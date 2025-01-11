@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="author" content="Douglas Crockford">
+<title>System</title>
+<link rel="stylesheet" type="text/css" href="../misty.css">
+<link rel="icon" type="image/png" href="../favicon.png">
+</head>
+<body>
+<img src="../misty.gif" width="204" height="79">
+<h1><a href="https://mistysystem.com/">Misty Programming Language:</a>System</h1>
+<ul>
+    <li><a href="#system">Misty System</a></li>
+    <li><a href="#memory">Memory</a></li>
+    <li><a href="#cores">Cores</a></li>
+    <li><a href="#actors">Actors</a></li>
+    <li><a href="#dgc">Distributed Garbage Collection</a></li>
+    <li><a href="#io">Input/Output</a></li>
+    <li id="shop"><a href="#shop">Program Shop</a></li>
+</ul>
+<h2 id="system">Misty System</h2>
+<p>A misty system is an application that runs in a computer that hosts a drove of misty actors. The actors may create more actors. The actors can send messages to each other, or to actors in other computers, or to the I/O system. The actors can receive messages from each other, from actors on other computers, and from the I/O system.</p>
+<p>A misty system might be running on an operating system, or might itself be an operating system.</p>
+<h2 id="memory">Memory</h2>
+<p>A misty system uses a single block of contiguous real memory to hold the state and programs of its actors. For efficient operation, the underlying operating system should not do paging or faulting on the misty system's memory. </p>
+<p>This block of memory is allocated  to actors in standard sizes using a doubling buddy memory manager. An actor is allocated two chunks of memory. One is for the read-only executable which includes immutable data that was known at build time (texts, field names, non-trivial numbers, stone arrays and records). The other is for the mutable data and actor state.</p>
+<p></p>
+<p>Within an actor, a program allocates memory from its own available data memory space in any convenient size. Actors never share their memory with other actors. An actor allocates memory to its objects with a simple bump allocator. If there is not sufficient memory available, the actor suspends and its status changes to <dfn>exhausted</dfn>.</p>
+<h2>Cores</h2>
+<p>A misty system wants exclusive access to at least one processor core, but can benefit from having most or all of the processor cores. These cores are managed exclusively by the misty system. For efficient operation, the underlying  operating system should not interfere with the misty system's cores by suspending or timeslicing. </p>
+<p>The cores are employed in executing the actors. A core that is not busy looks for a <dfn>ready</dfn> actor to execute. If there are none, it will look for an <dfn>exhausted</dfn> actor to garbage collect. If there are none, it will look for a <dfn>slow</dfn> actor to resume. If there are none, it might consider going into a low power state.</p>
+<h2 id="actors">Actors</h2>
+<p>An actor runs an executable from the program shop when the actor is created. The name of the executable is specified in an <code><a href="program.html#new">@.new</a></code> call. There will be at least one mother actor that is specified in some  way, such as a command line argument or a configuration in the program shop. An actor gets three timers, the <dfn>fast</dfn> timer than governs turns,  a <dfn>slow</dfn> timer that governs <dfn>slow</dfn> actors, and a <dfn>dgc</dfn> timer that governs the removal of unneeded actors.</p>
+<p>Actors run in turns. A turn starts with the reception of a message. A turn ends when the processing of the message is complete. At the end of a turn, outgoing messages are released to the outgoing message queue. A program can send messages, but the messages do not leave until the turn finishes succesfully.</p>
+<p>Actors can be in one of these statuses: <dfn>idle</dfn> <dfn>ready</dfn> <dfn>running</dfn> <dfn>exhausted</dfn> <dfn>collecting slow</dfn>.</p>
+<h3 id="idle">Idle</h3>
+<p>An <dfn>idle</dfn> actor has nothing to do. It is waiting for a message to arrive. If there are one or more messages for an <dfn>idle</dfn> actor, its status changes to <dfn>ready</dfn>. Also see <a href="#dgc">Distributed Garbage Collection.</a></p>
+<h3 id="ready">Ready</h3>
+<p>A <dfn>ready</dfn> actor can be picked up by any available core. The actor status is set to <dfn>running</dfn>, and it executes under the <dfn>fast</dfn> timer. </p>
+<h3>Running</h3>
+<p>An actor that was <dfn>ready</dfn>, <dfn>collecting</dfn>, or <dfn>slow</dfn> is now executing. If the turn ends, the actor becomes <dfn>idle</dfn>. If it runs out of time, the actor is suspended and its status becomes <dfn>slow</dfn>. If it runs out of memory, the actor is suspended and its status becomes <dfn>exhausted</dfn>. The core can now look for another actor to execute.</p>
+<h3 id="exhausted">Exhausted</h3>
+<p>An actor is <dfn>exhausted</dfn> when it does not have enough memory to continue its operation. This is normal. </p>
+<p>The garbage collector changes the actor status to <dfn>collecting</dfn>, freeing unreachable memory.</p>
+<h3>Collecting</h3>
+<p>When an actor is undergoing garbage collection, its status changes from <dfn>exhausted</dfn> to <dfn>collecting</dfn>. When collection is complete, the refreshed actor status changes to <dfn>running</dfn> and it resumes under the previous timer.</p>
+<p>If the amount of memory reclaimed is disappointing, then a note will be made that the next time the actor is garbage collected that its memory allocation be doubled, unless it is becoming abusive and must be halted.</p>
+<p>If the system can not provide memory to the garbage collector, the actor halts and is removed from memory. The out of memory event is recorded in a system log, and interested actors are notified.</p>
+<h3 id="slow">Slow</h3>
+<p>Most turns should complete before the <dfn>fast</dfn> timer. Sometimes, a turn will exceed that time. In that case, the actor is marked as <dfn>slow</dfn>. <dfn>Slow</dfn> actors have the lowest priority so that the system can stay responsive, doing as many fast turns as possible.</p>
+<p>When a core picks up a <dfn>slow</dfn> actor, it sets the actor status to <dfn>running</dfn> and resumes from where it paused under the <dfn>slow</dfn> timer. If it finishes the turn, it will go <dfn>idle</dfn> like a normal actor. If it times out again, it will either be paused again with a <dfn>slow</dfn> status, or halted and removed from memory if it has become abusive.</p>
+<h2 id="gc">Garbage Collection</h2>
+<p>When an actor uses up its data memory, it becomes exhausted. The garbage collector is run on exhausted actors. It uses a Cheney copying algorithm. Normally, Cheney uses semispace, where memory is divided into halves. Only one half is used during execution. During garbage collection, live data is copied into the other half, and the roles of the two halves are swapped. </p>
+<p>The misty system does not use semispace. Instead, the system allocates a new block of system memory. Live data is copied into the new block. Then the old block is returned to the system. If the actor previously did not reclaim enough space, then the new block will be twice as large.</p>
+<p>The model is not <strong>Stop the World</strong>. It is <strong>Stop a Process</strong>, which will likely have a much smaller impact.</p>
+<h2 id="dgc">Distributed Garbage Collection</h2>
+<p>Generally, an actor should be kept in memory as long as any other actor has its address and might send a message to it. When an actor has no outstanding addresses, it may be halted and its memory reclaimed. This is easily managed within a system, but may become much more complicated when there are many systems interacting with each other. Actors are free to transmit actor addresses in messages, so  meshes can develop. This can make it difficult to determine if an actor is still known or not. </p>
+<p>It is particularly difficult when cycles form. There are solutions, such as <a href="https://www.crockford.com/ec/dgc.html">The Bejar Algorithm</a>, but it is messy business. The misty system takes a simpler approach.</p>
+<p>If an actor is unreachable, it should halt and remove itself from memory. But how can it know? If it is not <dfn>idle</dfn>, then it knows that it is receiving messages, so its address must be known. But if it is <dfn>idle</dfn>, it is not so clear.</p>
+<p>It an actor has been <dfn>idle</dfn> for a long time, it might be because it has been forgotten. If that is the case, it should be removed from memory. But it is also possible that its correspondent has been delayed, or was on a machine that is restarting after a crash or equipment failure, or the machine was destroyed by a flash flood or a Russian sneak attack. At this moment, from the actor's point of view, it is impossible to know for certain what is true.</p>
+<p>When the <dfn>dgc</dfn> timer goes off on an <dfn>idle</dfn> actor, the actor is presumed to be unneeded and is immediately removed from memory. If that presumptuous assumption was erroneous, then the correspondent will fail when attempting to send a message to the now defunct actor. This can trigger a recover/restart protocol that will restore connectivity and service.</p>
+<h2 id="io">Input/Output</h2>
+<p>The misty system can do message passing and computation. It does not do communication (networking, coprocessing), storage (database, file systems), transducing (images, sounds, signals), or actuating (switches, motors). To do these things, Misty relies on its I/O system, which can interact with I/O devices, send and receive messages with the misty system, and  copy stone <a href="blobs.html">blobs</a> to and from actor memory.</p>
+<p>The program shop can  endow modules with affordances that let them interact effectively and securely with the I/O system.</p>
+<p></p>
+<h2 id="shop">Program Shop</h2>
+<p>The program shop performs many important functions in the misty system. The program shop may be integrated with programming tools,  source control systems,  software libraries, and dashboards. It is expected that there will be many vendors of program shops, each optimized for particular situations.</p>
+<p>A program shop's functionality includes:</p>
+<h3>Configuration</h3>
+<p>This can include start up conditions, timer values.</p>
+<h3>Holding of executables</h3>
+<p>The<a href="prongrams.html#new"> <code>@.new</code></a> function obtains its executables from here.</p>
+<h3>Building of executables from modules</h3>
+<p>The program builder gets <code><a href="statements.html#use">use</a></code> modules from here.</p>
+<h3>Granting of endowments to modules</h3>
+<p>The program shop can endow select modules with special access to the I/O system and the key store.</p>
+<h3>Locale</h3>
+<p>The program stores localization information.</p>
+<h3>Key store</h3>
+<p>The program store holds key pairs and associations for the setup and use of portals and other purposes.</p>
+<h3>Policies</h3>
+<p>The program shop holds the policies that determine which modules get access to which endowments, and which programs get access to which modules. For example, programs from third parties (guests) can be restricted from capabilities that are granted to trusted programs.</p>
+<h3>Logs</h3>
+<p> The program shop determines which programs have access to which logs, and determines the usage of the logs (archived, sent to debuggers, summarized and sent to humans, sent to ai for analysis).</p>
+<h3>Distributed management</h3>
+<p>Program shops on multiple machines can  share resources, simplifying administrations of large sites.</p>
+<h3>Versioning and Updating</h3>
+<p>Executables can be updated at any time. The actors that are currently running are not affected, but they can be halted and restarted with new executables if necessary, or they can continue to run beside updated actors. </p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+</body></html>

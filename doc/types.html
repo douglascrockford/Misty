@@ -1,0 +1,494 @@
+<html>
+<head>
+<title>Types</title>
+<link rel="stylesheet" type="text/css" href="../misty.css">
+<link rel="icon" type="image/png" href="../favicon.png">
+</head>
+<body>
+<img src="../misty.gif" width="204" height="79">
+<h1><a href="https://mistysystem.com/">Misty Programming Language:</a>Types</h1>
+<p>The Misty Language provides several object types.</p>
+<h2 id="literal">Literal</h2>
+<p class="rule">
+literal
+    array_literal
+    function_literal
+    number_literal
+    pattern_literal
+    record_literal
+    text_literal
+</p>
+<p>A literal value can be <a href="#array">an array literal</a>, <a href="functions.html">a function literal</a>,
+<a href="#number">a number literal</a>,
+<a href="patterns.html">a pattern literal</a>, <a href="#record">a record literal</a>, or <a href="#text">a text literal</a>.</p>
+<h2 id="array">Array</h2>
+<p>An array is an ordered collection of values. The values
+    stored in an array can be of any type or mixture of types. Arrays are one dimensional.
+    The first element of an array has an ordinal of <code>0</code>. The length of an
+    array is <code>1</code> plus the ordinal of the last element.
+    The length can be obtained by <a href="intrinsic.html#length">the
+    <code>length</code> function</a>. Arrays of arrays can be used to simulate
+    two dimensional arrays, and arrays of arrays of arrays can be used to
+    simulate three dimensional arrays.</p>
+<p>Arrays are always passed by reference.</p>
+<p>The <a href="statements.html#assign">assign statement</a> is able to append values to an array (push) and remove values from the end of an array (pop).</p>
+<p>There are two ways to make a new array: array literals and
+    <a href="intrinsic.html#array">the <code>array</code> function</a>.</p>
+
+<h3>Array literals</h3>
+<p class="rule">
+array_literal
+    <code>'['</code> array_filling <code>']'</code>
+</p>
+
+<p class="rule">
+array_filling
+    <code>&quot;&quot;</code>
+    expression elements
+    indent expression open_elements outdent
+</p>
+
+<p class="rule">
+elements
+    <code>""</code>
+    <code>','</code> space expression elements
+</p>
+
+<p class="rule">
+open_elements
+    <code>""</code>
+    <code>','</code> space expression open_elements
+    linebreak expression open_elements
+</p>
+
+<p>An array can be made from zero or more expressions, separated by commas,
+  enclosed in brackets. Each expression produces a value of any type that
+  is stored in the next element of the new array. The length of the array is the
+  number of expressions. The length of an array is fixed at its creation. In closed form, the expressions are separated by commas
+  and spaces. In open form, the expressions are separated by end of line and
+indentation.</p>
+<p>Example:</p>
+<pre>var stooges: [&quot;Curly&quot;, &quot;Larry&quot;, &quot;Moe&quot;]
+length(stooges)    # 3
+var bears: [
+    &quot;Papa&quot;
+    &quot;Mama&quot;
+    &quot;Baby&quot;
+]
+length(bears)      # 3
+var empty: []
+length(empty)      # 0
+</pre>
+<h3>Subscripting</h3>
+<p>The elements of an array are accessed using the <a href="operators.html#bracket">bracket postfix notation</a>.</p>
+<blockquote>
+  <p><var>array</var><code>[</code><var>ordinal</var><code>]</code></p>
+</blockquote>
+<p>The <var>ordinal</var> is an expression that produces a non-negative integer. When getting from an array, if the <var>ordinal</var>
+  is not an integer, or if it is less than <code>0</code> or greater than or equal to
+  the <var>array</var>'s <code>length</code> then it produces <code>null</code>.
+  When storing into an array, if the <var>ordinal</var> is not an integer, or
+  if it is less than <code>0</code> or greater than or equal to the <var>array</var>'s
+  <code>length</code> then the operation disrupts.
+  The number of elements in an array can be obtained by the <code>length</code>
+  function.</p>
+<p>If the array has multiple dimensions, additional subscripts can be used
+  to specify a particular element.</p>
+<blockquote>
+  <p><var>array</var><code>[</code><var>ordinal<sub>0</sub></var><code>][</code><var>ordinal<sub>1</sub></var><code>][</code><var>ordinal<sub>2</sub></var><code>]</code></p>
+</blockquote>
+<p>Example:</p>
+<pre>
+assign my_stooge: stooges[0]    # my_stooge is &quot;Curly&quot;
+assign stooges[0]: &quot;Shemp&quot;      # stooges is [&quot;Shemp&quot;, &quot;Larry&quot;, &quot;Moe&quot;]
+assign stooges[]: &quot;Joe&quot;         # stooges is [&quot;Shemp&quot;, &quot;Larry&quot;, &quot;Moe&quot;, &quot;Joe&quot;]
+assign popped: stooges[]        # stooges is [&quot;Shemp&quot;, &quot;Larry&quot;, &quot;Moe&quot;]
+                                # popped is &quot;Joe&quot;
+</pre>
+<h2 id="blob">Blob</h2>
+<p>A blob is a container of bits. Blobs are usually used to represent things external to the Misty system,
+such as keys, network packets, sounds, and images.</p>
+<p>See <a href="blob.html">blob</a>.</p>
+<h2 id="number">Number</h2>
+<p>Misty has a single number type: <a href="https://www.crockford.com/dec64.html">DEC64</a>. Numbers can be as enormous as <code>3.6028797018963967e143</code> or as miniscule as <code>1.0e-127</code>.</p>
+<p>Numbers are immutable.</p>
+<p>The <code>null</code> value is used to represent number values that can not
+    be represented. This includes numbers that are <code>3.6028797018963968e143</code> or more,
+    the result of division of non-zero by zero, type errors, and format errors.
+    Any arithmetic operation in which one of the operands is not a number
+    produces <code>null</code> as a result.</p>
+<p>Numbers that are signed integers that can be represented exactly in 56 bits are
+    called <b><a href="fit.html">fit</a></b><a href="fit.html"> numbers</a>.</p>
+<h3>Number literals</h3>
+<p class="rule">
+number_literal
+    <code>'-'</code> negative_number_literal
+    unsigned_number_literal
+    <code>'0'</code> zero
+</p>
+<p class="rule">
+zero
+    <code>""</code>
+    frac optional_exp
+</p>
+<p class="rule">
+unsigned_number_literal
+    int optional_frac optional_exp
+</p>
+<p class="rule">
+negative_number_literal
+    <code>'0'</code> frac optional_exp
+    int optional_frac optional_exp
+</p>
+<p class="rule">
+int
+    one_nine more_digits
+</p>
+<p class="rule">
+one_nine
+    <code>'1' . '9'</code>
+</p>
+<p class="rule">
+digits
+    digit more_digits
+</p>
+<p class="rule">
+more_digits
+    <code>""</code>
+    <code>'_'</code> digits
+    digits
+</p>
+<p class="rule">
+optional_frac
+    <code>""</code>
+    frac
+</p>
+<p class="rule">
+frac
+    <code>'.'</code> digits
+</p>
+<p class="rule">
+optional_exp
+    <code>""</code>
+    <code>'e'</code>optional_minus digits
+</p>
+<p class="rule">
+optional_minus
+    <code>""</code>
+    <code>'-'</code>
+</p>
+<p>Number literals are always in base 10. (See
+  the  <a href="intrinsic.html#number"><code>number</code> function</a> to
+    handle  other bases.) A number literal is an optional
+    <code>-</code><small>minus sign</small>, one or more digits, an
+    optional a single <code>.</code><small>decimal point</small> followed by
+    one or more digits, and an optional <code>e</code> and more digits
+    indicating scientific notation. The <code>_</code><small>underbar</small> can be inserted into a number literal as a separator..</p>
+<pre>-4
+0
+0.75
+12
+99.44
+1.024e3
+1_024
+1_073_741_824</pre>
+<h2 id="record">Record</h2>
+<p>Misty is an object-oriented language but it is not a classical language:
+    Objects are not rigidly defined by classes. Instead, Misty's records can be
+    soft and malleable. Misty unifies traditional records and associative data structures. Records are unordered
+    containers of key/value fields. Misty records can have fields added or removed at
+    any time. Records are initially mutable, but can be made immutable by the <code>stone</code> statement. Fields can be accessed using either <a href="operators.html#dot"> dot notation</a> or <a href="operators.html#bracket"> bracket notation</a>.</p>
+<h3 id="record literal">Record Literal</h3>
+<p>A new record can be made with a record literal.</p>
+<p class="rule">
+record_literal
+    <code>'{'</code> record_filling <code>'}'</code>
+</p>
+<p class="rule">
+record_filling
+    <code>""</code>
+    field more_fields
+    indent field more_open_fields outdent
+</p>
+<p class="rule">
+field
+    text_literal field_value
+    name optional_field_value
+</p>
+<p class="rule">
+field_value
+    <code>':'</code> space expression
+    input_list space body
+</p>
+<p class="rule">
+optional_field_value
+    <code>""</code>
+    field_value
+</p>
+<p class="rule">
+more_fields
+    <code>""</code>
+    <code>','</code> space field more_fields
+</p>
+<p class="rule">
+more_open_fields
+    <code>""</code>
+    linebreak field more_open_fields
+</p>
+<p>In the record literal notation, the specification of a record begins
+    with <code>{</code><small>left brace</small> and ends with
+    <code>}</code><small>right brace</small>. Between them are zero or more
+    name/value fields, separated by <code>,</code><small>comma</small>.
+    A name/value field is an identifier or text, followed by
+    <code>:</code><small>colon</small> followed by an expression. (See
+    <a href="json.html">JSON</a>.) Each <dfn>field</dfn> contributes a field to
+    the record.</p>
+<p>If no value is supplied, then the value is obtained from a variable with the same name.</p>
+<p>An empty record can be made by <code>{}</code><small>braces</small>.</p>
+<pre>def empty_record: {}    # empty_record is {}
+</pre>
+<p>The statement:</p>
+<pre>def stooge: {first: &quot;Curly&quot;, last: &quot;Howard&quot;}</pre>
+<p> has the same result as</p>
+<pre>def stooge: {
+    first: &quot;Curly&quot;
+    last: &quot;Howard&quot;
+}</pre>
+<p> and</p>
+<pre>def stooge: {}
+assign stooge.first: &quot;Curly&quot;
+assign stooge.last: &quot;Howard&quot;
+</pre>
+<p>There is a special form of field that is a shorthand for creating a property with the same name as a variable that is initialized by the variable.</p>
+<pre>def color: {
+    aliceblue
+    antiquewhite
+    aqua
+}
+
+def color: {
+    "aliceblue": aliceblue
+    "antiquewhite": antiquewhite
+    "aqua": aqua
+}</pre>
+
+<p>There is also a form for creating function fields (aka records).</p>
+<pre>def object: {
+    double: function double(x) (x + x)
+}
+
+def object: {
+    double(x) (x + x)
+}</pre>
+<h3>Keys</h3>
+<p>Keys can be</p>
+<ul>
+    <li>text</li>
+    <li>stone record</li>
+</ul>
+<p>An invalid key type yields <code>null</code> on reading, and a disrupt on writing.</p>
+<p>Keys in a record are unique. Writing a duplicate key first erases the original.</p>
+<p>A key can not be a number, although a number converted to a text is allowed.</p>
+<p>Fields with stone record keys can only be inserted with an <code>assign</code> statement. Record literals do not permit stone record keys. Stone record keys make it possible to put secret fields in records. Those fields can only be inserted and retrieved with the use of a specific stone record. If you do not have the secret key, the record appears to be an ordinary record. Stone record key fields are not copied by the intrinsic <a href="intrinsic.html#record">record</a> function. Stone record keys are also omitted by the <a href="intrinsic.html#array">intrinsic array function</a>.</p>
+<h3>Fields</h3>
+<p>The fields of a record can be accessed with either the dot notation or the
+    subscript notation.</p>
+<p>The dot notation is usually the most convenient notation for accessing the
+    fields of a record. It takes a record, a <code>.</code><small>period</small>, and an identifier. The dot notation is only allowed when the key is a text that conforms to the rules of a valid identifier. A key <code>&quot;a&quot;</code> (lower case) is distinct from
+    a key <code>&quot;A&quot;</code> (upper case).</p>
+<p>Example:</p>
+<pre>var stooge: {first: &quot;Curly&quot;, last: &quot;Howard&quot;}
+var first_name: stooge.first          # first_name is &quot;Curly&quot;
+assign first_name: null.first         # first_name is null
+assign new_stooge: record(stooge)
+assign new_stooge.first: &quot;Shemp&quot;      # new_stooge is {first: &quot;Shemp&quot;}
+assign last_name: new_stooge.last     # last_name is &quot;Howard&quot;</pre>
+<p>The subscript notation is similar to the dot notation, but instead of
+    taking an identifier (which is used as a text) it can take an expression that produces a valid key. It can be used for dynamically making
+    field names, or for creating keys that are not texts, such as stone records and stone arrays.</p>
+<p>The subscript expression is wrapped
+    in <code>[</code><small>left bracket</small> and <code>]</code><small>right bracket</small>.</p>
+<p>Example:</p>
+<pre>def stooge: {first: &quot;Curly&quot;, last: &quot;Howard&quot;}
+assign first_name: stooge[&quot;first&quot;]           # first_name is &quot;Curly&quot;
+assign stooge.first: "Jerome"                # {first: &quot;Curly&quot;, last: &quot;Howard&quot;}
+assign stooge.middle: "Lester"               # {first: &quot;Curly&quot;, middle: &quot;Lester&quot;, last: &quot;Howard&quot;}
+assign stooge[null]: &quot;Mogo on the Gogogo&quot;    # disrupt
+assign stooge: {}                            # disrupt
+</pre>
+<h3 id="delete">Delete</h3>
+<p>A field can be deleted by replacing its value with <code>null</code>.</p>
+<pre>assign stooge.first: null</pre>
+<h3>Methods</h3>
+<p>The method invocation pattern is</p>
+<blockquote>
+    <p><var>record</var><code>.</code><var>method_name</var><code>(</code><var>input_list</var><code>)</code></p>
+</blockquote>
+<p>The <var>record</var> is searched for a field matching the <var>method_name</var>.
+    If the result of that search is not a function, then it disrupts.</p>
+<h2 id="text">Text</h2>
+<p>A <var>text</var> is a sequence of zero or more 32-bit characters. Texts
+    are immutable. It is not possible to alter a text, but it is very easy to
+    construct new texts. There is no separate character type. A character is represented
+    as a text with a length of <code>1</code>.</p>
+<p>Texts are concatenated with <a href="operators.html#ampersand">the <code>&</code><small>ampersand</small> operator</a>
+    or <a href="operators.html#doubleampersand">the <code>&&</code><small>double ampersand</small> operator</a>.
+    <a href="intrinsic.html#length">The <code>length</code> function</a> is used to determine the number
+    of characters in a text.</p>
+<h3>Text literals</h3>
+<p class="rule">
+text_literal
+    quote
+    chevron
+</p>
+<p class="rule">
+quote
+    <code>'&quot;'</code> more_quote_characters <code>'&quot;'</code>
+</p>
+<p class="rule">
+quote_character
+    <code>'\'</code> escape
+    <code>'0020'</code> . <code>'10ffff'</code> - <code>'"'</code> - <code>'\'</code>
+</p>
+<p class="rule">
+more_quote_characters
+    <code>""</code>
+    quote_character more_quote_characters
+</p>
+<p class="rule">
+escape
+    <code>'b'</code>
+    <code>'n'</code>
+    <code>'q'</code>
+    <code>'r'</code>
+    <code>'t'</code>
+    <code>&quot;u</code><code>{&quot;</code> hex more_hex <code>'}'</code>
+</p>
+<p class="rule">
+hex
+    <code>'0'</code> . <code>'9'</code>
+    <code>'A'</code> . <code>'F'</code>
+</p>
+<p class="rule">
+more_hex
+    <code>""</code>
+    hex more_hex
+</p>
+<table align="right">
+    <tr>
+        <th><var>escape sequence</var></th>
+        <th><var>result</var></th>
+    </tr>
+    <tr>
+        <td><code>\b</code></td>
+        <td><code>\</code><small>backslash</small></td>
+    </tr>
+    <tr>
+        <td><code>\n</code></td>
+        <td><code>&nbsp;</code><small>linefeed</small></td>
+    </tr>
+    <tr>
+        <td><code>\q</code></td>
+        <td><code>&quot;</code><small>double quote</small></td>
+    </tr>
+    <tr>
+        <td><code>\r</code></td>
+        <td><code>&nbsp;</code><small>carriage return</small></td>
+    </tr>
+    <tr>
+        <td><code>\t</code></td>
+        <td><code>&nbsp;</code><small>tab</small></td>
+    </tr>
+    <tr>
+        <td><code>\u{</code><var>unicode codepoint in hex</var><code>}</code></td>
+        <td><code>&nbsp;</code><small>unicode</small></td>
+    </tr>
+</table>
+<p>A text literal is bounded by a pair of
+    <code>&quot;</code><small>double quote</small>. Between the quotes are zero
+    or more characters and escape sequences. The escape sequences are a
+    <code>\</code><small>reverse solidus</small> followed by 1 to 11 additional
+    characters. Each escape sequence contributes a single character to the text.
+    The <code>\u{</code><var>HHHHHHHH</var><code>}</code> sequence uses one to
+    eight base-16 digits to represent any 32 bit character.</p>
+<p>The table shows all of the legal escape sequences.
+    If <code>\</code><small>reverse solidus</small> does not form an escape
+    sequence, then there is a syntax error.</p>
+<p>Examples:</p>
+<pre>&quot;This is a text.&quot;
+
+&quot;So is this.&quot;
+
+&quot;&quot;                            # an empty text
+
+&quot;\u{0043}\u{0061}\u{0074}&quot;    # &quot;Cat&quot;
+
+&quot;This text contains \qquotes\q.&quot;
+</pre>
+<p>A text must begin and end on the same line. A text may not contain a line break.</p>
+<pre>
+&quot;This is
+an error.&quot;                    # must begin and end on the same line</pre>
+<p>A text literal can not contain a literal control character, but control characters
+    can be embedded in texts with escape sequences.</p>
+<pre>&quot;This is not\nan error.&quot;
+
+&quot;Neither is\u{A}this.&quot;</pre>
+<h3 id="chevron">Chevron text literals</h3>
+<p class="rule">
+chevron
+    <code>"&lt;&lt;</code> more_chevron_characters  &gt;&gt;"</code>
+</p>
+<p class="rule">
+chevron_character
+    <code>'0009'</code><small>tab</small>
+    <code>'000A'</code><small>linefeed</small>
+    <code>'000D'</code><small>carriage return</small>
+    <code>'0020' . '10FFFF'</code>
+</p>
+<p class="rule">
+more_chevron_characters
+    ""
+    chevron more_chevron_characters
+    chevron_character more_chevron_characters
+</p>
+<p>A text literal can also be bounded by <code>&lt;&lt;</code> and <code>&gt;&gt;</code>.
+    (Note that each is two characters: <code>&lt;</code><small>less</small> <code>&lt;</code><small>less</small> and <code>&gt;</code><small>greater</small> <code>&gt;</code><small>greater</small>. )
+    These chevron text literals contain no escape sequences; <code>\</code><small>reverse solidus</small> is treated as an ordinary
+    character. The chevron quote sequences can be nested literally within a
+    chevron text as long as they are properly balanced. The control characters <var>tab</var>, <var>carriage return</var>,
+    and <var>linefeed</var>, are permitted. Comments may not be placed inside of chevron text literals, being treated as ordinary text.</p>
+<pre>&lt;&lt;This text
+takes up
+three lines.&gt;&gt;
+
+&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;Chevrons may be nested when &lt;&lt;properly&gt;&gt; balanced&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
+
+&lt;&lt;Now it isn't necessary to escape &quot;double quotes&quot;.&gt;&gt;
+
+&lt;&lt;file:c:\nt\autoexec.bat&gt;&gt;    # same as &quot;file:c:\bnt\bautoexec.bat&quot;
+
+&lt;&lt;The chorus entered, said &lt;&lt;France hath in thee found out<br>A nest of hollow bosoms, which he fills
+With treacherous crowns&gt;&gt;, and then exited.&gt;&gt;</pre>
+<h3 id="subscripting">Subscripting</h3>
+<p><a href="operators.html#brackets">Subscripting</a> can be used to access the individual characters of a text.
+    Subscripts are integers that are greater than or equal to zero and less
+    than the length of the text. Texts are immutable, so subscripts can not
+    be used to change a character within a text.</p>
+<pre>var my_text: &quot;cat&quot;
+length(my_text)          # 3
+my_text[0]               # &quot;c&quot;
+my_text[2]               # &quot;t&quot;
+my_text[4]               # null
+assign my_text[0]: &quot;r&quot;   # disrupt
+</pre>
+<h2 id="immutability">Immutability</h2>
+<p>An immutable object can not be changed or mutated. An attempt to modify a mutable object will disrupt the program.</p>
+<p>These values are always immutable: <code>true false null</code>.</p>
+<p>Values of these types are always immutable: <code>number text function pattern</code>.</p>
+<p>Values of these types are initially mutable, but can be transformed into immutable values: <code>array record blob</code>.</p>
+<p>Objects can be made immutable by the <a href="operators.html#stone"><code>stone</code></a> intrinsic function that turns them to stone.</p>
+<p>The state of mutability of a value can be sensed with the <a href="intrinsic.html#stone?"><code>stone?</code></a> intrinsic function.</p>
+<p>Immutable objects are generally safer to pass to functions in modules that are not fully trusted.</p>
+</body>
+</html>

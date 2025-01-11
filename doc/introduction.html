@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Introduction</title>
+<link rel="stylesheet" type="text/css" href="../misty.css">
+<link rel="icon" type="image/png" href="../favicon.png">
+</head>
+<body>
+<img src="../misty.gif" width="204" height="79">
+<h1><a href="https://mistysystem.com/">Misty Programming Language:</a>Introduction</h1>
+<p align="left">Public Domain 2024 Douglas Crockford</p>
+<p>The Misty Programming Language is a dynamic, general-purpose, transitional, secure, distributed actor
+  language. It has a gentle syntax that is intended to benefit students, as well
+  as advanced features such as capability security and lambdas with lexical scoping. </p>
+<p>The grammar of the language is expressed in <a href="http://www.crockford.com/mckeeman.html">McKeeman Form</a>.</p>
+<h2>Overview</h2>
+<p>The Misty System supports the Actor model of distributed computation. It is a transitional language because it also supports a more conventional model with features of a functional language with mutation, similar in some ways to JavaScript. The intention is that a transitional language will be easier for industry to accept than a pure actor language, even if a pure actor language is more deserving of adoption.</p>
+<p>A misty application can be made up of many misty actors, possibly distributed over many machines. The misty actors communicate by <a href="statements.html#send">sending</a> messages. Misty uses a capability model to secure the application.  In a capability system, programs and modules are only given authority on a need-to-do basis. Part of the responsibility of a program is to manage the capabilities of its modules.</p>
+<p>A misty actor runs a misty executable (<code>mex</code>). An executable is made from a misty program source text (<code>mst</code>) and some misty modules (<code>mod</code>) and some build specifications (<code>msp</code>). The role of a program is to manage the work of the modules. Some modules are built into the system and are freely available. Some modules are more restricted. Modules can be provided by third parties. The capability model makes it possible include third party modules securely. Sources and specifications are kept in the program shop. The build specifications determine build-time options such as conditional compilation and access to logs. Build specifications can also provide linkages to capabilities outside of the Misty System, such as access to file systems and display systems.</p>
+<p>Misty programs should be designed for a distributed environment in which failure is always an option. Actors are expected to fail early and often, informing concerned actors as they fail. Because they fail to a known state, recover and resumption can be straightforward.</p>
+<h2 id="space">Space</h2>
+<p>The language is quite strict in its use of spaces and indentation.
+In most programming languages, code spacing and formatting are under specified, which leads to many incompatible conventions of style,
+some promoting bug formation, and all promoting time-wasting arguments, incompatibilities, and hurt feelings.
+Misty instead allows only one convention which is strictly enforced.
+This  liberates programmers to focus their attention on more important matters.</p>
+<p>Indentation is in increments of 4 spaces. The McKeeman Form is extended by three special rules to make this possible:</p>
+<p class="rule">
+indentation
+    <i>The </i>spaces<i> required by the current nesting.</i>
+</p>
+<p class="rule">
+increase_indentation
+    <i>Append four spaces to the </i>indentation<i>.</i>
+</p>
+<p class="rule">
+decrease_indentation
+    <i>Remove four spaces from the </i>indentation<i>.</i>
+</p>
+<p>The <dfn>indentation</dfn> is the number of spaces required at the beginning of a line as determined by its nesting level. </p>
+<p class="rule">
+indent
+    increase_indentation linebreak
+</p>
+<p class="rule">
+outdent
+    decrease_indentation linebreak
+</p>
+<p id=linebreak>The <dfn>linebreak</dfn> rule allows the insertion of a comment, ends the line,
+    and checks the indentation of the next line. Multiple comments and blank lines
+may appear wherever a line can end.</p>
+<p class="rule">
+linebreak
+    optional_comment linefeed more_linebreaks
+</p>
+<p class="rule">
+more_linebreaks
+    linebreak
+    indentation
+</p>
+<p class="rule">
+space
+    <code>' '</code>
+</p>
+<p class="rule">
+linefeed
+    <code>'000A'</code>
+</p>
+<p>There are many places where the language expects an end of line, such as at the end of a statement.</p>
+<p>Misty is strict about whitespace in order to eliminate the need for, debate over, and circumvention of coding standards. Misty starts with the pretty convention of <a href="json.html">JSON</a> formatting. For example, JSON allows this compact JSON text</p>
+<pre>{&quot;one&quot;:1,&quot;array&quot;:[1,2,3],&quot;text&quot;:&quot;hello&quot;}</pre>
+<p>to be presented more pleasingly as</p>
+<pre>{
+    &quot;one&quot;: 1,
+    &quot;array&quot;: [
+        1,
+        2,
+        3
+    ],
+    &quot;text&quot;: &quot;hello&quot;
+}</pre>
+<p>Misty <a href="types.html#record">record literals</a> take this further by eliminating the comma  at the end of a line, and eliminating quotes on field names in most cases.</p>
+<pre>{
+    one: 1
+    array: [
+        1
+        2
+        3
+    ]
+    text: &quot;hello&quot;
+}</pre>
+<p>Misty uses the same convention with <code>(</code><small>left paren</small> and <code>)</code><small>right paren</small> in input lists and expressions. In an open input value list, each input value goes on its own line and the commas between the input values are eliminated.</p>
+<pre>my_button.on(
+    "click"
+    function (event) {
+        call event.done()
+        call take_action()
+    }
+)</pre>
+<p>In complex expressions, parens can allow a line break. In this form, expressions may be broken before some operators. (See <a href="#operators.html">operators</a>.)</p>
+<pre>def atan(slope) (
+    math.sine(
+        slope
+        / (math.sqrt(
+            slope
+            * slope
+        ) + 1)
+    )
+)
+
+assign progress: (
+    result
+    + (radicand / result)
+) / 2
+</pre>
+<h2 id="comments">Comments</h2>
+<p>A comment begins with an <code>#</code><small>octothrope</small> and ends with the end of the line.
+Comments are used to provide context and motivation to help humans understand the programming.
+The Misty System strictly ignores all comments.</p>
+<p class="rule">
+optional_comment
+    <code>""</code>
+    spaces <code>'#'</code> comment_characters
+</p>
+<p class="rule">
+spaces
+    <code>""</code>
+    space spaces
+</p>
+<p class="rule">
+comment_characters
+    <code>""</code>
+    comment_character comment_characters
+</p>
+<p class="rule">
+comment_character
+    <code>'0020'</code> . <code>'10FFFF'</code>
+</p>
+
+<h2 id="names">Names</h2>
+<p>Names are used to identify functions, function inputs, fields, variables, modules, and programs.
+A name starts with a letter.
+A name may contain any number of letters and digits.
+A name may contain <code>_</code><small>underbar</small> as a separator.
+Names may end with <code>?</code><small>question mark</small> which is used to indicate predicate functions and truth values.</p>
+<p class="rule">
+name
+    letter subsequent
+</p>
+<p class="rule">
+subsequent
+    <code>""</code>
+    <code>'?'</code>
+    letter_or_digit subsequent
+    <code>'_'</code> letter_or_digit subsequent
+</p>
+<p class="rule">
+letter
+    <code>'A'</code> . <code>'Z'</code>
+    <code>'a'</code> . <code>'z'</code>
+</p>
+<p class="rule">
+digit
+    <code>'0'</code> . <code>'9'</code>
+</p>
+<p class="rule">
+letter_or_digit
+    letter
+    digit
+</p>
+<p>There are no reserved words. </p>
+<h2 id="purity">Purity</h2>
+<p>The Misty language strives for, but does not achieve, purity. It is a transitional language, so mutation and side-effects are tolerated, but not encouraged. Mutation is only allowed by the <code>assign</code> statement.
+The word <code><a href="statements.html#assign">assign</a></code> is required in the statement. This allows for using <code>=</code> <small>equal sign</small> correctly as the equality operator. </p>
+<p>When calling a function only for its side-effects, the <code><a href="statements.html#call">call</a></code> statement must be used.</p>
+<p> This is quite different than conventional languages whose syntax is optimized for mutation and side-effects. For example, JavaScript has 20 assignment operators if you count <code>++</code> and <code>--</code> twice, which you should, and it allows them all to be used in expression position as well as statement position.</p>
+</body></html>

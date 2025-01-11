@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Statements</title>
+<link rel='stylesheet' type='text/css' href='../misty.css'>
+<link rel="icon" type="image/png" href="../favicon.png">
+</head>
+<body>
+<img src="../misty.gif" width="204" height="79">
+<h1><a href="https://mistysystem.com/">Misty Programming Language:</a>Statements</h1>
+<p> This section describes the statements.</p>
+<p class="rule">
+statement
+    assign_statement
+    break_statement
+    call_statement
+    def_statement
+    disrupt_statement
+    do_statement
+    if_statement
+    log_statement
+    return_statement
+    send_statement
+    use_statement
+    var_statement
+</p>
+<p class="rule">
+statements
+    statement more_statements
+</p>
+<p class="rule">
+more_statements
+    <code>""</code>
+    linebreak statement more_statements
+</p>
+<h3 id="assign">The <code>assign</code> statement</h3>
+<p class="rule">
+assign_statement
+    <code>&quot;assign&quot;</code> space name optional_assign_suffix optional_box <code>':'</code> space expression optional_box
+</p>
+<p class="rule">
+optional_assign_suffix
+    <code>""</code>
+    assign_suffix
+</p>
+<p class="rule">
+assign_suffix
+    <code>'.'</code> name optional_assign_suffix
+    <code>'['</code> expression <code>']'</code> optional_assign_suffix
+    invocation assign_suffix
+</p>
+<p class="rule">
+optional_box
+    <code>""</code>
+    <code>"[]"</code>
+</p>
+<p>The <code>assign</code> statement is the instrument of <a href="types.html#immutable">mutation</a>. It can replace the value of a variable that was
+created by <a href="#var">the <code>var</code> statement</a>.</p>
+<p>The <code>assign</code> statement can also act on values that are mutable.</p>
+<ul>
+    <li>Replace an element of a mutable array.</li>
+    <li>Create a new field in a mutable record.</li>
+    <li>Replace a field of a mutable record.</li>
+    <li>Delete a field from a mutable record by assigning <code>null</code>.</li>
+    <li>Append an element to an array: <code>assign <var>array</var>[]: <var>value</var></code></li>
+    <li>Remove an element from the end of an array: <code>assign <var>variable</var>: <var>array</var>[]</code></li>
+</ul>
+<p>Attempting any of those changes on a <a href="intrinsic.html#stone">stone</a> object will <a href="#disrupt">disrupt</a>.</p>
+<h3 id="break">The <code>break</code> statement</h3>
+<p class="rule">
+break_statement
+    <code>"break"</code> do_label
+</p>
+<p>The <code>break</code> statement is used to break out of <a href="#do">loops</a>.</p>
+<h3 id="call">The <code>call</code> statement</h3>
+<p class="rule">
+call_statement
+    <code>"call"</code> space callee
+</p>
+<p class="rule">
+callee
+    <code>'@'</code> selection invocation
+    name activate
+</p>
+<p class="rule">
+activate
+    selection activate
+    subscript activate
+    invocation optional_activate
+</p>
+<p class="rule">
+optional_activate
+    <code>""</code>
+    activate
+</p>
+<p>The <code>call</code> statement invokes a function and ignores the return value.
+</p>
+<h3 id="def">The <code>def</code> statement</h3>
+<p class="rule">
+def_statement
+    <code>"def"</code> space name def_value
+</p>
+<p class="rule">
+def_value
+    <code>':'</code> space expression
+    input_list space body
+</p>
+<p>The <code>def</code> statement defines a read-only variable within
+    the current function. The variable is read-only, but the value it contains
+    may be mutable. Names that are defined with the <code>def</code> statement
+    can not be changed with the <code>assign</code> statement. If the value is mutable,
+  then the value's members or elements may be changed with the <code>assign</code> statement.
+  The <code>def</code> statement can not appear in an <code>if</code> or <code>do</code>.</p>
+<p>If the <code>def</code> is followed by a <a href="funct6ions.html">function literal</a>, then a read only variable having the same name as the function is created and given the value of the function object. So these two statements do the same thing:</p>
+<pre>def double: function double (number) (number + number)
+def double(number) (number + number)</pre>
+<p>Variables must be defined before they are used. The <dfn>name</dfn> may not be used on the right side of the <code>:</code><small>colon</small>.</p>
+<p>Example:</p>
+<pre>def pi: 3.1415926535897932
+</pre>
+<h3 id="disrupt">The <code>disrupt</code> statement</h3>
+<p class="rule">
+disrupt_statement
+    <code>"disrupt"</code>
+</p>
+<p>The <code>disrupt</code> statement causes the function to abruptly stop, sending control
+    to a <a href="functions.html#disruption">function's <code>disruption</code> part</a>. </p>
+<p>The <code>disrupt</code> statement causes control to go to the <code>disruption</code> part of the function or the enclosing module. If control was already in the <code>disruption</code> part, or if there is no <code>disruption</code> part, then control goes
+    to the most recent function in the calling chain that has a <code>disruption</code> part.</p>
+<h3 id="do">The <code>do</code> statement</h3>
+<p class="rule">
+do_statement
+    <code>"do"</code> do_label indent statements outdent <code>"od"</code> do_label
+</p>
+<p class="rule">
+do_label
+    <code>""</code>
+    space name
+</p>
+<p>The <code>do</code> statement executes a list of statements until the loop is broken by <code>break</code>,
+<code>return</code>, or <code>disrupt</code>.
+</p>
+<p>
+Loop labels are in their own name space. A function may contain two or more loops with the same label as long
+as they are not nested in each other.
+</p>
+<p>Example:</p>
+<pre>
+do
+    assign factor: factor * second
+    assign progress: (factor / divisor) + result
+    if result = progress \/ progress = null
+        break
+    fi
+    assign result: progress
+    assign divisor: divisor + 1
+od
+</pre>
+<h3 id="if">The <code>if</code> statement</h3>
+<p class="rule">
+if_statement
+    then_clause "fi"
+</p>
+<p class="rule">
+then_clause
+    <code>"if"</code> space expression indent statements outdent else_clause
+</p>
+<p class="rule">
+else_clause
+    <code>""</code>
+    <code>"else"</code> else_consequence
+</p>
+<p class="rule">
+else_consequence
+    space then_clause
+    indent statements outdent
+</p>
+<p>Example:</p>
+<pre>if first_name = &quot;Curly&quot; \/ first_name = &quot;Moe&quot; \/ first_name = &quot;Shemp&quot;
+    assign last_name: &quot;Howard&quot;
+else if first_name = &quot;Larry&quot;
+    assign last_name: &quot;Fine&quot;
+else
+    assign last_name: &quot;(unknown)&quot;
+fi</pre>
+<p>The <code>if</code> statement can be nested.</p>
+<p>Example:</p>
+<pre>if fee
+    if fie
+        assign ok: fee
+    fi
+else
+    assign ok: fie
+fi</pre>
+<p>The <code></code><code>else if</code>
+  form makes it possible to have alternatives without deep indentation.</p>
+<p>Example:</p>
+<pre>if character(list[at].op) = &quot;j&quot;
+    assign list[at].yz: list[at].yz - 1
+else if list[at].op = &quot;opx&quot;
+    assign list[at].yz: list[at].yz + 1
+fi
+assign at: at + 1</pre>
+<p>The <code>if</code> statement creates forks in the control flow of a
+  function. An <code>if</code> statement can not contain <code>var</code>
+  and <code>def</code> statements. </p>
+<h3 id="log">The <code>log</code> statement</h3>
+<p class="rule">
+log_statement
+    <code>&quot;log&quot;</code> name <code>':'</code> space expression
+</p>
+<p>The <code>log</code> statement may send an expression to the named log. It is used to record information about the execution of the program for later analysis.</p>
+<p>If logging to the named log  has not been enabled, then the <code>log</code> statement does nothing. The compiler can be configured to only enable certain logs.</p>
+<p>The <dfn>name</dfn> of a log can be any name. For example:</p>
+<pre>compliance debug disaster emergency error failure fatal feature hygiene maintenance normal probe spam test trace trivial violation</pre>
+<p>A system may block the execution of programs that would attempt to use restricted logs.</p>
+<p>It is usually good to <code>log</code> before <code>disrupt</code>. Logging does not change the behavior of a program.</p>
+<p>See <a href="programs.html#logging">logging</a>.</p>
+<p>Example:</p>
+<pre>log debug: &quot;index&quot; ≈ index</pre>
+<h3 id="return">The <code>return</code> statement</h3>
+<p class="rule">
+return_statement
+    <code>&quot;return&quot;</code> return_value
+</p>
+<p class="rule">
+return_value
+    <code>""</code>
+    space expression
+</p>
+<p>The <code>return</code> statement provides for the normal exit of a function
+    and the specification of its return value. If the expression is a function invocation,
+  then the tail call optimization might be performed.</p>
+<p>If a return value is not provided, then <code>null</code> is assumed. A function may  return <code>null</code> implicitly by falling
+    thru the bottom.</p>
+<p>Example:</p>
+<pre>def double(number) {
+    return number * 2
+}
+
+def abort() {
+    assign defcon: 1
+    call launch_all_missiles()
+}</pre>
+<h3 id="send">The <code>send</code> statement</h3>
+<p class="rule">
+send_statement
+    <code>&quot;send&quot;</code> space expression <code>':'</code> space expression callback
+</p>
+<p class="rule">
+callback
+    <code>""</code>
+    <code>':'</code> space expression
+</p>
+<p>The <code>send</code> statement sends a message to another <a href="actors.html">actor</a>.
+The left <dfn>expression</dfn> must resolve to an actor address object or a message object that is expecting a reply because it was sent with a callback. The right <dfn>expression</dfn> is a record containing the outgoingmessage. The outgoing message record must not  contain functions or patterns or cyclic structures.</p>
+<p>If a <dfn>callback</dfn> function is included, then the <dfn>callback</dfn> function will receive the reply, not the receiver function.</p>
+<p>See <a href="programs.html">programs</a>.</p>
+<p>Example:</p>
+<pre>send server: message</pre>
+<h3 id="use">The <code>use</code> statement</h3>
+<p class="rule">
+use
+    <code>"use"</code> space name optional_locator
+</p>
+<p class="rule">
+optional_locator
+    <code>""</code>
+    <code>':'</code> space locator
+</p>
+<p class="rule">
+locator
+    text_literal
+    name
+</p>
+<p>The <code>use</code> statement makes a module available to a program or another module. The return value of the module is bound to the <dfn>name</dfn>. An optional <dfn>locator</dfn> can be provided for finding the module file in the program shop. Standard modules do not require a locator. </p>
+<p>The modules are stored in the program shop, which contains the standard modules that are located with the <dfn>name</dfn> form, and the extra modules that are located with the <dfn>text_literal</dfn> form. In the <dfn>text_literal</dfn> form, it is recommended that the text contain a prefix to indicate the source or usage of the module. Guest code (programs from third parties that are not fully trusted) may be restricted from use of the <code>use</code> statement, or may have restrictions on which modules they can employ.</p>
+<p> The <code>use</code> statement can not appear in a function or an <code>if</code> or <code>do</code>. The <code>use</code> statement can only appear in the outermost level of an <code>program</code> or <code>module</code>.</p>
+<h3 id="var">The <code>var</code> statement</h3>
+<p class="rule">
+var_statement
+    <code>&quot;var&quot;</code> space name <code>':'</code> space expression
+</p>
+<p>The <code>var</code> statement creates a variable in the current function scope.
+The value of a variable can be replaced by <a href="#assign">the <code>assign</code> statement</a>. The <code>var</code> statement can not appear in an <code>if</code> or <code>do</code>. The <dfn>name</dfn> is the name of a new variable in this scope.The  expression on the right side of the <code>:</code><small>colon</small> gives the initial value of the variable.  The <dfn>name</dfn> may not be  used on the right side of the <code>:</code><small>colon</small>.</p>
+<p>Variables must be declared before they are used or assigned values. Note that <code>:</code> <dfn>expression</dfn> are not optional.</p>
+<p>Examples:</p>
+<pre>var first_name: &quot;&quot;
+var last_name: &quot;&quot;
+var node_nr: 0</pre>
+</body></html>

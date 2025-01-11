@@ -1,0 +1,125 @@
+misty module deque
+
+# deque: Double ended queue (pronounced /dek/)
+
+# This module produces a constructor function that makes a deque object.
+# A deque object has the abilities of a queue and a stack.
+# It has two ends: top and bottom. Values can be inserted
+# at either end. Values can be removed from either end.
+
+# It provides these methods:
+#   length()        # return the number of values currently in the deque
+#   array()         # return an array of values, starting at the bottom end
+#   push(value)     # insert a value at the top
+#   place(value)    # insert a value at the bottom
+#   pop()           # remove a value from the top; return the value
+#   pull()          # remove a value from the bottom; return the value
+
+# An attempt to remove a value from an empty queue will log an error and fail.
+
+# The deque is implemented with an underlying array that is grown as needed,
+# and 'bottom' and 'top' indexes that indicate the current ends.
+
+return function deque() {
+
+    var underlying: array(16)
+    var bottom: 0
+    var top: 0
+    var the_length: 0
+
+    def grow(value) {
+
+# If the underlying array is full, make a new one with double its capacity.
+
+        if the_length = length(underlying)
+            assign top: the_length
+            if bottom = 0
+                assign underlying: array(
+                    underlying
+                    array(the_length)
+                )
+            else
+                assign underlying: array(
+                    array(
+                        array(underlying, bottom)
+                        array(underlying, 0, bottom)
+                    )
+                    array(the_length)
+                )
+            fi
+            assign bottom: 0
+        fi
+    }
+
+    return {
+
+# This record is filled with the deque's methods.
+
+        length() (the_length)
+
+        array() {
+            if the_length <= 0
+                return []
+            else if bottom < top
+                return array(underlying, bottom, top)
+            else
+                return array(
+                    array(underlying, bottom)
+                    array(underlying, 0, top)
+                )
+            fi
+        }
+
+        push(value) {
+            call grow()
+            if top >= length(underlying)
+                assign top: 0
+            fi
+            assign underlying[top]: value
+            assign top: top + 1
+            assign the_length: the_length + 1
+        }
+
+        place(value) {
+            call grow()
+            if bottom <= 0
+                assign bottom: length(underlying)
+            fi
+            assign bottom: bottom - 1
+            assign underlying[bottom]: value
+            assign the_length: the_length + 1
+        }
+
+        pop() {
+            if the_length <= 0
+                log error: "deque.pop"
+                disrupt
+            fi
+            if top = 0
+                assign top: length(underlying)
+            fi
+            assign top: top - 1
+            def value: underlying[top]
+            assign underlying[top]: null
+            assign the_length: the_length - 1
+            return value
+        }
+
+        pull() {
+            if the_length <= 0
+                log error: "deque.pull"
+                disrupt
+            fi
+            def value: underlying[bottom]
+            assign underlying[bottom]: null
+            assign bottom: bottom + 1
+            if bottom >= length(underlying)
+                assign bottom: 0
+            fi
+            assign the_length: the_length - 1
+            return value
+        }
+    }
+}
+
+end deque

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="author" content="Douglas Crockford" />
+<meta name="copyright" content="(C)2023 Douglas Crockford" />
+<meta name="date" content="2023" />
+<meta http-equiv="Expires" content="1968-12-09" />
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<link rel="stylesheet" href="../misty.css" type="text/css">
+<link rel="icon" type="image/png" href="../favicon.png">
+<title>The Parse Tree</title>
+<style>
+fieldset {
+    border: 1pt solid black;
+    padding: 2em;
+}
+</style>
+</head>
+<body>
+<img src="../misty.gif" width="204" height="79">
+<h1><a href="https://mistysystem.com/">Misty Programming Language:</a>The Parse Tree</h1>
+<p>This document describes the Misty parse tree. This is not a part of the Misty System Standard.
+A conforming implementation does not have to conform to this.
+This is descriptive of one particular implementation.
+</p>
+<p>The tree can be fully realized as a JSON object.</p>
+<h2 id="token">Tokens</h2>
+<p>The module <code>tokenize.mst</code> takes a source text and produces an array of tokens. The tokens are made up of these fields:</p>
+<h4>kind</h4>
+<p><code>&quot;name&quot;</code>, <code>&quot;text&quot;</code>, <code>&quot;number&quot;</code>,
+<code>&quot;comment&quot;</code>, <code>&quot;newline&quot;</code>, <code>&quot;space&quot;</code>,
+and all of the <a href="intrinsic.html">intrinsics</a> and punctuators:</p>
+<pre>.  ,  /  |  !  -  +  *  (  )  [  ]  {  }  =  &lt;  &gt;  &lt;&gt; &lt;= &gt;=  //  &amp;  &amp;&amp;   /\  \/  '</pre>
+<h4>text</h4>
+<p>The characters making up the token. </p>
+<p>At this stage, <code>kind: &quot;number&quot;</code> tokens are represented as text to avoid the danger of early loss of precision. </p>
+<p>The <code>kind: &quot;text&quot;</code> tokens have already had escape sequences decoded and outer quotes removed. </p>
+<p>A contigous run of spaces is made into a single <code>kind: &quot;space&quot;</code> token with a <code>text</code> field containing the entire run of spaces.</p>
+<h4>at</h4>
+<p>The character position in the source text where the token begins, starting at <code>0</code>.</p>
+<h4>from_row</h4>
+<p>The line number of the the token, starting at <code>0</code>.</p>
+<h4>from_column</h4>
+<p>The column number of the start of the token, starting at 0.</p>
+<h4>to_row</h4>
+<p>The line number if the last character of the token.</p>
+<h4>to_column</h4>
+<p>The column number of the character past the token.</p>
+<h4>quote</h4>
+<p>For  <code>kind: &quot;text&quot;</code> tokens, one of:</p>
+<pre>&quot;<small>double quote</small>  &lt;&lt;&quot;<small>less less doouble quote</small>
+</pre>
+<p>The <code>kind</code> and and <code>text</code> fields will be meaningful to the parser that consumes the token list. The other fields are intended for error reporting.These token records are treated as nodes that are woven into a parse tree.</p>
+<h1 id="tree">Tree</h1>
+<p>The module <code>parse.mst</code> turns a list of tokens into an abstract parse tree.</p>
+<h2 id="root">Root</h2>
+<p>The root of the tree is a record. Its fields are</p>
+<h4>kind</h4>
+<p><code>&quot;misty&quot;</code></p>
+<h4>name</h4>
+<p>The name of the file. </p>
+<h4>functions</h4>
+<p>An array of functions. For each<code> function </code>there is a record in this array, plus function <code>0</code>, the program or module body.</p>
+<h4>endowment</h4>
+<p>An array of endowment names.</p>
+<h4>logs</h4>
+<p>An array of log names.</p>
+<h4>patterns</h4>
+<p>An array of pattern definitions.</p>
+<h4>scopes</h4>
+<p>An array of scopes. This array is parallel with the <code>functions</code> array. It contains records containing the names that are used in each function. The names can be the function name and inputs, and additional names created with <code>def</code>, <code>use</code>, <code>var</code>. The scope also contains names that are found in outer functions and intrinsics.</p>
+<p>A scope is used to determine what a name in a function refers to.</p>
+<h4>intrinsics</h4>
+<p>An array of intrinsics that are used. This information might be used by a linker.</p>
+<h4>uses</h4>
+<p>An array of modules that are mentioned in <code>use</code> statements. This information might be used by a linker.</p>
+<h3 id="program">Program</h3>
+<h4>kind</h4>
+<p><code>&quot;program&quot;</code></p>
+<h4>function_nr</h4>
+<p><code>0</code></p>
+<h4>statements</h4>
+<p>An array of statements.</p>
+<h3 id="module">Module</h3>
+<p>A module is like an actor except that it does not have access to <code>@</code><small>at</small> (the source of an actor's capabilies) and it has a <code>return</code> statement that the actor does not have.</p>
+<h4>kind</h4>
+<p><code>&quot;module&quot;</code></p>
+<h4>function_nr</h4>
+<p><code>0</code></p>
+<h4>statements</h4>
+<p>An array of statement nodes.</p>
+<h2 id="name">Names</h2>
+<p>Names are use to represent functions, variables, and constants.</p>
+<h4>kind</h4>
+<p><code>&quot;name&quot;</code></p>
+<h4>name</h4>
+<p>The name, as a simple text.</p>
+<p>More information about the name token can be found in the scope.</p>
+<h3>Functinos</h3>
+<p>A functino is an operator function. It looks like an operator, but it behaves as an intrinsic function. It has a name token, with the operator as the name.</p>
+<h2 id="literal">Literals</h2>
+<h3>Numbers</h3>
+<p>Number tokens have their values in text form so that the interpretation of the number can be delayed as long as possible. This is to minimize rounding and other representation errors.</p>
+<h4>kind</h4>
+<p><code>&quot;number&quot;</code></p>
+<h4>value</h4>
+<p>A text.</p>
+<h3>Texts</h3>
+<h4>kind</h4>
+<p><code>&quot;text&quot;</code></p>
+<h4>value</h4>
+<p>A text.</p>
+<h3>Array</h3>
+<h4>kind</h4>
+<p><code>&quot;array&quot;</code></p>
+<h4>list</h4>
+<p>An array (possibly empty) of expression nodes.</p>
+<h3>Record</h3>
+<h4>kind</h4>
+<p><code>&quot;record&quot;</code></p>
+<h4>list</h4>
+<p>An array (possibly empty) of pair records. A pair record is</p>
+<blockquote>
+    <h4>left</h4>
+    <p>A simple text.</p>
+    <h4>right</h4>
+    <p>An expression node.</p>
+</blockquote>
+<h3><code>@</code></h3>
+<p>This is the actor's source of capability. It can be used to call <code>@</code> functions.</p>
+<h4>kind</h4>
+<p><code>&quot;@&quot;</code></p>
+<h3><code>@</code> address</h3>
+<p>This is the actor's private address.</p>
+<h4>kind</h4>
+<p><code>&quot;@ address&quot;</code></p>
+<h2 id="operator">Operators</h2>
+<h3>Infix operators</h3>
+<h4>kind</h4>
+<pre>|  *  /  //  +  -  &amp;  &amp;&amp;  =  &lt;&gt;  &lt;  &lt;=  &gt;  &gt;=  /\  \/</pre>
+<h4>left</h4>
+<p>The left operand node.</p>
+<h4>right</h4>
+<p>The right operand node.</p>
+<h3>The <code>.</code> operator</h3>
+<h4>kind</h4>
+<p><code>&quot;.&quot;</code></p>
+<h4>left</h4>
+<p>The left operand node.</p>
+<h4>right</h4>
+<p>A simple text.</p>
+<h3>Subscript</h3>
+<h4>kind</h4>
+<p><code>&quot;[&quot;</code></p>
+<h4>left</h4>
+<p>The left operand node.</p>
+<h4>right</h4>
+<p>The right operand node. If <code>right</code> is missing, then <code>[]</code> are representing the push/pop operator.</p>
+<h3>The ( operator</h3>
+<h4>kind</h4>
+<p><code>&quot;(&quot;</code></p>
+<h4>expression</h4>
+<p>The left operand node, which should resolve to a function.</p>
+<h4>list</h4>
+<p>An array of expression nodes, an input value list.</p>
+<h3>The <code>then</code> operator</h3>
+<p>This is the ternary operator.</p>
+<h4>kind</h4>
+<p><code>&quot;then&quot;</code></p>
+<h4>expression</h4>
+<p>A condition node.</p>
+<h4>then</h4>
+<p>The expression node if true.</p>
+<h4>else</h4>
+<p>The expression node if false.</p>
+<h2 id="statement">Statements</h2>
+<h3 id="assign">The assign statement</h3>
+<h4>kind</h4>
+<p><code>&quot;assign&quot;</code></p>
+<h4>left</h4>
+<p>The destination expression node.</p>
+<h4>right</h4>
+<p>The value expression node.</p>
+<h4>push</h4>
+<p><code>true</code> if the <code>right</code> result is appended to the destination array.</p>
+<h4>pop</h4>
+<p><code>true</code> if the <code>left</code> result receives that the last element of the destination array, removing it from the destination array, reducing its length by one.</p>
+<h3 id="break">The break statement</h3>
+<h4>kind</h4>
+<p><code>&quot;break&quot;</code></p>
+<h4>name</h4>
+<p>If the statement is labelled, this is a simple text.</p>
+<h3 id="call">The call statement</h3>
+<h4>kind</h4>
+<p><code>&quot;call&quot;</code></p>
+<h4>expression</h4>
+<p>A <code>(</code> expression node.</p>
+<h3 id="def">The def statement</h3>
+<h4>kind</h4>
+<p><code>&quot;def&quot;</code></p>
+<h4>left</h4>
+<p>A name token.</p>
+<h4>right</h4>
+<p>An expression node.</p>
+<h3>The do statement</h3>
+<h4>kind</h4>
+<p><code>&quot;do&quot;</code></p>
+<h4>statements</h4>
+<p>An array of statement nodes.</p>
+<h4>name</h4>
+<p>If the <code>do</code> statement is labelled, this is a simple text.</p>
+<h3 id="disrupt">The disrupt statement</h3>
+<h4>kind</h4>
+<p><code>&quot;disrupt&quot;</code></p>
+<h3 id="if">The if statement</h3>
+<h4>kind</h4>
+<p><code>&quot;if&quot;</code></p>
+<h4>expression</h4>
+<p>A conditional expression node.</p>
+<h4>then</h4>
+<p>An array of statement nodes.</p>
+<h4>list</h4>
+<p>An array of <code>if</code> statement nodes (without <code>list</code> or <code>else</code>) that are from <code>else if</code>.</p>
+<h4>else</h4>
+<p>an array of statement nodes (optional).</p>
+<h3 id="return">The return statement</h3>
+<h4>kind</h4>
+<p><code>&quot;return&quot;</code></p>
+<h4>expression</h4>
+<p>An optional expression node.</p>
+<h3 id="send">The send statement</h3>
+<h4>kind</h4>
+<p><code>&quot;send&quot;</code></p>
+<h4>left</h4>
+<p>The address expression node.</p>
+<h4>right</h4>
+<p>The message expression node.</p>
+<h4>expression</h4>
+<p>The optional reply function expression node.</p>
+<h3 id="use">The use statement</h3>
+<h4>kind</h4>
+<p><code>&quot;use&quot;</code></p>
+<h4>left</h4>
+<p>A name token.</p>
+<h4>right</h4>
+<p>An optional name or text token.</p>
+<h3 id="var">The var statement</h3>
+<h4>kind</h4>
+<p><code>&quot;var&quot;</code></p>
+<h4>left</h4>
+<p>A name token.</p>
+<h4>right</h4>
+<p>An optional expression node. The default is <code>null</code>.</p>
+<h2 id="function">Function</h2>
+<p>The <code>function</code> operator does two things: It makes a function definition that it appends to the functions array, and it makes a reference to that function definition.</p>
+<h3>Function reference</h3>
+<h4>kind</h4>
+<p><code>&quot;function&quot;</code></p>
+<h4>function_nr</h4>
+<p>The location of the function definition in the <code>functions</code> array.</p>
+<h4>name</h4>
+<p>If it is an operator function, then <code>name</code> will be name of the operator, such as <code>&quot;+&quot;</code>. The name will also be noted in the intrinsics.</p>
+<h3>Function definition</h3>
+<h4>kind</h4>
+<p><code>&quot;function&quot;</code></p>
+<h4>name</h4>
+<p>If the function is named, this is a simple text.</p>
+<h4>outer</h4>
+<p>The number of the outer function that made this one.</p>
+<h4>list</h4>
+<p>A list of name nodes, the inputs. Each has a <code>input_nr</code> field, between 0 and 3. If an input has a default value, it will be in the name token's <code>expression</code> field.</p>
+<h4>expression</h4>
+<p>If the function is an expression function, the expression node is here.</p>
+<h4>statements</h4>
+<p>If the function is a statement function, then this is an array of statement nodes.</p>
+<h4>disruption</h4>
+<p>An array of statement nodes, the function's disruption handler. (Optional.)</p>
+<h2 id="scope">Scope</h2>
+<p>The root node contains an array of scopes. The <code>scopes</code> array is indexed by <code>function_nr</code>, like the <code>functions</code> array. Each function definition has a scope record containing all of the names used in that function. </p>
+<p>A scope record contains  name fields, where the key is a variable name, and the field is a record containing:</p>
+<h4>name</h4>
+<p>The name of the variable.</p>
+<h4>level</h4>
+<p>The distance to the outer scope.</p>
+<h4>make</h4>
+<p>The maker of the name:</p>
+<pre> def  endowment  function  input<small>parameter</small>  intrinsic  use  var</pre>
+<p>Only names that were made by the <code>var</code> statement can have their values replaced by the <code>assign</code> statement.</p>
+<h4>function_nr</h4>
+<p>The number of the function that declared the name.</p>
+<h4>functino</h4>
+<p>If this is an intrinsic functino, then <code>true</code>.</p>
+<h4>closure</h4>
+<p>If the name is used by an inner function, then this is <code>true</code>.</p>
+<h2 id="pattern">Pattern</h2>
+<p>The <code>pattern</code> operator does two things: It makes a function definition that it appends to the <code>patterns</code> array, and it makes a reference to that pattern definition.</p>
+<h3>Pattern reference</h3>
+<h4>kind</h4>
+<p><code>&quot;pattern&quot;</code></p>
+<h4>pattern_nr</h4>
+<p>The location of the pattern definition in the <code>patterns</code> list.</p>
+<h3>Pattern definition</h3>
+<p>Coming soon.</p>
+</body>
+</html>

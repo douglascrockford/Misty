@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Parseq</title>
+<link rel="stylesheet" href="../misty.css" type="text/css">
+<link rel="icon" type="image/png" href="../favicon.png">
+</head>
+<body>
+<img src="../misty.gif" width="204" height="79">
+<h1><a href="https://mistysystem.com/">Misty Programming Language:</a>Parseq</h1>
+<p>The <code>parseq</code> module provides tools for working with callbacks and eventual programming. The name combines the prefixes of parallel and sequence.</p>
+<p>The <code>parseq</code> module requires that the actor has the <a href="programs.html#delay"><code>@.delay</code></a> capability.</p>
+<pre>use parseq_make
+def parseq = parseq_make(@.delay)</pre>
+<p id="callback"><code>@.delay</code> is only necessary if time limits are used.</p>
+<h2 id="types">Function types</h2>
+<p>The <code>parseq</code> module works with functions of these types: callbacks, requestors, cancels, and factories.</p>
+<h3 id="callback">Callback</h3>
+<p id="callback2">Callbacks are a functional pattern used to deliver results from the future. A <var>callback</var> function has a signature of </p>
+<pre>&fnof; <var>callback</var>(<var>value</var>, <var>reason</var>)</pre>
+    <p>Instead of returning a <var>value</var>, a function may be written to use a provided <var>callback</var> function, passing the <var>value</var> as an input value.</p>
+    <pre>return <var>callback</var>(<var>value</var>)</pre>
+<p id="reverse">If the <var>value</var> is <code>null</code>, that indicates failure. The optional input value <var>reason</var> can be used to provide documentation about the failure.</p>
+<pre>return callback(null, &quot;My dog ate my return value.&quot;)</pre>
+<h3 id="requestor">Requestor</h3>
+<h3 id="cancel">Cancel</h3>
+<h3 id="factory">Factory</h3>
+<p>&nbsp;</p>
+<h4>requestor(<var>record</var>)</h4>
+<p>The <code>requestor</code> function makes and returns a <var>requestor</var> function. A <var>requestor</var> function has a signature of</p>
+    <pre>&fnof; <var>requestor</var>(<var>callback</var>, <var>value</var>)</pre>
+    <p>The <var>requestor</var> will eventually call the <var>callback</var> function, giving its <var>value</var>.</p>
+    <p id="callback">A <var>callback</var> frunction has a signature of </p>
+    <pre>&fnof; <var>callback</var>(<var>value</var>, <var>reason</var>)</pre>
+    <p>If the <var>requestor</var> was successful, it will pass its result as the <var>callback's</var> <var>value</var>. If the <var>requestor</var> is not successful, it will pass <code>null</code> as the callback's <var>value</var>, and optionally a <var>reason</var> for the failure.</p>
+    <p>The <code>requestor</code> function takes a record input value that specifies the record to be made. The record contains these fields:</p>
+    <ul>
+        <li><code>type</code> (required)
+            <p>The types are <code>"fallback"</code>, <code>"parallel"</code>, <code>"race"</code>, <code>"sequence"</code>.</p>
+        </li>
+        <li><code>requestors</code> (required except when type is <code>"parallel"</code>)</li>
+        <p>An array of <var>requestor</var> functions.</p>
+        <li>throttle (optional)</li>
+        <li></li>
+    </ul>
+<p>&nbsp;</p>
+    <h4 id="fallback">fallback(<var>array</var>, <var>time_limit</var>)</h4>
+    <h4 id="reduce"><span id="parallel">parallel</span>(<var>requireds</var>, <var>optionals</var>, <var>time_limit</var>, <var>throttle</var>)</h4>
+    <p>The parallel takes a set of requestor functions and returns a requestor function that starts them all at once. It ultimately produces an array of all of the results. </p>
+    <p>The <var>requireds</var> and <var>optionals</var> are an array or record of requestor functions. Either can be <code>null</code>, but not both. Otherwise, <var>requireds</var> and <var>optionals</var> must be the same type. The required requestors must all succeed if the parallel requestor is to succeed. An optional requestor can be unsuccessful without affecting the success of the whole.</p>
+    <p>A <var>time_limit</var> (in seconds) can be imposed.</p>
+    <p>A <var>throttle</var> may be used to limit the number of requestors that are running concurrently. This can be used to reduce stress on fragile systems.</p>
+<h4 id="race">race(<var>array</var>, <var>time_limit</var>, <var>throttle</var>)</h4>
+<h4 id="sequence">sequence(<var>array</var>, <var>time_limit</var>)</h4>
+<p>&nbsp;</p>
+<p align="left">&nbsp;</p></body></html>

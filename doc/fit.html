@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Numbers</title>
+<link rel="stylesheet" type="text/css" href="../misty.css">
+<link rel="icon" type="image/png" href="../favicon.png">
+</head>
+<body>
+<img src="../misty.gif" width="204" height="79">
+<h1><a href="https://mistysystem.com/">Misty Programming Language:</a>Fit Functions</h1>
+<p>A felicitous number, or <b>fit</b> number for short, is a signed integer that fits in 56 bits. A fit number is an integer   in the range <code>-36028797018963968</code> thru <code>36028797018963967</code>. The <code>fit</code> module provides functions that act upon fit integers.</p>
+<pre>use fit</pre>
+<p>If any of these functions is given an input that is not fit or not in range, the result is <code>null</code>.</p>
+<h4 id="and">fit.and(<var>first</var>, <var>second</var>)</h4>
+<p>And. The result is the bitwise <code>and</code> of the two fit integers. </p>
+<p>Examples:</p>
+<pre>assign result: fit.and(12, 10)   # result is 8
+assign result: fit.and(16, 2)    # result is 0
+assign result: fit.and(15, 3)    # result is 3
+assign result: fit.and(13, 3)    # result is 1
+assign result: fit.and(&quot;10&quot;, 3)  # result is null</pre>
+<h4 id="left2">fit.left(<var>first</var>, <var>second</var>)</h4>
+<p>Left shift. It is similar to multiplying by a power of two. Bits that fall off of the left edge are lost.</p>
+<p>Examples:</p>
+<pre>assign result: fit.left(12, 10)    # result is 12288
+assign result: fit.left(16, 2)     # result is 64
+assign result: fit.left(15, 53)    # result is -9007199254740992</pre>
+<h4 id="mask">fit.mask(<var>number</var>)</h4>
+<p>Mask. The <code>mask</code> function is used to generate bit fields that can be used
+    with the other functions. If the <var>number</var> is <code>0</code>, then the result is <code>0</code>. If the <var>number</var> is
+    not an integer, or if it is greater than <code>56</code> or less than <code>-56</code>, then the result is <code>null</code>. If the <var>number</var> is positive, then a number containing that many <code>1</code> bits is
+    generated. If the <var>number</var> is negative, then a number with that many (absolute)
+    <code>0</code> bits is generated. </p>
+<p>Examples:</p>
+<pre>fit.mask(0)     #  0                            (00000000000000)
+fit.mask(1)     #  1                            (00000000000001)
+fit.mask(3)     #  7                            (00000000000007)
+fit.mask(8)     #  255                          (000000000000FF)
+fit.mask(16)    #  65_535                       (0000000000FFFF)
+fit.mask(32)    #  4_294_967_295                (000000FFFFFFFF)
+fit.mask(55)    #  36_028_797_018_963_967       (7FFFFFFFFFFFFF)
+fit.mask(56)    #  -1                           (FFFFFFFFFFFFFF)
+fit.mask(57)    #  null
+fit.mask(-1)    #  -2                           (FFFFFFFFFFFFFE)
+fit.mask(-3)    #  -8                           (FFFFFFFFFFFFF8)
+fit.mask(-8)    #  -256                         (FFFFFFFFFFFF00)
+fit.mask(-16)   #  -65_536                      (FFFFFFFFFF0000)
+fit.mask(-32)   #  -4_294_967_296               (FFFFFF00000000)
+fit.mask(-55)   #  -36_028_797_018_963_968      (80000000000000)
+fit.mask(-56)   #  0                            (00000000000000) </pre>
+<h4 id="not">fit.not(<var>fit</var>)</h4>
+<p>Not. Flip every bit. Same as <code>fit.xor(<var>fit</var>, fit.mask(56))</code>.</p>
+<h4 id="or">fit.ones(<var>fit</var>)</h4>
+<p>Count the total number of <code>1</code> bits.</p>
+<p>Examples:</p>
+<pre>assign result: fit.ones(-1)    # result is 56
+assign result: fit.ones(0)     # result is 0
+assign result: fit.ones(8)     # result is 1
+assign result: fit.ones(18)    # result is 2</pre>
+<h4 id="or">fit.or(<var>first</var>, <var>second</var>)</h4>
+<p>Or. The result is the bitwise <code>or</code> of the two values. </p>
+<p>Examples:</p>
+<pre>assign result: fit.or(12, 10)   # result is 14
+assign result: fit.or(16, 2)    # result is 18
+assign result: fit.or(15, 3)    # result is 15
+assign result: fit.or(13, 3)    # result is 15</pre>
+<h4 id="reverse">fit.reverse(<var>first</var>)</h4>
+<p>Reverse. Reverse the order of the bits.</p>
+<p>Example:</p>
+<pre>assign result: fit.reverse(-36028797018963968)    # result is 1
+assign result: fit.reverse(3141592653589793)      # result is 2334719610726733</pre>
+<h4 id=right>fit.right(<var>first</var>, <var>second</var>)</h4>
+<p>Right shift with zero fill. </p>
+<p>Examples:</p>
+<pre>assign result: fit.right(12, 10)                   # result is 0
+assign result: fit.right(19, 2)                    # result is 4
+assign result: fit.right(-9007199254740992, 53)    # result is 7
+assign result: fit.right(-2)                       # result is 36028797018963967</pre>
+<h4 id="right_signed">fit.right_signed(<var>first</var>, <var>second</var>)</h4>
+<p>Right shift with sign fill. </p>
+<p>Examples:</p>
+<pre>assign result: fit.<code>right</code>(-2, 1)                   # result is -1</pre>
+<h4 id=rotate>fit.rotate(<var>first</var>, <var>second</var>)</h4>
+<p>Left shift with carry  fill. </p>
+<p>Examples:</p>
+<pre>assign result: fit.rotate(1, 1)                   # result is 2
+assign result: fit.rotate(-2, 1)                  # result is -3</pre>
+<h4 id="xor">fit.xor(<var>first</var>, <var>second</var>)</h4>
+<p>Exclusive or. The result is the bitwise exclusive-or of the two integers. </p>
+<p>Examples:</p>
+<pre>assign result: fit.xor(12, 10)    # result is 6
+assign result: fit.xor(16, 2)     # result is 18
+assign result: fit.xor(15, 3)     # result is 12
+assign result: fit.xor(13, 3)     # result is 14
+assign result: fit.xor(13.01, 3)  # result is null</pre>
+<h4 id="zeros">fit.zeros(<var>fit</var>)</h4>
+<p>Leading zeros. Count the number of leading zeros. </p>
+<p>Examples:</p>
+<pre>assign result: fit.zeros(-1)    # result is 0
+assign result: fit.zeros(0)     # result is 56
+assign result: fit.zeros(1)     # result is 55</pre>
+</body></html>

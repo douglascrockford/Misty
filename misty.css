@@ -1,0 +1,264 @@
+@charset "utf-8";
+
+@font-face {
+    font-family: 'Programma';
+    font-weight: bold;
+    src: url('https:/mistysystem.com/woff/Programma-Bold.woff2') format('woff2');
+}
+
+code, pre, h4, textarea {
+    font-family: Programma, monospace;
+    font-style: normal;
+    font-weight: bold;
+}
+
+code, pre, h4 {
+    font-family: Programma, monospace;
+    font-size: 100%;
+    font-style: normal;
+    font-weight: bold;
+}
+
+textarea {
+    box-sizing: border-box;
+    font-size: 10pt;
+    padding: 0.75em;
+    white-space: pre;
+    width: 100%;
+}
+
+fieldset, legend {
+    border: 1em solid rosybrown;
+}
+
+fieldset {
+    padding: 2em;
+}
+
+legend {
+    background-color: lavenderblush;
+    padding-bottom: 0.25em;
+    padding-top: 0.25em;
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+dfn, h1, h2, h3, caption, legend, .rule {
+    font-family: "Trebuchet MS", Futura, "Gill Sans", Arial, Helvetica, sans-serif;
+    font-style: normal;
+    font-weight: 500;
+}
+
+body, p, .rule i, li, h5  {
+    font-family: Georgia, serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+body {
+    background-color: mistyrose;
+    font-size: 14pt;
+    margin-left: 7%;
+    margin-right: 7%;
+    border-left: 1em solid rosybrown;
+    padding-left: 1em;
+    padding-bottom: 1em;
+    padding-top: 1em;
+}
+
+p, li {
+    margin-bottom: 0.5em;
+    margin-top: 0.5em;
+}
+
+h1 {
+    border-color: black;
+    border-style: solid;
+    border-width: 2pt 0 0 0;
+    font-size: 20pt;
+    font-variant: small-caps;
+    letter-spacing: 2pt;
+    margin-bottom: 0px;
+    margin-top: 1em;
+    padding-bottom: 1em;
+    padding-top: 1em;
+    text-align: left;
+}
+
+h2 {
+    border-color: black;
+    border-style: solid;
+    border-width: 1.5pt 0 0 0;
+    clear: both;
+    font-size: 18pt;
+    font-variant: normal;
+    letter-spacing: 3pt;
+    margin-top: 2em;
+    text-align: left;
+    padding-bottom: 0px;
+    padding-top: 0.5em;
+}
+
+h3 {
+    border-color: black;
+    border-style: solid;
+    border-width: 1pt 0 0 0;
+    font-size: 14pt;
+    letter-spacing: 2pt;
+    padding-bottom: 0px;
+    padding-top: 0.5em;
+    text-align: left;
+    width: 50%;
+}
+
+h4 {
+    font-size: 14pt;
+    margin-bottom: 0.5em;
+    padding-bottom: 0px;
+    text-align: left;
+    white-space: pre-wrap;
+}
+
+h5 {
+    font-size: 14pt;
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+h5::before {
+    content: "⏵ ";
+}
+
+p {
+    margin-left: 1em;
+}
+
+a:link {
+    color: black;
+    text-decoration-color: rosybrown;
+    text-decoration-line: underline;
+    text-decoration-style: solid;
+}
+
+a:visited {
+    color: black;
+    text-decoration-color: lightblue;
+}
+
+h1 a:link {
+    color: black;
+    font-size: 16pt;
+    font-variant: normal;
+    letter-spacing: 0;
+    margin-right: 1em;
+    text-decoration-color: transparent;
+    text-decoration-line: none;
+}
+
+h1 a:hover, a:hover {
+    text-decoration-color: red;
+    text-decoration-line: underline;
+    text-decoration-style: solid;
+}
+
+hr {
+    border: 1pt solid black;
+}
+
+pre {
+    margin-left: 3em;
+}
+
+small {
+    font-size: 8pt;
+    font-style: italic;
+    margin-left: 2pt;
+    margin-right: 0.75pt;
+}
+
+caption {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+table {
+    border: 0;
+    border-collapse: collapse;
+    float: right;
+    margin: 1em 0 1em 1em;
+}
+
+th {
+    background-color: thistle;
+    border: black solid 1px;
+    padding-left: 10pt;
+    padding-right: 10pt;
+    text-align: center;
+    vertical-align: top;
+}
+
+td {
+    background-color: white;
+    border: black solid 1px;
+    padding-left: 10pt;
+    padding-right: 10pt;
+    vertical-align: top;
+}
+
+table.bits {
+    float: none;
+}
+
+table.bits th {
+    background-color: inherit;
+    border: 0;
+    font-weight: lighter;
+    padding-left: 3pt;
+    padding-right: 3pt;
+    text-align: justify;
+}
+
+/* This terrible hack instead of text_align: force */
+
+table.bits th:after {
+    content: "";
+    display: inline-block;
+    height: 0;
+    width: 100%;
+}
+
+table.bits td {
+    background-color: white;
+    border: 2pt solid black;
+    text-align: center;
+}
+
+i, var, .rule i  {
+    font-style: italic;
+}
+
+.rule {
+    margin-top: -1em;
+    margin-bottom: 0.5em;
+    margin-left: 3em;
+    page-break-inside: avoid;
+    white-space: pre;
+}
+
+@media print {
+    @page {
+        margin-top: 1in;
+        margin-bottom: 1in;
+    }
+
+    body {
+        background-color: white;
+        border-left: 0;
+        padding-left: 0;
+    }
+
+    a:link, a:visited {
+        color: black;
+        text-decoration-line: none;
+    }
+}

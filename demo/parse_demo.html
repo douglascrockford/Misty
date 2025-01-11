@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="author" content="Douglas Crockford" />
+<title>The Misty Parse Demo</title>
+<link rel="icon" type="image/png" href="../favicon.png">
+<link rel="stylesheet" type="text/css" href="../misty.css">
+<style>
+input[type=button] {
+    border: 2pt solid black;
+    border-radius: 2em;
+    font-family: Programma, monospace;
+    font-size: 100%;
+    margin: 0.5em;
+    padding: 0.5em;
+}
+input[type=button]:hover {
+    background-color: thistle;
+}
+</style>
+<script src="../js/tokenize.js"></script>
+<script src="../js/parse.js"></script>
+<script src="../js/format.js"></script>
+</head>
+<body>
+<img src="../misty.gif" width="204" height="79">
+<h1><a href="https://mistysystem.com/">Misty Programming Language:</a>The Misty Parse Demo</h1>
+<p>Put misty source text in the box and push a button.</p>
+<fieldset style="clear: both;">
+<legend>Source text</legend>
+<textarea id="inputation" rows=24 autocomplete=off autocorrect=off spellcheck=false>
+</textarea>
+</fieldset>
+<p style="text-align: center;">
+
+<input id=clear type=button value="clear">
+<input id=tokens type=button value="tokens">
+<input id=neat type=button value="neat">
+<input id=complete type=button value="complete">
+<input id=scope type=button value="scope">
+<input id=intrin type=button value="intrinsics">
+
+</p>
+<fieldset><legend id=outputlegend>Watch this space</legend>
+<pre id=outputation stle="clear: both;"></pre></fieldset>
+
+<script>
+
+(function initialize() {
+    const inputation = document.getElementById("inputation");
+    const outputation = document.getElementById("outputation");
+    const outputlegend = document.getElementById("outputlegend");
+    const clear = document.getElementById("clear");
+    const tokens = document.getElementById("tokens");
+    const neat = document.getElementById("neat");
+    const complete = document.getElementById("complete");
+    const scope = document.getElementById("scope");
+    const intrin = document.getElementById("intrin");
+    clear.addEventListener("click", function (event) {
+        outputlegend.replaceChildren("Watch this space");
+        outputation.innerHTML = "";
+        inputation.value = "";
+        inputation.focus();
+    });
+    tokens.addEventListener("click", function (event) {
+        outputation.innerHTML = "";
+        outputation.append(JSON.stringify(tokenize(inputation.value), [
+            "kind", "text", "quote", "at", "column_nr", "line_nr"
+        ], 4));
+        outputlegend.replaceChildren("Tokens");
+        inputation.focus();
+    }, false);
+    neat.addEventListener("click", function (event) {
+        outputation.innerHTML = "";
+        outputation.append(JSON.stringify(
+            parse(tokenize(inputation.value)),
+            [
+                "kind", "name", "make", "value", "parameter_nr", "level",
+                "function_nr", "outer", "left", "right", "expression",
+                "then", "list", "else", "statements", "disruption",
+                "functions", "endowment", "logs", "uses", "closure"
+            ],
+            4
+        ));
+        outputlegend.replaceChildren("Neat parse tree");
+        inputation.focus();
+    }, false);
+    complete.addEventListener("click", function (event) {
+        outputation.innerHTML = "";
+        outputation.append(
+            JSON.stringify(
+                parse(tokenize(inputation.value)),
+                null,
+                4
+            )
+        );
+        outputlegend.replaceChildren("Parse tree");
+        inputation.focus();
+    }, false);
+    scope.addEventListener("click", function (event) {
+        outputation.innerHTML = "";
+        let tree = parse(tokenize(inputation.value));
+        outputation.append(JSON.stringify((
+            typeof tree === "object" && !Array.isArray(tree) && tree !== null
+            ? tree.scopes
+            : tree
+        ), null, 4));
+        outputlegend.replaceChildren("Scope");
+        inputation.focus();
+    }, false);
+    intrin.addEventListener("click", function (event) {
+        outputation.innerHTML = "";
+        let tree = parse(tokenize(inputation.value));
+        outputlegend.replaceChildren("Intrinsics");
+        outputation.append(JSON.stringify((
+            typeof tree === "object" && !Array.isArray(tree) && tree !== null
+            ? tree.intrinsics
+            : tree
+        ), null, 4));
+        inputation.focus();
+    }, false);
+    inputation.focus();
+}());
+</script>
+</body>
+</html>

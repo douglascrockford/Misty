@@ -1,0 +1,1248 @@
+misty module parse
+# 2025-01-09
+
+# Missing feature:
+#      patterns
+
+def intrinsics: stone([
+    "abs", "actor?", "apply", "array", "array?", "blob?", "character"
+    "character?", "codepoint", "data?", "delay", "digit?", "extract"
+    "false", "false?", "filter", "fit?", "floor", "for", "format"
+    "fraction", "function?", "integer", "integer?", "length", "letter?"
+    "logical", "logical?", "lower", "lower?", "max", "min", "modulo", "neg"
+    "not", "null", "null?", "number", "number?", "pattern?", "pi", "record"
+    "record?", "reduce", "remainder", "replace", "resolve", "reverse"
+    "round", "search", "sign", "sort", "stone", "stone?", "text", "text?"
+    "trim", "true", "true?", "trunc", "turkish_lower", "turkish_upper"
+    "upper", "upper?", "whitespace?"
+])
+
+def operators: stone({
+    <</\>>: true
+    <<\/>>: true
+    "|": true
+    "=": true
+    "<>": true
+    "<": true
+    "<=": true
+    ">": true
+    ">=": true
+    "&": true
+    "&&": true
+    "+": true
+    "-": true
+    "*": true
+    "/": true
+    "//": true
+    "[]": false
+})
+
+def error_message: stone({
+    "a space": "a space"
+    "already": "{term_a} was already declared."
+    "end of file": "end of file"
+    "end of line": "end of line"
+    "expected": "Expected {term_b} and saw {term_a}."
+    "misplaced": "Misplaced {term_a}."
+    "n spaces": " spaces"
+    "not implemented": "Feature {term_a} not implemented."
+    "not right": "{term_a} is not allowed on the right side of this statement."
+    "not var": "{term_a} is a {term_b}, not a var."
+    "text": "Text literal error: {term_b}."
+    "too many": "Unexpected {term_a} (too many)."
+    "unexpected": "Unexpected {term_a}."
+    "used before": "{term_a} was used before it was declared."
+})
+
+def error_preamble: "[{from_row}.{from_column}] "
+
+def initial: {}
+def operable: {}
+def precedence: {}
+def statement: {}
+def intrinsic: record(intrinsics, function (name) ({
+    make: "intrinsic"
+    name
+    used: 0
+}))
+
+var dos: null
+var endowment: null
+var errors: null
+var fields: null
+var functions: null
+var function_nr: null
+var intrinsic_used: null
+var indentation: null
+var logs: null
+var main: null
+var next_token: null
+var next_next_token: null
+var novar: null
+var scopes: null
+var token: null
+var tokens: null
+var token_nr: null
+
+# Error reporting
+
+def error_term(the_token) {
+    if the_token = null
+        return ""
+    fi
+    if text?(the_token)
+        if the_token[0] = " "
+            if the_token = " "
+                return error_message["a space"]
+            else
+                return the_token.length + error_message["n spaces"]
+            fi
+        fi
+        if the_token = "newline"
+            return error_message["end of line"]
+        fi
+        return "'" + the_token + "'"
+    fi
+    if the_token.kind = "text"
+        return <<">> + the_token.text + <<">>
+    fi
+    if the_token.kind = "space"
+        if the_token.text = " "
+            return error_message["a space"]
+        else
+            return the_token.text.length + error_message["n spaces"]
+        fi
+    fi
+    if token.kind = "end of file"
+        return error_message["end of file"]
+    fi
+    return "'" + the_token.text + "'"
+}
+
+def error(message, the_token, term_b) {
+    call errors.push(format(
+        error_preamble + error_message[message]
+        {
+            from_column: the_token.from_column
+            from_row: the_token.from_row
+            term_a: error_term(the_token)
+            term_b: error_term(term_b)
+        }
+    ))
+    if errors.length > 1
+        disrupt
+    fi
+}
+
+def fatal(message, the_token, term_b) {
+    call error(message, the_token, term_b)
+    disrupt
+}
+
+# Advance to the next token
+
+def advance(value) {
+
+# If a value was supplied, assure that the current token matches the value.
+
+    if value <> null /\ value <> token.kind /\ (
+        value <> token.text \/ (token.kind <> "name" /\ token.kind <> "space")
+    )
+        call fatal("expected", token, value)
+    fi
+
+# Get the next token. 'next_token' and 'next_next_token' make it possible to
+# look ahead to future tokens.
+
+    assign token: next_token
+    assign next_token: next_next_token
+    do
+
+# If there are no more tokens, synthesize an 'end of file' token.
+
+        if token_nr >= tokens.length
+            assign next_next_token: {
+                kind: "end of file"
+                from_row: next_token.from_row
+                from_column: next_token.to_column
+                to_row: next_token.from_row + 1
+                to_column: 0
+            }
+            break
+        fi
+
+# Skip over comments and spaces or newlines that are followed by a newline.
+
+        assign next_next_token: tokens[token_nr]
+        assign token_nr: token_nr + 1
+        if next_next_token.kind = "newline"
+            if next_token.kind = "newline" \/ next_token.kind = "space"
+                assign next_token: next_next_token
+            else
+                break
+            fi
+        else if next_next_token.kind <> "comment"
+            break
+        fi
+    od
+    if token.kind = "text" /\ token.error <> null
+        call fatal("text", token, token.error)
+    fi
+    return token
+}
+
+def initialize(array_of_tokens) {
+    assign dos: [[]]
+    assign errors: []
+    assign functions: []
+    assign novar: [0]
+    assign indentation: ""
+    assign scopes: []
+    assign token_nr: 0
+    assign tokens: array_of_tokens
+    assign next_next_token: {}
+    assign next_token: {}
+    call advance()
+    call advance()
+    call advance()
+}
+
+def indentation?() {
+    return token.kind = "newline" /\ next_token.text = indentation
+}
+
+def linebreak() {
+    call advance("newline")
+    if indentation <> ""
+        call advance(indentation)
+    fi
+}
+
+def indent() {
+    assign indentation: indentation + "    "
+    call linebreak()
+}
+
+def outdent() {
+    assign indentation: indentation.slice(0, -4)
+    call linebreak()
+}
+
+def declare(token, make) {
+    def name: token.text
+    def scope: scopes[function_nr]
+    if record?(scope[name])
+        call error(
+            (
+                scope[name].function_nr = function_nr
+                then "already"
+                else "used before"
+            )
+            token
+        )
+    fi
+    def variable: {
+        name
+        make
+        level: 0
+        closure: false
+        function_nr
+        nr_uses: 0
+    }
+    assign scope[name]: variable
+    return variable
+}
+
+def lookup() {
+    def the_token: token
+    def name: the_token.text
+    var dot: null
+    call advance("name")
+    assign the_token.name: name
+
+# Locate a name in the scope chain. We start in the current scope and then
+# work backwards thru the outer scopes.
+
+    var level: 0
+    var outer: function_nr
+    var variable: null
+    do
+        assign variable: scopes[outer][name]
+        if variable <> null
+            if variable.make <> "intrinsic"
+                assign the_token.level: variable.level + level
+            fi
+            break
+        fi
+        assign outer: functions[outer].outer
+        if outer = null
+            break
+        fi
+        assign level: level + 1
+    od
+    if variable = null
+        assign variable: intrinsic[name]
+    fi
+    if record?(variable)
+        call error("used before", the_token)
+    else if variable.make = null
+        call error("not right", the_token)
+    else
+        if the_token.level = 0
+            assign variable.nr_uses: variable.nr_uses + 1
+        else
+            assign scopes[function_nr][name]: {
+                name
+                level: the_token.level
+                make: variable.make
+                function_nr: variable.function_nr
+            }
+            if variable.make = "intrinsic"
+                assign variable.nr_uses: variable.nr_uses + 1
+                assign intrinsic_used[name]: true
+            else
+                assign scopes[variable.function_nr][name].closure: true
+                assign scopes[variable.function_nr][name].nr_uses: scopes[variable.function_nr][name].nr_uses + 1
+            fi
+        fi
+    fi
+    if scopes[function_nr][the_token.name].make = "endowment"
+        assign dot: token
+        call advance(".")
+        if token.kind <> "name"
+            call error("unexpected", token)
+        fi
+        assign dot.left: the_token
+        assign dot.right: token.text
+        assign endowment[token.text]: true
+        call advance()
+        return dot
+    fi
+    return the_token
+}
+
+def other_use() {
+
+# 'function' 'pattern' 'then' can also be used as variables. Look at the syntactic sequence to
+# distinguish. Then used as a keyword, it will be followed by a space followed not by an infix
+# operator.
+
+    return (
+        next_token.kind <> "space" \/ operators[next_next_token.kind] = true
+    )
+}
+
+def expression(right_binding_power | 0, open | false) {
+    var action: (
+        token.kind = "name" /\ (
+            token.text = "function" \/ token.text = "pattern"
+        )
+        then initial[token.text]
+        else initial[token.kind]
+    )
+    if not(function?(action))
+        call fatal("unexpected", token)
+    fi
+    var left: action()
+    var binding_power: 0
+    do
+        if (
+            token.kind = "newline" /\ open /\ next_token.kind = "space"
+            /\ function?(operable[next_next_token.kind])
+        )
+            assign action: operable[next_next_token.kind]
+            assign binding_power: precedence[next_next_token.kind]
+        else if token.kind = "space"
+            assign action: operable[next_token.kind]
+            assign binding_power: precedence[next_token.kind]
+        else
+            assign action: operable[token.kind]
+            assign binding_power: precedence[token.kind]
+        fi
+        if not(function?(action)) /\ open /\ indentation?()
+            assign action: operable[next_token.kind]
+            assign binding_power: precedence[next_token.kind]
+        fi
+        if not(function?(action)) \/ right_binding_power >= binding_power
+            break
+        fi
+        assign left: action(left, open)
+    od
+    return left
+}
+
+def block() {
+    var verb: null
+    var action: null
+    def statements: []
+    call indent()
+    do
+        assign verb: token.text
+        assign action: statement[verb]
+        if token.kind <> "name" \/ not(function?(action))
+            call error("expected", token, "a statement")
+            break
+        fi
+        call statements.push(action())
+        if not(indentation?()) \/ verb = "return" \/ verb = "break" \/ verb = "disrupt"
+            break
+        fi
+        call linebreak()
+    od
+    call outdent()
+    return statements
+}
+
+def prefix(kind, action) {
+    assign initial[kind]: action
+}
+
+def infix(kind, right_binding_power) {
+    assign precedence[kind]: right_binding_power
+    assign operable[kind]: function (left, open | false) {
+        if not(open) \/ token.text = " "
+            call advance(" ")
+        else
+            call linebreak()
+        fi
+        def result: token
+        call advance(kind)
+        call advance(" ")
+        assign result.left: left
+        assign result.right: expression(right_binding_power, open)
+        return result
+    }
+}
+
+def refinement(kind, action) {
+    assign precedence[kind]: 999
+    assign operable[kind]: action
+}
+
+def at() {
+    def result: token
+    call advance("@")
+    if functions[0].kind <> "program"
+        call error("unexpected", result)
+    fi
+    if token.kind <> "."
+        assign result.kind: "address"
+    fi
+    return result
+}
+
+call prefix("name", lookup)
+call prefix("text", function () {
+    def result: token
+    call advance()
+    assign result.value: result.text
+    return result
+})
+call prefix("number", function number() {
+    def result: token
+    call advance()
+    assign result.value: result.text
+    return result
+})
+call prefix("@", at)
+
+def paren_expression() {
+    var result: null
+    call advance("(")
+    if token.kind = "newline"
+        call indent()
+        assign result: expression(0, true)
+        if indentation?()
+            call linebreak()
+            assign token.expression: result
+            assign result: token
+            assign result.kind: "then"
+            call advance("then")
+            call advance(" ")
+            assign result.then: expression()
+            call linebreak()
+            call advance("else")
+            call advance(" ")
+            assign result.else: expression()
+        fi
+        call outdent()
+    else
+        assign result: expression(0, false)
+    fi
+    call advance(")")
+    return result
+}
+
+def conditions() {
+    def result: []
+    call indent()
+    do
+        call result.push(expression())
+        if not(indentation?())
+            break
+        fi
+        call linebreak()
+    od
+    call outdent()
+    return result
+}
+
+def input(list) {
+    def result: token
+    call advance("name")
+    def variable: declare(result)
+    if result.input_nr >= 4
+        call error("too many", result)
+    fi
+    if token.kind = "space"
+        call advance(" ")
+        call advance("|")
+        call advance(" ")
+        assign result.expression: expression()
+    fi
+    assign result.input_nr: list.length
+    assign result.kind: "input"
+    assign result.name: result.text
+    assign variable.input_nr: list.length
+    assign variable.make: "input"
+    call list.push(result)
+}
+
+def input_list() {
+    def list: []
+    var open: false
+    call advance("(")
+    if token.kind <> ")"
+        assign open: token.kind = "newline"
+        if open
+            call indent()
+        fi
+        do
+            call input(list)
+            if not(open) /\ token.kind = ","
+                call advance(",")
+                call advance(" ")
+            else if open /\ indentation?()
+                call linebreak()
+            else
+                break
+            fi
+        od
+        if open
+            call outdent()
+        fi
+    fi
+    call advance(")")
+    return list
+}
+
+def body(the_function) {
+    if token.kind = "("
+        assign the_function.expression: paren_expression()
+    else
+        call advance("{")
+        assign the_function.statements: block()
+        if token.text = "disruption"
+            call advance("name")
+            assign the_function.disruption: block()
+        fi
+        call advance("}")
+    fi
+}
+
+def function_stuff(name) {
+    var variable: null
+
+# Don't make functions in a loop. It is inefficient,
+# and closure does not acquire the current values.
+
+    if dos[function_nr].length > 0
+        call error("misplaced", token)
+    fi
+
+# 'token' is the "(" that starts the input list. It will be transformed into
+# the function definition. We do not build on the 'function' token because
+# 'def' and '{}' do not use the 'function' token. Everyone uses "(".
+
+    def the_function: token
+
+# Stash the current function number for later restoration.
+
+    def outer: function_nr
+
+# Get a new number for the new function.
+
+    assign function_nr: functions.length
+
+# Make the reference for the new function. This is returned at the end.
+
+    def reference: {
+        kind: "function"
+        function_nr
+    }
+
+# Put this function in the function list.
+
+    assign functions[function_nr]: the_function
+
+# Make the function's scope.
+
+    assign scopes[function_nr]: {}
+
+# var the function know its maker.
+
+    assign the_function.outer: outer
+
+# 'novar' controls where 'var' and 'def' can be.
+
+    assign novar[function_nr]: 0
+
+# 'dos' manages loops and their labals.
+
+    assign dos[function_nr]: []
+
+    if name
+        assign the_function.name: name.name
+        assign variable: declare(name)
+        assign variable.make: "function"
+    fi
+    assign the_function.list: input_list()
+    call advance(" ")
+    call body(the_function)
+    assign the_function.kind: "function"
+    assign function_nr: outer
+    return reference
+}
+
+call prefix("function", function () {
+    var name: null
+    if other_use()
+        return lookup()
+    fi
+    call advance("function")
+    call advance(" ")
+    if token.kind = "name"
+        assign name: token
+        call advance()
+    fi
+    return function_stuff(name)
+})
+call prefix("'", function () {
+    var name: null
+    call advance("'")
+    if token.kind = "("
+        return function_stuff()        # anonymous function
+    fi
+    if token.kind = "name"
+        assign name: token
+        call advance()
+        return function_stuff(name)    # named function
+    fi
+    if operators[token.kind] = null
+        return fatal("unexpected")
+    fi
+
+# Functinos are operator functions. Change the operator token into a name
+# token make an an intrinsic entry in the current scope increment the
+# nr_uses note that the intrinsic function was used.
+
+    def functino: token
+    call advance(token.kind)
+    assign functino.name: functino.kind
+    assign functino.kind: "name"
+    var field: scopes[function_nr][functino.name]
+    if field = null
+        assign intrinsic_used[functino.name]: true
+        assign scopes[function_nr][functino.name]: {
+            name: functino.name
+            make: "intrinsic"
+            closure: false
+            functino: true
+            nr_uses: 1
+        }
+    else
+        assign field.nr_uses: field.nr_uses + 1
+    fi
+    return functino
+})
+call prefix("pattern", function () {
+    if other_use()
+        return lookup()
+    fi
+    call fatal("not implemented")
+})
+call prefix("(", paren_expression)
+
+call prefix("{", function record_literal() {
+    def result: token
+    def list: []
+    var key: null
+    assign result.list: list
+    call advance("{")
+    if token.kind = "}"
+        call advance("}")
+        return result
+    fi
+    def open: token.kind = "newline"
+    if open
+        call indent()
+    fi
+    do
+        assign key: token
+        if key.kind <> "text" /\ key.kind <> "name"
+            call error("expected", key, "a key")
+        fi
+        if next_token.kind = "(" /\ key.kind = "name"
+            call advance()
+            call list.push({left: key.text, right: function_stuff(key)})
+        else
+            if key.kind <> "name" \/ (
+                next_token.kind <> "newline" /\ next_token.kind <> ","
+            )
+                call advance()
+                call advance(":")
+                call advance(" ")
+            fi
+            call list.push({left: key.text, right: expression(0)})
+        fi
+        assign fields[key.text]: true
+        if open
+            if indentation?()
+                call linebreak()
+            else
+                break
+            fi
+        else if token.kind = ","
+            call advance(",")
+            call advance(" ")
+        else
+            break
+        fi
+    od
+    if open
+        call outdent()
+    fi
+    call advance("}")
+    assign result.kind: "record"
+    return result
+})
+call prefix("[", function array_literal() {
+    def result: token
+    assign result.list: []
+    call advance("[")
+    if token.kind = "]"
+        call advance("]")
+        return result
+    fi
+    def open: token.kind = "newline"
+    if open
+        call indent()
+    fi
+    do
+        call result.list.push(expression())
+        if open /\ indentation?()
+            call linebreak()
+        else if token.kind = ","
+            call advance(",")
+            call advance(" ")
+        else
+            break
+        fi
+    od
+    if open
+        call outdent()
+    fi
+    call advance("]")
+    assign result.kind: "array"
+    return result
+})
+
+call prefix("[]", function empty_array_literal() {
+    def result: token
+    assign result.list: []
+    call advance("[]")
+    assign result.kind: "array"
+    return result
+})
+
+call infix("|", 777)
+call infix("*", 666)
+call infix("/", 666)
+call infix("//", 666)
+call infix("+", 555)
+call infix("-", 555)
+call infix("&", 444)
+call infix("&&", 444)
+call infix("=", 333)
+call infix("<>", 333)
+call infix("<", 333)
+call infix("<=", 333)
+call infix(">", 333)
+call infix(">=", 333)
+call infix(<</\>>, 222)
+call infix(<<\/>>, 222)
+
+def invoke(left) {
+    var result: token
+    assign result.expression: left
+    assign result.list: []
+    call advance("(")
+    if token.kind <> ")"
+        if token.kind = "newline"
+            call indent()
+            assign result.list[0]: expression(0, true)
+            if indentation?()
+                call linebreak()
+                if token.text = "then" /\ not(other_use())
+                    assign token.expression: result.list[0]
+                    assign result.list[0]: token
+                    call advance("then")
+                    call advance(" ")
+                    assign result.list[0].then: expression()
+                    call linebreak()
+                    call advance("else")
+                    call advance(" ")
+                    assign result.list[0].else: expression()
+                else
+                    do
+                        if result.list.length >= 4
+                            call error("too many", token)
+                        fi
+                        call result.list.push(expression())
+                        if not(indentation?())
+                            break
+                        fi
+                        call linebreak()
+                    od
+                fi
+            fi
+            call outdent()
+        else
+            do
+                if result.list.length >= 4
+                    call error("too many", token)
+                fi
+                call result.list.push(expression(0, false))
+                if token.kind <> ","
+                    break
+                fi
+                call advance(",")
+                call advance(" ")
+            od
+        fi
+    fi
+    call advance(")")
+    return result
+}
+
+call refinement("(", invoke)
+call refinement("[", function (left) {
+    var result: token
+    assign result.left: left
+    call advance("[")
+    if token.kind = "newline"
+        call indent()
+        assign result.right: expression(0, true)
+        call outdent()
+    else
+        assign result.right: expression(0, false)
+    fi
+    if result.right.kind = "null"
+        call error("unexpected", result.right)
+    fi
+    call advance("]")
+    return result
+})
+call refinement(".", function (left) {
+    var result: token
+    call advance(".")
+    assign result.left: left
+    assign result.right: token.text
+    assign fields[result.right]: true
+    call advance("name")
+    return result
+})
+
+assign statement.assign: function assign_statement() {
+    def result: token
+    call advance("assign")
+    call advance(" ")
+    var left: lookup()
+    if token.kind = ":"
+        if scopes[function_nr][left.text].make <> "var"
+            call error(
+                "not var"
+                left
+                scopes[function_nr][left.text].make
+            )
+        fi
+    else
+        if token.kind = "." \/ token.kind = "(" \/ token.kind = "["
+            do
+                assign left: operable[token.kind](left)
+                if token.kind = ":"
+                    if left.kind = "("
+                        call error("unexpected", left)
+                    fi
+                    break
+                fi
+                if token.kind <> "." /\ token.kind <> "(" /\ token.kind <> "["
+                    call fatal("expected", result, "call")
+                    break
+                fi
+            od
+        fi
+    fi
+    assign result.left: left
+    if token.kind = "[]"
+        assign result.push: true
+        call advance("[]")
+    fi
+    call advance(":")
+    call advance(" ")
+    assign result.right: expression()
+    if token.kind = "[]"
+        assign result.pop: true
+        call advance("[]")
+    fi
+    assign result.kind: "assign"
+    return result
+}
+
+assign statement.break: function break_statement() {
+    def result: token
+    if dos[function_nr].length < 1
+        call error("misplaced", token)
+    fi
+    call advance("break")
+    if token.kind = "space"
+        call advance(" ")
+        assign result.name: token.text
+        if not(dos[function_nr].includes(token.text))
+            call error("unrecognized", token)
+        fi
+        call advance("name")
+    fi
+    assign result.kind: "break"
+    return result
+}
+
+assign statement.call: function call_statement() {
+    def result: token
+    call advance("call")
+    call advance(" ")
+    var expression: (
+        token.kind = "@"
+        then at
+        else lookup
+    )()
+    do
+        if token.kind <> "." /\ token.kind <> "(" /\ token.kind <> "["
+            break
+        fi
+        assign expression: operable[token.kind](expression)
+    od
+    if expression.kind <> "("
+        call advance("(")
+    fi
+    assign result.expression: expression
+    assign result.kind: "call"
+    return result
+}
+
+assign statement.def: function def_statement() {
+    def result: token
+    if novar[function_nr] <> 0
+        call error("misplaced", result)
+    fi
+    call advance("def")
+    call advance(" ")
+    def name: token
+    call advance("name")
+    assign result.left: name
+    assign name.function_nr: function_nr
+    assign name.level: 0
+    assign name.name: name.text
+    def variable: declare(name)
+    if token.kind = "("
+        assign result.right: function_stuff({
+            text: name.name
+        })
+    else
+        call advance(":")
+        call advance(" ")
+        assign result.right: expression()
+    fi
+    assign variable.make: "def"
+    assign result.kind: "def"
+    return result
+}
+
+assign statement.do: function do_statement() {
+    def result: token
+    if function_nr < 1
+        call error("misplaced", token)
+    fi
+    call advance("do")
+    assign novar[function_nr]: novar[function_nr] + 1
+    if token.text = " "
+        call advance(" ")
+        if dos[function_nr].includes(token.text)
+            call error("already", token)
+        fi
+        call dos[function_nr].push(token.text)
+        assign result.name: token.text
+        call advance("name")
+    else
+        call dos[function_nr].push("")
+        assign result.name: ""
+    fi
+    assign result.statements: block()
+    call advance("od")
+    if result.name <> ""
+        call advance(" ")
+        call advance(result.name)
+    fi
+    call dos[function_nr].pop()
+    assign result.kind: "do"
+    assign novar[function_nr]: novar[function_nr] - 1
+    return result
+}
+
+assign statement.disrupt: function disrupt_statement() {
+    def result: token
+    if function_nr < 1
+        call error("misplaced", token)
+    fi
+    call advance()
+    assign result.kind: "disrupt"
+    return result
+}
+
+assign statement.fi: function fi_statement() {
+    def result: token
+    call advance()
+    call error("misplaced", result)
+    return result
+}
+
+assign statement.if: function if_statement() {
+    def result: token
+    var elif: null
+    assign novar[function_nr]: novar[function_nr] + 1
+    call advance("if")
+    call advance(" ")
+    assign result.expression: expression()
+    assign result.then: block()
+    if token.text = "else"
+        assign result.list: []
+        do
+            if token.text <> "else"
+                break
+            fi
+            call advance("else")
+            if token.text <> " "
+                assign result.else: block()
+                break
+            fi
+            call advance(" ")
+            assign elif: token
+            call advance("if")
+            call advance(" ")
+            assign elif.kind: "if"
+            assign elif.expression: expression()
+            assign elif.then: block()
+            call result.list.push(elif)
+        od
+    fi
+    call advance("fi")
+    assign novar[function_nr]: novar[function_nr] - 1
+    assign result.kind: "if"
+    return result
+}
+
+assign statement.od: function od_statement() {
+    def result: token
+    call advance()
+    call error("misplaced", result)
+    return result
+}
+
+assign statement.log: function log_statement() {
+    def result: token
+    call advance("log")
+    call advance(" ")
+    def name: token.text
+    call advance("name")
+    assign result.left: name
+    assign logs[name]: true
+    call advance(":")
+    call advance(" ")
+    assign result.right: expression()
+    return result
+}
+
+assign statement.return: function return_statement() {
+    def result: token
+    if function_nr = 0 /\ main.misty_type = "program"
+        call error("misplaced", token)
+    fi
+    call advance("return")
+    if token.kind = "space"
+        call advance(" ")
+        assign result.expression: expression()
+        assign result.kind: "return"
+    fi
+    return result
+}
+
+assign statement.send: function send_statement() {
+    def result: token
+    call advance("send")
+    call advance(" ")
+    assign result.left: expression()
+    call advance(":")
+    call advance(" ")
+    assign result.right: expression()
+    if token.kind = ":"
+        call advance(":")
+        call advance(" ")
+        assign result.expression: expression()
+    fi
+    assign result.send: "send"
+    return result
+}
+
+assign statement.use: function use_statement() {
+    def result: token
+    if function_nr <> 0 \/ novar[0] <> 0
+        call error("misplaced", result)
+    fi
+    call advance("use")
+    call advance(" ")
+    var name: token
+    call advance("name")
+    assign result.left: name
+    def variable: declare(name)
+    assign variable.make: "use"
+    if token.kind = ":"
+        call advance(":")
+        call advance(" ")
+        if token.kind = "name"
+            call main.uses.push(token.text)
+            assign result.right: token.text
+        else if token.kind = "text"
+            assign token.value: token.text
+            call main.uses.push(token)
+            assign result.right: token
+        else
+            call error("expected", token, "text")
+        fi
+        call advance()
+    else
+        call main.uses.push(name.name)
+    fi
+    assign result.kind: "use"
+    return result
+}
+
+assign statement.var: function var_statement() {
+    def result: token
+    var name: null
+    if novar[function_nr] <> 0
+        call error("misplaced", result)
+    fi
+    call advance("var")
+    call advance(" ")
+    assign name: token
+    call advance("name")
+    assign name.function_nr: function_nr
+    assign name.level: 0
+    assign name.name: name.text
+    def variable: declare(name)
+    assign result.left: name
+    call advance(":")
+    call advance(" ")
+    assign result.right: expression()
+    assign variable.make: "var"
+    assign result.kind: "var"
+    return result
+}
+
+def misty() {
+    var action: null
+    var verb: null
+
+    assign main: token
+    assign main.functions: functions
+    assign endowment: {}
+    assign fields: {}
+    assign intrinsic_used: {}
+    assign logs: {}
+    assign main.scopes: scopes
+    assign main.uses: []
+    assign function_nr: 0
+    assign novar[function_nr]: 0
+    assign dos[function_nr]: []
+
+    call advance("misty")
+    call advance(" ")
+    def the_body: token
+    if the_body.text <> "program" /\ the_body.text <> "module"
+        return error("expected", the_body, "program' 'module")
+    fi
+    assign the_body.kind: token.text
+    assign the_body.function_nr: function_nr
+    assign scopes[function_nr]: {}
+    assign functions[function_nr]: the_body
+    call advance(token.text)
+    call advance(" ")
+    if token.kind <> "name"
+        call error("expected", token, "a name")
+    fi
+    assign main.name: token.text
+    def variable: declare(token)
+    assign variable.make: "endowment"
+    call advance()
+    call linebreak()
+    assign the_body.statements: []
+    do
+        assign verb: token.text
+        assign action: statement[verb]
+        if not(function?(action))
+            call error("expected", token, "a statement")
+            break
+        fi
+        call the_body.statements.push(action())
+        call linebreak()
+        if verb = "return" \/ token.text = "end"
+            break
+        fi
+    od
+    call advance("end")
+    call advance(" ")
+    call advance(main.name)
+    assign main.endowment: record(endowment)
+    assign main.fields: record(fields)
+    assign main.intrinsics: record(intrinsic_used)
+    assign main.kind: "misty"
+    assign main.logs: record(logs)
+    if token.kind <> "end of file"
+        call linebreak()
+    fi
+    call advance("end of file")
+}
+
+return function parse(tokens) {
+    call initialize(tokens)
+    if tokens.length < 3
+        return ["Bad input"]
+    fi
+    call misty()
+    return (
+        errors.length > 0
+        then errors
+        else main
+    )
+}
+end parse

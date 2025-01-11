@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="author" content="Douglas Crockford" />
+<meta http-equiv="Expires" content="1968-12-09" />
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<link rel="icon" type="image/png" href="../favicon.png">
+<link rel="stylesheet" type="text/css" href="../misty.css">
+<title>The Tokenize Demo</title>
+<style>
+input[type=button] {
+    border: 2pt solid black;
+    border-radius: 2em;
+    font-family: Programma, monospace;
+    font-size: 100%;
+    margin: 0.5em;
+    padding: 0.5em;
+}
+input[type=button]:hover {
+    background-color: thistle;
+}
+</style>
+<script src="../js/tokenize.js"></script>
+</head>
+<body>
+<img src="../misty.gif" width="204" height="79">
+<h1><a href="https://mistysystem.com/">Misty Programming Language:</a>The Tokenize Demo</h1>
+<p>Put misty source text in the box and push the button.</p>
+<fieldset style="clear: both;">
+    <legend>Source text</legend>
+    <textarea id="inputation" rows=24 autocomplete=off autocorrect=off spellcheck=false></textarea>
+</fieldset>
+<p style="text-align: center;">
+    <input id=clear type=button value="clear">
+    <input id=tokenize type=button value="tokenize">
+    <input id=summary type=button value="summary">
+    </p>
+<fieldset><legend>Token list</legend>
+<p id=outputation style="clear: both; font-family: Programma, monospace; white-space: pre-wrap;"></p></fieldset>
+
+<script>
+
+(function initialize() {
+    const inputation = document.getElementById("inputation");
+    const outputation = document.getElementById("outputation");
+    const clear = document.getElementById("clear");
+    const tokenize = document.getElementById("button");
+    const summary = document.getElementById("summary");
+    clear.addEventListener("click", function (event) {
+        outputlegend.replaceChildren("\u00A0");
+        outputation.innerHTML = "";
+        inputation.value = "";
+        inputation.focus();
+    });
+    tokenize.addEventListener("click", function (event) {
+        outputation.innerHTML = "";
+        outputation.append(JSON.stringify(tokenize(inputation.value), null, 4));
+        inputation.focus();
+    }, false);
+    summary.addEventListener("click", function (event) {
+        outputation.innerHTML = "";
+        tokenize(inputation.value).forEach(function (value) {
+            let result = "";
+            switch (value.kind) {
+            case "name":
+            case "number":
+                result = value.text;
+                break;
+            case "text":
+                result = JSON.stringify(value.text);
+                if (value.error) {
+                    result = "\n" + result + " 'ERROR " + value.error + "'\n";
+                }
+                break;
+            case "space":
+                result = " \u00A0";
+                break;
+            case "newline":
+                result = " \n";
+                break;
+            default:
+                result = value.kind;
+            }
+            outputation.append(result + " ");
+        });
+        inputation.focus();
+    }, false);
+}());
+</script>
+</body>
+</html>

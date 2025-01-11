@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Operators</title>
+<link rel="stylesheet" type="text/css" href="../misty.css">
+<link rel="icon" type="image/png" href="../favicon.png">
+</head>
+<body>
+<img src="../misty.gif" width="204" height="79">
+<h1><a href="https://mistysystem.com/">Misty Programming Language:</a>Operators</h1>
+<p>Operators are special characters that are used to make expressions.</p>
+<h2 id="expression">Expression</h2>
+
+<p class="rule">
+expression
+    paren_expression suffix
+    literal suffix
+    name suffix
+    <a href="programs.html"><code>'@'</code></a> suffix
+</p>
+
+<p class="rule">
+open_expression
+    paren_expression open_suffix
+    literal open_suffix
+    name open_suffix
+    <a href="programs.html"><code>'@'</code></a> suffix
+</p>
+
+<p>Expressions are made up of names and literals, fortified by infix (or binary),
+suffix, and ternary operators. The Misty language does not have prefix operators,
+<a href="intrinsic.html#standard">using intrinsic functions instead</a>.</p>
+
+<p>Parentheses can be used to explicitly control the order of evaluation of expressions.</p>
+
+<h2 id="paren">Parenthesized Expressions</h2>
+
+<p class="rule">
+paren_expression
+    <code>'('</code> paren_filler <code>')'</code>
+</p>
+<p class="rule">
+paren_filler
+    expression
+    indent open_expression optional_ternary outdent
+</p>
+
+<p class="rule">
+optional_ternary
+    <code>""</code>
+    ternary
+</p>
+<p class="rule">
+ternary
+    linebreak <code>&quot;then&quot;</code> space expression linebreak <code>&quot;else&quot;</code> space expression
+</p>
+<p>Expressions can be wrapped in parentheses to clarify or alter the order of evaluation. </p>
+<p>A parenthesized expression can also contain a short-circuiting ternary operation. If the first operand is <code>true</code>, then the second operand is evaluated. If the first operand is <code>false</code>, then the third operand is evaluated.
+    If the first operand is neither <code>true</code> nor <code>false</code>, then it disrupts. Expressions that are indented within parens may contain line breaks before an infix operator. Ternary operation is not allowed if a variable is in scope named <code>then</code> or <code>else</code>.</p>
+
+<h2>Suffix Operators</h2>
+<p class="rule">
+suffix
+    <code>&quot;&quot;</code>
+    selection suffix
+    subscript suffix
+    invocation suffix
+    space infix_operator space expression
+</p>
+<p class="rule">
+open_suffix
+    <code>&quot;&quot;</code>
+    selection open_suffix
+    subscript open_suffix
+    invocation open_suffix
+    separation infix_operator space open_expression
+</p>
+<p class="rule">
+separation
+    space
+    linebreak
+</p>
+
+<h3 id="refinement">Refinement</h3>
+<h4 id="period">.<small>period</small></h4>
+<p class="rule">
+selection
+    <code>'.'</code> name
+</p>
+
+<p>Selection. This identifies a field in a value. It is mostly used
+   with records.</p>
+<pre>stooge.last_name     # &quot;Howard&quot;
+stooge.first_name    # &quot;Curly&quot;
+</pre>
+<p>Selection is a short form of subscription. If the thing being selected is a text that is a valid identifier, then the selection is an alias.</p>
+<pre>stooge.last_name = stooge[&quot;last_name&quot;]    # true</pre>
+<h4 id="bracket">[ ]<small>brackets</small></h4>
+<p class="rule">
+subscript
+    <code>'['</code> subscript_filler <code>']'</code>
+</p>
+
+<p class="rule">
+subscript_filler
+    <code>""</code>
+    expression
+    indent open_expression outdent
+</p>
+
+<p>Subscription. The expression in the brackets selects
+a field  of a record or an element of an array, or a character of a text.  </p>
+<table>
+    <tr>
+        <th>object type</th>
+        <th>subscript type</th>
+    </tr>
+    <tr>
+        <td>record</td>
+        <td>text or stone record</td>
+    </tr>
+    <tr>
+        <td>array</td>
+        <td>non-negative integer</td>
+    </tr>
+    <tr>
+        <td>text </td>
+        <td>non-negative integer</td>
+    </tr>
+</table>
+<p>On retrieval, if the record does not contain the key, then <code>null</code>
+  will be returned. On storage, it disrupts if the record is immutable. On storage to a mutable array, if the key
+  is not a number or if the key violates the bounds of the array, or if the key is not the correct type, then it disrupts.</p>
+<pre>stooge[&quot;first_name&quot;][4]    # &quot;y&quot;
+null[&quot;foo&quot;]                # null
+&quot;foo&quot;[0]                   # "f"
+&quot;foo&quot;[3]                   # null
+</pre>
+<h3 id="invocation">Function Invocation</h3>
+<h4>( )<small>parens</small></h4>
+<p class="rule">
+invocation
+    input_value_list
+    record_literal
+</p>
+
+<p class="rule">
+input_value_list
+    <code>'('</code> input_values <code>')'</code>
+</p>
+
+<p class="rule">
+input_values
+    <code>""</code>
+    expression closed_input_values
+    indent open_expression input_values_or_ternary outdent
+</p>
+
+<p class="rule">
+closed_input_values
+    <code>""</code>
+    <code>','</code> space expression closed_input_values
+</p>
+
+<p class="rule">
+input_values_or_ternary
+    ternary
+    open_input_values
+</p>
+
+<p class="rule">
+open_input_values
+    <code>""</code>
+    open_expression open_input_values
+</p>
+
+<p>Invocation. The <code>()</code> suffix operator invokes a function value.</p>
+<blockquote>
+  <p><var>function_value</var><code>(</code><var>input_values</var><code>)</code></p>
+</blockquote>
+<p>If the value is not function, it disrupts.</p>
+<p>If a function is invoked with too few input values, the missing input values are <code>null</code>.
+If a function is invoked with excess input values, there is a distruption.</p>
+<p>A function invocation can pass at most 4 input values. If you need more, consider passing a single record literal instead. </p>
+<p>If a function is used only for its side effects, use the <code><a href="statements.htm l#call">call</a></code><a href="statements.htm l#call"> statement</a>.</p>
+<h2>Infix Operators</h2>
+<p class="rule">
+infix_operator
+    <code>'*'</code>
+    <code>'/'</code>
+    <code>&quot;//&quot;</code>
+    <code>'+'</code>
+    <code>'-'</code>
+    <code>'&amp;'</code>
+    <code>&quot;&amp;&amp;&quot;</code>
+    <code>'='</code>
+    <code>&quot;&lt;&gt;&quot;</code>
+    <code>'&lt;'</code>
+    <code>&quot;&lt;=&quot;</code>
+    <code>'&gt;'</code>
+    <code>&quot;&gt;=&quot; </code><code>&quot;/\&quot;</code>
+    <code>&quot;\/&quot;</code>
+    <code>'|'</code>
+</p>
+
+<h3>Multiplicative Operators</h3>
+
+
+<h4>*<small>asterisk</small></h4>
+<p>Multiplication.
+  If it can be determined at compile time that either operand is zero, the other operand
+  might not be evaluated.</p>
+<pre>3 * 4        # 12
+0.10 * 20    # 2
+0 * null     # 0</pre>
+<h4>/<small>solidus</small></h4>
+<p>Division. </p>
+<pre>3 / 4       # 0.75
+5 / 4       # 1.25
+16 / 4      # 4
+0 / 0       # 0
+3 / 0       # null
+0 / null    # 0
+1 / null    # null
+null / 4    # null</pre>
+<h4><b>//</b><small>solidus solidus</small></h4>
+<p>Integer division.</p>
+<pre>3 // 4     # 0
+5 // 4     # 1
+16 // 4    # 4
+0 // 0     # 0
+0 // null  # 0
+3 // 0     # null</pre>
+<h3>Additive Operators</h3>
+
+<p>These operators work only for numbers. If either operand is not a number,
+  or if the operation creates a value that is too majestic to be contained
+  in a Misty number, then the result is <code>null</code>.</p>
+
+<h4>+</h4>
+<p>Addition. If either operand is not a number, the result is <code>null</code>.</p>
+<pre>3 + 4       # 7
+3 + null    # null
+null + 0    # null</pre>
+
+<h4>-</h4>
+<p>Subtraction. If either operand is not a number, the result is <code>null</code>.</p>
+<pre>3 - 4       # -1
+3 - null    # null</pre>
+<h3>Concatenation Operators</h3>
+<h4 id="ampersand">&<small>ampersand</small></h4>
+<p>Concatenation.  Make a new text
+that combines the two texts.   If an operand is a number, convert it to text. If after this conversion either operand is not text, then it disrupts. </p>
+<pre>3 & 4                          # &quot;34&quot;
+&quot;beginning&quot; & &quot;and&quot; & &quot;end&quot;    # &quot;beginningandend&quot;
+&quot;&quot; & &quot;ok&quot;                      # &quot;ok&quot;
+null & &quot;ok&quot;                    # disrupt
+&quot;&quot; & null                      # disrupt</pre>
+<h4 id="doubleampersand">&&<small>double ampersand</small></h4>
+<p>Concatenation with a space. If the two operands are not texts after number conversion, then it disrupts. Make a new text
+    that combines the two texts with a space between. If the first operand
+  is <code>&quot;&quot;</code>, then the result is the second
+  operand. If the second operand is <code>&quot;&quot;</code>,
+  then the result is the first operand.</p>
+<pre>3 && 4                            # &quot;3 4&quot;
+&quot;beginning&quot; && &quot;and&quot; && &quot;end&quot;      # &quot;beginning and end&quot;
+&quot;&quot; && &quot;ok&quot;                        # &quot;ok&quot;
+null && &quot;ok&quot;                      # disrupt
+&quot;&quot; && null                        # disrupt
+&quot;brillig&quot; && &quot;&quot;                   # &quot;brillig&quot;</pre>
+
+<h3>Relational Operators</h3>
+<p>The relational operators compare two values and return either <code>true</code> or <code>false</code>.</p>
+<p>The <code>=</code><small>equal</small> and <code>&lt;&gt;</code><small>not equal</small> operators can take values of all types. Objects are equal only if they are the same object. Texts containing the same characters in the same order are equal.</p>
+<p>The <code>&lt;</code><small>less than</small><code>&lt;=</code><small>less than or equal</small> <code>&gt;</code><small>greater than</small> <code>&gt;=</code><small>greater than or equal</small> operators only work on a pair of numbers or a pair of texts.
+    In all other cases they disrupt.</p>
+<h4>=</h4>
+<p>Equal. If the operands are the same then the result is <code>true</code>.</p>
+<p>Examples:</p>
+<pre>if variable = &quot;cat&quot;               # compute result if the variable is &quot;cat&quot;
+    assign result: 10 = &quot;10&quot;         # result is false
+fi
+</pre>
+<h4>&lt;&gt;</h4>
+<p>Not equal. If the operands are not the same, then the result is <code>false</code>.</p>
+<h4>&lt;</h4>
+<p>Less than.</p>
+<p> If the operands both numbers or both texts, then if the left operand is less than
+    the right operand, then the result is <code>true</code>. If the left operand
+is greater than or equal to the right operand the result is <code>false</code>.</p>
+<h4>&lt;=</h4>
+<p>Less than or equal. </p>
+<h4>&gt;</h4>
+<p>Greater than.</p>
+<h4>&gt;=</h4>
+<p>Greater than or equal. </p>
+
+<h3>Logical Operators</h3><h4>/\</h4>
+<p>Short-circuit And. If the left operand is <code>false</code>, then the result is <code>false</code> and the right operand will not be evaluated.
+  If the left operand is <code>true</code> and the <code>right</code> operand is <code>false</code>, then the result is <code>false</code>.
+  If the left operand is <code>true</code> and the right operand is <code>true</code>, then the result is <code>true</code>.</p>
+  <p>If the left operand is <code>true</code> and the right operand is not <code>false</code> or <code>true</code>, then disrupt.
+      If the left operand is not <code>false</code> or <code>true</code>, then it disrupts.
+  </p>
+<pre>3 &lt; 4 /\ 5 &lt; 6    # true</pre>
+<p>It made by combining <code>/</code><small>slash</small> and <code>\</code><small>backslash</small>.</p>
+<h4>\/</h4>
+<p>Short-circuit Or. If the left operand is <code>true</code>, then the result is <code>true</code> and the right operand is not evaluated.
+  If the left operand is <code>false</code> and the right operand is <code>false</code>, then the result is <code>false</code>.
+<code>false</code>and the right operand is <code>true</code>, then the result is <code>true</code>.</p>
+  <p>If the left operand is not a logical, then it disrupts. If the left operand is <code>false</code> and the right operand is not a logical, then it disrupts.
+  </p>
+<pre>3 &lt; 4 \/ 6 &lt; 5    # true</pre>
+<p>It made by combining <code>\</code><small>backslash</small> and <code>/</code><small>slash</small>.</p>
+<h3 id="default">Default Operator</h3>
+<h4>|</h4>
+<p>Short-circuit Default. If the left operand is not <code>null</code>, then the result
+  is the left operand. Otherwise, the result is the right operand.</p>
+<pre>var foo: null    # foo is null
+foo | 0          # 0</pre>
+<h2>Operator Precedence</h2>
+<table>
+<caption>Operator Precedence</caption>
+  <tbody>
+  <tr>
+      <td style="background-color: gainsboro;">highest</td>
+    <td align="center"><code>.&nbsp; &nbsp;[ ]&nbsp; &nbsp;( )</code></td>
+</tr>
+  <tr>
+      <td rowspan="6" style="background: linear-gradient(gainsboro, white);">&nbsp;</td>
+      <td align="center"><code>|</code></td>
+</tr>
+  <tr>
+      <td align="center"><code>*&nbsp; &nbsp;/&nbsp; &nbsp;//</code></td>
+</tr>
+  <tr>
+      <td align="center"><code>+&nbsp; &nbsp;-</code></td>
+</tr>
+  <tr>
+      <td align="center"><code>&&nbsp; &nbsp;&&</code></td>
+</tr>
+  <tr>
+      <td align="center"><code>=&nbsp; &nbsp;&lt;&gt;&nbsp; &nbsp;&lt;&nbsp;
+          &nbsp;&gt;&nbsp; &nbsp;&lt;=&nbsp; &nbsp;&gt;=</code>
+      </td>
+</tr>
+  <tr>
+      <td align="center"><code>/\&nbsp; &nbsp;\/</code>
+      </td>
+</tr>
+  <tr>
+      <td>lowest</td>
+      <td align="center"><code> then else</code></td>
+  </tr>
+  </tbody>
+</table>
+<p>Operators group left to
+  right. The selection, subscript, and invocation operators have the highest precedence (tightest).
+The ternary operator has the lowest precedence. Grouping can be made explicit with parens.</p>
+<pre>&quot;$&quot; & 3 + 4    # &quot;$7&quot;</pre>
+<ul>
+    <li><a href="https://www.crockford.com/ascii.html">ASCII</a></li></ul>
+</body>
+</html>
