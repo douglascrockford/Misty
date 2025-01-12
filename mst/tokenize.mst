@@ -1,5 +1,5 @@
 misty module tokenize
-# 2025-01-01
+# 2025-01-11
 
 # Tokenize takes a text and converts it into an array of tokens.
 # The input is a source text. The output is an array of token records.
@@ -56,6 +56,8 @@ def error_message: stone({
 
 def escape: stone({
     b: <<\>>
+    g: ">"
+    l: "<"
     n: "\n"
     q: <<">>
     r: "\r"

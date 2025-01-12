@@ -1,5 +1,5 @@
 // tokenize.js  # Misty tokenizer
-// 2025-01-06
+// 2025-01-11
 
 // Tokenize takes a text and converts it into an array of tokens.
 // The input is a source text. The output is an array of token records.
@@ -67,6 +67,8 @@ const tokenize = (function () {
 
     const escape = {
         b: backslash,
+        g: ">",
+        l: "<",
         n: "\n",
         q: quote,
         r: "\r",

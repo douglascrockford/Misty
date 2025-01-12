@@ -358,6 +358,8 @@ more_quote_characters
 <p class="rule">
 escape
     <code>'b'</code>
+    <code>'g'</code>
+    <code>'l'</code>
     <code>'n'</code>
     <code>'q'</code>
     <code>'r'</code>
@@ -384,6 +386,14 @@ more_hex
         <td><code>\</code><small>backslash</small></td>
     </tr>
     <tr>
+        <td><code>\g</code></td>
+        <td><code>&gt;</code><small>greater</small></td>
+    </tr>
+    <tr>
+        <td><code>\l</code></td>
+        <td><code>&lt;</code><small>less</small></td>
+    </tr>
+    <tr>
         <td><code>\n</code></td>
         <td><code>&nbsp;</code><small>linefeed</small></td>
     </tr>
@@ -400,7 +410,7 @@ more_hex
         <td><code>&nbsp;</code><small>tab</small></td>
     </tr>
     <tr>
-        <td><code>\u{</code><var>unicode codepoint in hex</var><code>}</code></td>
+        <td><code>\u{</code><var>HHHHHHHH</var><code>}</code></td>
         <td><code>&nbsp;</code><small>unicode</small></td>
     </tr>
 </table>
@@ -410,7 +420,7 @@ more_hex
     <code>\</code><small>reverse solidus</small> followed by 1 to 11 additional
     characters. Each escape sequence contributes a single character to the text.
     The <code>\u{</code><var>HHHHHHHH</var><code>}</code> sequence uses one to
-    eight base-16 digits to represent any 32 bit character.</p>
+    eight base-16 digits to specify the codepoint of any 32 bit character.</p>
 <p>The table shows all of the legal escape sequences.
     If <code>\</code><small>reverse solidus</small> does not form an escape
     sequence, then there is a syntax error.</p>
