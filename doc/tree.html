@@ -34,9 +34,10 @@ and all of the <a href="intrinsic.html">intrinsics</a> and punctuators:</p>
 <pre>.  ,  /  |  !  -  +  *  (  )  [  ]  {  }  =  &lt;  &gt;  &lt;&gt; &lt;= &gt;=  //  &amp;  &amp;&amp;   /\  \/  '</pre>
 <h4>text</h4>
 <p>The characters making up the token. </p>
-<p>At this stage, <code>kind: &quot;number&quot;</code> tokens are represented as text to avoid the danger of early loss of precision. </p>
 <p>The <code>kind: &quot;text&quot;</code> tokens have already had escape sequences decoded and outer quotes removed. </p>
 <p>A contigous run of spaces is made into a single <code>kind: &quot;space&quot;</code> token with a <code>text</code> field containing the entire run of spaces.</p>
+<h4>number</h4>
+<p>The numeric value of  <code>kind: &quot;number&quot;</code> tokens.</p>
 <h4>at</h4>
 <p>The character position in the source text where the token begins, starting at <code>0</code>.</p>
 <h4>from_row</h4>
@@ -106,6 +107,8 @@ and all of the <a href="intrinsic.html">intrinsics</a> and punctuators:</p>
 <p><code>&quot;number&quot;</code></p>
 <h4>value</h4>
 <p>A text.</p>
+<h4>number</h4>
+<p>A number.</p>
 <h3>Texts</h3>
 <h4>kind</h4>
 <p><code>&quot;text&quot;</code></p>

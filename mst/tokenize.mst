@@ -1,12 +1,13 @@
 misty module tokenize
-# 2025-01-11
+# 2025-01-14
 
 # Tokenize takes a text and converts it into an array of tokens.
 # The input is a source text. The output is an array of token records.
 
 # A token contains
 #      kind
-#      text (number literals are expressed here as text)
+#      text
+#      number
 #      at
 #      from_column
 #      from_row
@@ -216,7 +217,8 @@ def digit() {
         fi
     od
     assign token.kind: "number"
-    assign token.text: snip().replace("_", "")
+    assign token.text: snip()
+    assign token.number: number(token.text)
 }
 
 def minus() {

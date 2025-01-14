@@ -1,12 +1,13 @@
 // tokenize.js  # Misty tokenizer
-// 2025-01-11
+// 2025-01-14
 
 // Tokenize takes a text and converts it into an array of tokens.
 // The input is a source text. The output is an array of token records.
 
 // A token contains
 //      kind
-//      text (number literals are expressed here as text)
+//      text
+//      number
 //      at
 //      from_column
 //      from_row
@@ -215,7 +216,8 @@ const tokenize = (function () {
             }
         }
         token.kind = "number";
-        token.text = snip().replace(/_/, "");
+        token.text = snip();
+        token.number = Number(token.text.replace(/_/, ""));
     }
 
     function minus() {
