@@ -28,7 +28,7 @@
   transform date strings into seconds.</p>
 <pre>assign my_data: json.decode(
     text
-    &fnof; (key, value) (
+    function (key, value) (
         key.find(&quot;date&quot;)
         then time.number(value)
         else value
@@ -43,7 +43,7 @@ is a record, then only the keys that are associated with <code>true</code> in th
 <p>If the <var>space</var> input is <code>true</code>, then line breaks and extra whitespace will be included in the text. </p>
 <pre>var my_text: json.encode(
     my_data
-    &fnof; (key, value) (
+    function (key, value) (
         key.find(&quot;date&quot;)
         then time.text(value)
         else value
