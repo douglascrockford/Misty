@@ -13,9 +13,7 @@ code, pre, h4, textarea {
 }
 
 code, pre, h4 {
-    font-family: Programma, monospace;
     font-size: 100%;
-    font-style: normal;
     font-weight: bold;
 }
 
@@ -159,6 +157,10 @@ h1 a:hover, a:hover {
     text-decoration-color: red;
     text-decoration-line: underline;
     text-decoration-style: solid;
+}
+
+h1 a:active, a:active {
+    text-decoration-color: black;
 }
 
 hr {
