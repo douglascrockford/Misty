@@ -17,7 +17,7 @@ td {
 <p>The <code>blob</code> module acts on <a href="types.html#blob">blobs</a>.</p>
 <pre>use blob</pre>
 <p>A blob is a binary large object, a linear container of bits. Blobs can be used to encode data, messages, sounds, images, public keys, network addresses, and encrypted payloads. </p>
-<p>Blobs are created with <a href="#make"><code>blob.make</code></a>. Bits are appended to a blob with the <a href="#write"><code>blob.write_</code></a> functions. Information can be retrieved from a blob with the <a href="#read"><code>blob.read_</code></a> functions. Blogs produce <code>true</code> with the <a href="intrinsic.html#blob?"><code>blob?</code></a> and <a href="intrinsic.html#data?"><code>data?</code></a> intrinsic functions. The <a href="intrinsic.html"><code>length</code></a> intrinsic function determines the number of bits in a bob.</p>
+<p>Blobs are created with <a href="#make"><code>blob.make</code></a>. Bits are appended to a blob with the <a href="#write"><code>blob.write_</code></a> functions. Information can be retrieved from a blob with the <a href="#read"><code>blob.read_</code></a> functions. Blogs produce <code>true</code> with the <a href="intrinsic.html#blob?"><code>blob?</code></a> and <a href="intrinsic.html#data?"><code>data?</code></a> intrinsic functions. The <a href="intrinsic.html#length"><code>length</code></a> intrinsic function determines the number of bits in a blob.</p>
 <p>A blob can be in one of two states, either <em>antestone</em> or <em>stone</em>. In the mutable antestone state, the <code>write</code> functions may be used to append bits to the blob. In the immutable stone state, bits can be harvested from the blob. Bits can be written to blobs as fixed size bit fields, that is a sequence of bits with a specified length, or as a <a href="#kim">kim</a>. </p>
 <h2 align="left" id="make">Make function</h2>
 <p align="left">The <code>make</code> function makes mutable blobs.</p>
@@ -183,7 +183,7 @@ Any other value will disrupt. </p>
     </tr>
 </table>
 <p><a href="https://www.crockford.com/kim.html">Kim is an encoding</a> of <a href="fit.html">fit numbers.</a> Kim is a very simple encoding that delivers 7 bits per byte. The bottom 7  bits of each byte contain data, which can be accumulated to produce fit numbers. The top bit of each byte is <code>1</code> if the byte is not  the last and least byte of a number. The top bit of each byte is <code>0</code> if the byte  is  the last byte of a number. The last byte contains the 7 least significant bits. A first byte of <code>0x80</code> indicates negation.</p>
-<h4>blob.<a href="kim_length">kim_length</a>(<var>value</var>)</h4>
+<h4>blob.kim_length(<var>value</var>)</h4>
 <p>The <code>kim_length</code> function gives the length in bits of the kim encoding of a <var>value</var>. If the value is a fit number, it gives a result as shown in the table. If <var>value</var> is a logical, it gives <code>1</code>. If value is a text, it gives the length in bits
  of the kim encoding of a <var>text</var>, giving the sum of the kim encodings of the length and each character. Otherwise, it gives <code>null</code>.</p>
 </body></html>
