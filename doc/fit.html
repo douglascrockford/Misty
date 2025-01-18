@@ -20,7 +20,7 @@ assign result: fit.and(16, 2)    # result is 0
 assign result: fit.and(15, 3)    # result is 3
 assign result: fit.and(13, 3)    # result is 1
 assign result: fit.and(&quot;10&quot;, 3)  # result is null</pre>
-<h4 id="left2">fit.left(<var>first</var>, <var>second</var>)</h4>
+<h4 id="left">fit.left(<var>first</var>, <var>second</var>)</h4>
 <p>Left shift. It is similar to multiplying by a power of two. Bits that fall off of the left edge are lost.</p>
 <p>Examples:</p>
 <pre>assign result: fit.left(12, 10)    # result is 12288
@@ -51,7 +51,7 @@ fit.mask(-55)   #  -36_028_797_018_963_968      (80000000000000)
 fit.mask(-56)   #  0                            (00000000000000) </pre>
 <h4 id="not">fit.not(<var>fit</var>)</h4>
 <p>Not. Flip every bit. Same as <code>fit.xor(<var>fit</var>, fit.mask(56))</code>.</p>
-<h4 id="or">fit.ones(<var>fit</var>)</h4>
+<h4 id="ones">fit.ones(<var>fit</var>)</h4>
 <p>Count the total number of <code>1</code> bits.</p>
 <p>Examples:</p>
 <pre>assign result: fit.ones(-1)    # result is 56
