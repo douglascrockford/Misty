@@ -6,17 +6,6 @@
     src: url('https:/mistysystem.com/woff/Programma-Bold.woff2') format('woff2');
 }
 
-code, pre, h4, textarea {
-    font-family: Programma, monospace;
-    font-style: normal;
-    font-weight: bold;
-}
-
-code, pre, h4 {
-    font-size: 100%;
-    font-weight: bold;
-}
-
 textarea {
     box-sizing: border-box;
     font-size: 10pt;
@@ -115,6 +104,21 @@ h4 {
     padding-bottom: 0px;
     text-align: left;
     white-space: pre-wrap;
+}
+
+code, pre, h4, textarea {
+    font-family: Programma, monospace;
+    font-style: normal;
+    font-weight: bold;
+}
+
+code, pre, h4 {
+    font-size: 100%;
+}
+
+h4 var {
+    font-family: Georgia, serif;
+    font-weight: 400;
 }
 
 h5 {
