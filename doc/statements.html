@@ -55,7 +55,7 @@ optional_box
     <code>""</code>
     <code>"[]"</code>
 </p>
-<p>The <code>assign</code> statement is the instrument of <a href="types.html#immutable">mutation</a>. It can replace the value of a variable that was
+<p>The <code>assign</code> statement is the instrument of <a href="types.html#immutability">mutation</a>. It can replace the value of a variable that was
 created by <a href="#var">the <code>var</code> statement</a>.</p>
 <p>The <code>assign</code> statement can also act on values that are mutable.</p>
 <ul>
@@ -253,8 +253,8 @@ callback
     <code>""</code>
     <code>':'</code> space expression
 </p>
-<p>The <code>send</code> statement sends a message to another <a href="actors.html">actor</a>.
-The left <dfn>expression</dfn> must resolve to an actor address object or a message object that is expecting a reply because it was sent with a callback. The right <dfn>expression</dfn> is a record containing the outgoingmessage. The outgoing message record must not  contain functions or patterns or cyclic structures.</p>
+<p>The <code>send</code> statement sends a message to another <a href="system.html#actors">actor</a>.
+The left <dfn>expression</dfn> must resolve to an actor address object or a message object that is expecting a reply because it was sent with a callback. The right <dfn>expression</dfn> is a record containing the outgoing message. The outgoing message record must not  contain functions or patterns or cyclic structures.</p>
 <p>If a <dfn>callback</dfn> function is included, then the <dfn>callback</dfn> function will receive the reply, not the receiver function.</p>
 <p>See <a href="programs.html">programs</a>.</p>
 <p>Example:</p>
@@ -276,15 +276,15 @@ locator
 </p>
 <p>The <code>use</code> statement makes a module available to a program or another module. The return value of the module is bound to the <dfn>name</dfn>. An optional <dfn>locator</dfn> can be provided for finding the module file in the program shop. Standard modules do not require a locator. </p>
 <p>The modules are stored in the program shop, which contains the standard modules that are located with the <dfn>name</dfn> form, and the extra modules that are located with the <dfn>text_literal</dfn> form. In the <dfn>text_literal</dfn> form, it is recommended that the text contain a prefix to indicate the source or usage of the module. Guest code (programs from third parties that are not fully trusted) may be restricted from use of the <code>use</code> statement, or may have restrictions on which modules they can employ.</p>
-<p> The <code>use</code> statement can not appear in a function or an <code>if</code> or <code>do</code>. The <code>use</code> statement can only appear in the outermost level of an <code>program</code> or <code>module</code>.</p>
+<p> The <code>use</code> statement can not appear in a function or an <code>if</code> or <code>do</code>. The <code>use</code> statement can only appear in the outermost level of a <code>program</code> or <code>module</code>.</p>
 <h3 id="var">The <code>var</code> statement</h3>
 <p class="rule">
 var_statement
     <code>&quot;var&quot;</code> space name <code>':'</code> space expression
 </p>
 <p>The <code>var</code> statement creates a variable in the current function scope.
-The value of a variable can be replaced by <a href="#assign">the <code>assign</code> statement</a>. The <code>var</code> statement can not appear in an <code>if</code> or <code>do</code>. The <dfn>name</dfn> is the name of a new variable in this scope.The  expression on the right side of the <code>:</code><small>colon</small> gives the initial value of the variable.  The <dfn>name</dfn> may not be  used on the right side of the <code>:</code><small>colon</small>.</p>
-<p>Variables must be declared before they are used or assigned values. Note that <code>:</code> <dfn>expression</dfn> are not optional.</p>
+The value of a variable can be replaced by <a href="#assign">the <code>assign</code> statement</a>. The <code>var</code> statement can not appear in an <code>if</code> or <code>do</code>. The <dfn>name</dfn> is the name of a new variable in this scope. The expression on the right side of the <code>:</code><small>colon</small> gives the initial value of the variable.  The <dfn>name</dfn> may not be  used on the right side of the <code>:</code><small>colon</small>.</p>
+<p>Variables must be declared before they are used or assigned values. Note that <code>:</code> <dfn>expression</dfn> is not optional.</p>
 <p>Examples:</p>
 <pre>var first_name: &quot;&quot;
 var last_name: &quot;&quot;
