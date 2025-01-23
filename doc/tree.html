@@ -31,7 +31,7 @@ This is descriptive of one particular implementation.
 <p><code>&quot;name&quot;</code>, <code>&quot;text&quot;</code>, <code>&quot;number&quot;</code>,
 <code>&quot;comment&quot;</code>, <code>&quot;newline&quot;</code>, <code>&quot;space&quot;</code>,
 and all of the <a href="intrinsic.html">intrinsics</a> and punctuators:</p>
-<pre>.  ,  /  |  !  -  +  *  (  )  [  ]  {  }  =  &lt;  &gt;  &lt;&gt; &lt;= &gt;=  //  &amp;  &amp;&amp;   /\  \/  '</pre>
+<pre>.  ,  :  (  )  [  ]  {  }  +  -  *  /  //  &amp;  &amp;&amp;  =  &lt;&gt;  &lt;  &gt;  &lt;= &gt;=  /\  \/  |  '</pre>
 <h4>text</h4>
 <p>The characters making up the token. </p>
 <p>The <code>kind: &quot;text&quot;</code> tokens have already had escape sequences decoded and outer quotes removed. </p>
@@ -49,10 +49,10 @@ and all of the <a href="intrinsic.html">intrinsics</a> and punctuators:</p>
 <h4>to_column</h4>
 <p>The column number of the character past the token.</p>
 <h4>quote</h4>
-<p>For  <code>kind: &quot;text&quot;</code> tokens, one of:</p>
-<pre>&quot;<small>double quote</small>  &lt;&lt;&quot;<small>less less doouble quote</small>
+<p>For <code>kind: &quot;text&quot;</code> tokens, one of:</p>
+<pre>&quot;<small>double quote</small>  &lt;&lt;<small>less less</small>
 </pre>
-<p>The <code>kind</code> and and <code>text</code> fields will be meaningful to the parser that consumes the token list. The other fields are intended for error reporting.These token records are treated as nodes that are woven into a parse tree.</p>
+<p>The <code>kind</code> and <code>text</code> fields will be meaningful to the parser that consumes the token list. The other fields are intended for error reporting.These token records are treated as nodes that are woven into a parse tree.</p>
 <h1 id="tree">Tree</h1>
 <p>The module <code>parse.mst</code> turns a list of tokens into an abstract parse tree.</p>
 <h2 id="root">Root</h2>
