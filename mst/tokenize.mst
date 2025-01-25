@@ -1,5 +1,5 @@
-misty module tokenize
-# 2025-01-14
+misty module tokenize()
+# 2025-01-25
 
 # Tokenize takes a text and converts it into an array of tokens.
 # The input is a source text. The output is an array of token records.
