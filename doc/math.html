@@ -10,10 +10,11 @@
 <img src="../misty.gif" width="204" height="79">
 <h1><a href="https://mistysystem.com/">Misty Programming Language:</a>Math Functions</h1>
 <table>
+<caption>Angular Units</caption>
     <tr>
-    <th><i>Cycles</i></th>
-    <th><i>Degrees</i></th>
-    <th><i>Radians</i></th>
+    <th><i><code>&quot;cycles&quot;</code></i></th>
+    <th><i><code>&quot;degrees&quot;</code></i></th>
+    <th><i><code>&quot;radians&quot;</code></i></th>
     </tr>
     <tr>
         <td><code>0</code></td>
@@ -41,14 +42,14 @@
     <td align="center"><code>2</code>&pi;</td>
     </tr>
 </table>
-<p>The <code>math</code> modules provide the elementary functions. There are three variations to cope with the different conventions for expressing angles. For example, </p>
-<pre>use math: math_radians</pre>
-<p>selects the module that expresses angles in radians. So the trigonometric methods (<code>math.arc_cosine</code>, <code>math.arc_sine</code>, <code>math.arc_tangent</code>, <code>math.cosine</code>, <code>math.sine</code>, and <code>math.tangent</code>) express angles as radians. The descriptions in this section describe <code>math_radians</code>.</p>
+<p>The <code>math</code> modules provide the elementary functions. It takes an angular units argument: <code>&quot;cycles&quot;</code>, <code>&quot;degrees&quot;</code>, <code>&quot;radians&quot;</code>.</p>
+<pre>use math(&quot;radians&quot;)</pre>
+<p>selects the math module expressing angles in radians. So the trigonometric methods (<code>math.arc_cosine</code>, <code>math.arc_sine</code>, <code>math.arc_tangent</code>, <code>math.cosine</code>, <code>math.sine</code>, and <code>math.tangent</code>) express angles as radians. The descriptions in this section describe the ise of radians.</p>
 <p>Alternatively,</p>
-<pre>use math: math_degrees</pre>
-<p>selects the module that expresses angles as degrees, and </p>
-<pre>use math: math_cycles</pre>
-<p>selects the module that expresses angles as cycles.</p>
+<pre>use math(&quot;degrees&quot;)</pre>
+<p>expresses angles as degrees, and </p>
+<pre>use math(&quot;cycles&quot;)</pre>
+<p>expresses angles as cycles.</p>
 <h4><code>math.arc_cosine(<var>number</var>)</code></h4>
 <p>Compute the arc cosine of a <var></var> The <var>number</var> should
     be between <code>-1</code> and <code>1</code>. The result is the inverse cosine,

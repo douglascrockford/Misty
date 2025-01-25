@@ -1,5 +1,5 @@
 // parse.js
-// 2025-01-09
+// 2025-01-25
 
 // Missing feature:
 //      patterns
@@ -983,10 +983,7 @@ const parse = (function () {
             }
             expression = operable[token.kind](expression);
         }
-        if (expression.kind !== "(") {
-            advance("(");
-        }
-        result.expression = expression;
+        result.list = invoke().list;
         result.kind = "call";
         return result;
     };
@@ -1182,6 +1179,7 @@ const parse = (function () {
         } else {
             main.uses.push(name.name);
         }
+        result.list = invoke().list;
         result.kind = "use";
         return result;
     };
@@ -1245,6 +1243,7 @@ const parse = (function () {
             const variable = declare(token);
             variable.make = "endowment";
             advance();
+            main.list = input_list();
             linebreak();
             the_body.statements = [];
             while (true) {

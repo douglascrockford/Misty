@@ -13,7 +13,7 @@
 <p>A program can use modules. Many programs can work productively together.</p>
 <p class="rule">
 misty
-    <code>"misty"</code> space misty_type space name more_statements linebreak <code>"end"</code> space name
+    <code>"misty"</code> space misty_type space name input_list more_statements linebreak <code>"end"</code> space name
 </p>
 <p class="rule">
 misty_type
@@ -37,9 +37,9 @@ misty_type
     Module <code>a</code> can not use module <code>b</code> if module <code>b</code> uses module <code>a</code>.</p>
 <p>In this example, the <code>example</code> program imports the <code>app_master_2000</code> module,
     and designates its <code>handler</code> function as the receiver of messages for the actor.</p>
-<pre>misty program example
+<pre>misty program example()
 
-use app: &quot;app_master_2000&quot;
+use app: &quot;app_master_2000&quot;()
 call @.receiver(app.handler)
 
 end example</pre>
@@ -48,6 +48,7 @@ end example</pre>
 <p>Messages are usually transmitted over some sort of connection. </p>
 <p>The <dfn>name</dfn> of a <dfn>program</dfn> or <dfn>module</dfn> can contain an <a href="#endowment">endowment</a> of values provided at the time the program is built.
 So if the <code>example</code> program is endowed with a superpower,  the superpower can be accessed as <code>example.superpower</code>.</p>
+<p>A module can have arguments passed to it from a <a href="statements.html#use"><code>use</code> statement</a>. A program can have arguments passed to it from a command line or <code><a href="#new">@.new</a></code>.</p>
 <h2 id="process_object">Process object</h2>
 <p>An actor address object contains the information needed to communicate with an actor.
 An actor object can be transmitted to other actors, even on other machines.</p>
@@ -144,11 +145,11 @@ Any messages sent in this final turn will not be put into the outgoing queue.</p
 <h4>@.halt() </h4>
 <p>The <code>halt</code> method allows an actor to stop itself. This usually happens when it has completed its work. Any messages sent in this final turn are put into the outgoing queue. The <code>halt</code> method does not return.</p>
 <h3 id="new"><code>new</code> method</h3>
-<h4>@.new(<var>callback</var>, <var>program</var>, <var>configuration</var>)</h4>
+<h4>@.new(<var>callback</var>, <var>program</var>, <var>configuration</var>, <var>arguments</var>)</h4>
 <p>The <code>new</code> function creates a new actor. The <var>callback</var> function receives messages about the new actor, starting with a message containing the new actors address object.</p>
 <p>The  <var>program</var> text  identifies the  executable  in  the program shop  that the new actor  runs. </p>
 <p>The <var>configuration</var> record  contains fields having the names of the <code>@</code> methods. If the field's value is <code>true</code>, then the new actor will have that method in its own <code>@</code> object. So, if the configuration contains  a <code>contact</code> field that is <code>true</code>, then the new actor is allowed to contact portals to obtain actor address objects. However, if the overling does not have access to the method itself, it can not make it available to the underling.</p>
-<p>The configuation record can also contain constants and actor address records that are put into the new actors <code>@</code> record.</p>
+<p>The <var>arguments</var> array contains up to four arguments of type actor address object, logical, number, or text.</p>
 <p>The current actor is the overling of the new actor, and it is notified when the new actor stops. The new actor is an underling of the current actor.</p>
 <p>Example:</p>
 <pre>call @.new(
@@ -158,9 +159,7 @@ Any messages sent in this final turn will not be put into the outgoing queue.</p
         contact: true
         couple: true
         greeter: false
-        keys: fresh_key_pair
         new: true
-        overling: @
         receiver: true
     }
 )</pre>

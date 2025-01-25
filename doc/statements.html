@@ -262,7 +262,7 @@ The left <dfn>expression</dfn> must resolve to an actor address object or a mess
 <h3 id="use">The <code>use</code> statement</h3>
 <p class="rule">
 use
-    <code>"use"</code> space name optional_locator
+    <code>"use"</code> space name optional_locator invocation
 </p>
 <p class="rule">
 optional_locator
@@ -277,6 +277,8 @@ locator
 <p>The <code>use</code> statement makes a module available to a program or another module. The return value of the module is bound to the <dfn>name</dfn>. An optional <dfn>locator</dfn> can be provided for finding the module file in the program shop. Standard modules do not require a locator. </p>
 <p>The modules are stored in the program shop, which contains the standard modules that are located with the <dfn>name</dfn> form, and the extra modules that are located with the <dfn>text_literal</dfn> form. In the <dfn>text_literal</dfn> form, it is recommended that the text contain a prefix to indicate the source or usage of the module. Guest code (programs from third parties that are not fully trusted) may be restricted from use of the <code>use</code> statement, or may have restrictions on which modules they can employ.</p>
 <p> The <code>use</code> statement can not appear in a function or an <code>if</code> or <code>do</code>. The <code>use</code> statement can only appear in the outermost level of a <code>program</code> or <code>module</code>.</p>
+<p>Example:</p>
+<pre>use lang: language_library(&quot;en&quot;)</pre>
 <h3 id="var">The <code>var</code> statement</h3>
 <p class="rule">
 var_statement

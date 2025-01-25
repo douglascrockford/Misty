@@ -10,9 +10,8 @@
 <img src="../misty.gif" width="204" height="79">
 <h1><a href="https://mistysystem.com/">Misty Programming Language:</a>Parseq</h1>
 <p>The <code>parseq</code> module provides tools for working with callbacks and eventual programming. The name combines the prefixes of parallel and sequence.</p>
-<p>The <code>parseq</code> module requires that the actor has the <a href="programs.html#delay"><code>@.delay</code></a> capability.</p>
-<pre>use parseq_make
-def parseq = parseq_make(@.delay)</pre>
+<p>The <code>parseq</code> module can be passed the <a href="programs.html#delay"><code>@.delay</code></a> capability.</p>
+<pre>use parseq(@.delay)</pre>
 <p id="callback"><code>@.delay</code> is only necessary if time limits are used.</p>
 <h2 id="types">Function types</h2>
 <p>The <code>parseq</code> module works with functions of these types: callbacks, requestors, cancels, and factories.</p>

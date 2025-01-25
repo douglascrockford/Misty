@@ -15,7 +15,7 @@ td {
 <img src="../misty.gif" width="204" height="79">
 <h1><a href="https://mistysystem.com/">Misty Programming Language:</a>Blob Functions</h1>
 <p>The <code>blob</code> module acts on <a href="types.html#blob">blobs</a>.</p>
-<pre>use blob</pre>
+<pre>use blob()</pre>
 <p>A blob is a binary large object, a linear container of bits. Blobs can be used to encode data, messages, sounds, images, public keys, network addresses, and encrypted payloads. </p>
 <p>Blobs are created with <a href="#make"><code>blob.make</code></a>. Bits are appended to a blob with the <a href="#write"><code>blob.write</code></a> functions. Information can be retrieved from a blob with the <a href="#read"><code>blob.read</code></a> functions. Blogs produce <code>true</code> with the <a href="intrinsic.html#blob?"><code>blob?</code></a> and <a href="intrinsic.html#data?"><code>data?</code></a> intrinsic functions. The <a href="intrinsic.html#length"><code>length</code></a> intrinsic function determines the number of bits in a blob.</p>
 <p>A blob can be in one of two states, either <em>antestone</em> or <em>stone</em>. In the mutable antestone state, the <code>write</code> functions may be used to append bits to the blob. In the immutable stone state, bits can be harvested from the blob. Bits can be written to blobs as fixed size bit fields, that is a sequence of bits with a specified length, or as a <a href="#kim">kim</a>. </p>
