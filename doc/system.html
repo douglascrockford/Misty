@@ -53,7 +53,7 @@
 <h2 id="mr">Memory Reclamation</h2>
 <p>When an actor uses up its data memory, it becomes exhausted. The memory reclaimer is run on exhausted actors. It uses a Cheney copying algorithm. Normally, Cheney uses semispace, where memory is divided into halves. Only one half is used during execution. During memory reclamation, live data is copied into the other half, and the roles of the two halves are swapped. </p>
 <p>The misty system does not use semispace. Instead, the system allocates a new block of system memory. Live data is copied into the new block. Then the old block is returned to the system. If the actor previously did not reclaim enough space, then the new block will be twice as large.</p>
-<p>The model is not <strong>Stop the World</strong>. It is <strong>Stop a Process</strong>, which will likely have a much smaller impact on performance.</p>
+<p>The model is not <strong>Pause the World</strong>. It is <strong>Pause an actor</strong>, which will likely have a much smaller impact on performance.</p>
 <h2 id="dar">Distributed Actor Reclamation</h2>
 <p>Generally, an actor should be kept in memory as long as any other actor has its address and might send a message to it. When an actor is no longer addressed by other actors, it may be halted and its memory reclaimed. This is easily managed within a system, but may become much more complicated when there are many systems interacting with each other. Actors are free to transmit actor addresses in messages, so  meshes can develop. This can make it difficult to determine if an actor is still known or not. </p>
 <p>It is particularly difficult when cycles form. There are solutions, such as <a href="https://www.crockford.com/ec/dgc.html">The Bejar Algorithm</a>, but it is messy business. The misty system takes a simpler approach.</p>
@@ -76,15 +76,15 @@
 <h3>Granting of endowments to modules</h3>
 <p>The program shop can endow select modules with special access to the I/O system and the key store.</p>
 <h3>Locale</h3>
-<p>The program stores localization information.</p>
+<p>The program store keeps localization information.</p>
 <h3>Key store</h3>
 <p>The program store holds key pairs and associations for the setup and use of portals and other purposes.</p>
 <h3>Policies</h3>
-<p>The program shop holds the policies that determine that modules get access to which endowments, and which programs get access to which modules. For example, programs from third parties (guests) can be restricted from capabilities that are granted to trusted programs.</p>
+<p>The program shop holds the policies that determine which modules get access to which endowments, and which programs get access to which modules. For example, programs from third parties (guests) can be restricted from capabilities that are granted to trusted programs.</p>
 <h3>Logs</h3>
 <p> The program shop determines which programs have access to which logs, and determines the usage of the logs (archived, sent to debuggers, summarized and sent to humans, sent to ai for analysis).</p>
 <h3>Distributed management</h3>
-<p>Program shops on multiple machines can  share resources, simplifying administrations of large sites.</p>
+<p>Program shops on multiple machines can  share resources, simplifying administration of large sites.</p>
 <h3>Versioning and Updating</h3>
 <p>Executables can be updated at any time. The actors that are currently running are not affected, but they can be halted and restarted with new executables if necessary, or they can continue to run beside updated actors. </p>
 <p>&nbsp;</p>
