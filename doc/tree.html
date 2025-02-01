@@ -81,6 +81,8 @@ and all of the <a href="intrinsic.html">intrinsics</a> and punctuators:</p>
 <p><code>&quot;program&quot;</code></p>
 <h4>function_nr</h4>
 <p><code>0</code></p>
+<h4>list</h4>
+<p>A list of name nodes, the inputs. Each has a <code>input_nr</code> field, between 0 and 3. If an input has a default value, it will be in the name token's <code>expression</code> field.</p>
 <h4>statements</h4>
 <p>An array of statements.</p>
 <h3 id="module">Module</h3>
@@ -89,6 +91,8 @@ and all of the <a href="intrinsic.html">intrinsics</a> and punctuators:</p>
 <p><code>&quot;module&quot;</code></p>
 <h4>function_nr</h4>
 <p><code>0</code></p>
+<h4>list</h4>
+<p>A list of name nodes, the inputs. Each has a <code>input_nr</code> field, between 0 and 3. If an input has a default value, it will be in the name token's <code>expression</code> field.</p>
 <h4>statements</h4>
 <p>An array of statement nodes.</p>
 <h2 id="name">Names</h2>
@@ -197,8 +201,10 @@ and all of the <a href="intrinsic.html">intrinsics</a> and punctuators:</p>
 <h3 id="call">The call statement</h3>
 <h4>kind</h4>
 <p><code>&quot;call&quot;</code></p>
-<h4>expression</h4>
-<p>A <code>(</code> expression node.</p>
+<h4>left</h4>
+<p>The expression to be called.</p>
+<h4>list</h4>
+<p>The array of arguments.</p>
 <h3 id="def">The def statement</h3>
 <h4>kind</h4>
 <p><code>&quot;def&quot;</code></p>
@@ -248,6 +254,8 @@ and all of the <a href="intrinsic.html">intrinsics</a> and punctuators:</p>
 <p>A name token.</p>
 <h4>right</h4>
 <p>An optional name or text token.</p>
+<h4>list</h4>
+<p>The array of arguments.</p>
 <h3 id="var">The var statement</h3>
 <h4>kind</h4>
 <p><code>&quot;var&quot;</code></p>
