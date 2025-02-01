@@ -166,7 +166,7 @@ Any messages sent in this final turn will not be put into the outgoing queue.</p
 <h3 id="unneeded"><code>unneeded</code> function</h3>
 <h4>@.unneeded(<var>function</var>, <var>seconds</var>)</h4>
 <p>The <code>unneeded</code> function registers a <var>function</var> that will receive a message informing the actor that it has not received a message in the recent <var>seconds</var>.  This likely means that the actor is no longer needed. The actor should finish its work and then <code><a href="#stop">@.stop()</a></code>. The <code>unneeded</code> function returns <code>null</code>.</p>
-<p>This differs from the <a href="system.html#ar">ar timer</a> in three ways. First, it is optional. Second, the actor is notified. Third, the actor is not automatically halted. </p>
+<p>This differs from the <a href="system.html#ar">ar timer</a> in three ways. First, it is optional. Second, the actor is notified. Third, the actor is not automatically stopped. </p>
 <p>If the <code>unneeded</code> timer is not used, then the <a href="system.html#ar">ar timer</a> is used by default.</p>
 <h2>Process Data Structures</h2>
 <h3>Process Address Object</h3>
@@ -192,7 +192,7 @@ Turns can be timesliced. There are no concurrency issues because actors do not s
 They communicate with other actors and the world only by  message passing. </p>
 <h2 id="endowment">Endowment</h2>
 <p>The <dfn>name</dfn> of a program or module can contain endowed constants. These constants can be used to customize a program. The constants are accessed by the <code><a href="operators.html#period">.</a></code><a href="operators.html#period"><small>period</small> operator</a>. The endowment constants can be specified when the program executable is produced.</p>
-<p>An endowment can also contain functions that give access to system powers will I/O. See Policy.</p>
+<p>An endowment can also contain functions that give access to system powers will I/O. See <a href="system.html#policy">Policy</a>.</p>
 <pre>misty program example
 if example.test
     # stuff that executes if test is true
