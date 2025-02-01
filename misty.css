@@ -178,6 +178,7 @@ pre {
 small {
     font-size: 8pt;
     font-style: italic;
+    letter-spacing: 0;
     margin-left: 2pt;
     margin-right: 0.75pt;
 }
