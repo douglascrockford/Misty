@@ -214,7 +214,10 @@ log_statement
 <p>If logging to the named log  has not been enabled, then the <code>log</code> statement does nothing. <a href="system.html#policy">Policies</a> can be configured to only enable certain logs. A policy may block the execution of programs that  attempt to use restricted logs.</p>
 <p>The <dfn>name</dfn> of a log can be any name. For example:</p>
 <blockquote>
-    <p><code>compliance console crash debug development disaster emergency error event failure fatal feature fraud hygiene kyc maintenance mishap memory normal probe recover risk security spam test time trace trivial type usage verbose violation warning world</code></p>
+    <code>compliance console crash debug development disaster emergency error
+    event failure fatal feature fraud hygiene kyc maintenance memory mishap
+    normal probe recover risk security spam test time trace trivial type usage
+    verbose violation warning world</code>
 </blockquote>
 <p>It is usually good to <code>log</code> before <code>disrupt</code>. Logging does not change the behavior of a program.</p>
 <p>Logs can be ephemeral or durable. Logs can be local or remote. See <a href="programs.html#logging">logging</a>.</p>
