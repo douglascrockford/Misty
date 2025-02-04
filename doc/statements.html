@@ -211,14 +211,15 @@ log_statement
     <code>&quot;log&quot;</code> name <code>':'</code> space expression
 </p>
 <p>The <code>log</code> statement may send an expression to the named log. It is used to record information about the execution of the program for later analysis.</p>
-<p>If logging to the named log  has not been enabled, then the <code>log</code> statement does nothing. The compiler can be configured to only enable certain logs.</p>
+<p>If logging to the named log  has not been enabled, then the <code>log</code> statement does nothing. <a href="system.html#policy">Policies</a> can be configured to only enable certain logs. A policy may block the execution of programs that  attempt to use restricted logs.</p>
 <p>The <dfn>name</dfn> of a log can be any name. For example:</p>
-<pre>compliance debug disaster emergency error failure fatal feature hygiene maintenance normal probe spam test trace trivial violation</pre>
-<p>A system may block the execution of programs that would attempt to use restricted logs.</p>
+<blockquote>
+    <p><code>compliance console crash debug development disaster emergency error event failure fatal feature fraud hygiene kyc maintenance mishap memory normal probe recover risk security spam test time trace trivial type usage verbose violation warning world</code></p>
+</blockquote>
 <p>It is usually good to <code>log</code> before <code>disrupt</code>. Logging does not change the behavior of a program.</p>
-<p>See <a href="programs.html#logging">logging</a>.</p>
+<p>Logs can be ephemeral or durable. Logs can be local or remote. See <a href="programs.html#logging">logging</a>.</p>
 <p>Example:</p>
-<pre>log debug: &quot;index&quot; ≈ index</pre>
+<pre>log debug: &quot;index&quot; &amp;&amp; index</pre>
 <h3 id="return">The <code>return</code> statement</h3>
 <p class="rule">
 return_statement
