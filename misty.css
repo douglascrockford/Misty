@@ -79,7 +79,7 @@ h2 {
     clear: both;
     font-size: 18pt;
     font-variant: normal;
-    letter-spacing: 3pt;
+    letter-spacing: 1pt;
     margin-top: 2em;
     text-align: left;
     padding-bottom: 0px;
@@ -91,7 +91,7 @@ h3 {
     border-style: solid;
     border-width: 1pt 0 0 0;
     font-size: 14pt;
-    letter-spacing: 2pt;
+    letter-spacing: 0;
     padding-bottom: 0px;
     padding-top: 0.5em;
     text-align: left;
