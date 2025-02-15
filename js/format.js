@@ -1,12 +1,15 @@
 // format.js
 // Douglas Crockford
-// 2023-12-29
+// 2025-02-13
 
 /*property
     reduce, replace, split
 */
 
-function format(string, container, encoder) {
+//      import format from "./format.js";
+
+
+export default Object.freeze(function format(string, container, encoder) {
 
 // The format function takes a string containing symbolic
 // variables, an object or array containing values to replace the
@@ -91,4 +94,4 @@ function format(string, container, encoder) {
             }
         }
     );
-}
+});

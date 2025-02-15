@@ -21,7 +21,6 @@ input[type=button]:hover {
     background-color: thistle;
 }
 </style>
-<script src="../js/tokenize.js"></script>
 </head>
 <body>
 <img src="../misty.gif" width="204" height="79">
@@ -33,19 +32,21 @@ input[type=button]:hover {
 </fieldset>
 <p style="text-align: center;">
     <input id=clear type=button value="clear">
-    <input id=tokenize type=button value="tokenize">
+    <input id=button type=button value="tokenize">
     <input id=summary type=button value="summary">
-    </p>
+</p>
 <fieldset><legend>Token list</legend>
-<p id=outputation style="clear: both; font-family: Programma, monospace; white-space: pre-wrap;"></p></fieldset>
+<p id=outputation style="clear: both; font-family: Programma, monospace; white-space: pre-wrap;"></p>
+</fieldset>
 
-<script>
+<script type="module">
+import tokenize from "../js/tokenize.js";
 
 (function initialize() {
     const inputation = document.getElementById("inputation");
     const outputation = document.getElementById("outputation");
     const clear = document.getElementById("clear");
-    const tokenize = document.getElementById("button");
+    const tokenize_button = document.getElementById("button");
     const summary = document.getElementById("summary");
     clear.addEventListener("click", function (event) {
         outputlegend.replaceChildren("\u00A0");
@@ -53,7 +54,7 @@ input[type=button]:hover {
         inputation.value = "";
         inputation.focus();
     });
-    tokenize.addEventListener("click", function (event) {
+    tokenize_button.addEventListener("click", function (event) {
         outputation.innerHTML = "";
         outputation.append(JSON.stringify(tokenize(inputation.value), null, 4));
         inputation.focus();
