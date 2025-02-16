@@ -1,0 +1,2831 @@
+{
+    "at": 0,
+    "from_column": 0,
+    "from_row": 0,
+    "kind": "misty",
+    "text": "misty",
+    "to_column": 5,
+    "to_row": 0,
+    "functions": [
+        {
+            "at": 6,
+            "from_column": 6,
+            "from_row": 0,
+            "kind": "module",
+            "text": "module",
+            "to_column": 12,
+            "to_row": 0,
+            "function_nr": 0,
+            "statements": [
+                {
+                    "at": 970,
+                    "from_column": 0,
+                    "from_row": 23,
+                    "kind": "return",
+                    "text": "return",
+                    "to_column": 6,
+                    "to_row": 23,
+                    "expression": {
+                        "kind": "function",
+                        "function_nr": 1
+                    }
+                }
+            ]
+        },
+        {
+            "at": 991,
+            "from_column": 21,
+            "from_row": 23,
+            "text": "(",
+            "kind": "function",
+            "to_column": 22,
+            "to_row": 23,
+            "outer": 0,
+            "list": [],
+            "statements": [
+                {
+                    "at": 1001,
+                    "from_column": 4,
+                    "from_row": 25,
+                    "kind": "var",
+                    "text": "var",
+                    "to_column": 7,
+                    "to_row": 25,
+                    "left": {
+                        "at": 1005,
+                        "from_column": 8,
+                        "from_row": 25,
+                        "kind": "name",
+                        "text": "underlying",
+                        "to_column": 18,
+                        "to_row": 25,
+                        "function_nr": 1,
+                        "level": 0,
+                        "name": "underlying"
+                    },
+                    "right": {
+                        "at": 1022,
+                        "from_column": 25,
+                        "from_row": 25,
+                        "text": "(",
+                        "kind": "(",
+                        "to_column": 26,
+                        "to_row": 25,
+                        "expression": {
+                            "at": 1017,
+                            "from_column": 20,
+                            "from_row": 25,
+                            "kind": "name",
+                            "text": "array",
+                            "to_column": 25,
+                            "to_row": 25,
+                            "name": "array"
+                        },
+                        "list": [
+                            {
+                                "at": 1023,
+                                "from_column": 26,
+                                "from_row": 25,
+                                "kind": "number",
+                                "text": "16",
+                                "number": 16,
+                                "to_column": 28,
+                                "to_row": 25,
+                                "value": "16"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "at": 1031,
+                    "from_column": 4,
+                    "from_row": 26,
+                    "kind": "var",
+                    "text": "var",
+                    "to_column": 7,
+                    "to_row": 26,
+                    "left": {
+                        "at": 1035,
+                        "from_column": 8,
+                        "from_row": 26,
+                        "kind": "name",
+                        "text": "bottom",
+                        "to_column": 14,
+                        "to_row": 26,
+                        "function_nr": 1,
+                        "level": 0,
+                        "name": "bottom"
+                    },
+                    "right": {
+                        "at": 1043,
+                        "from_column": 16,
+                        "from_row": 26,
+                        "kind": "number",
+                        "text": "0",
+                        "number": 0,
+                        "to_column": 17,
+                        "to_row": 26,
+                        "value": "0"
+                    }
+                },
+                {
+                    "at": 1049,
+                    "from_column": 4,
+                    "from_row": 27,
+                    "kind": "var",
+                    "text": "var",
+                    "to_column": 7,
+                    "to_row": 27,
+                    "left": {
+                        "at": 1053,
+                        "from_column": 8,
+                        "from_row": 27,
+                        "kind": "name",
+                        "text": "top",
+                        "to_column": 11,
+                        "to_row": 27,
+                        "function_nr": 1,
+                        "level": 0,
+                        "name": "top"
+                    },
+                    "right": {
+                        "at": 1058,
+                        "from_column": 13,
+                        "from_row": 27,
+                        "kind": "number",
+                        "text": "0",
+                        "number": 0,
+                        "to_column": 14,
+                        "to_row": 27,
+                        "value": "0"
+                    }
+                },
+                {
+                    "at": 1064,
+                    "from_column": 4,
+                    "from_row": 28,
+                    "kind": "var",
+                    "text": "var",
+                    "to_column": 7,
+                    "to_row": 28,
+                    "left": {
+                        "at": 1068,
+                        "from_column": 8,
+                        "from_row": 28,
+                        "kind": "name",
+                        "text": "the_length",
+                        "to_column": 18,
+                        "to_row": 28,
+                        "function_nr": 1,
+                        "level": 0,
+                        "name": "the_length"
+                    },
+                    "right": {
+                        "at": 1080,
+                        "from_column": 20,
+                        "from_row": 28,
+                        "kind": "number",
+                        "text": "0",
+                        "number": 0,
+                        "to_column": 21,
+                        "to_row": 28,
+                        "value": "0"
+                    }
+                },
+                {
+                    "at": 1087,
+                    "from_column": 4,
+                    "from_row": 30,
+                    "kind": "def",
+                    "text": "def",
+                    "to_column": 7,
+                    "to_row": 30,
+                    "left": {
+                        "at": 1091,
+                        "from_column": 8,
+                        "from_row": 30,
+                        "kind": "name",
+                        "text": "grow",
+                        "to_column": 12,
+                        "to_row": 30,
+                        "function_nr": 1,
+                        "level": 0,
+                        "name": "grow"
+                    },
+                    "right": {
+                        "kind": "function",
+                        "function_nr": 2
+                    }
+                },
+                {
+                    "at": 1749,
+                    "from_column": 4,
+                    "from_row": 54,
+                    "kind": "return",
+                    "text": "return",
+                    "to_column": 10,
+                    "to_row": 54,
+                    "expression": {
+                        "at": 1756,
+                        "from_column": 11,
+                        "from_row": 54,
+                        "text": "{",
+                        "kind": "record",
+                        "to_column": 12,
+                        "to_row": 54,
+                        "list": [
+                            {
+                                "left": "length",
+                                "right": {
+                                    "kind": "function",
+                                    "function_nr": 3
+                                }
+                            },
+                            {
+                                "left": "array",
+                                "right": {
+                                    "kind": "function",
+                                    "function_nr": 4
+                                }
+                            },
+                            {
+                                "left": "push",
+                                "right": {
+                                    "kind": "function",
+                                    "function_nr": 5
+                                }
+                            },
+                            {
+                                "left": "place",
+                                "right": {
+                                    "kind": "function",
+                                    "function_nr": 6
+                                }
+                            },
+                            {
+                                "left": "pop",
+                                "right": {
+                                    "kind": "function",
+                                    "function_nr": 7
+                                }
+                            },
+                            {
+                                "left": "pull",
+                                "right": {
+                                    "kind": "function",
+                                    "function_nr": 8
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "at": 1095,
+            "from_column": 12,
+            "from_row": 30,
+            "text": "(",
+            "kind": "function",
+            "to_column": 13,
+            "to_row": 30,
+            "outer": 1,
+            "list": [
+                {
+                    "at": 1096,
+                    "from_column": 13,
+                    "from_row": 30,
+                    "kind": "input",
+                    "text": "value",
+                    "to_column": 18,
+                    "to_row": 30,
+                    "input_nr": 0,
+                    "name": "value"
+                }
+            ],
+            "statements": [
+                {
+                    "at": 1191,
+                    "from_column": 8,
+                    "from_row": 34,
+                    "kind": "if",
+                    "text": "if",
+                    "to_column": 10,
+                    "to_row": 34,
+                    "expression": {
+                        "at": 1205,
+                        "from_column": 22,
+                        "from_row": 34,
+                        "text": "=",
+                        "kind": "=",
+                        "to_column": 23,
+                        "to_row": 34,
+                        "left": {
+                            "at": 1194,
+                            "from_column": 11,
+                            "from_row": 34,
+                            "kind": "name",
+                            "text": "the_length",
+                            "to_column": 21,
+                            "to_row": 34,
+                            "name": "the_length",
+                            "level": 1
+                        },
+                        "right": {
+                            "at": 1213,
+                            "from_column": 30,
+                            "from_row": 34,
+                            "text": "(",
+                            "kind": "(",
+                            "to_column": 31,
+                            "to_row": 34,
+                            "expression": {
+                                "at": 1207,
+                                "from_column": 24,
+                                "from_row": 34,
+                                "kind": "name",
+                                "text": "length",
+                                "to_column": 30,
+                                "to_row": 34,
+                                "name": "length"
+                            },
+                            "list": [
+                                {
+                                    "at": 1214,
+                                    "from_column": 31,
+                                    "from_row": 34,
+                                    "kind": "name",
+                                    "text": "underlying",
+                                    "to_column": 41,
+                                    "to_row": 34,
+                                    "name": "underlying",
+                                    "level": 1
+                                }
+                            ]
+                        }
+                    },
+                    "then": [
+                        {
+                            "at": 1238,
+                            "from_column": 12,
+                            "from_row": 35,
+                            "kind": "assign",
+                            "text": "assign",
+                            "to_column": 18,
+                            "to_row": 35,
+                            "left": {
+                                "at": 1245,
+                                "from_column": 19,
+                                "from_row": 35,
+                                "kind": "name",
+                                "text": "top",
+                                "to_column": 22,
+                                "to_row": 35,
+                                "name": "top",
+                                "level": 1
+                            },
+                            "right": {
+                                "at": 1250,
+                                "from_column": 24,
+                                "from_row": 35,
+                                "kind": "name",
+                                "text": "the_length",
+                                "to_column": 34,
+                                "to_row": 35,
+                                "name": "the_length",
+                                "level": 1
+                            }
+                        },
+                        {
+                            "at": 1273,
+                            "from_column": 12,
+                            "from_row": 36,
+                            "kind": "if",
+                            "text": "if",
+                            "to_column": 14,
+                            "to_row": 36,
+                            "expression": {
+                                "at": 1283,
+                                "from_column": 22,
+                                "from_row": 36,
+                                "text": "=",
+                                "kind": "=",
+                                "to_column": 23,
+                                "to_row": 36,
+                                "left": {
+                                    "at": 1276,
+                                    "from_column": 15,
+                                    "from_row": 36,
+                                    "kind": "name",
+                                    "text": "bottom",
+                                    "to_column": 21,
+                                    "to_row": 36,
+                                    "name": "bottom",
+                                    "level": 1
+                                },
+                                "right": {
+                                    "at": 1285,
+                                    "from_column": 24,
+                                    "from_row": 36,
+                                    "kind": "number",
+                                    "text": "0",
+                                    "number": 0,
+                                    "to_column": 25,
+                                    "to_row": 36,
+                                    "value": "0"
+                                }
+                            },
+                            "then": [
+                                {
+                                    "at": 1303,
+                                    "from_column": 16,
+                                    "from_row": 37,
+                                    "kind": "assign",
+                                    "text": "assign",
+                                    "to_column": 22,
+                                    "to_row": 37,
+                                    "left": {
+                                        "at": 1310,
+                                        "from_column": 23,
+                                        "from_row": 37,
+                                        "kind": "name",
+                                        "text": "underlying",
+                                        "to_column": 33,
+                                        "to_row": 37,
+                                        "name": "underlying",
+                                        "level": 1
+                                    },
+                                    "right": {
+                                        "at": 1327,
+                                        "from_column": 40,
+                                        "from_row": 37,
+                                        "text": "(",
+                                        "kind": "(",
+                                        "to_column": 41,
+                                        "to_row": 37,
+                                        "expression": {
+                                            "at": 1322,
+                                            "from_column": 35,
+                                            "from_row": 37,
+                                            "kind": "name",
+                                            "text": "array",
+                                            "to_column": 40,
+                                            "to_row": 37,
+                                            "name": "array"
+                                        },
+                                        "list": [
+                                            {
+                                                "at": 1349,
+                                                "from_column": 20,
+                                                "from_row": 38,
+                                                "kind": "name",
+                                                "text": "underlying",
+                                                "to_column": 30,
+                                                "to_row": 38,
+                                                "name": "underlying",
+                                                "level": 1
+                                            },
+                                            {
+                                                "at": 1385,
+                                                "from_column": 25,
+                                                "from_row": 39,
+                                                "text": "(",
+                                                "kind": "(",
+                                                "to_column": 26,
+                                                "to_row": 39,
+                                                "expression": {
+                                                    "at": 1380,
+                                                    "from_column": 20,
+                                                    "from_row": 39,
+                                                    "kind": "name",
+                                                    "text": "array",
+                                                    "to_column": 25,
+                                                    "to_row": 39,
+                                                    "name": "array"
+                                                },
+                                                "list": [
+                                                    {
+                                                        "at": 1386,
+                                                        "from_column": 26,
+                                                        "from_row": 39,
+                                                        "kind": "name",
+                                                        "text": "the_length",
+                                                        "to_column": 36,
+                                                        "to_row": 39,
+                                                        "name": "the_length",
+                                                        "level": 1
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "list": [],
+                            "else": [
+                                {
+                                    "at": 1449,
+                                    "from_column": 16,
+                                    "from_row": 42,
+                                    "kind": "assign",
+                                    "text": "assign",
+                                    "to_column": 22,
+                                    "to_row": 42,
+                                    "left": {
+                                        "at": 1456,
+                                        "from_column": 23,
+                                        "from_row": 42,
+                                        "kind": "name",
+                                        "text": "underlying",
+                                        "to_column": 33,
+                                        "to_row": 42,
+                                        "name": "underlying",
+                                        "level": 1
+                                    },
+                                    "right": {
+                                        "at": 1473,
+                                        "from_column": 40,
+                                        "from_row": 42,
+                                        "text": "(",
+                                        "kind": "(",
+                                        "to_column": 41,
+                                        "to_row": 42,
+                                        "expression": {
+                                            "at": 1468,
+                                            "from_column": 35,
+                                            "from_row": 42,
+                                            "kind": "name",
+                                            "text": "array",
+                                            "to_column": 40,
+                                            "to_row": 42,
+                                            "name": "array"
+                                        },
+                                        "list": [
+                                            {
+                                                "at": 1500,
+                                                "from_column": 25,
+                                                "from_row": 43,
+                                                "text": "(",
+                                                "kind": "(",
+                                                "to_column": 26,
+                                                "to_row": 43,
+                                                "expression": {
+                                                    "at": 1495,
+                                                    "from_column": 20,
+                                                    "from_row": 43,
+                                                    "kind": "name",
+                                                    "text": "array",
+                                                    "to_column": 25,
+                                                    "to_row": 43,
+                                                    "name": "array"
+                                                },
+                                                "list": [
+                                                    {
+                                                        "at": 1531,
+                                                        "from_column": 29,
+                                                        "from_row": 44,
+                                                        "text": "(",
+                                                        "kind": "(",
+                                                        "to_column": 30,
+                                                        "to_row": 44,
+                                                        "expression": {
+                                                            "at": 1526,
+                                                            "from_column": 24,
+                                                            "from_row": 44,
+                                                            "kind": "name",
+                                                            "text": "array",
+                                                            "to_column": 29,
+                                                            "to_row": 44,
+                                                            "name": "array"
+                                                        },
+                                                        "list": [
+                                                            {
+                                                                "at": 1532,
+                                                                "from_column": 30,
+                                                                "from_row": 44,
+                                                                "kind": "name",
+                                                                "text": "underlying",
+                                                                "to_column": 40,
+                                                                "to_row": 44,
+                                                                "name": "underlying",
+                                                                "level": 1
+                                                            },
+                                                            {
+                                                                "at": 1544,
+                                                                "from_column": 42,
+                                                                "from_row": 44,
+                                                                "kind": "name",
+                                                                "text": "bottom",
+                                                                "to_column": 48,
+                                                                "to_row": 44,
+                                                                "name": "bottom",
+                                                                "level": 1
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        "at": 1581,
+                                                        "from_column": 29,
+                                                        "from_row": 45,
+                                                        "text": "(",
+                                                        "kind": "(",
+                                                        "to_column": 30,
+                                                        "to_row": 45,
+                                                        "expression": {
+                                                            "at": 1576,
+                                                            "from_column": 24,
+                                                            "from_row": 45,
+                                                            "kind": "name",
+                                                            "text": "array",
+                                                            "to_column": 29,
+                                                            "to_row": 45,
+                                                            "name": "array"
+                                                        },
+                                                        "list": [
+                                                            {
+                                                                "at": 1582,
+                                                                "from_column": 30,
+                                                                "from_row": 45,
+                                                                "kind": "name",
+                                                                "text": "underlying",
+                                                                "to_column": 40,
+                                                                "to_row": 45,
+                                                                "name": "underlying",
+                                                                "level": 1
+                                                            },
+                                                            {
+                                                                "at": 1594,
+                                                                "from_column": 42,
+                                                                "from_row": 45,
+                                                                "kind": "number",
+                                                                "text": "0",
+                                                                "number": 0,
+                                                                "to_column": 43,
+                                                                "to_row": 45,
+                                                                "value": "0"
+                                                            },
+                                                            {
+                                                                "at": 1597,
+                                                                "from_column": 45,
+                                                                "from_row": 45,
+                                                                "kind": "name",
+                                                                "text": "bottom",
+                                                                "to_column": 51,
+                                                                "to_row": 45,
+                                                                "name": "bottom",
+                                                                "level": 1
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "at": 1652,
+                                                "from_column": 25,
+                                                "from_row": 47,
+                                                "text": "(",
+                                                "kind": "(",
+                                                "to_column": 26,
+                                                "to_row": 47,
+                                                "expression": {
+                                                    "at": 1647,
+                                                    "from_column": 20,
+                                                    "from_row": 47,
+                                                    "kind": "name",
+                                                    "text": "array",
+                                                    "to_column": 25,
+                                                    "to_row": 47,
+                                                    "name": "array"
+                                                },
+                                                "list": [
+                                                    {
+                                                        "at": 1653,
+                                                        "from_column": 26,
+                                                        "from_row": 47,
+                                                        "kind": "name",
+                                                        "text": "the_length",
+                                                        "to_column": 36,
+                                                        "to_row": 47,
+                                                        "name": "the_length",
+                                                        "level": 1
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "at": 1710,
+                            "from_column": 12,
+                            "from_row": 50,
+                            "kind": "assign",
+                            "text": "assign",
+                            "to_column": 18,
+                            "to_row": 50,
+                            "left": {
+                                "at": 1717,
+                                "from_column": 19,
+                                "from_row": 50,
+                                "kind": "name",
+                                "text": "bottom",
+                                "to_column": 25,
+                                "to_row": 50,
+                                "name": "bottom",
+                                "level": 1
+                            },
+                            "right": {
+                                "at": 1725,
+                                "from_column": 27,
+                                "from_row": 50,
+                                "kind": "number",
+                                "text": "0",
+                                "number": 0,
+                                "to_column": 28,
+                                "to_row": 50,
+                                "value": "0"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "at": 1824,
+            "from_column": 14,
+            "from_row": 58,
+            "text": "(",
+            "kind": "function",
+            "to_column": 15,
+            "to_row": 58,
+            "outer": 1,
+            "list": [],
+            "expression": {
+                "at": 1828,
+                "from_column": 18,
+                "from_row": 58,
+                "kind": "name",
+                "text": "the_length",
+                "to_column": 28,
+                "to_row": 58,
+                "name": "the_length",
+                "level": 1
+            }
+        },
+        {
+            "at": 1854,
+            "from_column": 13,
+            "from_row": 60,
+            "text": "(",
+            "kind": "function",
+            "to_column": 14,
+            "to_row": 60,
+            "outer": 1,
+            "list": [],
+            "statements": [
+                {
+                    "at": 1871,
+                    "from_column": 12,
+                    "from_row": 61,
+                    "kind": "if",
+                    "text": "if",
+                    "to_column": 14,
+                    "to_row": 61,
+                    "expression": {
+                        "at": 1885,
+                        "from_column": 26,
+                        "from_row": 61,
+                        "text": "<=",
+                        "kind": "<=",
+                        "to_column": 28,
+                        "to_row": 61,
+                        "left": {
+                            "at": 1874,
+                            "from_column": 15,
+                            "from_row": 61,
+                            "kind": "name",
+                            "text": "the_length",
+                            "to_column": 25,
+                            "to_row": 61,
+                            "name": "the_length",
+                            "level": 1
+                        },
+                        "right": {
+                            "at": 1888,
+                            "from_column": 29,
+                            "from_row": 61,
+                            "kind": "number",
+                            "text": "0",
+                            "number": 0,
+                            "to_column": 30,
+                            "to_row": 61,
+                            "value": "0"
+                        }
+                    },
+                    "then": [
+                        {
+                            "at": 1906,
+                            "from_column": 16,
+                            "from_row": 62,
+                            "kind": "return",
+                            "text": "return",
+                            "to_column": 22,
+                            "to_row": 62,
+                            "expression": {
+                                "at": 1913,
+                                "from_column": 23,
+                                "from_row": 62,
+                                "text": "[]",
+                                "kind": "array",
+                                "to_column": 25,
+                                "to_row": 62,
+                                "list": []
+                            }
+                        }
+                    ],
+                    "list": [
+                        {
+                            "at": 1933,
+                            "from_column": 17,
+                            "from_row": 63,
+                            "kind": "if",
+                            "text": "if",
+                            "to_column": 19,
+                            "to_row": 63,
+                            "expression": {
+                                "at": 1943,
+                                "from_column": 27,
+                                "from_row": 63,
+                                "text": "<",
+                                "kind": "<",
+                                "to_column": 28,
+                                "to_row": 63,
+                                "left": {
+                                    "at": 1936,
+                                    "from_column": 20,
+                                    "from_row": 63,
+                                    "kind": "name",
+                                    "text": "bottom",
+                                    "to_column": 26,
+                                    "to_row": 63,
+                                    "name": "bottom",
+                                    "level": 1
+                                },
+                                "right": {
+                                    "at": 1945,
+                                    "from_column": 29,
+                                    "from_row": 63,
+                                    "kind": "name",
+                                    "text": "top",
+                                    "to_column": 32,
+                                    "to_row": 63,
+                                    "name": "top",
+                                    "level": 1
+                                }
+                            },
+                            "then": [
+                                {
+                                    "at": 1965,
+                                    "from_column": 16,
+                                    "from_row": 64,
+                                    "kind": "return",
+                                    "text": "return",
+                                    "to_column": 22,
+                                    "to_row": 64,
+                                    "expression": {
+                                        "at": 1977,
+                                        "from_column": 28,
+                                        "from_row": 64,
+                                        "text": "(",
+                                        "kind": "(",
+                                        "to_column": 29,
+                                        "to_row": 64,
+                                        "expression": {
+                                            "at": 1972,
+                                            "from_column": 23,
+                                            "from_row": 64,
+                                            "kind": "name",
+                                            "text": "array",
+                                            "to_column": 28,
+                                            "to_row": 64,
+                                            "name": "array",
+                                            "level": 0
+                                        },
+                                        "list": [
+                                            {
+                                                "at": 1978,
+                                                "from_column": 29,
+                                                "from_row": 64,
+                                                "kind": "name",
+                                                "text": "underlying",
+                                                "to_column": 39,
+                                                "to_row": 64,
+                                                "name": "underlying",
+                                                "level": 1
+                                            },
+                                            {
+                                                "at": 1990,
+                                                "from_column": 41,
+                                                "from_row": 64,
+                                                "kind": "name",
+                                                "text": "bottom",
+                                                "to_column": 47,
+                                                "to_row": 64,
+                                                "name": "bottom",
+                                                "level": 1
+                                            },
+                                            {
+                                                "at": 1998,
+                                                "from_column": 49,
+                                                "from_row": 64,
+                                                "kind": "name",
+                                                "text": "top",
+                                                "to_column": 52,
+                                                "to_row": 64,
+                                                "name": "top",
+                                                "level": 1
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    ],
+                    "else": [
+                        {
+                            "at": 2036,
+                            "from_column": 16,
+                            "from_row": 66,
+                            "kind": "return",
+                            "text": "return",
+                            "to_column": 22,
+                            "to_row": 66,
+                            "expression": {
+                                "at": 2048,
+                                "from_column": 28,
+                                "from_row": 66,
+                                "text": "(",
+                                "kind": "(",
+                                "to_column": 29,
+                                "to_row": 66,
+                                "expression": {
+                                    "at": 2043,
+                                    "from_column": 23,
+                                    "from_row": 66,
+                                    "kind": "name",
+                                    "text": "array",
+                                    "to_column": 28,
+                                    "to_row": 66,
+                                    "name": "array",
+                                    "level": 0
+                                },
+                                "list": [
+                                    {
+                                        "at": 2075,
+                                        "from_column": 25,
+                                        "from_row": 67,
+                                        "text": "(",
+                                        "kind": "(",
+                                        "to_column": 26,
+                                        "to_row": 67,
+                                        "expression": {
+                                            "at": 2070,
+                                            "from_column": 20,
+                                            "from_row": 67,
+                                            "kind": "name",
+                                            "text": "array",
+                                            "to_column": 25,
+                                            "to_row": 67,
+                                            "name": "array",
+                                            "level": 0
+                                        },
+                                        "list": [
+                                            {
+                                                "at": 2076,
+                                                "from_column": 26,
+                                                "from_row": 67,
+                                                "kind": "name",
+                                                "text": "underlying",
+                                                "to_column": 36,
+                                                "to_row": 67,
+                                                "name": "underlying",
+                                                "level": 1
+                                            },
+                                            {
+                                                "at": 2088,
+                                                "from_column": 38,
+                                                "from_row": 67,
+                                                "kind": "name",
+                                                "text": "bottom",
+                                                "to_column": 44,
+                                                "to_row": 67,
+                                                "name": "bottom",
+                                                "level": 1
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "at": 2121,
+                                        "from_column": 25,
+                                        "from_row": 68,
+                                        "text": "(",
+                                        "kind": "(",
+                                        "to_column": 26,
+                                        "to_row": 68,
+                                        "expression": {
+                                            "at": 2116,
+                                            "from_column": 20,
+                                            "from_row": 68,
+                                            "kind": "name",
+                                            "text": "array",
+                                            "to_column": 25,
+                                            "to_row": 68,
+                                            "name": "array",
+                                            "level": 0
+                                        },
+                                        "list": [
+                                            {
+                                                "at": 2122,
+                                                "from_column": 26,
+                                                "from_row": 68,
+                                                "kind": "name",
+                                                "text": "underlying",
+                                                "to_column": 36,
+                                                "to_row": 68,
+                                                "name": "underlying",
+                                                "level": 1
+                                            },
+                                            {
+                                                "at": 2134,
+                                                "from_column": 38,
+                                                "from_row": 68,
+                                                "kind": "number",
+                                                "text": "0",
+                                                "number": 0,
+                                                "to_column": 39,
+                                                "to_row": 68,
+                                                "value": "0"
+                                            },
+                                            {
+                                                "at": 2137,
+                                                "from_column": 41,
+                                                "from_row": 68,
+                                                "kind": "name",
+                                                "text": "top",
+                                                "to_column": 44,
+                                                "to_row": 68,
+                                                "name": "top",
+                                                "level": 1
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "at": 2198,
+            "from_column": 12,
+            "from_row": 73,
+            "text": "(",
+            "kind": "function",
+            "to_column": 13,
+            "to_row": 73,
+            "outer": 1,
+            "list": [
+                {
+                    "at": 2199,
+                    "from_column": 13,
+                    "from_row": 73,
+                    "kind": "input",
+                    "text": "value",
+                    "to_column": 18,
+                    "to_row": 73,
+                    "input_nr": 0,
+                    "name": "value"
+                }
+            ],
+            "statements": [
+                {
+                    "at": 2220,
+                    "from_column": 12,
+                    "from_row": 74,
+                    "kind": "call",
+                    "text": "call",
+                    "to_column": 16,
+                    "to_row": 74,
+                    "list": []
+                },
+                {
+                    "at": 2244,
+                    "from_column": 12,
+                    "from_row": 75,
+                    "kind": "if",
+                    "text": "if",
+                    "to_column": 14,
+                    "to_row": 75,
+                    "expression": {
+                        "at": 2251,
+                        "from_column": 19,
+                        "from_row": 75,
+                        "text": ">=",
+                        "kind": ">=",
+                        "to_column": 21,
+                        "to_row": 75,
+                        "left": {
+                            "at": 2247,
+                            "from_column": 15,
+                            "from_row": 75,
+                            "kind": "name",
+                            "text": "top",
+                            "to_column": 18,
+                            "to_row": 75,
+                            "name": "top",
+                            "level": 1
+                        },
+                        "right": {
+                            "at": 2260,
+                            "from_column": 28,
+                            "from_row": 75,
+                            "text": "(",
+                            "kind": "(",
+                            "to_column": 29,
+                            "to_row": 75,
+                            "expression": {
+                                "at": 2254,
+                                "from_column": 22,
+                                "from_row": 75,
+                                "kind": "name",
+                                "text": "length",
+                                "to_column": 28,
+                                "to_row": 75,
+                                "name": "length"
+                            },
+                            "list": [
+                                {
+                                    "at": 2261,
+                                    "from_column": 29,
+                                    "from_row": 75,
+                                    "kind": "name",
+                                    "text": "underlying",
+                                    "to_column": 39,
+                                    "to_row": 75,
+                                    "name": "underlying",
+                                    "level": 1
+                                }
+                            ]
+                        }
+                    },
+                    "then": [
+                        {
+                            "at": 2289,
+                            "from_column": 16,
+                            "from_row": 76,
+                            "kind": "assign",
+                            "text": "assign",
+                            "to_column": 22,
+                            "to_row": 76,
+                            "left": {
+                                "at": 2296,
+                                "from_column": 23,
+                                "from_row": 76,
+                                "kind": "name",
+                                "text": "top",
+                                "to_column": 26,
+                                "to_row": 76,
+                                "name": "top",
+                                "level": 1
+                            },
+                            "right": {
+                                "at": 2301,
+                                "from_column": 28,
+                                "from_row": 76,
+                                "kind": "number",
+                                "text": "0",
+                                "number": 0,
+                                "to_column": 29,
+                                "to_row": 76,
+                                "value": "0"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "at": 2330,
+                    "from_column": 12,
+                    "from_row": 78,
+                    "kind": "assign",
+                    "text": "assign",
+                    "to_column": 18,
+                    "to_row": 78,
+                    "left": {
+                        "at": 2347,
+                        "from_column": 29,
+                        "from_row": 78,
+                        "text": "[",
+                        "kind": "[",
+                        "to_column": 30,
+                        "to_row": 78,
+                        "left": {
+                            "at": 2337,
+                            "from_column": 19,
+                            "from_row": 78,
+                            "kind": "name",
+                            "text": "underlying",
+                            "to_column": 29,
+                            "to_row": 78,
+                            "name": "underlying",
+                            "level": 1
+                        },
+                        "right": {
+                            "at": 2348,
+                            "from_column": 30,
+                            "from_row": 78,
+                            "kind": "name",
+                            "text": "top",
+                            "to_column": 33,
+                            "to_row": 78,
+                            "name": "top",
+                            "level": 1
+                        }
+                    },
+                    "right": {
+                        "at": 2354,
+                        "from_column": 36,
+                        "from_row": 78,
+                        "kind": "name",
+                        "text": "value",
+                        "to_column": 41,
+                        "to_row": 78,
+                        "name": "value",
+                        "level": 0
+                    }
+                },
+                {
+                    "at": 2372,
+                    "from_column": 12,
+                    "from_row": 79,
+                    "kind": "assign",
+                    "text": "assign",
+                    "to_column": 18,
+                    "to_row": 79,
+                    "left": {
+                        "at": 2379,
+                        "from_column": 19,
+                        "from_row": 79,
+                        "kind": "name",
+                        "text": "top",
+                        "to_column": 22,
+                        "to_row": 79,
+                        "name": "top",
+                        "level": 1
+                    },
+                    "right": {
+                        "at": 2388,
+                        "from_column": 28,
+                        "from_row": 79,
+                        "text": "+",
+                        "kind": "+",
+                        "to_column": 29,
+                        "to_row": 79,
+                        "left": {
+                            "at": 2384,
+                            "from_column": 24,
+                            "from_row": 79,
+                            "kind": "name",
+                            "text": "top",
+                            "to_column": 27,
+                            "to_row": 79,
+                            "name": "top",
+                            "level": 1
+                        },
+                        "right": {
+                            "at": 2390,
+                            "from_column": 30,
+                            "from_row": 79,
+                            "kind": "number",
+                            "text": "1",
+                            "number": 1,
+                            "to_column": 31,
+                            "to_row": 79,
+                            "value": "1"
+                        }
+                    }
+                },
+                {
+                    "at": 2404,
+                    "from_column": 12,
+                    "from_row": 80,
+                    "kind": "assign",
+                    "text": "assign",
+                    "to_column": 18,
+                    "to_row": 80,
+                    "left": {
+                        "at": 2411,
+                        "from_column": 19,
+                        "from_row": 80,
+                        "kind": "name",
+                        "text": "the_length",
+                        "to_column": 29,
+                        "to_row": 80,
+                        "name": "the_length",
+                        "level": 1
+                    },
+                    "right": {
+                        "at": 2434,
+                        "from_column": 42,
+                        "from_row": 80,
+                        "text": "+",
+                        "kind": "+",
+                        "to_column": 43,
+                        "to_row": 80,
+                        "left": {
+                            "at": 2423,
+                            "from_column": 31,
+                            "from_row": 80,
+                            "kind": "name",
+                            "text": "the_length",
+                            "to_column": 41,
+                            "to_row": 80,
+                            "name": "the_length",
+                            "level": 1
+                        },
+                        "right": {
+                            "at": 2436,
+                            "from_column": 44,
+                            "from_row": 80,
+                            "kind": "number",
+                            "text": "1",
+                            "number": 1,
+                            "to_column": 45,
+                            "to_row": 80,
+                            "value": "1"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "at": 2462,
+            "from_column": 13,
+            "from_row": 83,
+            "text": "(",
+            "kind": "function",
+            "to_column": 14,
+            "to_row": 83,
+            "outer": 1,
+            "list": [
+                {
+                    "at": 2463,
+                    "from_column": 14,
+                    "from_row": 83,
+                    "kind": "input",
+                    "text": "value",
+                    "to_column": 19,
+                    "to_row": 83,
+                    "input_nr": 0,
+                    "name": "value"
+                }
+            ],
+            "statements": [
+                {
+                    "at": 2484,
+                    "from_column": 12,
+                    "from_row": 84,
+                    "kind": "call",
+                    "text": "call",
+                    "to_column": 16,
+                    "to_row": 84,
+                    "list": []
+                },
+                {
+                    "at": 2508,
+                    "from_column": 12,
+                    "from_row": 85,
+                    "kind": "if",
+                    "text": "if",
+                    "to_column": 14,
+                    "to_row": 85,
+                    "expression": {
+                        "at": 2518,
+                        "from_column": 22,
+                        "from_row": 85,
+                        "text": "<=",
+                        "kind": "<=",
+                        "to_column": 24,
+                        "to_row": 85,
+                        "left": {
+                            "at": 2511,
+                            "from_column": 15,
+                            "from_row": 85,
+                            "kind": "name",
+                            "text": "bottom",
+                            "to_column": 21,
+                            "to_row": 85,
+                            "name": "bottom",
+                            "level": 1
+                        },
+                        "right": {
+                            "at": 2521,
+                            "from_column": 25,
+                            "from_row": 85,
+                            "kind": "number",
+                            "text": "0",
+                            "number": 0,
+                            "to_column": 26,
+                            "to_row": 85,
+                            "value": "0"
+                        }
+                    },
+                    "then": [
+                        {
+                            "at": 2539,
+                            "from_column": 16,
+                            "from_row": 86,
+                            "kind": "assign",
+                            "text": "assign",
+                            "to_column": 22,
+                            "to_row": 86,
+                            "left": {
+                                "at": 2546,
+                                "from_column": 23,
+                                "from_row": 86,
+                                "kind": "name",
+                                "text": "bottom",
+                                "to_column": 29,
+                                "to_row": 86,
+                                "name": "bottom",
+                                "level": 1
+                            },
+                            "right": {
+                                "at": 2560,
+                                "from_column": 37,
+                                "from_row": 86,
+                                "text": "(",
+                                "kind": "(",
+                                "to_column": 38,
+                                "to_row": 86,
+                                "expression": {
+                                    "at": 2554,
+                                    "from_column": 31,
+                                    "from_row": 86,
+                                    "kind": "name",
+                                    "text": "length",
+                                    "to_column": 37,
+                                    "to_row": 86,
+                                    "name": "length"
+                                },
+                                "list": [
+                                    {
+                                        "at": 2561,
+                                        "from_column": 38,
+                                        "from_row": 86,
+                                        "kind": "name",
+                                        "text": "underlying",
+                                        "to_column": 48,
+                                        "to_row": 86,
+                                        "name": "underlying",
+                                        "level": 1
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "at": 2600,
+                    "from_column": 12,
+                    "from_row": 88,
+                    "kind": "assign",
+                    "text": "assign",
+                    "to_column": 18,
+                    "to_row": 88,
+                    "left": {
+                        "at": 2607,
+                        "from_column": 19,
+                        "from_row": 88,
+                        "kind": "name",
+                        "text": "bottom",
+                        "to_column": 25,
+                        "to_row": 88,
+                        "name": "bottom",
+                        "level": 1
+                    },
+                    "right": {
+                        "at": 2622,
+                        "from_column": 34,
+                        "from_row": 88,
+                        "text": "-",
+                        "kind": "-",
+                        "to_column": 35,
+                        "to_row": 88,
+                        "left": {
+                            "at": 2615,
+                            "from_column": 27,
+                            "from_row": 88,
+                            "kind": "name",
+                            "text": "bottom",
+                            "to_column": 33,
+                            "to_row": 88,
+                            "name": "bottom",
+                            "level": 1
+                        },
+                        "right": {
+                            "at": 2624,
+                            "from_column": 36,
+                            "from_row": 88,
+                            "kind": "number",
+                            "text": "1",
+                            "number": 1,
+                            "to_column": 37,
+                            "to_row": 88,
+                            "value": "1"
+                        }
+                    }
+                },
+                {
+                    "at": 2638,
+                    "from_column": 12,
+                    "from_row": 89,
+                    "kind": "assign",
+                    "text": "assign",
+                    "to_column": 18,
+                    "to_row": 89,
+                    "left": {
+                        "at": 2655,
+                        "from_column": 29,
+                        "from_row": 89,
+                        "text": "[",
+                        "kind": "[",
+                        "to_column": 30,
+                        "to_row": 89,
+                        "left": {
+                            "at": 2645,
+                            "from_column": 19,
+                            "from_row": 89,
+                            "kind": "name",
+                            "text": "underlying",
+                            "to_column": 29,
+                            "to_row": 89,
+                            "name": "underlying",
+                            "level": 1
+                        },
+                        "right": {
+                            "at": 2656,
+                            "from_column": 30,
+                            "from_row": 89,
+                            "kind": "name",
+                            "text": "bottom",
+                            "to_column": 36,
+                            "to_row": 89,
+                            "name": "bottom",
+                            "level": 1
+                        }
+                    },
+                    "right": {
+                        "at": 2665,
+                        "from_column": 39,
+                        "from_row": 89,
+                        "kind": "name",
+                        "text": "value",
+                        "to_column": 44,
+                        "to_row": 89,
+                        "name": "value",
+                        "level": 0
+                    }
+                },
+                {
+                    "at": 2683,
+                    "from_column": 12,
+                    "from_row": 90,
+                    "kind": "assign",
+                    "text": "assign",
+                    "to_column": 18,
+                    "to_row": 90,
+                    "left": {
+                        "at": 2690,
+                        "from_column": 19,
+                        "from_row": 90,
+                        "kind": "name",
+                        "text": "the_length",
+                        "to_column": 29,
+                        "to_row": 90,
+                        "name": "the_length",
+                        "level": 1
+                    },
+                    "right": {
+                        "at": 2713,
+                        "from_column": 42,
+                        "from_row": 90,
+                        "text": "+",
+                        "kind": "+",
+                        "to_column": 43,
+                        "to_row": 90,
+                        "left": {
+                            "at": 2702,
+                            "from_column": 31,
+                            "from_row": 90,
+                            "kind": "name",
+                            "text": "the_length",
+                            "to_column": 41,
+                            "to_row": 90,
+                            "name": "the_length",
+                            "level": 1
+                        },
+                        "right": {
+                            "at": 2715,
+                            "from_column": 44,
+                            "from_row": 90,
+                            "kind": "number",
+                            "text": "1",
+                            "number": 1,
+                            "to_column": 45,
+                            "to_row": 90,
+                            "value": "1"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "at": 2739,
+            "from_column": 11,
+            "from_row": 93,
+            "text": "(",
+            "kind": "function",
+            "to_column": 12,
+            "to_row": 93,
+            "outer": 1,
+            "list": [],
+            "statements": [
+                {
+                    "at": 2756,
+                    "from_column": 12,
+                    "from_row": 94,
+                    "kind": "if",
+                    "text": "if",
+                    "to_column": 14,
+                    "to_row": 94,
+                    "expression": {
+                        "at": 2770,
+                        "from_column": 26,
+                        "from_row": 94,
+                        "text": "<=",
+                        "kind": "<=",
+                        "to_column": 28,
+                        "to_row": 94,
+                        "left": {
+                            "at": 2759,
+                            "from_column": 15,
+                            "from_row": 94,
+                            "kind": "name",
+                            "text": "the_length",
+                            "to_column": 25,
+                            "to_row": 94,
+                            "name": "the_length",
+                            "level": 1
+                        },
+                        "right": {
+                            "at": 2773,
+                            "from_column": 29,
+                            "from_row": 94,
+                            "kind": "number",
+                            "text": "0",
+                            "number": 0,
+                            "to_column": 30,
+                            "to_row": 94,
+                            "value": "0"
+                        }
+                    },
+                    "then": [
+                        {
+                            "at": 2791,
+                            "from_column": 16,
+                            "from_row": 95,
+                            "kind": "name",
+                            "text": "log",
+                            "to_column": 19,
+                            "to_row": 95,
+                            "left": "error",
+                            "right": {
+                                "at": 2802,
+                                "from_column": 27,
+                                "from_row": 95,
+                                "kind": "text",
+                                "text": "deque.pop",
+                                "quote": "\"",
+                                "to_column": 38,
+                                "to_row": 95,
+                                "value": "deque.pop"
+                            }
+                        },
+                        {
+                            "at": 2830,
+                            "from_column": 16,
+                            "from_row": 96,
+                            "kind": "disrupt",
+                            "text": "disrupt",
+                            "to_column": 23,
+                            "to_row": 96
+                        }
+                    ]
+                },
+                {
+                    "at": 2865,
+                    "from_column": 12,
+                    "from_row": 98,
+                    "kind": "if",
+                    "text": "if",
+                    "to_column": 14,
+                    "to_row": 98,
+                    "expression": {
+                        "at": 2872,
+                        "from_column": 19,
+                        "from_row": 98,
+                        "text": "=",
+                        "kind": "=",
+                        "to_column": 20,
+                        "to_row": 98,
+                        "left": {
+                            "at": 2868,
+                            "from_column": 15,
+                            "from_row": 98,
+                            "kind": "name",
+                            "text": "top",
+                            "to_column": 18,
+                            "to_row": 98,
+                            "name": "top",
+                            "level": 1
+                        },
+                        "right": {
+                            "at": 2874,
+                            "from_column": 21,
+                            "from_row": 98,
+                            "kind": "number",
+                            "text": "0",
+                            "number": 0,
+                            "to_column": 22,
+                            "to_row": 98,
+                            "value": "0"
+                        }
+                    },
+                    "then": [
+                        {
+                            "at": 2892,
+                            "from_column": 16,
+                            "from_row": 99,
+                            "kind": "assign",
+                            "text": "assign",
+                            "to_column": 22,
+                            "to_row": 99,
+                            "left": {
+                                "at": 2899,
+                                "from_column": 23,
+                                "from_row": 99,
+                                "kind": "name",
+                                "text": "top",
+                                "to_column": 26,
+                                "to_row": 99,
+                                "name": "top",
+                                "level": 1
+                            },
+                            "right": {
+                                "at": 2910,
+                                "from_column": 34,
+                                "from_row": 99,
+                                "text": "(",
+                                "kind": "(",
+                                "to_column": 35,
+                                "to_row": 99,
+                                "expression": {
+                                    "at": 2904,
+                                    "from_column": 28,
+                                    "from_row": 99,
+                                    "kind": "name",
+                                    "text": "length",
+                                    "to_column": 34,
+                                    "to_row": 99,
+                                    "name": "length"
+                                },
+                                "list": [
+                                    {
+                                        "at": 2911,
+                                        "from_column": 35,
+                                        "from_row": 99,
+                                        "kind": "name",
+                                        "text": "underlying",
+                                        "to_column": 45,
+                                        "to_row": 99,
+                                        "name": "underlying",
+                                        "level": 1
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "at": 2950,
+                    "from_column": 12,
+                    "from_row": 101,
+                    "kind": "assign",
+                    "text": "assign",
+                    "to_column": 18,
+                    "to_row": 101,
+                    "left": {
+                        "at": 2957,
+                        "from_column": 19,
+                        "from_row": 101,
+                        "kind": "name",
+                        "text": "top",
+                        "to_column": 22,
+                        "to_row": 101,
+                        "name": "top",
+                        "level": 1
+                    },
+                    "right": {
+                        "at": 2966,
+                        "from_column": 28,
+                        "from_row": 101,
+                        "text": "-",
+                        "kind": "-",
+                        "to_column": 29,
+                        "to_row": 101,
+                        "left": {
+                            "at": 2962,
+                            "from_column": 24,
+                            "from_row": 101,
+                            "kind": "name",
+                            "text": "top",
+                            "to_column": 27,
+                            "to_row": 101,
+                            "name": "top",
+                            "level": 1
+                        },
+                        "right": {
+                            "at": 2968,
+                            "from_column": 30,
+                            "from_row": 101,
+                            "kind": "number",
+                            "text": "1",
+                            "number": 1,
+                            "to_column": 31,
+                            "to_row": 101,
+                            "value": "1"
+                        }
+                    }
+                },
+                {
+                    "at": 2982,
+                    "from_column": 12,
+                    "from_row": 102,
+                    "kind": "def",
+                    "text": "def",
+                    "to_column": 15,
+                    "to_row": 102,
+                    "left": {
+                        "at": 2986,
+                        "from_column": 16,
+                        "from_row": 102,
+                        "kind": "name",
+                        "text": "value",
+                        "to_column": 21,
+                        "to_row": 102,
+                        "function_nr": 7,
+                        "level": 0,
+                        "name": "value"
+                    },
+                    "right": {
+                        "at": 3003,
+                        "from_column": 33,
+                        "from_row": 102,
+                        "text": "[",
+                        "kind": "[",
+                        "to_column": 34,
+                        "to_row": 102,
+                        "left": {
+                            "at": 2993,
+                            "from_column": 23,
+                            "from_row": 102,
+                            "kind": "name",
+                            "text": "underlying",
+                            "to_column": 33,
+                            "to_row": 102,
+                            "name": "underlying",
+                            "level": 1
+                        },
+                        "right": {
+                            "at": 3004,
+                            "from_column": 34,
+                            "from_row": 102,
+                            "kind": "name",
+                            "text": "top",
+                            "to_column": 37,
+                            "to_row": 102,
+                            "name": "top",
+                            "level": 1
+                        }
+                    }
+                },
+                {
+                    "at": 3021,
+                    "from_column": 12,
+                    "from_row": 103,
+                    "kind": "assign",
+                    "text": "assign",
+                    "to_column": 18,
+                    "to_row": 103,
+                    "left": {
+                        "at": 3038,
+                        "from_column": 29,
+                        "from_row": 103,
+                        "text": "[",
+                        "kind": "[",
+                        "to_column": 30,
+                        "to_row": 103,
+                        "left": {
+                            "at": 3028,
+                            "from_column": 19,
+                            "from_row": 103,
+                            "kind": "name",
+                            "text": "underlying",
+                            "to_column": 29,
+                            "to_row": 103,
+                            "name": "underlying",
+                            "level": 1
+                        },
+                        "right": {
+                            "at": 3039,
+                            "from_column": 30,
+                            "from_row": 103,
+                            "kind": "name",
+                            "text": "top",
+                            "to_column": 33,
+                            "to_row": 103,
+                            "name": "top",
+                            "level": 1
+                        }
+                    },
+                    "right": {
+                        "at": 3045,
+                        "from_column": 36,
+                        "from_row": 103,
+                        "kind": "name",
+                        "text": "null",
+                        "to_column": 40,
+                        "to_row": 103,
+                        "name": "null"
+                    }
+                },
+                {
+                    "at": 3062,
+                    "from_column": 12,
+                    "from_row": 104,
+                    "kind": "assign",
+                    "text": "assign",
+                    "to_column": 18,
+                    "to_row": 104,
+                    "left": {
+                        "at": 3069,
+                        "from_column": 19,
+                        "from_row": 104,
+                        "kind": "name",
+                        "text": "the_length",
+                        "to_column": 29,
+                        "to_row": 104,
+                        "name": "the_length",
+                        "level": 1
+                    },
+                    "right": {
+                        "at": 3092,
+                        "from_column": 42,
+                        "from_row": 104,
+                        "text": "-",
+                        "kind": "-",
+                        "to_column": 43,
+                        "to_row": 104,
+                        "left": {
+                            "at": 3081,
+                            "from_column": 31,
+                            "from_row": 104,
+                            "kind": "name",
+                            "text": "the_length",
+                            "to_column": 41,
+                            "to_row": 104,
+                            "name": "the_length",
+                            "level": 1
+                        },
+                        "right": {
+                            "at": 3094,
+                            "from_column": 44,
+                            "from_row": 104,
+                            "kind": "number",
+                            "text": "1",
+                            "number": 1,
+                            "to_column": 45,
+                            "to_row": 104,
+                            "value": "1"
+                        }
+                    }
+                },
+                {
+                    "at": 3108,
+                    "from_column": 12,
+                    "from_row": 105,
+                    "kind": "return",
+                    "text": "return",
+                    "to_column": 18,
+                    "to_row": 105,
+                    "expression": {
+                        "at": 3115,
+                        "from_column": 19,
+                        "from_row": 105,
+                        "kind": "name",
+                        "text": "value",
+                        "to_column": 24,
+                        "to_row": 105,
+                        "name": "value",
+                        "level": 0
+                    }
+                }
+            ]
+        },
+        {
+            "at": 3144,
+            "from_column": 12,
+            "from_row": 108,
+            "text": "(",
+            "kind": "function",
+            "to_column": 13,
+            "to_row": 108,
+            "outer": 1,
+            "list": [],
+            "statements": [
+                {
+                    "at": 3161,
+                    "from_column": 12,
+                    "from_row": 109,
+                    "kind": "if",
+                    "text": "if",
+                    "to_column": 14,
+                    "to_row": 109,
+                    "expression": {
+                        "at": 3175,
+                        "from_column": 26,
+                        "from_row": 109,
+                        "text": "<=",
+                        "kind": "<=",
+                        "to_column": 28,
+                        "to_row": 109,
+                        "left": {
+                            "at": 3164,
+                            "from_column": 15,
+                            "from_row": 109,
+                            "kind": "name",
+                            "text": "the_length",
+                            "to_column": 25,
+                            "to_row": 109,
+                            "name": "the_length",
+                            "level": 1
+                        },
+                        "right": {
+                            "at": 3178,
+                            "from_column": 29,
+                            "from_row": 109,
+                            "kind": "number",
+                            "text": "0",
+                            "number": 0,
+                            "to_column": 30,
+                            "to_row": 109,
+                            "value": "0"
+                        }
+                    },
+                    "then": [
+                        {
+                            "at": 3196,
+                            "from_column": 16,
+                            "from_row": 110,
+                            "kind": "name",
+                            "text": "log",
+                            "to_column": 19,
+                            "to_row": 110,
+                            "left": "error",
+                            "right": {
+                                "at": 3207,
+                                "from_column": 27,
+                                "from_row": 110,
+                                "kind": "text",
+                                "text": "deque.pull",
+                                "quote": "\"",
+                                "to_column": 39,
+                                "to_row": 110,
+                                "value": "deque.pull"
+                            }
+                        },
+                        {
+                            "at": 3236,
+                            "from_column": 16,
+                            "from_row": 111,
+                            "kind": "disrupt",
+                            "text": "disrupt",
+                            "to_column": 23,
+                            "to_row": 111
+                        }
+                    ]
+                },
+                {
+                    "at": 3271,
+                    "from_column": 12,
+                    "from_row": 113,
+                    "kind": "def",
+                    "text": "def",
+                    "to_column": 15,
+                    "to_row": 113,
+                    "left": {
+                        "at": 3275,
+                        "from_column": 16,
+                        "from_row": 113,
+                        "kind": "name",
+                        "text": "value",
+                        "to_column": 21,
+                        "to_row": 113,
+                        "function_nr": 8,
+                        "level": 0,
+                        "name": "value"
+                    },
+                    "right": {
+                        "at": 3292,
+                        "from_column": 33,
+                        "from_row": 113,
+                        "text": "[",
+                        "kind": "[",
+                        "to_column": 34,
+                        "to_row": 113,
+                        "left": {
+                            "at": 3282,
+                            "from_column": 23,
+                            "from_row": 113,
+                            "kind": "name",
+                            "text": "underlying",
+                            "to_column": 33,
+                            "to_row": 113,
+                            "name": "underlying",
+                            "level": 1
+                        },
+                        "right": {
+                            "at": 3293,
+                            "from_column": 34,
+                            "from_row": 113,
+                            "kind": "name",
+                            "text": "bottom",
+                            "to_column": 40,
+                            "to_row": 113,
+                            "name": "bottom",
+                            "level": 1
+                        }
+                    }
+                },
+                {
+                    "at": 3313,
+                    "from_column": 12,
+                    "from_row": 114,
+                    "kind": "assign",
+                    "text": "assign",
+                    "to_column": 18,
+                    "to_row": 114,
+                    "left": {
+                        "at": 3330,
+                        "from_column": 29,
+                        "from_row": 114,
+                        "text": "[",
+                        "kind": "[",
+                        "to_column": 30,
+                        "to_row": 114,
+                        "left": {
+                            "at": 3320,
+                            "from_column": 19,
+                            "from_row": 114,
+                            "kind": "name",
+                            "text": "underlying",
+                            "to_column": 29,
+                            "to_row": 114,
+                            "name": "underlying",
+                            "level": 1
+                        },
+                        "right": {
+                            "at": 3331,
+                            "from_column": 30,
+                            "from_row": 114,
+                            "kind": "name",
+                            "text": "bottom",
+                            "to_column": 36,
+                            "to_row": 114,
+                            "name": "bottom",
+                            "level": 1
+                        }
+                    },
+                    "right": {
+                        "at": 3340,
+                        "from_column": 39,
+                        "from_row": 114,
+                        "kind": "name",
+                        "text": "null",
+                        "to_column": 43,
+                        "to_row": 114,
+                        "name": "null"
+                    }
+                },
+                {
+                    "at": 3357,
+                    "from_column": 12,
+                    "from_row": 115,
+                    "kind": "assign",
+                    "text": "assign",
+                    "to_column": 18,
+                    "to_row": 115,
+                    "left": {
+                        "at": 3364,
+                        "from_column": 19,
+                        "from_row": 115,
+                        "kind": "name",
+                        "text": "bottom",
+                        "to_column": 25,
+                        "to_row": 115,
+                        "name": "bottom",
+                        "level": 1
+                    },
+                    "right": {
+                        "at": 3379,
+                        "from_column": 34,
+                        "from_row": 115,
+                        "text": "+",
+                        "kind": "+",
+                        "to_column": 35,
+                        "to_row": 115,
+                        "left": {
+                            "at": 3372,
+                            "from_column": 27,
+                            "from_row": 115,
+                            "kind": "name",
+                            "text": "bottom",
+                            "to_column": 33,
+                            "to_row": 115,
+                            "name": "bottom",
+                            "level": 1
+                        },
+                        "right": {
+                            "at": 3381,
+                            "from_column": 36,
+                            "from_row": 115,
+                            "kind": "number",
+                            "text": "1",
+                            "number": 1,
+                            "to_column": 37,
+                            "to_row": 115,
+                            "value": "1"
+                        }
+                    }
+                },
+                {
+                    "at": 3395,
+                    "from_column": 12,
+                    "from_row": 116,
+                    "kind": "if",
+                    "text": "if",
+                    "to_column": 14,
+                    "to_row": 116,
+                    "expression": {
+                        "at": 3405,
+                        "from_column": 22,
+                        "from_row": 116,
+                        "text": ">=",
+                        "kind": ">=",
+                        "to_column": 24,
+                        "to_row": 116,
+                        "left": {
+                            "at": 3398,
+                            "from_column": 15,
+                            "from_row": 116,
+                            "kind": "name",
+                            "text": "bottom",
+                            "to_column": 21,
+                            "to_row": 116,
+                            "name": "bottom",
+                            "level": 1
+                        },
+                        "right": {
+                            "at": 3414,
+                            "from_column": 31,
+                            "from_row": 116,
+                            "text": "(",
+                            "kind": "(",
+                            "to_column": 32,
+                            "to_row": 116,
+                            "expression": {
+                                "at": 3408,
+                                "from_column": 25,
+                                "from_row": 116,
+                                "kind": "name",
+                                "text": "length",
+                                "to_column": 31,
+                                "to_row": 116,
+                                "name": "length"
+                            },
+                            "list": [
+                                {
+                                    "at": 3415,
+                                    "from_column": 32,
+                                    "from_row": 116,
+                                    "kind": "name",
+                                    "text": "underlying",
+                                    "to_column": 42,
+                                    "to_row": 116,
+                                    "name": "underlying",
+                                    "level": 1
+                                }
+                            ]
+                        }
+                    },
+                    "then": [
+                        {
+                            "at": 3443,
+                            "from_column": 16,
+                            "from_row": 117,
+                            "kind": "assign",
+                            "text": "assign",
+                            "to_column": 22,
+                            "to_row": 117,
+                            "left": {
+                                "at": 3450,
+                                "from_column": 23,
+                                "from_row": 117,
+                                "kind": "name",
+                                "text": "bottom",
+                                "to_column": 29,
+                                "to_row": 117,
+                                "name": "bottom",
+                                "level": 1
+                            },
+                            "right": {
+                                "at": 3458,
+                                "from_column": 31,
+                                "from_row": 117,
+                                "kind": "number",
+                                "text": "0",
+                                "number": 0,
+                                "to_column": 32,
+                                "to_row": 117,
+                                "value": "0"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "at": 3487,
+                    "from_column": 12,
+                    "from_row": 119,
+                    "kind": "assign",
+                    "text": "assign",
+                    "to_column": 18,
+                    "to_row": 119,
+                    "left": {
+                        "at": 3494,
+                        "from_column": 19,
+                        "from_row": 119,
+                        "kind": "name",
+                        "text": "the_length",
+                        "to_column": 29,
+                        "to_row": 119,
+                        "name": "the_length",
+                        "level": 1
+                    },
+                    "right": {
+                        "at": 3517,
+                        "from_column": 42,
+                        "from_row": 119,
+                        "text": "-",
+                        "kind": "-",
+                        "to_column": 43,
+                        "to_row": 119,
+                        "left": {
+                            "at": 3506,
+                            "from_column": 31,
+                            "from_row": 119,
+                            "kind": "name",
+                            "text": "the_length",
+                            "to_column": 41,
+                            "to_row": 119,
+                            "name": "the_length",
+                            "level": 1
+                        },
+                        "right": {
+                            "at": 3519,
+                            "from_column": 44,
+                            "from_row": 119,
+                            "kind": "number",
+                            "text": "1",
+                            "number": 1,
+                            "to_column": 45,
+                            "to_row": 119,
+                            "value": "1"
+                        }
+                    }
+                },
+                {
+                    "at": 3533,
+                    "from_column": 12,
+                    "from_row": 120,
+                    "kind": "return",
+                    "text": "return",
+                    "to_column": 18,
+                    "to_row": 120,
+                    "expression": {
+                        "at": 3540,
+                        "from_column": 19,
+                        "from_row": 120,
+                        "kind": "name",
+                        "text": "value",
+                        "to_column": 24,
+                        "to_row": 120,
+                        "name": "value",
+                        "level": 0
+                    }
+                }
+            ]
+        }
+    ],
+    "scopes": [
+        {
+            "deque": {
+                "name": "deque",
+                "make": "endowment",
+                "level": 0,
+                "closure": false,
+                "function_nr": 0,
+                "nr_uses": 0
+            }
+        },
+        {
+            "deque": {
+                "name": "deque",
+                "make": "function",
+                "level": 0,
+                "closure": false,
+                "function_nr": 1,
+                "nr_uses": 0
+            },
+            "underlying": {
+                "name": "underlying",
+                "make": "var",
+                "level": 0,
+                "closure": true,
+                "function_nr": 1,
+                "nr_uses": 19
+            },
+            "array": {
+                "name": "array",
+                "make": "intrinsic",
+                "nr_uses": null
+            },
+            "bottom": {
+                "name": "bottom",
+                "make": "var",
+                "level": 0,
+                "closure": true,
+                "function_nr": 1,
+                "nr_uses": 18
+            },
+            "top": {
+                "name": "top",
+                "make": "var",
+                "level": 0,
+                "closure": true,
+                "function_nr": 1,
+                "nr_uses": 15
+            },
+            "the_length": {
+                "name": "the_length",
+                "make": "var",
+                "level": 0,
+                "closure": true,
+                "function_nr": 1,
+                "nr_uses": 16
+            },
+            "grow": {
+                "name": "grow",
+                "make": "def",
+                "level": 0,
+                "closure": true,
+                "function_nr": 1,
+                "nr_uses": 2
+            }
+        },
+        {
+            "grow": {
+                "name": "grow",
+                "make": "function",
+                "level": 0,
+                "closure": false,
+                "function_nr": 2,
+                "nr_uses": 0
+            },
+            "value": {
+                "name": "value",
+                "make": "input",
+                "level": 0,
+                "closure": false,
+                "function_nr": 2,
+                "nr_uses": 0,
+                "input_nr": 0
+            },
+            "the_length": {
+                "name": "the_length",
+                "level": 1,
+                "make": "var",
+                "function_nr": 1
+            },
+            "length": {
+                "name": "length",
+                "make": "intrinsic"
+            },
+            "underlying": {
+                "name": "underlying",
+                "level": 1,
+                "make": "var",
+                "function_nr": 1
+            },
+            "top": {
+                "name": "top",
+                "level": 1,
+                "make": "var",
+                "function_nr": 1
+            },
+            "bottom": {
+                "name": "bottom",
+                "level": 1,
+                "make": "var",
+                "function_nr": 1
+            },
+            "array": {
+                "name": "array",
+                "make": "intrinsic"
+            }
+        },
+        {
+            "length": {
+                "name": "length",
+                "make": "function",
+                "level": 0,
+                "closure": false,
+                "function_nr": 3,
+                "nr_uses": 0
+            },
+            "the_length": {
+                "name": "the_length",
+                "level": 1,
+                "make": "var",
+                "function_nr": 1
+            }
+        },
+        {
+            "array": {
+                "name": "array",
+                "make": "function",
+                "level": 0,
+                "closure": false,
+                "function_nr": 4,
+                "nr_uses": 4
+            },
+            "the_length": {
+                "name": "the_length",
+                "level": 1,
+                "make": "var",
+                "function_nr": 1
+            },
+            "bottom": {
+                "name": "bottom",
+                "level": 1,
+                "make": "var",
+                "function_nr": 1
+            },
+            "top": {
+                "name": "top",
+                "level": 1,
+                "make": "var",
+                "function_nr": 1
+            },
+            "underlying": {
+                "name": "underlying",
+                "level": 1,
+                "make": "var",
+                "function_nr": 1
+            }
+        },
+        {
+            "push": {
+                "name": "push",
+                "make": "function",
+                "level": 0,
+                "closure": false,
+                "function_nr": 5,
+                "nr_uses": 0
+            },
+            "value": {
+                "name": "value",
+                "make": "input",
+                "level": 0,
+                "closure": false,
+                "function_nr": 5,
+                "nr_uses": 1,
+                "input_nr": 0
+            },
+            "grow": {
+                "name": "grow",
+                "level": 1,
+                "make": "def",
+                "function_nr": 1
+            },
+            "top": {
+                "name": "top",
+                "level": 1,
+                "make": "var",
+                "function_nr": 1
+            },
+            "length": {
+                "name": "length",
+                "make": "intrinsic"
+            },
+            "underlying": {
+                "name": "underlying",
+                "level": 1,
+                "make": "var",
+                "function_nr": 1
+            },
+            "the_length": {
+                "name": "the_length",
+                "level": 1,
+                "make": "var",
+                "function_nr": 1
+            }
+        },
+        {
+            "place": {
+                "name": "place",
+                "make": "function",
+                "level": 0,
+                "closure": false,
+                "function_nr": 6,
+                "nr_uses": 0
+            },
+            "value": {
+                "name": "value",
+                "make": "input",
+                "level": 0,
+                "closure": false,
+                "function_nr": 6,
+                "nr_uses": 1,
+                "input_nr": 0
+            },
+            "grow": {
+                "name": "grow",
+                "level": 1,
+                "make": "def",
+                "function_nr": 1
+            },
+            "bottom": {
+                "name": "bottom",
+                "level": 1,
+                "make": "var",
+                "function_nr": 1
+            },
+            "length": {
+                "name": "length",
+                "make": "intrinsic"
+            },
+            "underlying": {
+                "name": "underlying",
+                "level": 1,
+                "make": "var",
+                "function_nr": 1
+            },
+            "the_length": {
+                "name": "the_length",
+                "level": 1,
+                "make": "var",
+                "function_nr": 1
+            }
+        },
+        {
+            "pop": {
+                "name": "pop",
+                "make": "function",
+                "level": 0,
+                "closure": false,
+                "function_nr": 7,
+                "nr_uses": 0
+            },
+            "the_length": {
+                "name": "the_length",
+                "level": 1,
+                "make": "var",
+                "function_nr": 1
+            },
+            "top": {
+                "name": "top",
+                "level": 1,
+                "make": "var",
+                "function_nr": 1
+            },
+            "length": {
+                "name": "length",
+                "make": "intrinsic"
+            },
+            "underlying": {
+                "name": "underlying",
+                "level": 1,
+                "make": "var",
+                "function_nr": 1
+            },
+            "value": {
+                "name": "value",
+                "make": "def",
+                "level": 0,
+                "closure": false,
+                "function_nr": 7,
+                "nr_uses": 1
+            },
+            "null": {
+                "name": "null",
+                "make": "intrinsic"
+            }
+        },
+        {
+            "pull": {
+                "name": "pull",
+                "make": "function",
+                "level": 0,
+                "closure": false,
+                "function_nr": 8,
+                "nr_uses": 0
+            },
+            "the_length": {
+                "name": "the_length",
+                "level": 1,
+                "make": "var",
+                "function_nr": 1
+            },
+            "value": {
+                "name": "value",
+                "make": "def",
+                "level": 0,
+                "closure": false,
+                "function_nr": 8,
+                "nr_uses": 1
+            },
+            "underlying": {
+                "name": "underlying",
+                "level": 1,
+                "make": "var",
+                "function_nr": 1
+            },
+            "bottom": {
+                "name": "bottom",
+                "level": 1,
+                "make": "var",
+                "function_nr": 1
+            },
+            "null": {
+                "name": "null",
+                "make": "intrinsic"
+            },
+            "length": {
+                "name": "length",
+                "make": "intrinsic"
+            }
+        }
+    ],
+    "uses": [],
+    "name": "deque",
+    "list": [],
+    "endowment": [],
+    "fields": [
+        "length",
+        "array",
+        "push",
+        "place",
+        "pop",
+        "pull"
+    ],
+    "intrinsics": [
+        "array",
+        "length",
+        "null"
+    ],
+    "logs": [
+        "error"
+    ]
+}
