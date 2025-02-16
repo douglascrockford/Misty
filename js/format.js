@@ -13,7 +13,7 @@ export default Object.freeze(function format(string, container, encoder) {
 
 // The format function takes a string containing symbolic
 // variables, an object or array containing values to replace the
-// symbolic variables, and an optional an encoder function that
+// symbolic variables, and an optional encoder function that
 // will take a value and an encoding and return a string, or an
 // encoder object whose names are encodings and values are
 // encoder functions.
