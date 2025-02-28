@@ -51,13 +51,13 @@ The <a href="statements.html#use"><code>use</code> statement</a> is not needed t
 <p><var>array</var>: the array to copy</p>
 <p><var>from</var>: the position at which to start copying. Default: <code>0</code>, the beginning. If negative, add <code>length(<var>array</var>)</code>.</p>
 <p><var>to</var>: the position at which to stop copying. Default: <code>length(<var>array</var>)</code>, the end. If negative, add <code>length(<var>array</var>)</code>.</p>
-<p>If, after adjustment,  <var>from</var> and <var>to</var> are not valid integers in the proper range, then it return <code>null</code>. <var>from</var> must be positive and less than or equal to <var>to</var>. <var>to</var> must be less than or equal to <code>length(<var>array</var>)</code>.</p>
+<p>If, after adjustment,  <var>from</var> and <var>to</var> are not valid integers in the proper range, then it returns <code>null</code>. <var>from</var> must be positive and less than or equal to <var>to</var>. <var>to</var> must be less than or equal to <code>length(<var>array</var>)</code>.</p>
 <h4>array(<var>record</var>)</h4>
 <p>Keys. Make an array containing all of the
 text keys in the <var>record</var>. The keys are not guaranteed
     to be in any particular order. Stone record keys are not included.</p>
 <h4>array(<var>text</var>)</h4>
-<p>Split into composite characters. A composite character is a Unicode character and its succeeding combining characters, if any.</p>
+<p>Split the text into composite characters. A composite character is a Unicode character and its succeeding combining characters, if any.</p>
 <h4>array(<var>text</var>, <var>separator</var>)</h4>
 <p>Split the text into an array of subtexts. The <var>separator</var>  can be a text or pattern. </p>
 <h4>array(<var>text</var>, <var>length</var>)</h4>
@@ -183,7 +183,7 @@ assign result: number(&quot;0666&quot;)                   # result is 666
 <h4>text(<var>array</var>, <var>separator</var>)</h4>
 <p>Convert an array to text. The array can contain text and unicode codepoints. All will be concatenated together to make a single text. The <var>separator</var> text is inserted between each piece. </p>
 <h4>text(<var>number</var>, <var>radix</var>)</h4>
-<p>Convert a number to text.  The optional <var>radix</var> is an integer <code> 2</code> and <code>37</code>. (<a href="https://www.crockford.com/base32.html">See Base 32.</a>) The default <var>radix</var> is 10.</p>
+<p>Convert a number to text.  The optional <var>radix</var> is an integer between <code>2</code> and <code>37</code>. (<a href="https://www.crockford.com/base32.html">See Base 32.</a>) The default <var>radix</var> is 10.</p>
 <h4><code>text(<var>number</var>, </code><var>format</var><code>) </code></h4>
 <blockquote style="background-color: white; border: 2pt solid black; float: right; margin-right: 0; padding-right: 2em;">
 <p>The format of the <var>format</var> text is</p>
@@ -388,8 +388,8 @@ assign result: text(12, &quot;t2&quot;)        # result is &quot;0C&quot;
 <p>Make a copy of part of a text. </p>
 <p><var>text</var>: the text to copy.</p>
 <p><var>from</var>: the position at which to start copying. Default: <code>0</code>, the beginning. If negative, add <code>length(<var>text</var>)</code>.</p>
-<p><var>to</var>: the position at which to stop copying. Default: <code>length(<var>array</var>)</code>, the end. If negative, add <code>length(<var>text</var>)</code>.</p>
-<p>If, after adjustment, <var>from</var> and <var>to</var> are not valid integers in the proper range, then it returns <code>null</code>. <var>from</var> must be positive and less than or equal to <var>to</var>. <var>to</var> must be less than or equal to <code>length(<var>array</var>)</code>.</p>
+<p><var>to</var>: the position at which to stop copying. Default: <code>length(<var>text</var>)</code>, the end. If negative, add <code>length(<var>text</var>)</code>.</p>
+<p>If, after adjustment, <var>from</var> and <var>to</var> are not valid integers in the proper range, then it returns <code>null</code>. <var>from</var> must be positive and less than or equal to <var>to</var>. <var>to</var> must be less than or equal to <code>length(<var>text</var>)</code>.</p>
 <pre>assign my_text: &quot;miskatonic&quot;
 text(my_text, 0, 3)        # &quot;mis&quot;        # the first 3
 text(my_text, 3, 6)        # &quot;kat&quot;        # from 3 to 6
@@ -585,7 +585,7 @@ whitespace?(&quot;&quot;)         # false</pre>
 <p>Apply. Execute the <var>function</var> and return its return value. Pass the elements of the <var>array</var> as input values. The length may not be greater than four. See <a href="functions.html#proxy">proxy</a>.</p>
 <p>If the first input value is not a function, <code>apply</code> returns its first input value. </p>
 <p>If  <code>length(<var>array</var>)</code> is greater than 4, it disrupts.</p>
-<p>If the second argment is not an array, it is used as a single input value. </p>
+<p>If the second argument is not an array, it is used as a single input value. </p>
 <h4 id="ceiling">ceiling(<var>number</var>, <var>place</var>)</h4>
 <p>If <var>place</var> is <code>0</code> or <code>null</code>, the <var>number</var> is rounded up to the smallest integer that is greater than or equal to the
     <var>number</var>. If <var>place</var> is a small positive integer, then the <var>number</var> is rounded up to that  decimal place. </p>
@@ -594,7 +594,7 @@ whitespace?(&quot;&quot;)         # false</pre>
 assign result: ceiling(12.3775, -2)     # result is 12.38
 assign result: ceiling(-12.3775)        # result is -12
 assign result: ceiling(-12.3775, -2)    # result is -12.37
-assign result: ceiling(-12.3775)        # result is -13</pre>
+assign result: ceiling(-12.3775, 0)        # result is -13</pre>
 <h4 id="character">character(<var>value</var>)</h4>
 <p>If the <var>value</var> is a text, it returns the first character. If the <var>value</var> is a non-negative 32-bit integer, it returns the character from that codepoint. Otherwise, it returns the empty string. </p>
 <h4 id="codepoint">codepoint(<var>text</var>)</h4>
@@ -603,7 +603,7 @@ assign result: ceiling(-12.3775)        # result is -13</pre>
 <p>The <var>text</var> is matched to the <var>pattern</var>. If it does not match, the result is <code>null</code>. If the <var>pattern</var> does match, then the result is a record containing the saved fields.</p>
 <h4>filter(<var>array</var>, <var>function</var>)</h4>
 <p> The <code>filter</code> function calls a <var>function</var> for every
-    element in the <var>array</var>, passing each element andits element number.    </p>
+    element in the <var>array</var>, passing each element and its element number.    </p>
 <pre><var></var>(element, element_nr)</pre>
 <p>When the <var>function</var>'s return value is <code>true</code>, then the element
     is copied into a new array. If the <var>function</var>'s return value is <code>false</code>, then the element is not copied into the new array. If the return value is not a logical, then the filter returns <code>null</code>.</p>
