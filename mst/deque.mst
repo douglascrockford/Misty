@@ -1,5 +1,5 @@
 misty module deque()
-# 2025-01-25
+# 2025-02-17
 
 # deque: Double ended queue (pronounced /dek/)
 
@@ -8,7 +8,10 @@ misty module deque()
 # It has two ends: top and bottom. Values can be inserted
 # at either end. Values can be removed from either end.
 
-# It provides these methods:
+# The deque constructor can take an optional initial capacity.
+# The capacity is automatically increased as necessary.
+# The deque constructor returns a record containing these methods:
+
 #   length()        # return the number of values currently in the deque
 #   array()         # return an array of values, starting at the bottom end
 #   push(value)     # insert a value at the top
@@ -16,14 +19,17 @@ misty module deque()
 #   pop()           # remove a value from the top; return the value
 #   pull()          # remove a value from the bottom; return the value
 
-# An attempt to remove a value from an empty queue will log an error and fail.
+# An attempt to remove a value from an empty queue will return null.
 
 # The deque is implemented with an underlying array that is grown as needed,
 # and 'bottom' and 'top' indexes that indicate the current ends.
 
-return function deque() {
+return function deque(capacity) {
 
-    var underlying: array(16)
+    var underlying: array(capacity)
+    if (length(underlying) < 2) {
+        assign underlying: array(16)
+    }
     var bottom: 0
     var top: 0
     var the_length: 0
@@ -93,8 +99,9 @@ return function deque() {
 
         pop() {
             if the_length <= 0
-                log error: "deque.pop"
-                disrupt
+                assign top: 0
+                assign bottom: 0
+                return null
             fi
             if top = 0
                 assign top: length(underlying)
@@ -108,8 +115,9 @@ return function deque() {
 
         pull() {
             if the_length <= 0
-                log error: "deque.pull"
-                disrupt
+                assign top: 0
+                assign bottom: 0
+                return null
             fi
             def value: underlying[bottom]
             assign underlying[bottom]: null
