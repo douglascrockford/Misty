@@ -17,9 +17,9 @@ The <a href="statements.html#use"><code>use</code> statement</a> is not needed t
 </ul>
 <h2 align="left" id=constants>Constants</h2>
 <h4 align="left" id=false>false</h4>
-<p align="left">This is the value of <code>1 = 0</code>. The <code>false</code> value is one of the two logical values. </p>
+<p align="left">This is the value of <code>1 = 0</code>. The <code>false</code> value is one of the two logical values.</p>
 <h4 align="left" id=true>true</h4>
-<p align="left">This is the value of <code>1 = 1</code>. The <code>true</code> value is one of the two logical values. </p>
+<p align="left">This is the value of <code>1 = 1</code>. The <code>true</code> value is one of the two logical values.</p>
 <h4 align="left" id=null>null</h4>
 <p align="left">This is the value of <code>1 / 0</code>. The <code>null</code> value is an empty immutable object. All attempts to obtain a value from <code>null</code> by <a href="operators.html#refinement">refinement</a> will produce <code>null</code>.</p>
 <p>Any attempt to modify <code>null</code> will disrupt. Any attempt to call <code>null</code> as a function will disrupt.</p>
@@ -39,7 +39,7 @@ The <a href="statements.html#use"><code>use</code> statement</a> is not needed t
 <h4>array(<var>array</var>)</h4>
 <p>Copy. Make a mutable copy of the array.</p>
 <h4>array(<var>array</var>, <var>function</var>, <var>reverse</var>, <var>exit</var>)</h4>
-<p>Map. Call the <var>function</var> with each element of  the <var>array</var>, collecting the return values in a new array. The <var>function</var> is passed each  element and its element number. </p>
+<p>Map. Call the <var>function</var> with each element of  the <var>array</var>, collecting the return values in a new array. The <var>function</var> is passed each  element and its element number.</p>
 <pre>(element, element_nr)</pre>
 <p>If <var>reverse</var> is <code>true</code>, then it starts with the last element and works backwards.</p>
 <p>If <var>exit</var> is not <code>null</code>, then when the <var>function</var> returns the <var>exit</var> value, then the <code>array</code> function returns early. The <var>exit</var> value will not be stored into the new array. If the <var>array</var> was processed normally, then the returned array will be shorter than the input <var>array</var>. If the <var>array</var> was processed in <var>reverse</var>, then the returned array will have the same length as the input <var>array</var>, and the first elements will be <code>null</code>.</p>
@@ -51,15 +51,15 @@ The <a href="statements.html#use"><code>use</code> statement</a> is not needed t
 <p><var>array</var>: the array to copy</p>
 <p><var>from</var>: the position at which to start copying. Default: <code>0</code>, the beginning. If negative, add <code>length(<var>array</var>)</code>.</p>
 <p><var>to</var>: the position at which to stop copying. Default: <code>length(<var>array</var>)</code>, the end. If negative, add <code>length(<var>array</var>)</code>.</p>
-<p>If, after adjustment,  <var>from</var> and <var>to</var> are not valid integers in the proper range, then it return <code>null</code>. <var>from</var> must be positive and less than or equal to <var>to</var>. <var>to</var> must be less than or equal to <code>length(<var>array</var>)</code>.</p>
+<p>If, after adjustment,  <var>from</var> and <var>to</var> are not valid integers in the proper range, then it returns <code>null</code>. <var>from</var> must be positive and less than or equal to <var>to</var>. <var>to</var> must be less than or equal to <code>length(<var>array</var>)</code>.</p>
 <h4>array(<var>record</var>)</h4>
 <p>Keys. Make an array containing all of the
 text keys in the <var>record</var>. The keys are not guaranteed
     to be in any particular order. Stone record keys are not included.</p>
 <h4>array(<var>text</var>)</h4>
-<p>Split into composite characters. A composite character is a Unicode character and its succeeding combining characters, if any.</p>
+<p>Split the <var>text</var> into composite characters. A composite character is a Unicode character and its succeeding combining characters, if any.</p>
 <h4>array(<var>text</var>, <var>separator</var>)</h4>
-<p>Split the text into an array of subtexts. The <var>separator</var>  can be a text or pattern. </p>
+<p>Split the <var>text</var> into an array of subtexts. The <var>separator</var>  can be a text or pattern.</p>
 <h4>array(<var>text</var>, <var>length</var>)</h4>
 <p>Dice the text into an array of subtexts of a given <var>length</var>.</p>
 <h3 align="left" id="logical">Logical</h3>
@@ -76,7 +76,7 @@ return null
 <h4><code>number(<var>number</var>)</code></h4>
 <p>The <var>number</var> is returned.</p>
 <h4>number(<var>text</var>, <var>radix</var>)</h4>
-<p>Convert a <var>text</var> to a number. The optional <var>radix</var> is an integer between <code>2</code> and <code>37</code>. (<a href="https://www.crockford.com/base32.html">See Base 32.</a>) The default <var>radix</var> is 10.</p>
+<p>Convert a <var>text</var> to a number. The optional <var>radix</var> is an integer from <code>2</code> thru <code>37</code>. (<a href="https://www.crockford.com/base32.html">See Base 32.</a>) The default <var>radix</var> is 10.</p>
 <h4><var></var><code>number</code>(<var>text</var>, <var>format</var>)</h4>
 <table>
     <caption>number format</caption>
@@ -181,7 +181,7 @@ assign result: number(&quot;0666&quot;)                   # result is 666
 <h4>text(<var>array</var>)</h4>
 <p>Convert an array to text. The array can contain text and unicode codepoints. All will be concatenated together to make a single text.</p>
 <h4>text(<var>array</var>, <var>separator</var>)</h4>
-<p>Convert an array to text. The array can contain text and unicode codepoints. All will be concatenated together to make a single text. The <var>separator</var> text is inserted between each piece. </p>
+<p>Convert an array to text. The array can contain text and unicode codepoints. All will be concatenated together to make a single text. The <var>separator</var> text is inserted between each piece.</p>
 <h4>text(<var>number</var>, <var>radix</var>)</h4>
 <p>Convert a number to text.  The optional <var>radix</var> is an integer <code> 2</code> and <code>37</code>. (<a href="https://www.crockford.com/base32.html">See Base 32.</a>) The default <var>radix</var> is 10.</p>
 <h4><code>text(<var>number</var>, </code><var>format</var><code>) </code></h4>
@@ -218,16 +218,16 @@ format_places
 </p>
 </blockquote>
 <p> The <code>text</code> method converts a <var>number</var> to a text.
-    It takes a <var>format</var> text input. </p>
+    It takes a <var>format</var> text input.</p>
 <p>A <var>format</var> text contains a style letter that controls how a text is
     produced from the number.   It is optionally preceded by a separation digit,
     and optionally followed by a places digit. There are real styles and integer
     styles. If the <var>format</var> input is not a proper format text,
-    then <code>null</code> will be returned. </p>
+    then <code>null</code> will be returned.</p>
 <p>Separation is a character that is placed between digits to improve readability.
     If separation is 0, then there is no separation. If separation is 3, then
     a character will be inserted before the quadrillions, trillions, billions, millions,
-    and thousands. </p>
+    and thousands.</p>
 <p>Places is the number of places to display after the decimal point (in
     real styles) or the minimum number of digits to display with zero-fill
     (in integer styles). If places is 0, then as many digits as necessary
@@ -286,7 +286,7 @@ format_places
         </tr>
     </tbody>
 </table>
-<p>The real <var>format</var> options are </p>
+<p>The real <var>format</var> options are</p>
 <blockquote>
     <p><code>&quot;e&quot;</code>  uses scientific notation. One digit will be placed before the decimal point, and all of the remaining digits after, followed by <code>e</code> and the exponent.</p>
     <p><code>&quot;n&quot;</code>  uses <code>.</code><small>period</small> as the decimal point and no separator. It is the format used for numbers in Misty source
@@ -301,7 +301,7 @@ format_places
 <p>The optional <var>places</var> determines the number of digits after
     the decimal point. The default is determined by the <var>format</var>, as seen in the table.
     If the <var>places</var> is 0, then the number of decimal places will
-    be the fewest to exactly display the number without truncating. If the <var>places</var> is larger, then the field will be padded if necessary with trailing <code>0</code>. </p>
+    be the fewest to exactly display the number without truncating. If the <var>places</var> is larger, then the field will be padded if necessary with trailing <code>0</code>.</p>
 <p>The optional <var>separation</var> determines the spacing of the separator
     character. For example, to place a separator between billions, millions,
     and thousands (that is, every 3 digits) then <var>separation</var> should
@@ -385,11 +385,11 @@ assign result: text(12, &quot;t2&quot;)        # result is &quot;0C&quot;
 <h4>text(<var>text</var>)</h4>
 <p>Return the text.</p>
 <h4>text(<var>text</var>, <var>from</var>, <var>to</var>)</h4>
-<p>Make a copy of part of a text. </p>
+<p>Make a copy of part of a text.</p>
 <p><var>text</var>: the text to copy.</p>
 <p><var>from</var>: the position at which to start copying. Default: <code>0</code>, the beginning. If negative, add <code>length(<var>text</var>)</code>.</p>
-<p><var>to</var>: the position at which to stop copying. Default: <code>length(<var>array</var>)</code>, the end. If negative, add <code>length(<var>text</var>)</code>.</p>
-<p>If, after adjustment, <var>from</var> and <var>to</var> are not valid integers in the proper range, then it returns <code>null</code>. <var>from</var> must be positive and less than or equal to <var>to</var>. <var>to</var> must be less than or equal to <code>length(<var>array</var>)</code>.</p>
+<p><var>to</var>: the position at which to stop copying. Default: <code>length(<var>text</var>)</code>, the end. If negative, add <code>length(<var>text</var>)</code>.</p>
+<p>If, after adjustment, <var>from</var> and <var>to</var> are not valid integers in the proper range, then it returns <code>null</code>. <var>from</var> must be positive and less than or equal to <var>to</var>. <var>to</var> must be less than or equal to <code>length(<var>text</var>)</code>.</p>
 <pre>assign my_text: &quot;miskatonic&quot;
 text(my_text, 0, 3)        # &quot;mis&quot;        # the first 3
 text(my_text, 3, 6)        # &quot;kat&quot;        # from 3 to 6
@@ -538,7 +538,7 @@ record?(function () ({}))               # false
 record?(&para; (1- {letter digit &quot;_-%&quot;}))    # false
 record?(@)                              # true</pre>
 <h4 id="stone?">stone?(<var>value</var>)</h4>
-<p>Is the value <a href="#stone">stone</a>? </p>
+<p>Is the value <a href="#stone">stone</a>?</p>
 <pre>stone?("false")     # true
 stone?(9)           # true
 stone?(null)        # true
@@ -583,27 +583,27 @@ whitespace?(&quot;&quot;)         # false</pre>
 <p>Absolute value. Return the positive form of the number. If the input value is not a number, the result is <code>null</code>.</p>
 <h4 id="apply">apply(<var>function</var>, <var>array</var>)</h4>
 <p>Apply. Execute the <var>function</var> and return its return value. Pass the elements of the <var>array</var> as input values. The length may not be greater than four. See <a href="functions.html#proxy">proxy</a>.</p>
-<p>If the first input value is not a function, <code>apply</code> returns its first input value. </p>
+<p>If the first input value is not a function, <code>apply</code> returns its first input value.</p>
 <p>If  <code>length(<var>array</var>)</code> is greater than 4, it disrupts.</p>
-<p>If the second argment is not an array, it is used as a single input value. </p>
+<p>If the second argument is not an array, it is used as a single input value.</p>
 <h4 id="ceiling">ceiling(<var>number</var>, <var>place</var>)</h4>
 <p>If <var>place</var> is <code>0</code> or <code>null</code>, the <var>number</var> is rounded up to the smallest integer that is greater than or equal to the
-    <var>number</var>. If <var>place</var> is a small positive integer, then the <var>number</var> is rounded up to that  decimal place. </p>
+    <var>number</var>. If <var>place</var> is a small positive integer, then the <var>number</var> is rounded up to that  decimal place.</p>
 <p>Examples:</p>
 <pre>assign result: ceiling(12.3775, 0)      # result is 13
 assign result: ceiling(12.3775, -2)     # result is 12.38
 assign result: ceiling(-12.3775)        # result is -12
 assign result: ceiling(-12.3775, -2)    # result is -12.37
-assign result: ceiling(-12.3775)        # result is -13</pre>
+assign result: ceiling(-12.3775)        # result is -12</pre>
 <h4 id="character">character(<var>value</var>)</h4>
-<p>If the <var>value</var> is a text, it returns the first character. If the <var>value</var> is a non-negative 32-bit integer, it returns the character from that codepoint. Otherwise, it returns the empty string. </p>
+<p>If the <var>value</var> is a text, it returns the first character. If the <var>value</var> is a non-negative 32-bit integer, it returns the character from that codepoint. Otherwise, it returns the empty string.</p>
 <h4 id="codepoint">codepoint(<var>text</var>)</h4>
 <p>The <code>codepoint</code> function returns the first codepoint in a <var>text</var> as a number. If the input value is not a text, or if it is the empty text, then it returns <code>null</code>.</p>
 <h4 id="extract">extract(<var>text</var>, <var>pattern</var>, <var>from</var>, <var>to</var>)</h4>
 <p>The <var>text</var> is matched to the <var>pattern</var>. If it does not match, the result is <code>null</code>. If the <var>pattern</var> does match, then the result is a record containing the saved fields.</p>
 <h4>filter(<var>array</var>, <var>function</var>)</h4>
 <p> The <code>filter</code> function calls a <var>function</var> for every
-    element in the <var>array</var>, passing each element andits element number.    </p>
+    element in the <var>array</var>, passing each element and its element number.</p>
 <pre><var></var>(element, element_nr)</pre>
 <p>When the <var>function</var>'s return value is <code>true</code>, then the element
     is copied into a new array. If the <var>function</var>'s return value is <code>false</code>, then the element is not copied into the new array. If the return value is not a logical, then the filter returns <code>null</code>.</p>
@@ -613,12 +613,12 @@ assign result: ceiling(-12.3775)        # result is -13</pre>
 <pre>def data: [0, 1.25, 2, 3.5, 4, 5.75]
 def integers: filter(data, integer?)    # integers is [0, 2, 4]</pre>
 <h4 id="find">find(<var>array</var>, <var>function</var>, <var>reverse</var>, <var>from</var>)</h4>
-<p>Call the <var>function</var> for each element of the <var>array</var>, passing each element and its element number. </p>
+<p>Call the <var>function</var> for each element of the <var>array</var>, passing each element and its element number.</p>
 <pre><var></var>(element, element_nr)</pre>
-<p>If the <var>function</var> returns <code>true</code>, then <code>find</code> returns the element number of the current element. </p>
+<p>If the <var>function</var> returns <code>true</code>, then <code>find</code> returns the element number of the current element.</p>
 <p>If the second input value is not a function, then it will be compared exactly to the elements.</p>
-<p>If the <var>reverse</var> input value is <code>true</code>, then search begins at the end of the array and works backward. </p>
-<p>The <var>from</var> input value gives the element number to search first. The default is <code>0</code> unless <var>reverse</var> is <code>true</code>, when the default is <code>length(<var>array</var>) - 1</code>. </p>
+<p>If the <var>reverse</var> input value is <code>true</code>, then search begins at the end of the array and works backward.</p>
+<p>The <var>from</var> input value gives the element number to search first. The default is <code>0</code> unless <var>reverse</var> is <code>true</code>, when the default is <code>length(<var>array</var>) - 1</code>.</p>
 <p><code>find</code> returns the element number of the found value. If nothing is found, <code>find</code> returns <code>null</code>.</p>
 <h4 id="floor">floor(<var>number</var>, <var>place</var>)</h4>
 <p>If <var>place</var> is <code>0</code> or <code>null</code>, the <var>number</var> is rounded down to the greatest integer that is less than or equal to
@@ -631,7 +631,7 @@ assign result: floor(-12.3775, 0)     # result is -13
 assign result: floor(-12.3775, -2)    # result is -12.38</pre>
 <h4 id="for">for(<var>array</var>, <var>function</var>, <var>reverse</var>, <var>exit</var>)</h4>
 <p>For each. Call the <var>function</var> with each element of the <var>array</var>.
-The <var>function</var> is passed each element and its element number. </p>
+The <var>function</var> is passed each element and its element number.</p>
 <pre><var></var>(element, element_nr)</pre>
 <p>If <var>reverse</var> is <code>true</code>, then it starts with the last element and works backwards.</p>
 <p>If <var>exit</var> is not <code>null</code>, then when the <var>function</var> returns the <var>exit</var> value,
@@ -641,7 +641,7 @@ If <var>exit</var> is <code>null</code>, then every element is processed.</p>
 <p>The <code>for</code> function returns <code>null</code> unless it did an early <var>exit</var>, when it returns the <var>exit</var> value.</p>
 <h4>format(<var>text</var>, <var>collection</var>, <var>transformer</var>)</h4>
 <p>The <code>format</code> function makes a new text with substitutions in an original <var>text</var>. A <var>collection</var> is either an array of
-texts or a record of texts. </p>
+texts or a record of texts.</p>
 <p>A search is made for <code>{</code><small>left brace</small> and <code>}</code><small>right brace</small> in the <var>text</var>.
     If they are found, the middle text between them is examined.
     If the <var>collection</var> is an array, the middle text is used as a number,
@@ -649,7 +649,7 @@ texts or a record of texts. </p>
     at that subscript in the array. If the collection is a record, and if
     the middle text is the key of a member of the <var>collection</var> with
     a text value, then the value of the member is used in the substitution.
-    Unmatched text is not altered. </p>
+    Unmatched text is not altered.</p>
 <p>The text between <code>{</code><small>left brace</small> and <code>}</code><small>right brace</small> will be broken on
     the <code>:</code><small>colon</small> character. The left text will
     be used as a number or name to select a value from the <var>collection</var>.
@@ -717,7 +717,7 @@ text<code>)</code>. If it returns a text, then the substitution is made.</p>
         <td>number of codepoints</td>
     </tr>
 </table>
-<p>Length. Find the length of an array, a <a href="blob.html">blob</a>, or a text in elements, bits, or characters. For functions, it is the arity (or  number of inputs). </p>
+<p>Length. Find the length of an array, a <a href="blob.html">blob</a>, or a text in elements, bits, or characters. For functions, it is the arity (or  number of inputs).</p>
 <p>If the <var>value</var> is a record containing a <code>length</code> field</p>
 <blockquote>
     <p> If the field contains a function, then <code>length(</code><var>my_record</var><code>)</code> has the same effect as <var>my_record</var><code>.length()</code>.</p>
@@ -760,12 +760,12 @@ then the result is <code>null</code>. <var><var>dividend</var></var> and <var>di
 <p>Not. Return the opposite logical. If the input value is not a logical, it returns <code>null</code>.</p>
 <h4>reduce(<var>array</var>, <var>function</var>, <var>initial</var>, <var>reverse</var>)</h4>
 <p>The <code>reduce</code> function takes a <var>function</var> that takes
-    two input values and returns a value. </p>
+    two input values and returns a value.</p>
 <pre>(zeroth, wunth)</pre>
 <p>The <var>function</var> will be called
     for each element of the <var>array</var>, passing the result of the previous
-    iteration to the next iteration. </p>
-<p>The <var>initial</var> value is optional. If present, the <var>function</var> will be called for every element of the array. </p>
+    iteration to the next iteration.</p>
+<p>The <var>initial</var> value is optional. If present, the <var>function</var> will be called for every element of the array.</p>
 <p>If <var>initial</var> is <code>null</code>:</p>
 <ul>
     <li>If <code>length(</code><var>array</var><code>)</code> is <code>0</code>, then it returns <code>null</code>. </li>
@@ -793,7 +793,7 @@ def product: reduce(data, '*)    # product is 362880</pre>
 <p>Return a new text in which the <var>target</var> is replaced by the <var>replacement</var>.</p>
 <p><var>text</var>: the source text.</p>
 <p> <var>target</var>: a text or pattern that should be replaced in the source.</p>
-<p> <var>replacement</var>: text to replace the matched text, or a function that takes the matched text and the starting position, and returns the replacement text or <code>null</code> if it should be left alone. </p>
+<p> <var>replacement</var>: text to replace the matched text, or a function that takes the matched text and the starting position, and returns the replacement text or <code>null</code> if it should be left alone.</p>
 <p> <var>limit</var>: The maximum number of replacements. The default is all possible replacements. The <var>limit</var> includes <code>null</code> matches.</p>
 <h4 id="reverse"><code>reverse(</code><code><var>array</var>)</code></h4>
 <p>The <code>reverse</code> method makes a new array or blob with the elements or bits in the
@@ -804,7 +804,7 @@ def product: reduce(data, '*)    # product is 362880</pre>
 def result: reverse(data)    # the result is [&quot;Sam&quot;, &quot;am&quot;, &quot;I&quot;]</pre>
 <h4 id="round">round(<var>number</var>, <var>place</var>)</h4>
 <p>If <var>place</var> is <code>0</code> or <code>null</code>, the <var>number</var> is rounded to the nearest integer. If <var>place</var> is a small integer,
-    then the <var>number</var> is rounded to that many decimal places. </p>
+    then the <var>number</var> is rounded to that many decimal places.</p>
 <p>Examples:</p>
 <pre>
 round(12.3775)         # 12
@@ -816,8 +816,8 @@ round(-12.3775, -2)    # -12.38</pre>
 <h4 id="search">search(<var>text</var>, <var>target</var>, <var>from</var>)</h4>
 <p>Search the <var>text</var> for the <var>target</var>. If the <var>target</var> is found, return the character position of the left-most part of the match.
     If the search fails, return <code>null</code>.</p>
-<p><var>text</var>: the source text.    </p>
-<p><var>target</var>: a text or pattern that should be found in the source.    </p>
+<p><var>text</var>: the source text.</p>
+<p><var>target</var>: a text or pattern that should be found in the source.</p>
 <p><var>from</var>: The starting position for the search. The default is <code>0</code>, the beginning of the text. If from is negative, it is added to <code>length(</code><var>text</var><code>)</code>.</p>
 <h4 id="sign">sign(<var>number</var><var></var>)</h4>
 <p>The <code>sign</code> function returns <code>-1</code> if the <var>number</var> is negative, <code>0</code> if the <var>number</var> is exactly <code>0</code>, <code>1</code> if the <var>number</var> is positive, and <code>null</code> if it is not a number.</p>
@@ -894,11 +894,11 @@ assign stooges: sort(stooges, [50, 60, 20, 40, 10, 30])
 <p>This can not be reversed. Immutable objects can never become mutable. A mutable copy can be made of an immutable object, but the original object remains immutable.</p>
 <p>The <code>stone</code> function returns the <var>value</var>.</p>
 <h4 id="trim">trim(<var>text</var>, <var>reject</var>)</h4>
-<p>The <code>trim</code> function removes selected characters from the ends of a <var>text</var>. The default is to remove control characters and spaces. </p>
+<p>The <code>trim</code> function removes selected characters from the ends of a <var>text</var>. The default is to remove control characters and spaces.</p>
 <pre>assign result: &quot;  Hello   there   &quot;.trim()    # result is &quot;Hello   there&quot;</pre>
 <h4 id="trunc">trunc(<var>number</var>, <var>place</var>)</h4>
 <p>The <var>number</var> will be truncated toward zero. If the <var>number</var> is positive, the result is the same as <var></var><code>floor(</code><var>place</var><code>)</code>.
-    If the <var>number</var> is negative, the result is the same as <var></var><code>ceiling(</code><var>place</var><code>)</code>. </p>
+    If the <var>number</var> is negative, the result is the same as <var></var><code>ceiling(</code><var>place</var><code>)</code>.</p>
 <p>If <var>place</var> is a small integer, then the <var>number</var> is rounded
     down to that many decimal places. This is like discarding decimal places.</p>
 <p>Examples:</p>
