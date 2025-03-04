@@ -35,7 +35,7 @@ The <a href="statements.html#use"><code>use</code> statement</a> is not needed t
 <h4>array(<var>number</var>, <var>initial_value</var>)</h4>
 <p>Make an array. All of the elements are initialized to <var>initial_value</var>.</p>
 <p><var>number</var> is a non-negative integer, the intended length of the new array.</p>
-<p> If <var>initial_value</var> is a function, then the function is called for each element to produce initialization values. If the function has an arity of 1 or more, it will be passed the element number.</p>
+<p> If <var>initial_value</var> is a function, then the function is called for each element to produce initialization values. If the function has an arity of 1 or more, it is passed the element number.</p>
 <h4>array(<var>array</var>)</h4>
 <p>Copy. Make a mutable copy of the array.</p>
 <h4>array(<var>array</var>, <var>function</var>, <var>reverse</var>, <var>exit</var>)</h4>
@@ -72,7 +72,7 @@ return null
 </pre>
 <h3 align="left" id="number">Number</h3>
 <h4>number(<var>logical</var>)</h4>
-<p>The result will be <code>1</code> or <code>0</code>.</p>
+<p>The result is <code>1</code> or <code>0</code>.</p>
 <h4><code>number(<var>number</var>)</code></h4>
 <p>The <var>number</var> is returned.</p>
 <h4>number(<var>text</var>, <var>radix</var>)</h4>
@@ -179,9 +179,9 @@ assign result: number(&quot;0666&quot;)                   # result is 666
 <p>Functional Value Set. Make a record using the array as the source of the keys. The <var>function</var> is called for each key, yielding the field values.</p>
 <h3 align="left" id="text">Text</h3>
 <h4>text(<var>array</var>)</h4>
-<p>Convert an array to text. The array can contain text and unicode codepoints. All will be concatenated together to make a single text.</p>
+<p>Convert an array to text. The array can contain text and unicode codepoints. All are concatenated together to make a single text.</p>
 <h4>text(<var>array</var>, <var>separator</var>)</h4>
-<p>Convert an array to text. The array can contain text and unicode codepoints. All will be concatenated together to make a single text. The <var>separator</var> text is inserted between each piece.</p>
+<p>Convert an array to text. The array can contain text and unicode codepoints. All are concatenated together to make a single text. The <var>separator</var> text is inserted between each piece.</p>
 <h4>text(<var>number</var>, <var>radix</var>)</h4>
 <p>Convert a number to text.  The optional <var>radix</var> is an integer <code> 2</code> and <code>37</code>. (<a href="https://www.crockford.com/base32.html">See Base 32.</a>) The default <var>radix</var> is 10.</p>
 <h4><code>text(<var>number</var>, </code><var>format</var><code>) </code></h4>
@@ -223,10 +223,10 @@ format_places
     produced from the number.   It is optionally preceded by a separation digit,
     and optionally followed by a places digit. There are real styles and integer
     styles. If the <var>format</var> input is not a proper format text,
-    then <code>null</code> will be returned.</p>
+    then <code>null</code> is returned.</p>
 <p>Separation is a character that is placed between digits to improve readability.
     If separation is 0, then there is no separation. If separation is 3, then
-    a character will be inserted before the quadrillions, trillions, billions, millions,
+    a character is inserted before the quadrillions, trillions, billions, millions,
     and thousands.</p>
 <p>Places is the number of places to display after the decimal point (in
     real styles) or the minimum number of digits to display with zero-fill
@@ -288,9 +288,9 @@ format_places
 </table>
 <p>The real <var>format</var> options are</p>
 <blockquote>
-    <p><code>&quot;e&quot;</code>  uses scientific notation. One digit will be placed before the decimal point, and all of the remaining digits after, followed by <code>e</code> and the exponent.</p>
+    <p><code>&quot;e&quot;</code>  uses scientific notation. One digit is placed before the decimal point, and all of the remaining digits after, followed by <code>e</code> and the exponent.</p>
     <p><code>&quot;n&quot;</code>  uses <code>.</code><small>period</small> as the decimal point and no separator. It is the format used for numbers in Misty source
-        programs and JSON. Scientific notation will be used if the number value is extreme.</p>
+        programs and JSON. Scientific notation is used if the number value is extreme.</p>
     <p><code>&quot;s&quot;</code>  uses <code>.</code><small>period</small> as the decimal point and a <i>space</i> as the separator.</p>
 <p><code>&quot;u&quot;</code>  uses <code>.</code><small>period</small> as the decimal point and <code>_</code><small>underbar</small> as the separator.</p>
     <p><code>&quot;d&quot;</code>  uses <code>.</code><small>period</small> as the decimal point and <code>,</code><small>comma</small> as the separator.</p>
@@ -301,7 +301,7 @@ format_places
 <p>The optional <var>places</var> determines the number of digits after
     the decimal point. The default is determined by the <var>format</var>, as seen in the table.
     If the <var>places</var> is 0, then the number of decimal places will
-    be the fewest to exactly display the number without truncating. If the <var>places</var> is larger, then the field will be padded if necessary with trailing <code>0</code>.</p>
+    be the fewest to exactly display the number without truncating. If the <var>places</var> is larger, then the field is padded if necessary with trailing <code>0</code>.</p>
 <p>The optional <var>separation</var> determines the spacing of the separator
     character. For example, to place a separator between billions, millions,
     and thousands (that is, every 3 digits) then <var>separation</var> should
@@ -616,7 +616,7 @@ def integers: filter(data, integer?)    # integers is [0, 2, 4]</pre>
 <p>Call the <var>function</var> for each element of the <var>array</var>, passing each element and its element number.</p>
 <pre><var></var>(element, element_nr)</pre>
 <p>If the <var>function</var> returns <code>true</code>, then <code>find</code> returns the element number of the current element.</p>
-<p>If the second input value is not a function, then it will be compared exactly to the elements.</p>
+<p>If the second input value is not a function, then it is compared exactly to the elements.</p>
 <p>If the <var>reverse</var> input value is <code>true</code>, then search begins at the end of the array and works backward.</p>
 <p>The <var>from</var> input value gives the element number to search first. The default is <code>0</code> unless <var>reverse</var> is <code>true</code>, when the default is <code>length(<var>array</var>) - 1</code>.</p>
 <p><code>find</code> returns the element number of the found value. If nothing is found, <code>find</code> returns <code>null</code>.</p>
@@ -650,22 +650,22 @@ texts or a record of texts.</p>
     the middle text is the key of a member of the <var>collection</var> with
     a text value, then the value of the member is used in the substitution.
     Unmatched text is not altered.</p>
-<p>The text between <code>{</code><small>left brace</small> and <code>}</code><small>right brace</small> will be broken on
+<p>The text between <code>{</code><small>left brace</small> and <code>}</code><small>right brace</small> is broken on
     the <code>:</code><small>colon</small> character. The left text will
     be used as a number or name to select a value from the <var>collection</var>.
     (The value need not be a text.)</p>
-<p>If a <var>transformer</var> input is a function, then it will be
+<p>If a <var>transformer</var> input is a function, then it is
     called with the <var>collection</var><code>[</code><var>left text</var><code>]</code> and right text as inputs. If it returns a text, then the substitution
     is made.</p>
 <p>If a <var>transformer</var> input is a record, then the right text
-    will be used to select a function from the <var>transformer</var>. That
-    function will be passed the value from the <var>collection</var>. If the
+    is used to select a function from the <var>transformer</var>. That
+    function is passed the value from the <var>collection</var>. If the
     return value is a text, that text will substitute. If there is no
-    colon, then the empty text will be used to select the function from
+    colon, then the empty text is used to select the function from
     the <var>transformer</var>. If the <var>transformer</var> does not produce
     a function, or if the function does not return a text, then no replacement
     occurs. If <var>transformer</var><code>[</code>right text<code>](</code><var>collection</var><code>[</code>left
-text<code>])</code> produces a text, then the substituation will be
+text<code>])</code> produces a text, then the substituation is
     made.</p>
 <p>If the substitution is not made, and if <var>collection</var><code>[</code>left
 text<code>]</code> is a number, then the right text is used as a format
@@ -762,10 +762,10 @@ then the result is <code>null</code>. <var><var>dividend</var></var> and <var>di
 <p>The <code>reduce</code> function takes a <var>function</var> that takes
     two input values and returns a value.</p>
 <pre>(zeroth, wunth)</pre>
-<p>The <var>function</var> will be called
+<p>The <var>function</var> is called
     for each element of the <var>array</var>, passing the result of the previous
     iteration to the next iteration.</p>
-<p>The <var>initial</var> value is optional. If present, the <var>function</var> will be called for every element of the array.</p>
+<p>The <var>initial</var> value is optional. If present, the <var>function</var> is called for every element of the array.</p>
 <p>If <var>initial</var> is <code>null</code>:</p>
 <ul>
     <li>If <code>length(</code><var>array</var><code>)</code> is <code>0</code>, then it returns <code>null</code>. </li>
@@ -782,7 +782,7 @@ then the result is <code>null</code>. <var><var>dividend</var></var> and <var>di
     <li>If <code>length(</code><var>array</var><code>)</code> is 3, it returns <var>function</var><code>(</code><var>function</var><code>(<var>function</var>(<var>initial</var>, </code><var>array</var><code>[0]), </code><var>array</var><code>[1]), </code><var>array</var><code>[2])</code>. </li>
     <li>And so on.</li>
 </ul>
-<p>If <var>reverse</var> is <code>true</code>, then the work will begin at the end of the array and work backward.</p>
+<p>If <var>reverse</var> is <code>true</code>, then the work begins at the end of the array and works backward.</p>
 <p>Example:</p>
 <pre>def data: [1, 2, 3, 4, 5, 6, 7, 8, 9]
 def total: reduce(data, '+)      # total is 45
@@ -897,7 +897,7 @@ assign stooges: sort(stooges, [50, 60, 20, 40, 10, 30])
 <p>The <code>trim</code> function removes selected characters from the ends of a <var>text</var>. The default is to remove control characters and spaces.</p>
 <pre>assign result: &quot;  Hello   there   &quot;.trim()    # result is &quot;Hello   there&quot;</pre>
 <h4 id="trunc">trunc(<var>number</var>, <var>place</var>)</h4>
-<p>The <var>number</var> will be truncated toward zero. If the <var>number</var> is positive, the result is the same as <var></var><code>floor(</code><var>place</var><code>)</code>.
+<p>The <var>number</var> is truncated toward zero. If the <var>number</var> is positive, the result is the same as <var></var><code>floor(</code><var>place</var><code>)</code>.
     If the <var>number</var> is negative, the result is the same as <var></var><code>ceiling(</code><var>place</var><code>)</code>.</p>
 <p>If <var>place</var> is a small integer, then the <var>number</var> is rounded
     down to that many decimal places. This is like discarding decimal places.</p>
