@@ -9,6 +9,8 @@
 <body>
 <img src="../misty.gif" width="204" height="79">
 <h1><a href="https://mistysystem.com/">Misty Programming Language:</a>Security</h1>
+<p>The security of a misty system depends on capability discipline and a policy machine.</p>
+<h2>Capability Discipline</h2>
 <p>Conventional programming languages give too much power to programs. Typically,
   any program is potentially capable of doing anything that the whole system
   is capable of doing. This makes sense to programmers because programmers
@@ -98,15 +100,18 @@ my_record[latent]     # using the key
 <p>Actors are made of functions and benefit from the security properties of those functions. Each actor is an independent process. A process does not share any memory with other processes, so corruption of one process has no impact on the other processes.</p>
 <p>Every actor has a private address. The only way to interact with an actor is by sending a message to the private address. If you do not have a private address, you can not send a message.
 An actor's private address is a capability.</p>
-<h2 id=guests>Guests</h2>
+<h2>Policy Machine</h2>
+<h3 id=guests>Guests</h3>
 <p>There are situations where code representing another party is allowed to run in your system alongside your own code. Web browsers do this. This situation has obvious security problems.</p>
 <p>Misty can mitigate the problems. First, the code that the guest is to run is delivered to the misty system in source form. The code is compiled with the most restrictive policies. The executable is placed in the program shopwith a distinctive name.</p>
 <p>When a guest program is launched with <code>@.new()</code>, the guest program can be given a very restricted with of capabilities.
 It will not be able to create other actors. It will only be able to send messages to its home system. It will not have an <code>@.portal()</code> function. It will not have an <code>@.garbage()</code> function. Instead, when it becomes unreachable, it automatically dies. It will only have the capabilities that it is explicitly given, so its opportunities to commit mischief are drastically constrained. However, it will be able to do things that are mutually beneficial.</p>
-<h2>Environment</h2>
+<h3>Environment</h3>
 <p>The security of the Misty language depends on the security of the run-time
   environment. The interfaces that are provided should practice Capability
   Discipline.</p>
 <p>The Misty System does not depend on passwords, certificates, permission tables, or access control lists.
 It instead relies on object references, which are unforgable, and actor addresses, which are unguessable and cryptographically protected, and public/private keys.</p>
+<h2>Practical</h2>
+<p>&nbsp;</p>
 </body></html>
