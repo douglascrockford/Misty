@@ -216,8 +216,10 @@ table.bits {
     float: none;
 }
 
-i, var, .rule i  {
+i, var {
+    font-family: Georgia, serif;
     font-style: italic;
+    font-weight: 400;
 }
 
 .rule {
