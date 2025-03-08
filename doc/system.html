@@ -36,7 +36,7 @@
 <p>Actors run in turns. A turn starts with the reception of a message. A turn ends when the processing of the message is complete. At the end of a turn, outgoing messages are released to the outgoing message queue. A program can send messages, but the messages do not leave until the turn finishes successfully.</p>
 <p>Actors can be in one of these statuses: <dfn>idle</dfn> <dfn>ready</dfn> <dfn>running</dfn> <dfn>exhausted</dfn> <dfn>reclaiming</dfn> <dfn>slow</dfn>.</p>
 <h3 id="idle">Idle</h3>
-<p>An <dfn>idle</dfn> actor has nothing to do. It is waiting for a message to arrive. If there are one or more messages for an <dfn>idle</dfn> actor, its status changes to <dfn>ready</dfn>. Also see <a href="#dar">Distributed Actor Reclamation.</a></p>
+<p>An <dfn>idle</dfn> actor has nothing to do. It is waiting for a message to arrive. If there are one or more messages for an <dfn>idle</dfn> actor, its status changes to <dfn>ready</dfn>. Also see <a href="#ar"> Actor Reclamation.</a></p>
 <h3 id="ready">Ready</h3>
 <p>A <dfn>ready</dfn> actor can be picked up by any available core. The actor status is set to <dfn>running</dfn>, and it executes under the <dfn>fast</dfn> timer. </p>
 <h3>Running</h3>
@@ -71,7 +71,7 @@
 <h3>Configuration</h3>
 <p>This can include start up conditions, timer values.</p>
 <h3>Holding of executables</h3>
-<p>The<a href="prongrams.html#new"> <code>@.new</code></a> function obtains its executables from here.</p>
+<p>The <a href="prongrams.html#start"><code>@.start</code></a> function obtains its executables from here.</p>
 <h3>Building of executables from modules</h3>
 <p>The program builder gets <code><a href="statements.html#use">use</a></code> modules from here.</p>
 <h3>Granting of endowments to modules</h3>
@@ -83,20 +83,20 @@
 <h3>Policies</h3>
 <p>The program shop holds the policies that determine which modules get access to which endowments, and which programs get access to which modules. For example, programs from third parties (guests) can be restricted from capabilities that are granted to trusted programs.</p>
 <h3>Logs</h3>
-<p> The program shop determines which programs have access to which logs, and determines the usage of the logs (archived, sent to debuggers, summarized and sent to humans, sent to ai for analysis).</p>
+<p> The program shop determines which programs have access to which logs, and determines the usage of the logs (archived, sent to debuggers, summarized and sent to humans, sent to ai for analysis, ignored).</p>
 <h3>Distributed management</h3>
 <p>Program shops on multiple machines can  share resources, simplifying administration of large sites.</p>
 <h3>Versioning and Updating</h3>
 <p>Executables can be updated at any time. The actors that are currently running are not affected, but they can be stopped and started again with new executables if necessary, or they can continue to run beside updated actors.</p>
 <h2 id="build">Build</h2>
-<p>The Build tools make the executables that are in the <a href="#shop">Program Shop</a>. Most of the tools are written in Misty and are part of the standard tools. The exception is the endow tool.</p>
+<p>The Build tools make the executables that are in the <a href="#shop">Program Shop</a>. Most of the tools are written in Misty and are part of the standard tools. The exception is the <a href="#endow">endow</a> tool.</p>
 <h3>Tokenize</h3>
 <p>Take a program source text or module source text, and produce an array of tokens.</p>
 <h3>Parse</h3>
 <p>Take an array of tokens and produce a parse tree record.</p>
 <h3>Optimize</h3>
 <p>Take a parse tree and optimize it by constant folding, strength reduction, and other techniques.</p>
-<h3>Endow</h3>
+<h3 id="endow">Endow</h3>
 <p>Take a program parse tree and combine it with its module's parse trees. Also give values to the endowment expressions, and provide native interfaces for access to things like display systems and file systems.</p>
 <p>The default endow tool grants all requested configurations, and in development, this can be sufficient. However, in production, it may be necessary to have policies that determine:</p>
 <ul>
