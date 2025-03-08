@@ -187,7 +187,7 @@ Any messages sent in this final turn will not be put into the outgoing queue.</p
 <h2 id="turns">Turns</h2>
 <p>Computation takes place in an actor in a fragment of time called a <dfn>turn</dfn>.
 A turn starts with the receiving of a message.
-A function (such as the function registered with <code>@.receive</code>, <code>@.greeter</code>, <code>@.clock</code>,  or a <code><a href="intrinsic.html#delay">delay</a></code><a href="intrinsic.html#delay"> callback function</a>)
+A function (such as the function registered with <code>@.receive</code>, <code>@.portal</code>, <code>@.clock</code>,  or a <code><a href="intrinsic.html#delay">delay</a></code><a href="intrinsic.html#delay"> callback function</a>)
 will run to completion. Any outgoing messages are held until the turn completes successfully,
 at which time they go into the outgoing queue and are sent.</p>
 <p>An actor will not receive another message until the turn ends. Each turn will process exactly one message.</p>
