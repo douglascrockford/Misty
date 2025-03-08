@@ -68,12 +68,12 @@ my_process = your_process         # false (probably)</pre>
 <h2 id="actor?"> The <code>actor?</code> function</h2>
 <h4>actor?(<var>value</var>)</h4>
 <p>The <code>actor?</code> function gives <code>true</code> if the <var>value</var> is an actor address object.</p>
-<h2 id="lifecycle">Process lifecycle</h2>
-<p>An actor is created by another actor by <a href="#start"><code>@.start(<var>program</var>)</code></a> which returns a new private address object. Over its existence, an actor will receive messages, which may cause it to change its state and send messages.</p>
+<h2 id="lifecycle">Actor lifecycle</h2>
+<p>An actor is created by another actor by <a href="#start"><code>@.start(<var>program</var>)</code></a> which produces a new private address object. Over its existence, an actor will receive messages, which may cause it to change its state and send messages.</p>
 <p>When an actor stops, it will no longer send or receive messages. Ultimately, there are four ways that an actor stops:</p>
 <h3>Stop</h3>
 <p>An overling actor may stop a underling by calling <code><a href="#stop">@.stop(<var>underling</var>)</a></code>.  If the underling actor is in the middle of executing a turn when it is stopped, any messages sent in that final turn will not be put into the outgoing queue.</p>
-<p>An actor can also stop itself by calling <a href="#stop"><code>@.stop()</code></a>. It may do this as a result of being told to do so by its overling or another trusted actor, or because it has fulfilled its purpose or become <a href="#unneeded">unneeded</a>. Any messages sent in this final turn are put into the outgoing queue. </p>
+<p>An actor can also stop itself by calling <a href="#stop"><code>@.stop()</code></a>. It might do this as a result of being told to do so by its overling or another trusted actor, or because it has fulfilled its purpose or become <a href="#unneeded">unneeded</a>. Any messages sent in this final turn are put into the outgoing queue. </p>
 <h3>Disrupt</h3>
 <p>If an explicit or implicit <code>disrupt</code> occurs that is not handled, then the actor stops.
 Any messages sent in this final turn will not be put into the outgoing queue.</p>
