@@ -586,7 +586,7 @@ whitespace?(&quot;&quot;)         # false</pre>
 <h4 id="apply">apply(<var>function</var>, <var>array</var>)</h4>
 <p>Apply. Execute the <var>function</var> and return its return value. Pass the elements of the <var>array</var> as input values. The length may not be greater than four. See <a href="functions.html#proxy">proxy</a>.</p>
 <p>If the first input value is not a function, <code>apply</code> returns its first input value.</p>
-<p>If  <code>length(<var>array</var>)</code> is greater than 4, it disrupts.</p>
+<p>If  <code>length(<var>array</var>)</code> is greater than  <code>length(<var>function</var>)</code>, it disrupts.</p>
 <p>If the second argument is not an array, it is used as a single input value.</p>
 <h4 id="ceiling">ceiling(<var>number</var>, <var>place</var>)</h4>
 <p>If <var>place</var> is <code>0</code> or <code>null</code>, the <var>number</var> is rounded up to the smallest integer that is greater than or equal to the
