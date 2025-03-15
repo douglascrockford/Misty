@@ -1,5 +1,5 @@
 // parse.js
-// 2025-02-14
+// 2025-03-14
 
 // Missing feature:
 //      patterns
@@ -573,9 +573,6 @@ function input(list) {
     const result = token;
     advance("name");
     const variable = declare(result);
-    if (result.input_nr >= 4) {
-        error("too many", result);
-    }
     if (token.kind === "space") {
         advance(" ");
         advance("|");
@@ -834,9 +831,6 @@ function invoke(left) {
                     result.list[0].else = expression();
                 } else {
                     while (true) {
-                        if (result.list.length >= 4) {
-                            error("too many", token);
-                        }
                         result.list.push(expression());
                         if (!indentation_q()) {
                             break;
@@ -848,9 +842,6 @@ function invoke(left) {
             outdent();
         } else {
             while (true) {
-                if (result.list.length >= 4) {
-                    error("too many", token);
-                }
                 result.list.push(expression(0, false));
                 if (token.kind !== ",") {
                     break;

@@ -46,7 +46,7 @@ optional_function_name
 <p>Functions can also be made with the <a href="statements.html#def"><code>def</code> statement</a> and <a href="types.html#record literal">record literals</a>.</p>
 <h3 id="input">Input List</h3>
 <p>The input list can be open (each input name on its own line) or closed (all input names on the same line, separated with <code>,</code><small>comma</small>).
- The input names are bound to the input values when the function is called. An input is a <code>def</code> that is initialized by the caller. An input list can contain at most 4 names. If you need more than 4, consider using a single record or array instead.</p>
+ The input names are bound to the input values when the function is called. An input is a <code>def</code> that is initialized by the caller.</p>
 <p class="rule">
 input_list
     <code>'('</code> input_list_filler <code>')'</code>
@@ -76,12 +76,12 @@ more_open_inputs
     <code>""</code>
     linebreak input more_open_inputs
 </p>
-<p>An input list is a list of zero thru four names, separated
+<p>An input list is a list of zero or more names, separated
   by commas or stacked vertically. When the function is invoked, the input values will be
   assigned to these names and made available to the body. The
   body can not modify the inputs, but can modify the values of the inputs if they are not stone. Inputs behave as <code>def</code>, not <code>var</code>. The number of
   names in the input list determines the function's arity.
-If the function is invoked with too many input values, the excess input values are ignored. </p>
+If the function is invoked with too many input values, it disrupts. </p>
 <p>If the function is invoked with too few inputs, the missing values will get <code>null</code>. The <code>|</code><small>default</small> operator is allowed in input lists, replacing <code>null</code> input values with values.</p>
 <h3>Body</h3>
 <p>And then, the body. There are two forms: the expression form wrapped in parens, and the statement form wrapped in braces.</p>
