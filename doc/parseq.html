@@ -20,37 +20,28 @@
 <pre>function <var>callback</var>(<var>value</var>, <var>reason</var>)</pre>
     <p>Instead of returning a <var>value</var>, a function may be written to use a provided <var>callback</var> function, passing the <var>value</var> as an input value.</p>
     <pre>return <var>callback</var>(<var>value</var>)</pre>
-<p id="reverse">If the <var>value</var> is <code>null</code>, that indicates failure. The optional input value <var>reason</var> can be used to provide documentation about the failure.</p>
+<p id="reverse">If the <var>reason</var> is <code>null</code>, that indicates success. The optional input value <var>reason</var> can be used to provide documentation about the failure.</p>
 <pre>return callback(null, &quot;My dog ate my return value.&quot;)</pre>
 <h3 id="requestor">Requestor</h3>
+<p>A requestor function oversees a unit of work. </p>
+<pre>function <var>requstor</var>(<var>callback</var>, <var>value</var>)</pre>
+<p>When the work is complete or has failed, the <var>requestor</var> function calls the <var>callback</var>. The <var>requestor</var> function can optionally return a <var>cancel</var> function.</p>
 <h3 id="cancel">Cancel</h3>
+<p>A cancel function can attempt to stop the working of a requestor. It is intended to stop the wasting of resources on work that is no longer needed. It is not an undo. It is not guaranteed to be effective.</p>
+<pre>function <var>cancel</var>(<var>reason</var>)</pre>
 <h3 id="factory">Factory</h3>
-<p>&nbsp;</p>
-<h4>requestor(<var>record</var>)</h4>
-<p>The <code>requestor</code> function makes and returns a <var>requestor</var> function. A <var>requestor</var> function has a signature of</p>
-    <pre>function <var>requestor</var>(<var>callback</var>, <var>value</var>)</pre>
-    <p>The <var>requestor</var> will eventually call the <var>callback</var> function, giving its <var>value</var>.</p>
-    <p id="callback">A <var>callback</var> frunction has a signature of </p>
-    <pre>function <var>callback</var>(<var>value</var>, <var>reason</var>)</pre>
-    <p>If the <var>requestor</var> was successful, it will pass its result as the <var>callback's</var> <var>value</var>. If the <var>requestor</var> is not successful, it will pass <code>null</code> as the callback's <var>value</var>, and optionally a <var>reason</var> for the failure.</p>
-    <p>The <code>requestor</code> function takes a record input value that specifies the record to be made. The record contains these fields:</p>
-    <ul>
-        <li><code>type</code> (required)
-            <p>The types are <code>"fallback"</code>, <code>"parallel"</code>, <code>"race"</code>, <code>"sequence"</code>.</p>
-        </li>
-        <li><code>requestors</code> (required except when type is <code>"parallel"</code>)</li>
-        <p>An array of <var>requestor</var> functions.</p>
-        <li>throttle (optional)</li>
-        <li></li>
-    </ul>
-<p>&nbsp;</p>
-    <h4 id="fallback">fallback(<var>array</var>, <var>time_limit</var>)</h4>
+<p>A <var>factory</var> function is a parameterized function that returns a <var>requestor</var>.</p>
+<h2>Parseq factories</h2>
+<p>Parseq comes with 4  factory functions that can be used to structure requestor infunctions into useful flows.</p>
+<p>Each can take an optional <code>time_limit</code> in seconds. If it is provided, then the operation must finish returns a requestor function. If the time limit is exceeded, then the currently running requestors are cancelled and the operation fails.</p>
+<p>Some can take an optional <code>throttle</code>. If supplied, it will constrain the number of requestors that can be running at a time. This can be used to avoid overwhelming fragile systems.</p>
+<h4 id="fallback">fallback(<var>array</var>, <var>time_limit</var>)</h4>
+    <p>The requestors in the array will be dispatched one at a time until one is successful.</p>
     <h4 id="reduce"><span id="parallel">parallel</span>(<var>array_or_record</var>, <var>all</var>, <var>time_limit</var>, <var>throttle</var>)</h4>
-    <p>The parallel takes a set of requestor functions and returns a requestor function that starts them all at once. It ultimately produces an array of all of the results. </p>
-    <p>The <var>array_or_record</var> is an array or record of requestor functions.  If <var>all</var> is <code>true</code>, then they must all succeed. The value produced will be an array of values or a record of values.</p>
-<p>A <var>time_limit</var> (in seconds) can be imposed.</p>
-    <p>A <var>throttle</var> may be used to limit the number of requestors that are running concurrently. This can be used to reduce stress on fragile systems.</p>
+<p>The <code>parallel</code> function takes an array of requestor functions or a record of requestor functions, and returns a requestor function that starts them all at once. It ultimately produces an array or a record of all of the results. </p>
+    <p>If <var>all</var> is <code>true</code>, then they must all succeed. So if any requestor fails, the remainder are cancelled and the parallel requestor fails.</p>
 <h4 id="race">race(<var>array</var>, <var>time_limit</var>, <var>throttle</var>)</h4>
+<p>The <code>race</code> function takes an array of requestor functions and returns a requestor function that starts them all at once. If one is successful, then the others are cancelled and the successful value is the result.</p>
 <h4 id="sequence">sequence(<var>array</var>, <var>time_limit</var>)</h4>
-<p>&nbsp;</p>
+<p>The <code>sequence</code> function takes an array of requestor functions runs them one at a time, giving the result of the previous to the next. It is successful if all are successful.</p>
 <p align="left">&nbsp;</p></body></html>
