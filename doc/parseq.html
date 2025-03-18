@@ -17,11 +17,11 @@
 <p>The <code>parseq</code> module works with functions of these types: callbacks, requestors, cancels, and factories.</p>
 <h3 id="callback">Callback</h3>
 <p id="callback2">Callbacks are a functional pattern used to deliver results from the future. A <var>callback</var> function has a signature of </p>
-<pre>function <var>callback</var>(<var>success</var>, <var>value</var>)</pre>
-    <p>If the requestor is successful, it passes <code>true</code> and the result to the callback. </p>
-    <pre>return callback(true, valuable_information)</pre>
-    <p>If the requestor fails, it passes <code>false</code> and reason to the callback.</p>
-<pre>return callback(false, &quot;My dog ate my return value.&quot;)</pre>
+<pre>function <var>callback</var>(<var>value</var>, <var>reason</var>)</pre>
+<p>If the requestor is successful, it passes the result <var>value</var> to the callback and passes <code>null</code> (or implied <code>null</code>) as the <var>reason</var>.</p>
+<pre>return callback(valuable_information)</pre>
+<p>If the requestor fails, it passes the <var>reason</var> to the callback. The <var>value</var> is ignored.</p>
+<pre>return callback(null, &quot;My dog ate my return value.&quot;)</pre>
 <h3 id="requestor">Requestor</h3>
 <p>A requestor function oversees a unit of work. </p>
 <pre>function <var>requstor</var>(<var>callback</var>, <var>value</var>)</pre>
