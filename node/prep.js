@@ -1,5 +1,5 @@
 //prep.js
-// 2025-02-16
+// 2025-03-08
 
 // prep takes mst/source.mst and produces a tree in mtree/source.json
 
@@ -47,6 +47,11 @@ if (Array.isArray(tree)) {
         null,
         4
     ));
+    process.exit(1);
+}
+
+if (name.indexOf(tree.name) < 0) {
+    console.log(name + " <> " + tree.name);
     process.exit(1);
 }
 
