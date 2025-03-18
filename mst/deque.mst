@@ -27,9 +27,9 @@ misty module deque()
 return function deque(capacity) {
 
     var underlying: array(capacity)
-    if (length(underlying) < 2) {
+    if length(underlying) < 2
         assign underlying: array(16)
-    }
+    fi
     var bottom: 0
     var top: 0
     var the_length: 0
