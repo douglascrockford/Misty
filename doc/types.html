@@ -199,7 +199,7 @@ optional_minus
     Objects are not rigidly defined by classes. Instead, Misty's records can be
     soft and malleable. Misty unifies traditional records and associative data structures. Records are unordered
     containers of key/value fields. Misty records can have fields added or removed at
-    any time. Records are initially mutable, but can be made immutable by the <code>stone</code> statement. Fields can be accessed using either <a href="operators.html#dot"> dot notation</a> or <a href="operators.html#bracket"> bracket notation</a>.</p>
+    any time. Records are initially mutable, but can be made immutable by the <code><a href="intrinsic.html#stone">stone</a></code> function. Fields can be accessed using either <a href="operators.html#dot"> dot notation</a> or <a href="operators.html#bracket"> bracket notation</a>.</p>
 <h3 id="record literal">Record Literal</h3>
 <p>A new record can be made with a record literal.</p>
 <p class="rule">
@@ -283,15 +283,10 @@ def object: {
     double(x) (x + x)
 }</pre>
 <h3>Keys</h3>
-<p>Keys can be</p>
-<ul>
-    <li>text</li>
-    <li>stone record</li>
-</ul>
-<p>An invalid key type yields <code>null</code> on reading, and a disrupt on writing.</p>
+<p>Keys are text. An invalid key type yields <code>null</code> on reading, and a disrupt on writing.
+</p>
 <p>Keys in a record are unique. Writing a duplicate key first erases the original.</p>
 <p>A key can not be a number, although a number converted to a text is allowed.</p>
-<p>Fields with stone record keys can only be inserted with an <code>assign</code> statement. Record literals do not permit stone record keys. Stone record keys make it possible to put secret fields in records. Those fields can only be inserted and retrieved with the use of a specific stone record. If you do not have the secret key, the record appears to be an ordinary record. Stone record key fields are not copied by the intrinsic <a href="intrinsic.html#record">record</a> function. Stone record keys are also omitted by the <a href="intrinsic.html#array">intrinsic array function</a>.</p>
 <h3>Fields</h3>
 <p>The fields of a record can be accessed with either the dot notation or the
     subscript notation.</p>
@@ -307,7 +302,7 @@ assign new_stooge.first: &quot;Shemp&quot;      # new_stooge is {first: &quot;Sh
 assign last_name: new_stooge.last     # last_name is &quot;Howard&quot;</pre>
 <p>The subscript notation is similar to the dot notation, but instead of
     taking an identifier (which is used as a text) it can take an expression that produces a valid key. It can be used for dynamically making
-    field names, or for creating keys that are not texts, such as stone records and stone arrays.</p>
+    field names.</p>
 <p>The subscript expression is wrapped
     in <code>[</code><small>left bracket</small> and <code>]</code><small>right bracket</small>.</p>
 <p>Example:</p>

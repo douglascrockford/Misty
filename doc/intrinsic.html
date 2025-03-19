@@ -55,7 +55,7 @@ The <a href="statements.html#use"><code>use</code> statement</a> is not needed t
 <h4>array(<var>record</var>)</h4>
 <p>Keys. Make an array containing all of the
 text keys in the <var>record</var>. The keys are not guaranteed
-    to be in any particular order. Stone record keys are not included.</p>
+    to be in any particular order.</p>
 <h4>array(<var>text</var>)</h4>
 <p>Split the <var>text</var> into composite characters. A composite character is a Unicode character and its succeeding combining characters, if any.</p>
 <h4>array(<var>text</var>, <var>separator</var>)</h4>
@@ -168,9 +168,9 @@ assign result: number(&quot;0666&quot;)                   # result is 666
 </pre>
 <h3 align="left" id="record">Record</h3>
 <h4 id="copy record">record(<var>record</var>)</h4>
-<p>Copy. Make a mutable copy, not including stone record keys.</p>
+<p>Copy. Make a mutable copy.</p>
 <h4>record(<var>record</var>, <var>another_record</var>)</h4>
-<p>Combine. Make a <a href="#copy record">copy</a> of a <var>record</var>, and then put all the fields of <var>another_record</var> into the copy, not including stone record keys.</p>
+<p>Combine. Make a <a href="#copy record">copy</a> of a <var>record</var>, and then put all the fields of <var>another_record</var> into the copy.</p>
 <h4>record(<var>record</var>, <var>array_of_keys</var>)</h4>
 <p>Select. Make a new record containing only the fields that are named by the <var>array_of_keys</var>.</p>
 <h4>record(<var>array_of_keys</var>)</h4>
