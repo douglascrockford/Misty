@@ -1,5 +1,5 @@
 //prep.js
-// 2025-03-08
+// 2025-03-20
 
 // prep takes mst/source.mst and produces a tree in mtree/source.json
 
@@ -17,6 +17,7 @@ import {
 } from "fs";
 import tokenize from "../js/tokenize.js";
 import parse from "../js/parse.js";
+import slot from "../js/slot.js";
 
 let name = process.argv[2];
 if (name.endsWith(mst_extension)) {
@@ -40,7 +41,7 @@ try {
     erase(mtree_directory + name + mtree_extension);
 } catch (e) {
 }
-const tree = parse(tokenize(source));
+const tree = slot(parse(tokenize(source)));
 if (Array.isArray(tree)) {
     console.log(JSON.stringify(
         tree,
