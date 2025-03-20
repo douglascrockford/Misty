@@ -45,6 +45,7 @@ input[type=button]:hover {
 <script type="module">
 import tokenize from "../js/tokenize.js";
 import parse from "../js/parse.js";
+import slot from "../js/slot.js";
 
 (function initialize() {
     const inputation = document.getElementById("inputation");
@@ -73,12 +74,12 @@ import parse from "../js/parse.js";
     neat.addEventListener("click", function (event) {
         outputation.innerHTML = "";
         outputation.append(JSON.stringify(
-            parse(tokenize(inputation.value)),
+            slot(parse(tokenize(inputation.value))),
             [
                 "kind", "name", "make", "value", "parameter_nr", "level",
                 "function_nr", "outer", "left", "right", "expression",
                 "then", "list", "else", "statements", "disruption",
-                "functions", "endowment", "logs", "uses", "closure"
+                "functions", "endowment", "logs", "uses"
             ],
             4
         ));
@@ -89,7 +90,7 @@ import parse from "../js/parse.js";
         outputation.innerHTML = "";
         outputation.append(
             JSON.stringify(
-                parse(tokenize(inputation.value)),
+                slot(parse(tokenize(inputation.value))),
                 null,
                 4
             )
@@ -99,7 +100,7 @@ import parse from "../js/parse.js";
     }, false);
     scope.addEventListener("click", function (event) {
         outputation.innerHTML = "";
-        let tree = parse(tokenize(inputation.value));
+        let tree = slot(parse(tokenize(inputation.value)));
         outputation.append(JSON.stringify((
             typeof tree === "object" && !Array.isArray(tree) && tree !== null
             ? tree.scopes
@@ -110,7 +111,7 @@ import parse from "../js/parse.js";
     }, false);
     intrin.addEventListener("click", function (event) {
         outputation.innerHTML = "";
-        let tree = parse(tokenize(inputation.value));
+        let tree = slot(parse(tokenize(inputation.value)));
         outputlegend.replaceChildren("Intrinsics");
         outputation.append(JSON.stringify((
             typeof tree === "object" && !Array.isArray(tree) && tree !== null
