@@ -54,7 +54,7 @@ and all of the <a href="intrinsic.html">intrinsics</a> and punctuators:</p>
 </pre>
 <p>The <code>kind</code> and <code>text</code> fields will be meaningful to the parser that consumes the token list. The other fields are intended for error reporting.These token records are treated as nodes that are woven into a parse tree.</p>
 <h1 id="tree">Tree</h1>
-<p>The module <code>parse.mst</code> turns a list of tokens into an abstract parse tree.</p>
+<p>The module <code>parse.mst</code> turns a list of tokens into an abstract parse tree by adding new fields. The source notations are retained for error reporting and debugging.</p>
 <h2 id="root">Root</h2>
 <p>The root of the tree is a record. Its fields are</p>
 <h4>kind</h4>
