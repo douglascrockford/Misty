@@ -12,11 +12,11 @@
 <p>The <code>parseq</code> module provides tools for working with callbacks and eventual programming. The name combines the prefixes of parallel and sequence.</p>
 <p>The <code>parseq</code> module can be passed the <a href="programs.html#delay"><code>@.delay</code></a> capability.</p>
 <pre>use parseq(@.delay)</pre>
-<p id="callback"><code>@.delay</code> is only necessary if time limits are used.</p>
+<p id="delay"><code>@.delay</code> is only necessary if time limits are used.</p>
 <h2 id="types">Function types</h2>
 <p>The <code>parseq</code> module works with functions of these types: callbacks, requestors, cancels, and factories.</p>
 <h3 id="callback">Callback</h3>
-<p id="callback2">Callbacks are a functional pattern used to deliver results from the future. A <var>callback</var> function has a signature of </p>
+<p>Callbacks are a functional pattern used to deliver results from the future. A <var>callback</var> function has a signature of </p>
 <pre>function <var>callback</var>(<var>value</var>, <var>reason</var>)</pre>
 <p>If the requestor is successful, it passes the result <var>value</var> to the callback and passes <code>null</code> (or implied <code>null</code>) as the <var>reason</var>.</p>
 <pre>return callback(valuable_information)</pre>
@@ -35,8 +35,6 @@
 <p>Parseq comes with 5  factory functions that can be used to structure requestor infunctions into useful flows.</p>
 <p>Each can take an optional <var>time_limit</var> in seconds. If it is provided, then the operation must finish returns a requestor function. If the time limit is exceeded, then the currently running requestors are cancelled.</p>
 <p>Some can take an optional <var>throttle</var>. If supplied, it will constrain the number of requestors that can be running at a time. This can be used to avoid overwhelming fragile systems.</p>
-<h4 id="fallback">fallback(<var>array</var>, <var>time_limit</var>)</h4>
-<p>The requestors in the array will be dispatched one at a time until one is successful.</p>
 <h4 id="par_all">par_all(<var>array_or_record</var>, <var>time_limit</var>, <var>throttle</var>)</h4>
 <p>The <code>par_all</code> function takes an array of requestor functions or a record of requestor functions, and
 returns a requestor function that starts them all at once.
@@ -50,6 +48,8 @@ It ultimately produces an array or a record of all of the successful results.
 The <code>par_any</code> action succeeds if one or more of the requestors succeed before the time limit.</p>
 <h4 id="race">race(<var>array</var>, <var>time_limit</var>, <var>throttle</var>)</h4>
 <p>The <code>race</code> function takes an array of requestor functions and returns a requestor function that starts them all at once. If one is successful, then the others are cancelled and the successful value is the result.</p>
+<h4 id="fallback">fallback(<var>array</var>, <var>time_limit</var>)</h4>
+<p>The requestors in the array will be dispatched one at a time until one is successful.</p>
 <h4 id="sequence">sequence(<var>array</var>, <var>time_limit</var>)</h4>
 <p>The <code>sequence</code> function takes an array of requestor functions runs them one at a time, giving the result of the previous to the next. It is successful if all are successful.</p>
 <p align="left">&nbsp;</p></body></html>
