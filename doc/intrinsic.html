@@ -57,7 +57,7 @@ The <a href="statements.html#use"><code>use</code> statement</a> is not needed t
 text keys in the <var>record</var>. The keys are not guaranteed
     to be in any particular order.</p>
 <h4>array(<var>text</var>)</h4>
-<p>Split the <var>text</var> into composite characters. A composite character is a Unicode character and its succeeding combining characters, if any.</p>
+<p>Split the <var>text</var> into grapheme clusters. A grapheme cluster is a Unicode codepoint and its contributing combining characters, if any.</p>
 <h4>array(<var>text</var>, <var>separator</var>)</h4>
 <p>Split the <var>text</var> into an array of subtexts. The <var>separator</var>  can be a text or pattern.</p>
 <h4>array(<var>text</var>, <var>length</var>)</h4>
@@ -759,6 +759,8 @@ then the result is <code>null</code>. <var><var>dividend</var></var> and <var>di
 <code>and(<var>dividend</var>, <var>divisor</var> - 1)</code>.</p>
 <h4>neg(<var>number</var>)</h4>
 <p>Negate. Reverse the sign of a number. If the input value is not a number, the result is <code>null</code>. Note that the <code>-</code><small>minus sign</small> is not used as a prefix negation operator.</p>
+<h4 id=normalize>normalize(<var>text</var>)</h4>
+<p>Unicode normalize. Return a text whose textual value is the same as <var>text</var>, but whose binary representation is in the specified Unicode normalization form. The two texts will display the same, but might not be equal.</p>
 <h4 id="not">not(<var>logical</var>)</h4>
 <p>Not. Return the opposite logical. If the input value is not a logical, it returns <code>null</code>.</p>
 <h4>reduce(<var>array</var>, <var>function</var>, <var>initial</var>, <var>reverse</var>)</h4>
