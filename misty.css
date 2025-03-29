@@ -37,7 +37,7 @@ dfn, h1, h2, h3, caption, legend, .rule {
 }
 
 body, p, .rule i, li, h5  {
-    font-family: Georgia, serif;
+    font-family: Georgia, Garamond, serif;
     font-weight: 400;
     font-style: normal;
 }
