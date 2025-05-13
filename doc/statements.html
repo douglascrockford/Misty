@@ -18,6 +18,7 @@ statement
     def_statement
     disrupt_statement
     do_statement
+    go_statement
     if_statement
     log_statement
     return_statement
@@ -132,7 +133,7 @@ do_label
     <code>""</code>
     space name
 </p>
-<p>The <code>do</code> statement executes a list of statements until the loop is broken by <code>break</code>,
+<p>The <code>do</code> statement executes a list of statements until the loop is broken by <code>break</code>, <code>go</code>,
 <code>return</code>, or <code>disrupt</code>.
 </p>
 <p>
@@ -151,6 +152,15 @@ do
     assign divisor: divisor + 1
 od
 </pre>
+<h3 id="go">The <code>go</code> statement</h3>
+<p class="rule">
+go_statement
+    <code>"go"</code> space callee
+</p>
+<p>The <code>go</code> statement is parameterized jump to a function. It is similar to <a href="#return"><code>return</code></a> except that control will ultimately go to the caller's caller, not the caller. In some languages, this is called tail call optimization. It can significantly reduce the rate at which memory is consumed, making looping by recusion and continuation passintg style feasible.</p>
+<p>The <code>go</code> statement is not allowed in functions that have a <a href="functions.html#disruption"><code>disruption</code></a> clause.</p>
+<p>The <code>go</code> statement is not allowed in functions that have inner functions.</p>
+<p>&nbsp;</p>
 <h3 id="if">The <code>if</code> statement</h3>
 <p class="rule">
 if_statement

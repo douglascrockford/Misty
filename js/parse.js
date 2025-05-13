@@ -1,5 +1,5 @@
 // parse.js
-// 2025-03-14
+// 2025-05-13
 
 // Missing feature:
 //      patterns
@@ -407,9 +407,10 @@ function block() {
         statements.push(action());
         if (
             !indentation_q()
-            || verb === "return"
             || verb === "break"
             || verb === "disrupt"
+            || verb === "go"
+            || verb === "return"
         ) {
             break;
         }
@@ -1005,6 +1006,16 @@ statement.def = function def_statement() {
     return result;
 };
 
+statement.disrupt = function disrupt_statement() {
+    const result = token;
+    if (function_nr < 1) {
+        error("misplaced", token);
+    }
+    advance();
+    result.kind = "disrupt";
+    return result;
+};
+
 statement.do = function do_statement() {
     const result = token;
     if (function_nr < 1) {
@@ -1036,20 +1047,30 @@ statement.do = function do_statement() {
     return result;
 };
 
-statement.disrupt = function disrupt_statement() {
-    const result = token;
-    if (function_nr < 1) {
-        error("misplaced", token);
-    }
-    advance();
-    result.kind = "disrupt";
-    return result;
-};
-
 statement.fi = function fi_statement() {
     const result = token;
     advance();
     error("misplaced", result);
+    return result;
+};
+
+statement.go = function go_statement() {
+    const result = token;
+    advance("go");
+    advance(" ");
+    let expression = (
+        token.kind === "@"
+        ? at
+        : lookup
+    )();
+    while (true) {
+        if (token.kind !== "." && token.kind !== "[") {
+            break;
+        }
+        expression = operable[token.kind](expression);
+    }
+    result.list = invoke().list;
+    result.kind = "go";
     return result;
 };
 
