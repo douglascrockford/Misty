@@ -1,5 +1,5 @@
 // parse.js
-// 2025-05-13
+// 2025-05-18
 
 // Missing feature:
 //      patterns
@@ -617,17 +617,13 @@ function input_list() {
 }
 
 function body(the_function) {
-    if (token.kind === "(") {
-        the_function.expression = paren_expression();
-    } else {
-        advance("{");
-        the_function.statements = block();
-        if (token.text === "disruption") {
-            advance("name");
-            the_function.disruption = block();
-        }
-        advance("}");
+    advance("{");
+    the_function.statements = block();
+    if (token.text === "disruption") {
+        advance("name");
+        the_function.disruption = block();
     }
+    advance("}");
 }
 
 function function_stuff(name) {
@@ -1055,6 +1051,9 @@ statement.fi = function fi_statement() {
 };
 
 statement.go = function go_statement() {
+
+// To do: Give a warning if there is closure or disruption.
+
     const result = token;
     advance("go");
     advance(" ");

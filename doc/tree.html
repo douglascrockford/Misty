@@ -31,7 +31,7 @@ This is descriptive of one particular implementation.
 <p><code>&quot;name&quot;</code>, <code>&quot;text&quot;</code>, <code>&quot;number&quot;</code>,
 <code>&quot;comment&quot;</code>, <code>&quot;newline&quot;</code>, <code>&quot;space&quot;</code>,
 and all of the <a href="intrinsic.html">intrinsics</a> and punctuators:</p>
-<pre>.  ,  :  (  )  [  ]  {  }  +  -  *  /  //  &amp;  &amp;&amp;  =  &lt;&gt;  &lt;  &gt;  &lt;= &gt;=  /\  \/  |  '</pre>
+<pre>.  ,  :  (  )  [  ]  {  }  +  -  *  /  //  &amp;  &amp;&amp;  =   &lt;&gt;  &lt;  &gt;  &lt;=   &gt;=  /\  \/  |  '</pre>
 <h4>text</h4>
 <p>The characters making up the token. </p>
 <p>The <code>kind: &quot;text&quot;</code> tokens have already had escape sequences decoded and outer quotes removed. </p>
@@ -288,8 +288,6 @@ and all of the <a href="intrinsic.html">intrinsics</a> and punctuators:</p>
 <h3>Function definition</h3>
 <h4>disruption</h4>
 <p>An array of statement nodes, the function's disruption handler. (Optional.)</p>
-<h4>expression</h4>
-<p>If the function is an expression function, the expression node is here.</p>
 <h4>kind</h4>
 <p><code>&quot;function&quot;</code></p>
 <h4>list</h4>
@@ -299,12 +297,11 @@ and all of the <a href="intrinsic.html">intrinsics</a> and punctuators:</p>
 <h4>outer</h4>
 <p>The number of the outer function that made this one.</p>
 <h4>statements</h4>
-<p>If the function is a statement function, then this is an array of statement nodes.</p>
+<p>An array of statement nodes.</p>
 <h4>nr_close_slots</h4>
 <p>The number of slots that are protected during memory reclamation.</p>
 <h4>nr_slots</h4>
 <p>The number of slots required for the this function's inputs, vars, and defs.</p>
-<p>&nbsp;</p>
 <h2 id="scope">Scope</h2>
 <p>The root node contains an array of scopes. The <code>scopes</code> array is indexed by <code>function_nr</code>, like the <code>functions</code> array. Each function definition has a scope record containing all of the names used in that function. </p>
 <p>A scope record contains  name fields, where the key is a variable name, and the field is a record containing:</p>

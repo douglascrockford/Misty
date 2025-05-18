@@ -1,5 +1,5 @@
 misty module deque()
-# 2025-02-17
+# 2025-05-18
 
 # deque: Double ended queue (pronounced /dek/)
 
@@ -62,7 +62,7 @@ return function deque(capacity) {
 
 # This record is filled with the deque's methods.
 
-        length() (the_length)
+        length() {return the_length}
 
         array() {
             if the_length <= 0

@@ -84,10 +84,9 @@ more_open_inputs
 If the function is invoked with too many input values, it disrupts. </p>
 <p>If the function is invoked with too few inputs, the missing values will get <code>null</code>. The <code>|</code><small>default</small> operator is allowed in input lists, replacing <code>null</code> input values with values.</p>
 <h3>Body</h3>
-<p>And then, the body. There are two forms: the expression form wrapped in parens, and the statement form wrapped in braces.</p>
+<p>And then, the body, a string of statements wrapped in <code>{}</code><small>braces</small>.</p>
 <p class="rule">
 body
-    paren_expression
     <code>'{'</code> statements disruption <code>'}'</code>
 </p>
 <p class="rule">
@@ -95,9 +94,8 @@ disruption
     <code>""</code>
     <code>"disruption"</code> statements
 </p>
-<p>The expression form is a single expression. The result of the expression is the return value. </p>
-<p>The statement form includes a string of statements. <a href="statements.html#return">The <code>return</code> statement</a> gives the return value. Implicit return (falling through the bottom) is  not allowed.</p>
-<p>The statement form can also include  a disruption clause.</p>
+<p><a href="statements.html#return">The <code>return</code> statement</a> or <a href="statements.html#go">the go statement</a> gives the return value. Implicit return (falling through the bottom) is  not allowed.</p>
+<p>The body can be followed by a <a href="#disruption">disruption clause</a>.</p>
 <h3>Context</h3>
 <p>The <var>context</var> of a function is the function in which it is made.
   An outer function provides the context for an inner function. The inner
@@ -182,18 +180,18 @@ disruption
     return plan_R()
 </pre>
 <h2>Proxy</h2>
-<p>A <var>function</var> can be used as a proxy for a record. If the function is called
+<p>A <var>function</var> can be used as a proxy for a record. If a <var>function</var> is called
   as</p>
 <blockquote>
-  <p><var>function</var><code>.</code><var>name</var><code>(</code><var>input_value0</var><code>,</code>
-    <var>input_value1</var><code>)</code></p>
+  <p><var>function</var><code>.</code><var>name</var><code>(</code><var>input_value_a</var><code>,</code>
+    <var>input_value_b</var><code>)</code></p>
 </blockquote>
-<p>then the function will be called as though it had been written as</p>
+<p>then the <var>function</var> will be called as though it had been written as</p>
 <blockquote>
-  <p><var>function</var><code>(&quot;</code><var>name</var><code>&quot;,</code> <code>[</code><var>input_value0</var><code>,</code>
-    <var>input_value1</var><code>])</code></p>
+  <p><var>function</var><code>(&quot;</code><var>name</var><code>&quot;,</code> <code>[</code><var>input_value_a</var><code>,</code>
+    <var>input_value_b</var><code>])</code></p>
 </blockquote>
-<p>The <var>function</var> will be called with the name of the method and an array
+<p>The <var>function</var> will be called with the <var>name</var> of the method and an array
   of input values. The result that is returned by the <var>function</var>
   will be given to the caller. </p>
 <p>Example:</p>
