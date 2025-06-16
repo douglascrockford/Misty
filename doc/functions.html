@@ -82,7 +82,7 @@ more_open_inputs
   body can not modify the inputs, but can modify the values of the inputs if they are not stone. Inputs behave as <code>def</code>, not <code>var</code>. The number of
   names in the input list determines the function's arity.
 If the function is invoked with too many input values, it disrupts. </p>
-<p>If the function is invoked with too few inputs, the missing values will get <code>null</code>. The <code>|</code><small>default</small> operator is allowed in input lists, replacing <code>null</code> input values with values.</p>
+<p>If the function is invoked with too few inputs, the missing values will get <code>null</code>. The <code>|</code><small>default</small> operator is allowed in input lists, replacing a <code>null</code> input value with a value from an <dfn>expression</dfn>.</p>
 <h3>Body</h3>
 <p>And then, the body, a string of statements wrapped in <code>{}</code><small>braces</small>.</p>
 <p class="rule">
@@ -94,7 +94,7 @@ disruption
     <code>""</code>
     <code>"disruption"</code> statements
 </p>
-<p><a href="statements.html#return">The <code>return</code> statement</a> or <a href="statements.html#go">the go statement</a> gives the return value. Implicit return (falling through the bottom) is  not allowed.</p>
+<p><a href="statements.html#return">The <code>return</code> statement</a> or <a href="statements.html#go">the go statement</a> gives the return value. Implicit return (falling through the bottom) returns <code>null</code>.</p>
 <p>The body can be followed by a <a href="#disruption">disruption clause</a>.</p>
 <h3>Context</h3>
 <p>The <var>context</var> of a function is the function in which it is made.
