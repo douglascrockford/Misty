@@ -27,9 +27,9 @@
 <p>The Misty Machine is an abstract executor of Misty executables. It is used to define an intermediate representation that can be interpreted or fed to backend code generators for real machines. </p>
 <p>When functions are called, an activation object is created containing slots that hold the inputs, variables, and temporary values of the invocation.</p>
 <h2>Misty Assembly Language</h2>
-<p>The format of Misty machine code, or <dfn>MCODE</dfn>, is <a href="json.html">JSON</a>. It is a very verbose class of assembly language, retaining source token coordinates for error reporting and debugging.</p>
+<p>The format of Misty machine code, or <dfn>MCODE</dfn>, is <a href="json.html">JSON</a>. </p>
 <p>The <code>instructions</code> field contains an array containing labels and instructions.</p>
-<p>Instructions describe a unit of work or flow. Instructions are encoded as array containing up to four elements. The first element is the opcode. The remaining zero thru three elements are operands. The names and meanings of the operands depends on the opcode. The use of tokens as operands facilitates debugging and error reporting.</p>
+<p>Instructions describe a unit of work or flow. Instructions are encoded as array containing up to four elements. The first element is the opcode represented as a text. The remaining zero thru three elements are operands. The names and meanings of the operands depends on the opcode. The use of tokens as operands facilitates debugging and error reporting.</p>
 <p>Labels are the targets of branch instructions. Labels are encoded as simple text literals. Labels may be included solely for informing debugging.</p>
 <p>Slots are elements in a activation frame. They are designated by a small positive integer. Slots are the general registers of the misty machine. Slots hold the parameters, variables, and temporaries of a function invocation.</p>
 <p>Intrinsics are represented by a token record.</p>
@@ -60,8 +60,9 @@
     ]
 }</pre>
 <h2>Misty Machine Instructions</h2>
-<h3>Arithmentic</h3>
+<h3>Arithmetic</h3>
 <h4>&quot;add&quot;, dest, left, right</h4>
+<p>dest, left, and right are numbers designating slots in the current activation frame.</p>
 <h4>&quot;subtract&quot;, dest, left, right</h4>
 <h4>&quot;multiply&quot;, dest, left, right</h4>
 <h4>&quot;divide&quot;, dest, left, right</h4>
@@ -82,7 +83,7 @@
 <h4>&quot;trunc&quot;, dest, right, place</h4>
 <h3>Text</h3>
 <h4>&quot;concat&quot;, dest, left, right</h4>
-<h4>&quot;concatspace&quot;, dest, left, right</h4>
+<h4>&quot;concat_space&quot;, dest, left, right</h4>
 <h4>&quot;character&quot;, dest, right</h4>
 <h4>&quot;codepoint&quot;, dest, right</h4>
 <h4>&quot;length&quot;, dest, right</h4>
@@ -99,7 +100,9 @@
 <h4>"ge", dest, left, right</h4>
 <h3>Function</h3>
 <h4>&quot;frame&quot;, dest, func, nr_args</h4>
+<p>Prepare to invoke the func object. If the nr_args is too large, disrupt. Allocate the new activation frame. Put the current frame pointer into it.</p>
 <h4>&quot;reframe&quot;, dest, func, nr_args</h4>
+<p>Same as frame, except if that the current frame is reused if it is large enough.</p>
 <h4>&quot;invoke&quot;, frame</h4>
 <h4>&quot;apply&quot;, func, array</h4>
 <h4>&quot;return&quot;, value</h4>
@@ -117,6 +120,7 @@
 <h4>&quot;wary_false&quot;: slot, label</h4>
 <p>If the value in the slot is true, jump to the label. If the value is false, continue with the next instruction. Otherwise disrupt because of a type error.</p>
 <h3>Sensory</h3>
+<p>Does the right slot contain a value of the indicated type?</p>
 <h4>&quot;actor?&quot;, dest, right</h4>
 <h4>&quot;array?&quot;, dest, right</h4>
 <h4>&quot;blob?&quot;, dest, right</h4>
@@ -142,8 +146,9 @@
 <h4>&quot;true&quot;, dest</h4>
 <h4>&quot;false&quot;, dest</h4>
 <h4>&quot;null&quot;, dest</h4>
-<h4>&quot;access&quot;, dest, address</h4>
-<p>This is used to access values from the program's read-only memory.</p>
+<h4>&quot;int&quot;, dest, small_int</h4>
+<h4>&quot;access&quot;, dest, literal</h4>
+<p>This is used to access values (numbers, texts, function codes) from the program's immutable memory. The literal is a number or text.</p>
 <h4>&quot;load&quot;, dest, object, subscript</h4>
 <p>This is used to load values from records and arrays.</p>
 <h4>&quot;store&quot;, dest, object, subscript</h4>
@@ -157,6 +162,6 @@
 <h3>Make</h3>
 <h4>"array", dest, nr_elements</h4>
 <h4>"blob", dest, nr_bits</h4>
-<h4>"function", dest, address</h4>
+<h4>"function", dest, code_name_text</h4>
 <h4>"pretext", dest, nr_characters</h4>
 <h4>"record", dest, nr_elements</h4></body></html>
