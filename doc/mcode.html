@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Misty Machine Code</title>
+<link rel="stylesheet" type="text/css" href="../misty.css">
+<link rel="icon" type="image/png" href="../favicon.png">
+<style>
+#opcodes tr :first-child {
+    font-family: Programma, monospace;
+    font-style: normal;
+    font-weight: bold;
+	text-align: center;
+}
+
+#opcodes tr :last-child {
+    font-family: Programma, monospace;
+    font-style: normal;
+    font-weight: bold;
+}
+</style>
+</head>
+<body>
+<img src="../misty.gif" width="204" height="79">
+<h1><a href="https://mistysystem.com/">Misty Programming Language:</a>Misty Machine Code</h1>
+<h2>Misty Machine</h2>
+<p>The Misty Machine is an abstract executor of Misty executables. It is used to define an intermediate representation that can be interpreted or fed to backend code generators for real machines. </p>
+<p>When functions are called, an activation object is created containing slots that hold the inputs, variables, and temporary values of the invocation.</p>
+<h2>Misty Assembly Language</h2>
+<p>The format of Misty machine code, or <dfn>MCODE</dfn>, is <a href="json.html">JSON</a>. It is a very verbose class of assembly language, retaining source token coordinates for error reporting and debugging.</p>
+<p>The <code>instructions</code> field contains an array containing labels and instructions.</p>
+<p>Instructions describe a unit of work or flow. Instructions are encoded as array containing up to four elements. The first element is the opcode. The remaining zero thru three elements are operands. The names and meanings of the operands depends on the opcode. The use of tokens as operands facilitates debugging and error reporting.</p>
+<p>Labels are the targets of branch instructions. Labels are encoded as simple text literals. Labels may be included solely for informing debugging.</p>
+<p>Slots are elements in a activation frame. They are designated by a small positive integer. Slots are the general registers of the misty machine. Slots hold the parameters, variables, and temporaries of a function invocation.</p>
+<p>Intrinsics are represented by a token record.</p>
+<pre>{
+    &quot;name&quot;: "<var>program_name</var>",
+    &quot;data&quot;: {&#x2E33;&#x2E33;&#x2E33;},
+    &quot;source&quot;: &quot;...&quot;,
+</pre>
+<p><em>The labels record associates labels with tokens for use by debuggers.</em></p>
+<pre>    &quot;labels&quot;: {
+        &quot;begin&quot;: <var>token</var>,
+        &quot;beyond&quot;: <var>token</var>,
+        ...
+    },</pre>
+<p><em>The instructions array is a list of instructions and labels.</em></p>
+<pre>    instructions: [</pre>
+<p><em>A statement label:</em></p><pre>        "begin",</pre>
+<p><em>go to beyond:</em></p>
+<pre>        [&quot;jump&quot;, &quot;beyond&quot;],</pre>
+<p><em>slot 8: pi / 2</em></p>
+<pre>
+        [&quot;access&quot;, 13, {&quot;kind&quot;: &quot;name&quot;, &quot;name&quot;: &quot;pi&quot;, &quot;make&quot;: &quot;intrinsic&quot;, &#x2E33;&#x2E33;&#x2E33;}],
+        [&quot;access&quot;, 14, 2],
+        [&quot;divide&quot;, 8, 13, 14],</pre>
+<pre>        &#x2E33;&#x2E33;&#x2E33;
+        &quot;beyond&quot;
+        &#x2E33;&#x2E33;&#x2E33;
+    ]
+}</pre>
+<h2>Misty Machine Instructions</h2>
+<h3>Arithmentic</h3>
+<h4>&quot;add&quot;, dest, left, right</h4>
+<h4>&quot;subtract&quot;, dest, left, right</h4>
+<h4>&quot;multiply&quot;, dest, left, right</h4>
+<h4>&quot;divide&quot;, dest, left, right</h4>
+<h4>&quot;integer_divide&quot;, dest, left, right</h4>
+<h4>&quot;modulo&quot;, dest, left, right</h4>
+<h4>&quot;remainder&quot;, dest, left, right</h4>
+<h4>&quot;max&quot;, dest, left, right</h4>
+<h4>&quot;min&quot;, dest, left, right</h4>
+<h4>&quot;abs&quot;, dest, right</h4>
+<h4>&quot;neg&quot;, dest, right</h4>
+<h4>&quot;sign&quot;, dest, right</h4>
+<h4>&quot;fraction&quot;, dest, right</h4>
+<h4>&quot;integer&quot;, dest, right</h4>
+<h4>&quot;neg&quot;, dest, right</h4>
+<h4>&quot;ceiling&quot;, dest, right, place</h4>
+<h4>&quot;floor&quot;, dest, right, place</h4>
+<h4>&quot;round&quot;, dest, right, place</h4>
+<h4>&quot;trunc&quot;, dest, right, place</h4>
+<h3>Text</h3>
+<h4>&quot;concat&quot;, dest, left, right</h4>
+<h4>&quot;concatspace&quot;, dest, left, right</h4>
+<h4>&quot;character&quot;, dest, right</h4>
+<h4>&quot;codepoint&quot;, dest, right</h4>
+<h4>&quot;length&quot;, dest, right</h4>
+<h4>&quot;lower&quot;, dest, right</h4>
+<h4>&quot;upper&quot;, dest, right</h4>
+<h4>&quot;append&quot;, pretext, right</h4>
+<p>Append the right text to the pretext, growing it if necessary.</p>
+<h3>Comparison</h3>
+<h4>"eq", dest, left, right</h4>
+<h4>"ne", dest, left, right</h4>
+<h4>"lt", dest, left, right</h4>
+<h4>"le", dest, left, right</h4>
+<h4>"gt", dest, left, right</h4>
+<h4>"ge", dest, left, right</h4>
+<h3>Function</h3>
+<h4>&quot;frame&quot;, dest, func, nr_args</h4>
+<h4>&quot;reframe&quot;, dest, func, nr_args</h4>
+<h4>&quot;invoke&quot;, frame</h4>
+<h4>&quot;apply&quot;, func, array</h4>
+<h4>&quot;return&quot;, value</h4>
+<h4>&quot;return_value&quot;, dest</h4>
+<h3>Branching</h3>
+<h4>&quot;jump&quot;, label</h4>
+<h4>&quot;jump_true&quot;, slot, label</h4>
+<p>If the value in the slot is true, jump to the label. Otherwise, continue with the next instruction.</p>
+<h4>&quot;jump_false&quot;: slot, label</h4>
+<p>If the value in the slot is false, jump to the label. Otherwise, continue with the next instruction.</p>
+<h4>&quot;jump_null&quot;: slot, label</h4>
+<h4>&quot;jump_empty&quot;: slot, label</h4>
+<h4>&quot;wary_true&quot;, slot, label</h4>
+<p>If the value in the slot is true, jump to the label. If the value is false, continue with the next instruction. Otherwise disrupt because of a type error.</p>
+<h4>&quot;wary_false&quot;: slot, label</h4>
+<p>If the value in the slot is true, jump to the label. If the value is false, continue with the next instruction. Otherwise disrupt because of a type error.</p>
+<h3>Sensory</h3>
+<h4>&quot;actor?&quot;, dest, right</h4>
+<h4>&quot;array?&quot;, dest, right</h4>
+<h4>&quot;blob?&quot;, dest, right</h4>
+<h4>&quot;character?&quot;, dest, right</h4>
+<h4>&quot;data?&quot;, dest, right</h4>
+<h4>&quot;digit?&quot;, dest, right</h4>
+<h4>&quot;false?&quot;, dest, right</h4>
+<h4>&quot;fit?&quot;, dest, right</h4>
+<h4>&quot;function?&quot;, dest, right</h4>
+<h4>&quot;integer?&quot;, dest, right</h4>
+<h4>&quot;letter?&quot;, dest, right</h4>
+<h4>&quot;logical?&quot;, dest, right</h4>
+<h4>&quot;null?&quot;, dest, right</h4>
+<h4>&quot;pattern?&quot;, dest, right</h4>
+<h4>&quot;record?&quot;, dest, right</h4>
+<h4>&quot;stone?&quot;, dest, right</h4>
+<h4>&quot;text?&quot;, dest, right</h4>
+<h4>&quot;true?&quot;, dest, right</h4>
+<h4>&quot;upper?&quot;, dest, right</h4>
+<h4>&quot;whitespace?&quot;, dest, right</h4>
+<h3>Potpourri </h3>
+<h4>&quot;stone&quot;, dest, right</h4>
+<h4>&quot;true&quot;, dest</h4>
+<h4>&quot;false&quot;, dest</h4>
+<h4>&quot;null&quot;, dest</h4>
+<h4>&quot;access&quot;, dest, address</h4>
+<p>This is used to access values from the program's read-only memory.</p>
+<h4>&quot;load&quot;, dest, object, subscript</h4>
+<p>This is used to load values from records and arrays.</p>
+<h4>&quot;store&quot;, dest, object, subscript</h4>
+<p>This is used to store values into records and arrays.</p>
+<h4>&quot;get&quot;, dest, slot, level</h4>
+<p>This is used to get values from slots in outer frames.</p>
+<h4>&quot;put&quot;, value, slot, level</h4>
+<p>This is used to store values into slots in outer frames.</p>
+<h4>&quot;distrupt&quot;</h4>
+<h4>&quot;move&quot;, dest, right</h4>
+<h3>Make</h3>
+<h4>"array", dest, nr_elements</h4>
+<h4>"blob", dest, nr_bits</h4>
+<h4>"function", dest, address</h4>
+<h4>"pretext", dest, nr_characters</h4>
+<h4>"record", dest, nr_elements</h4></body></html>
