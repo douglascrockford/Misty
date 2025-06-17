@@ -101,9 +101,10 @@
 <h3>Function</h3>
 <h4>&quot;frame&quot;, dest, func, nr_args</h4>
 <p>Prepare to invoke the func object. If the nr_args is too large, disrupt. Allocate the new activation frame. Put the current frame pointer into it.</p>
-<h4>&quot;reframe&quot;, dest, func, nr_args</h4>
+<h4>&quot;goframe&quot;, dest, func, nr_args</h4>
 <p>Same as frame, except if that the current frame is reused if it is large enough.</p>
 <h4>&quot;invoke&quot;, frame</h4>
+<h4>&quot;goinvoke&quot;, frame</h4>
 <h4>&quot;apply&quot;, func, array</h4>
 <h4>&quot;return&quot;, value</h4>
 <h4>&quot;return_value&quot;, dest</h4>
