@@ -26,12 +26,16 @@
 <h2>Misty Machine</h2>
 <p>The Misty Machine is an abstract executor of Misty executables. It is used to define an intermediate representation that can be interpreted or fed to backend code generators for real machines. </p>
 <p>When functions are called, an activation object is created containing slots that hold the inputs, variables, and temporary values of the invocation.</p>
+<h2>Memory</h2>
+<p>Each actor is given two blocks of memory. One is immutable, the other is mutable.</p>
+<p>The immutable memory is where code objects are kept, as well as values that are stone and known at build time, such as numbers and texts. </p>
+<p>The mutable memory is where the dynamic state of the actor is kept, including activation frames and data.</p>
 <h2>Misty Assembly Language</h2>
 <p>The format of Misty machine code, or <dfn>MCODE</dfn>, is <a href="json.html">JSON</a>. </p>
 <p>The <code>instructions</code> field contains an array containing labels and instructions.</p>
-<p>Instructions describe a unit of work or flow. Instructions are encoded as array containing up to four elements. The first element is the opcode represented as a text. The remaining zero thru three elements are operands. The names and meanings of the operands depends on the opcode. The use of tokens as operands facilitates debugging and error reporting.</p>
-<p>Labels are the targets of branch instructions. Labels are encoded as simple text literals. Labels may be included solely for informing debugging.</p>
-<p>Slots are elements in a activation frame. They are designated by a small positive integer. Slots are the general registers of the misty machine. Slots hold the parameters, variables, and temporaries of a function invocation.</p>
+<p>Instructions describe a unit of work or flow. An instruction is encoded as array containing up to four elements. The first element is the opcode represented as a text. The remaining zero thru three elements are operands. The names and meanings of the operands depend on the opcode. </p>
+<p>Labels are the targets of branch instructions. Labels are encoded as simple text literals. Labels may be included  for informing debuggers.</p>
+<p>Slots are elements in an activation frame. They are designated by a small positive integer. Slots are the general registers of the misty machine. Slots hold the arguments, variables, and temporaries of a function invocation.</p>
 <p>Intrinsics are represented by a token record.</p>
 <pre>{
     &quot;name&quot;: "<var>program_name</var>",
@@ -40,13 +44,14 @@
 </pre>
 <p><em>The labels record associates labels with tokens for use by debuggers.</em></p>
 <pre>    &quot;labels&quot;: {
-        &quot;begin&quot;: <var>token</var>,
+        &quot;entry&quot;: <var>token</var>,
         &quot;beyond&quot;: <var>token</var>,
         ...
     },</pre>
 <p><em>The instructions array is a list of instructions and labels.</em></p>
 <pre>    instructions: [</pre>
-<p><em>A statement label:</em></p><pre>        "begin",</pre>
+<p><em>A statement label:</em></p>
+<pre>        "entry",</pre>
 <p><em>go to beyond:</em></p>
 <pre>        [&quot;jump&quot;, &quot;beyond&quot;],</pre>
 <p><em>slot 8: pi / 2</em></p>
@@ -90,7 +95,7 @@
 <h4>&quot;lower&quot;, dest, right</h4>
 <h4>&quot;upper&quot;, dest, right</h4>
 <h4>&quot;append&quot;, pretext, right</h4>
-<p>Append the right text to the pretext, growing it if necessary.</p>
+<p>Append the right text to the pretext, forwarding and growing its capacity if necessary.</p>
 <h3>Comparison</h3>
 <h4>"eq", dest, left, right</h4>
 <h4>"ne", dest, left, right</h4>
@@ -104,6 +109,7 @@
 <h4>&quot;goframe&quot;, dest, func, nr_args</h4>
 <p>Same as frame, except if that the current frame is reused if it is large enough.</p>
 <h4>&quot;invoke&quot;, frame</h4>
+<p>Store the next instruction address in the current frame. Make the new frame the current frame. Jump to the entry point.</p>
 <h4>&quot;goinvoke&quot;, frame</h4>
 <h4>&quot;apply&quot;, func, array</h4>
 <h4>&quot;return&quot;, value</h4>
@@ -147,9 +153,10 @@
 <h4>&quot;true&quot;, dest</h4>
 <h4>&quot;false&quot;, dest</h4>
 <h4>&quot;null&quot;, dest</h4>
+<h4>&quot;move&quot;, dest, right</h4>
 <h4>&quot;int&quot;, dest, small_int</h4>
 <h4>&quot;access&quot;, dest, literal</h4>
-<p>This is used to access values (numbers, texts, function codes) from the program's immutable memory. The literal is a number or text.</p>
+<p>This is used to access values (numbers, texts) from the program's immutable memory. The literal is a number or text.</p>
 <h4>&quot;load&quot;, dest, object, subscript</h4>
 <p>This is used to load values from records and arrays.</p>
 <h4>&quot;store&quot;, dest, object, subscript</h4>
@@ -158,11 +165,226 @@
 <p>This is used to get values from slots in outer frames.</p>
 <h4>&quot;put&quot;, value, slot, level</h4>
 <p>This is used to store values into slots in outer frames.</p>
-<h4>&quot;distrupt&quot;</h4>
-<h4>&quot;move&quot;, dest, right</h4>
+<h4>&quot;push&quot;, array, slot</h4>
+<h4>&quot;pop&quot;, dest, array</h4>
+<h4>&quot;disrupt&quot;</h4>
 <h3>Make</h3>
 <h4>"array", dest, nr_elements</h4>
 <h4>"blob", dest, nr_bits</h4>
 <h4>"function", dest, code_name_text</h4>
 <h4>"pretext", dest, nr_characters</h4>
-<h4>"record", dest, nr_elements</h4></body></html>
+<h4>"record", dest, nr_elements</h4>
+<h2 id="objects">Objects</h2>
+<p>An object is a data structure that sits at some address in the actor's memory. </p>
+<table style="clear: both; floar: none;"><tbody>
+    <caption>
+       Object Header
+    </caption>
+  <tr>
+  <td style="
+    background-color: inherit;
+    border: 0;
+    font-weight: lighter;
+    padding-left: 0;
+    padding-right: 3pt;
+    text-align: center;
+">63</td>
+  <td style="
+    background-color: inherit;
+    border: 0;
+    font-weight: lighter;
+    padding-left: 3pt;
+    padding-right: 3pt;
+    text-align: justify;
+    text-align-last: justify;
+">62 8</td>
+  <td style="
+    background-color: inherit;
+    border: 0;
+    font-weight: lighter;
+    padding-left: 3pt;
+    padding-right: 3pt;
+    text-align: center;
+">7</td>
+  <td style="
+    background-color: inherit;
+    border: 0;
+    font-weight: lighter;
+    padding-left: 3pt;
+    padding-right: 3pt;
+    text-align: center;
+">6</td>
+  <td style="
+    background-color: inherit;
+    border: 0;
+    font-weight: lighter;
+    padding-left: 3pt;
+    padding-right: 3pt;
+    text-align: justify;
+    text-align-last: justify;
+">5 3</td>
+  <td style="
+    background-color: inherit;
+    border: 0;
+    font-weight: lighter;
+    padding-left: 3pt;
+    padding-right: 0;
+    text-align: justify;
+    text-align-last: justify;
+">2 0</td>
+</tr>
+  <tr>
+    <td width=1% align="center" style="padding: 0;">f</td>
+    <td width=55% align="center">capacity</td>
+    <td width=1% align="center" style="padding: 0;">m</td>
+    <td width=1% align="center" style="padding: 0;">s</td>
+    <td width=3% align="center" style="padding: 0;"><code>000</code></td>
+    <td width=3% align="center" style="padding: 0;">type</td>
+  </tr></tbody>
+</table>
+<table>
+    <caption>
+        Object Type
+    </caption>
+    <tr>
+        <th scope="col">code</th>
+        <th scope="col">type</th>
+    </tr>
+    <tr>
+        <td align="center"><code>0</code></td>
+        <td><i>reserved</i></td>
+    </tr>
+    <tr>
+        <td align="center"><code>1</code></td>
+        <td>array</td>
+    </tr>
+    <tr>
+        <td align="center"><code>2</code></td>
+        <td>blob</td>
+    </tr>
+    <tr>
+        <td align="center"><code>3</code></td>
+        <td>text</td>
+    </tr>
+    <tr>
+        <td align="center"><code>4</code></td>
+        <td>record</td>
+    </tr>
+    <tr>
+        <td align="center"><code>5</code></td>
+        <td>function</td>
+    </tr>
+    <tr>
+        <td align="center"><code>6</code></td>
+        <td>frame</td>
+    </tr>
+    <tr>
+        <td align="center"><code>7</code></td>
+        <td>code</td>
+    </tr>
+</table>
+<p>Every object has a header word containing:</p>
+<ul>
+    <li>a 1 bit forward flag: f</li>
+    <p>The forward flag indicates that object (an array, blob,  pretext, or record) has grown beyond its capacity and is now residing at a new address. The remaining 63 bits contain the address of the enlarged object. Forward linkages are cleaned up by the memory reclaimer.</p>
+    <li>a 55 bit capacity</li>    
+    <p>The units of the capacity depend on the type.</p>
+    <li>a 1 bit memory reclamation flag: r</li>
+    <p>This is used by the memory reclaimer to note that this object has already been assigned a new address. </p>
+    <li>a 1 bit stone flag: s</li>
+    <p>The stone bit indicates that the object is immutable. </p>
+    <li>a 3 bit type</li>
+    <p>Every object has an object type. </p>
+</ul>
+<br style="clear: both">
+<h3>Array</h3>
+<ol start=0>
+    <li>Header (type 1)</li>
+    <li>Length</li>
+    <li>Element[0]</li>
+</ol>
+<p>The capacity is the number of elements that the array can hold. If more elements are needed, then the forward mechanism is used. During  stoning or memory reclamation, the capacity is set to the length.</p>
+<p>The length is the number of elements in use.</p>
+<p>The elements follow, from [0] to [capacity - 1]</p>
+<p>The number of words used by an array is capacity + 2.</p>
+<h3>Blob</h3>
+<ol start=0>
+    <li>Header (type 2)</li>
+    <li>Length</li>
+    <li>Bit[0] thru Bit[63]</li>
+</ol>
+<p>The capacity is the number of bits the blob can hold. If more bits are needed, then the forward mechanism is used. During  stoning or memory reclamation, the capacity is set to the length.</p>
+<p>The length is the number of elements in bits.</p>
+<p>The bits follow, from [0] to [capacity - 1], with the [0] bit in the most significant position of word 2, and [63] in the least significant position of word 2. The last word is zero filled, if necessary.</p>
+<p>The number of words used by a blob is (capacity + 63) // 64 + 2</p>
+<h3>Text</h3>
+<p>Text objects have two forms: mutable pretext, and immutable text, depending on the s flag. </p>
+<p>Pretext is not a feature of the Misty language. It is a low level feature to support optimization of text operations.
+</p>
+<ol start=0>
+    <li>Header (type 3)</li>
+    <li>Length (pretext) <i>or</i> Hash (text)</li>
+    <li>Character[0] and Character[1]</li>
+</ol>
+<p>The capacity of a pretext is the number of characters it can hold. If more characters are needed, then the forward mechanism is used. During  stoning and memory reclamation, the capacity is set to the length.</p>
+<p>The capacity of a text is its length, the number of characters it contains.</p>
+<p>The length of a pretext is the number of characters it contains. This will not be greater than the capacity.</p>
+<p>The hash of a text is used in organizing records. If the hash is zero, then the hash has not been computed yet. All texts in the immutable memory have hashes. Texts made by concat will not be given hashes until needed.</p>
+<p>A text object contains a sequence of UTF32 characters, packed two per word, the first character in the higher order half. If the number of characters (length) is even, then the least significant half of the last word is zero filled.</p>
+<p>The number of words used by a text is (capacity + 1) // 2 + 2</p>
+<h3>Record</h3>
+<p>A record is an array of fields represented as key/value pairs. Fields are located by hashes of texts, using open addressing with linear probing and lazy deletion. The load factor is less than 0.5. </p>
+<ol start=0>
+    <li>Header (type 4)</li>
+    <li>Length</li>
+    <li>Key[1]</li>
+    <li>Value[1]</li>
+</ol>
+<p>The capacity is the number of fields the record can hold. It is a  power of two minus one. It is at least twice the length.</p>
+<p>The length is the number of fields that the record currently contains.</p>
+<p>A field candidate  number is identified by <code>and</code>(key.hash, capacity). In case of hash collision, advance to the next field. If this goes past the end, continue with field 1. Field 0 is reserved.</p>
+<p>The number of words used by a record is (capacity + 1) * 2.</p>
+<h3>Function</h3>
+<ol start=0>
+    <li>Header (type 5)</li>
+    <li>Code</li>
+    <li>Outer</li>
+</ol>
+<p>A function object has a zero capacity and is always stone.</p>
+<p>Code is a pointer to the code object that the function executes.</p>
+<p>Outer is a pointer to the frame that created this function object.</p>
+<p>The number of words used by a function object is 3.</p>
+<h3>Frame</h3>
+<ol start=0>
+    <li>Header (type 6)</li>
+    <li>Function</li>
+    <li>Caller</li>
+    <li>Return address.</li>
+</ol>
+<p>The activation frame is created when a function is invoked to hold its linkages and state.</p>
+<p>The capacity is the number of slots, including the inputs, variables, temporaries, and the four words of overhead. A frame, unlike the other types, is never stone.</p>
+<p>The function is the address of the function object being called.</p>
+<p>The caller is the address of the frame that is invoking the function.</p>
+<p>The return address is the address of the instruction in the code that should be executed upon return.</p>
+<p>Next come the input arguments, if any.</p>
+<p>Then the variables that are closed over by inner functions.</p>
+<p>Then the variables that are not closed over, followed by the temporaries.</p>
+<p>When a function returns, the caller is set to zero. This is a signal to the memory reclaimer that the frame can be reduced.</p>
+<h3>Code</h3>
+<ol start=0>
+    <li>Header (type 7)</li>
+    <li>Arity</li>
+    <li>Size</li>
+    <li>Closure size</li>
+    <li>Entry point</li>
+    <li>Disruption point</li>
+</ol>
+<p>A code object exists in the actor's immutable memory. A code object  never exists in mutable memory.</p>
+<p>The capacity is zero.</p>
+<p>The arity is the maximum number of inputs.</p>
+<p>The size is the capacity of a frame that will execute this code.</p>
+<p>The closure size is a reduced capacity for returned frames that survive memory reclamation.</p>
+<p>The entry point is the address at which to begin execution.</p>
+<p>The disruption point is the address of the disruption clause.</p>
+<p>&nbsp;</p>
+</body></html>
