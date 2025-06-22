@@ -185,19 +185,11 @@
     background-color: inherit;
     border: 0;
     font-weight: lighter;
-    padding-left: 0;
-    padding-right: 3pt;
-    text-align: center;
-">63</td>
-  <td style="
-    background-color: inherit;
-    border: 0;
-    font-weight: lighter;
     padding-left: 3pt;
     padding-right: 3pt;
     text-align: justify;
     text-align-last: justify;
-">62 8</td>
+">63 8</td>
   <td style="
     background-color: inherit;
     border: 0;
@@ -228,14 +220,13 @@
     border: 0;
     font-weight: lighter;
     padding-left: 3pt;
-    padding-right: 0;
+    padding-right: 3pt;
     text-align: justify;
     text-align-last: justify;
 ">2 0</td>
 </tr>
   <tr>
-    <td width=1% align="center" style="padding: 0;">f</td>
-    <td width=55% align="center">capacity</td>
+    <td width=56% align="center">capacity</td>
     <td width=1% align="center" style="padding: 0;">r</td>
     <td width=1% align="center" style="padding: 0;">s</td>
     <td width=3% align="center" style="padding: 0;"><code>000</code></td>
@@ -252,7 +243,7 @@
     </tr>
     <tr>
         <td align="center"><code>0</code></td>
-        <td><i>reserved</i></td>
+        <td>forward</td>
     </tr>
     <tr>
         <td align="center"><code>1</code></td>
@@ -285,9 +276,7 @@
 </table>
 <p>Every object has a header word containing:</p>
 <ul>
-    <li>a 1 bit forward flag: f</li>
-    <p>The forward flag indicates that object (an array, blob,  pretext, or record) has grown beyond its capacity and is now residing at a new address. The remaining 63 bits contain the address of the enlarged object. Forward linkages are cleaned up by the memory reclaimer.</p>
-    <li>a 55 bit capacity</li>    
+<li>a 56 bit capacity</li>    
     <p>The units of the capacity depend on the type.</p>
     <li>a 1 bit memory reclamation flag: r</li>
     <p>This is used by the memory reclaimer to note that this object has already been assigned a new address. </p>
@@ -297,6 +286,8 @@
     <p>Every object has an object type. </p>
 </ul>
 <br style="clear: both">
+<h3>Forward</h3>
+<p>The forward type indicates that the object (an array, blob, pretext, or record) has grown beyond its capacity and is now residing at a new address. The remaining 56 bits contain the address of the enlarged object. Forward linkages are cleaned up by the memory reclaimer.</p>
 <h3>Array</h3>
 <ol start=0>
     <li>Header (type 1)</li>
