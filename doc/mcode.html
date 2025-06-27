@@ -321,7 +321,7 @@
 <p>The capacity of a text is its length, the number of characters it contains.</p>
 <p>The length of a pretext is the number of characters it contains. This will not be greater than the capacity.</p>
 <p>The hash of a text is used in organizing records. If the hash is zero, then the hash has not been computed yet. All texts in the immutable memory have hashes. Texts made by concat will not be given hashes until needed.</p>
-<p>A text object contains a sequence of UTF32 characters, packed two per word, the first character in the higher order half. If the number of characters (length) is even, then the least significant half of the last word is zero filled.</p>
+<p>A text object contains a sequence of UTF32 characters, packed two per word, the first character in the higher order half. If the number of characters (length) is odd, then the least significant half of the last word is zero filled.</p>
 <p>The number of words used by a text is (capacity + 1) // 2 + 2</p>
 <h3>Record</h3>
 <p>A record is an array of fields represented as key/value pairs. Fields are located by hashes of texts, using open addressing with linear probing and lazy deletion. The load factor is less than 0.5. </p>
