@@ -320,7 +320,7 @@
 <p>The capacity of a pretext is the number of characters it can hold. If more characters are needed, then the forward mechanism is used. During  stoning and memory reclamation, the capacity is set to the length.</p>
 <p>The capacity of a text is its length, the number of characters it contains.</p>
 <p>The length of a pretext is the number of characters it contains. This will not be greater than the capacity.</p>
-<p>The hash of a text is used in organizing records. If the hash is zero, then the hash has not been computed yet. All texts in the immutable memory have hashes. Texts made by concat will not be given hashes until needed.</p>
+<p>The hash of a text is used in organizing records. If the hash is zero, then the hash has not been computed yet. All texts in the immutable memory have hashes. Texts made by concat will not be given hashes until needed. The hash function is <code><a href="https://www.crockford.com/fash.html">fash</a></code>.</p>
 <p>A text object contains a sequence of UTF32 characters, packed two per word, the first character in the higher order half. If the number of characters (length) is odd, then the least significant half of the last word is zero filled.</p>
 <p>The number of words used by a text is (capacity + 1) // 2 + 2</p>
 <h3>Record</h3>
