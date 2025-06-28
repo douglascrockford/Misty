@@ -125,7 +125,7 @@
 <h4>&quot;wary_true&quot;, slot, label</h4>
 <p>If the value in the slot is true, jump to the label. If the value is false, continue with the next instruction. Otherwise disrupt because of a type error.</p>
 <h4>&quot;wary_false&quot;: slot, label</h4>
-<p>If the value in the slot is true, jump to the label. If the value is false, continue with the next instruction. Otherwise disrupt because of a type error.</p>
+<p>If the value in the slot is false, jump to the label. If the value is true, continue with the next instruction. Otherwise disrupt because of a type error.</p>
 <h3>Sensory</h3>
 <p>Does the right slot contain a value of the indicated type?</p>
 <h4>&quot;actor?&quot;, dest, right</h4>
@@ -276,7 +276,7 @@
 </table>
 <p>Every object has a header word containing:</p>
 <ul>
-<li>a 56 bit capacity</li>    
+<li>a 56 bit capacity</li>
     <p>The units of the capacity depend on the type.</p>
     <li>a 1 bit memory reclamation flag: r</li>
     <p>This is used by the memory reclaimer to note that this object has already been assigned a new address. </p>
