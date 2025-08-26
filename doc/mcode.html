@@ -33,7 +33,7 @@
 <h2>Misty Assembly Language</h2>
 <p>The format of Misty machine code, or <dfn>MCODE</dfn>, is <a href="json.html">JSON</a>. </p>
 <p>The <code>instructions</code> field contains an array containing labels and instructions.</p>
-<p>Instructions describe a unit of work or flow. An instruction is encoded as array containing up to four elements. The first element is the opcode represented as a text. The remaining zero thru three elements are operands. The names and meanings of the operands depend on the opcode. </p>
+<p>Instructions describe a unit of work or flow. An instruction is encoded as an array containing up to four elements. The first element is the opcode represented as a text. The remaining zero thru three elements are operands. The names and meanings of the operands depend on the opcode. </p>
 <p>Labels are the targets of branch instructions. Labels are encoded as simple text literals. Labels may be included  for informing debuggers.</p>
 <p>Slots are elements in an activation frame. They are designated by a small positive integer. Slots are the general registers of the misty machine. Slots hold the arguments, variables, and temporaries of a function invocation.</p>
 <p>Intrinsics are represented by a token record.</p>
@@ -54,10 +54,10 @@
 <pre>        "entry",</pre>
 <p><em>go to beyond:</em></p>
 <pre>        [&quot;jump&quot;, &quot;beyond&quot;],</pre>
-<p><em>slot 8: pi / 2</em></p>
+<p><em>assign slot 8: pi / 2</em></p>
 <pre>
         [&quot;access&quot;, 13, {&quot;kind&quot;: &quot;name&quot;, &quot;name&quot;: &quot;pi&quot;, &quot;make&quot;: &quot;intrinsic&quot;, &#x2E33;&#x2E33;&#x2E33;}],
-        [&quot;access&quot;, 14, 2],
+        [&quot;int&quot;, 14, 2],
         [&quot;divide&quot;, 8, 13, 14],</pre>
 <pre>        &#x2E33;&#x2E33;&#x2E33;
         &quot;beyond&quot;
@@ -107,7 +107,7 @@
 <h4>&quot;frame&quot;, dest, func, nr_args</h4>
 <p>Prepare to invoke the func object. If the nr_args is too large, disrupt. Allocate the new activation frame. Put the current frame pointer into it.</p>
 <h4>&quot;goframe&quot;, dest, func, nr_args</h4>
-<p>Same as frame, except if that the current frame is reused if it is large enough.</p>
+<p>Same as frame, except  that the current frame is reused if it is large enough.</p>
 <h4>&quot;invoke&quot;, frame</h4>
 <p>Store the next instruction address in the current frame. Make the new frame the current frame. Jump to the entry point.</p>
 <h4>&quot;goinvoke&quot;, frame</h4>
@@ -166,17 +166,20 @@
 <h4>&quot;put&quot;, value, slot, level</h4>
 <p>This is used to store values into slots in outer frames.</p>
 <h4>&quot;push&quot;, array, slot</h4>
+<p>Append to a mutable array.</p>
 <h4>&quot;pop&quot;, dest, array</h4>
+<p>Remove the last element of a mutable array, putting the element into dest.</p>
 <h4>&quot;disrupt&quot;</h4>
 <h3>Make</h3>
 <h4>"array", dest, nr_elements</h4>
 <h4>"blob", dest, nr_bits</h4>
 <h4>"function", dest, code_name_text</h4>
 <h4>"pretext", dest, nr_characters</h4>
+<p>A pretext must be converted to text by <code>stone</code> before it can leave the function scope.</p>
 <h4>"record", dest, nr_elements</h4>
 <h2 id="objects">Objects</h2>
 <p>An object is a data structure that sits at some address in the actor's memory. </p>
-<table style="clear: both; floar: none;"><tbody>
+<table class=center><tbody>
     <caption>
        Object Header
     </caption>
@@ -204,17 +207,17 @@
     font-weight: lighter;
     padding-left: 3pt;
     padding-right: 3pt;
-    text-align: center;
-">6</td>
+    text-align: justify;
+    text-align-last: justify;
+">6 4</td>
   <td style="
     background-color: inherit;
     border: 0;
     font-weight: lighter;
     padding-left: 3pt;
     padding-right: 3pt;
-    text-align: justify;
-    text-align-last: justify;
-">5 3</td>
+    text-align: center;
+">3</td>
   <td style="
     background-color: inherit;
     border: 0;
@@ -228,8 +231,8 @@
   <tr>
     <td width=56% align="center">capacity</td>
     <td width=1% align="center" style="padding: 0;">r</td>
-    <td width=1% align="center" style="padding: 0;">s</td>
     <td width=3% align="center" style="padding: 0;"><code>000</code></td>
+    <td width=1% align="center" style="padding: 0;">s</td>
     <td width=3% align="center" style="padding: 0;">type</td>
   </tr></tbody>
 </table>
@@ -243,27 +246,27 @@
     </tr>
     <tr>
         <td align="center"><code>0</code></td>
-        <td>forward</td>
-    </tr>
-    <tr>
-        <td align="center"><code>1</code></td>
         <td>array</td>
     </tr>
     <tr>
-        <td align="center"><code>2</code></td>
+        <td align="center"><code>1</code></td>
         <td>blob</td>
     </tr>
     <tr>
-        <td align="center"><code>3</code></td>
+        <td align="center"><code>2</code></td>
         <td>text</td>
     </tr>
     <tr>
-        <td align="center"><code>4</code></td>
+        <td align="center"><code>3</code></td>
         <td>record</td>
     </tr>
     <tr>
-        <td align="center"><code>5</code></td>
+        <td align="center"><code>4</code></td>
         <td>function</td>
+    </tr>
+    <tr>
+        <td align="center"><code>5</code></td>
+        <td>code</td>
     </tr>
     <tr>
         <td align="center"><code>6</code></td>
@@ -271,7 +274,7 @@
     </tr>
     <tr>
         <td align="center"><code>7</code></td>
-        <td>code</td>
+        <td>forward</td>
     </tr>
 </table>
 <p>Every object has a header word containing:</p>
@@ -290,7 +293,7 @@
 <p>The forward type indicates that the object (an array, blob, pretext, or record) has grown beyond its capacity and is now residing at a new address. The remaining 56 bits contain the address of the enlarged object. Forward linkages are cleaned up by the memory reclaimer.</p>
 <h3>Array</h3>
 <ol start=0>
-    <li>Header (type 1)</li>
+    <li>Header (type 0)</li>
     <li>Length</li>
     <li>Element[0]</li>
 </ol>
@@ -300,7 +303,7 @@
 <p>The number of words used by an array is capacity + 2.</p>
 <h3>Blob</h3>
 <ol start=0>
-    <li>Header (type 2)</li>
+    <li>Header (type 1)</li>
     <li>Length</li>
     <li>Bit[0] thru Bit[63]</li>
 </ol>
@@ -313,7 +316,7 @@
 <p>Pretext is not a feature of the Misty language. It is a low level feature to support optimization of text operations.
 </p>
 <ol start=0>
-    <li>Header (type 3)</li>
+    <li>Header (type 2)</li>
     <li>Length (pretext) <i>or</i> Hash (text)</li>
     <li>Character[0] and Character[1]</li>
 </ol>
@@ -326,7 +329,7 @@
 <h3>Record</h3>
 <p>A record is an array of fields represented as key/value pairs. Fields are located by hashes of texts, using open addressing with linear probing and lazy deletion. The load factor is less than 0.5. </p>
 <ol start=0>
-    <li>Header (type 4)</li>
+    <li>Header (type 3)</li>
     <li>Length</li>
     <li>Key[1]</li>
     <li>Value[1]</li>
@@ -337,7 +340,7 @@
 <p>The number of words used by a record is (capacity + 1) * 2.</p>
 <h3>Function</h3>
 <ol start=0>
-    <li>Header (type 5)</li>
+    <li>Header (type 4)</li>
     <li>Code</li>
     <li>Outer</li>
 </ol>
@@ -347,7 +350,7 @@
 <p>The number of words used by a function object is 3.</p>
 <h3>Frame</h3>
 <ol start=0>
-    <li>Header (type 6)</li>
+    <li>Header (type 5)</li>
     <li>Function</li>
     <li>Caller</li>
     <li>Return address.</li>
@@ -363,7 +366,7 @@
 <p>When a function returns, the caller is set to zero. This is a signal to the memory reclaimer that the frame can be reduced.</p>
 <h3>Code</h3>
 <ol start=0>
-    <li>Header (type 7)</li>
+    <li>Header (type 6)</li>
     <li>Arity</li>
     <li>Size</li>
     <li>Closure size</li>
@@ -371,9 +374,9 @@
     <li>Disruption point</li>
 </ol>
 <p>A code object exists in the actor's immutable memory. A code object  never exists in mutable memory.</p>
-<p>The capacity is zero.</p>
+<p>A code object has a zero capacity and is always stone.</p>
 <p>The arity is the maximum number of inputs.</p>
-<p>The size is the capacity of a frame that will execute this code.</p>
+<p>The size is the capacity of an activation frame that will execute this code.</p>
 <p>The closure size is a reduced capacity for returned frames that survive memory reclamation.</p>
 <p>The entry point is the address at which to begin execution.</p>
 <p>The disruption point is the address of the disruption clause.</p>
