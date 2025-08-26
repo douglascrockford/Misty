@@ -15,7 +15,7 @@ textarea {
 }
 
 fieldset, legend {
-    border: 1em solid rosybrown;
+    border: 0.125em solid rosybrown;
 }
 
 fieldset {
@@ -36,7 +36,12 @@ dfn, h1, h2, h3, caption, legend, .rule {
     font-weight: 500;
 }
 
-body, p, .rule i, li, h5  {
+h1, h2, h3, h4, h5, h6 {
+    break-after: avoid;
+    clear: both;
+}
+
+body, p, .rule i, li, h5, h6  {
     font-family: Georgia, Garamond, serif;
     font-weight: 400;
     font-style: normal;
@@ -53,7 +58,7 @@ body {
     padding-top: 1em;
 }
 
-p, li {
+p, li, h6 {
     margin-bottom: 0.5em;
     margin-top: 0.5em;
 }
@@ -131,7 +136,7 @@ h5::before {
     content: "⏵ ";
 }
 
-p {
+p, h6 {
     margin-left: 1em;
 }
 
@@ -172,6 +177,7 @@ hr {
 }
 
 pre {
+    break-inside: avoid;
     margin-left: 3em;
 }
 
@@ -189,8 +195,10 @@ caption {
 }
 
 table {
+    break-inside: avoid;
     border: 0;
     border-collapse: collapse;
+    clear: both;
     float: right;
     margin: 1em 0 1em 1em;
 }
@@ -216,6 +224,12 @@ table.bits {
     float: none;
 }
 
+table.center {
+    float: none;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 i, var {
     font-family: Georgia, serif;
     font-style: italic;
@@ -223,10 +237,10 @@ i, var {
 }
 
 .rule {
+    margin-left: 3em;
     margin-top: -1em;
     margin-bottom: 0.5em;
-    margin-left: 3em;
-    page-break-inside: avoid;
+    break-inside: avoid;
     white-space: pre;
 }
 

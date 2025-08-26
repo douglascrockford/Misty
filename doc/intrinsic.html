@@ -80,7 +80,7 @@ return null
 <h4>number(<var>text</var>, <var>radix</var>)</h4>
 <p>Convert a <var>text</var> to a number. The optional <var>radix</var> is an integer from <code>2</code> thru <code>37</code>. (<a href="https://www.crockford.com/base32.html">See Base 32.</a>) The default <var>radix</var> is <code>10</code>.</p>
 <h4><var></var><code>number</code>(<var>text</var>, <var>format</var>)</h4>
-<table>
+<table class=center>
     <caption>number format</caption>
     <tr>
         <th><var>format</var></th>
@@ -151,7 +151,7 @@ return null
 <p> If it is unable to (possibly because of a formatting error), it returns <code>null</code>. The  <var>format</var> character determines
     how the text is interpreted. If the format is not one of those listed,
     then <code>null</code> is returned.</p>
-<p style="clear: both;">Examples:</p>
+<h6>Examples:</h6>
 <pre>assign result: number(&quot;123,456,789.10&quot;, &quot;d&quot;)    # result is 123456789.1
 assign result: number(&quot;123.456.789,10&quot;, &quot;v&quot;)    # result is 123456789.1
 assign result: number(&quot;123.456.789,10&quot;, &quot;d&quot;)    # result is null
@@ -234,7 +234,7 @@ format_places
     real styles) or the minimum number of digits to display with zero-fill
     (in integer styles). If places is 0, then as many digits as necessary
     are displayed. Places can be zero or one or two digits.</p>
-<table style="clear: both;">
+<table class=center style="clear: both;">
     <tbody>
         <tr>
             <th colspan="2">real style</th>
@@ -359,7 +359,7 @@ format_places
     be <code>3</code>. If <var>separation</var> is zero, then there is no
     separation. The default is determined by the <var>format</var>, as seen
     in the table.</p>
-<p>Examples:</p>
+<h6>Examples:</h6>
 <pre>
 def data: 0123456789.1
 assign result: text(data)            # result is "123456789.1"
@@ -527,18 +527,18 @@ number?(1)           # true
 <h4><span id="pattern?">pattern?</span>(<var>value</var>)</h4>
 <p>Is the <var>value</var> a pattern? If the <var>value</var> is a pattern, then the result is <code>true</code>.
     Otherwise, the result is <code>false</code>.</p>
-<pre>pattern?(pattern (1- {letter digit &quot;_-%&quot;}))    # true</pre>
+<pre>pattern?(pattern (1- {letter digit &quot;_-%&quot;}))   # true</pre>
 <h4><span id="record?">record?</span>(<var>value</var>)</h4>
 <p>Is the <var>value</var> a record? If the <var>value</var> is a record, then the result is <code>true</code>.
     Otherwise, the result is <code>false</code>.</p>
-<pre>record?(0)                              # false
-record?({})                             # true
-record?([])                             # false
-record?(&quot;record&quot;)                       # false
-record?(&quot;{}&quot;)                           # false
-record?(function () ({}))               # false
-record?(&para; (1- {letter digit &quot;_-%&quot;}))    # false
-record?(@)                              # true</pre>
+<pre>record?(0)                                    # false
+record?({})                                   # true
+record?([])                                   # false
+record?(&quot;record&quot;)                             # false
+record?(&quot;{}&quot;)                                 # false
+record?(function () ({}))                     # false
+record?(pattern (1- {letter digit &quot;_-%&quot;}))    # false
+record?(@)                                    # true</pre>
 <h4 id="stone?">stone?(<var>value</var>)</h4>
 <p>Is the value <a href="#stone">stone</a>?</p>
 <pre>stone?("false")     # true
@@ -591,7 +591,7 @@ whitespace?(&quot;&quot;)         # false</pre>
 <h4 id="ceiling">ceiling(<var>number</var>, <var>place</var>)</h4>
 <p>If <var>place</var> is <code>0</code> or <code>null</code>, the <var>number</var> is rounded up to the smallest integer that is greater than or equal to the
     <var>number</var>. If <var>place</var> is a small positive integer, then the <var>number</var> is rounded up to that  decimal place.</p>
-<p>Examples:</p>
+<h6>Examples:</h6>
 <pre>assign result: ceiling(12.3775)         # result is 13
 assign result: ceiling(12.3775, 0)      # result is 13
 assign result: ceiling(12.3775, 1)      # result is 20
@@ -612,7 +612,7 @@ assign result: ceiling(-12.3775)        # result is -12</pre>
     is copied into a new array. If the <var>function</var>'s return value is <code>false</code>, then the element is not copied into the new array. If the return value is not a logical, then the filter returns <code>null</code>.</p>
 <p>It returns a new array. The <code>length</code> of the new array is between
     <code>0</code> thru  <code>length(<var>array</var>)</code>. It returns <code>null</code> if the <var>function</var> input is not a function.</p>
-<p>Example:</p>
+<h6>Example:</h6>
 <pre>def data: [0, 1.25, 2, 3.5, 4, 5.75]
 def integers: filter(data, integer?)    # integers is [0, 2, 4]</pre>
 <h4 id="find">find(<var>array</var>, <var>function</var>, <var>reverse</var>, <var>from</var>)</h4>
@@ -627,7 +627,7 @@ def integers: filter(data, integer?)    # integers is [0, 2, 4]</pre>
 <p>If <var>place</var> is <code>0</code> or <code>null</code>, the <var>number</var> is rounded down to the greatest integer that is less than or equal to
     the <var>number</var>. If <var>place</var> is a small positive integer, then the <var>number</var> is rounded down to that many decimal places. For positive
     numbers, this is like discarding decimal places.</p>
-<p>Examples:</p>
+<h6>Examples:</h6>
 <pre>assign result: floor(12.3775)         # result is 12
 assign result: floor(12.3775, -2)     # result is 12.37
 assign result: floor(-12.3775, 0)     # result is -13
@@ -674,7 +674,7 @@ text<code>])</code> produces a text, then the substituation is
 text<code>]</code> is a number, then the right text is used as a format
     input in calling <var>collection</var><code>[</code>left text<code>].text(</code>right
 text<code>)</code>. If it returns a text, then the substitution is made.</p>
-<p>Example:</p>
+<h6>Example:</h6>
 <pre>var result: format(&quot;{0} in {1}!&quot;, [&quot;Malmborg&quot;, &quot;Plano&quot;])
     # result is &quot;Malmborg in Plano!&quot;</pre>
 <h4 id="fraction">fraction(<var>number</var>)</h4>
@@ -730,7 +730,7 @@ text<code>)</code>. If it returns a text, then the substitution is made.</p>
 <h4 id="lower">lower(<var>text</var>)</h4>
 <p>The <code>lower</code> function returns a text in which all uppercase
     characters are converted to lowercase.</p>
-<p>Example:</p>
+<h6>Example:</h6>
 <pre>assign result: lower(&quot;Carl Hollywood&quot;)    # result is &quot;carl hollywood&quot;</pre>
 <h4 id="max">max(<var>number</var>, <var>number</var>)</h4>
 <p>Maximum. The result is the larger of the two numbers. If either input value is
@@ -788,7 +788,7 @@ then the result is <code>null</code>. <var><var>dividend</var></var> and <var>di
     <li>And so on.</li>
 </ul>
 <p>If <var>reverse</var> is <code>true</code>, then the work begins at the end of the array and works backward.</p>
-<p>Example:</p>
+<h6>Example:</h6>
 <pre>def data: [1, 2, 3, 4, 5, 6, 7, 8, 9]
 def total: reduce(data, '+)      # total is 45
 def product: reduce(data, '*)    # product is 362880</pre>
@@ -804,13 +804,13 @@ def product: reduce(data, '*)    # product is 362880</pre>
 <p>The <code>reverse</code> method makes a new array or blob with the elements or bits in the
     opposite order.</p>
 <p>It returns a new, reversed array or blob.</p>
-<p>Example:</p>
+<h6>Example:</h6>
 <pre>def data: [&quot;I&quot;, &quot;am&quot;, &quot;Sam&quot;]
 def result: reverse(data)    # the result is [&quot;Sam&quot;, &quot;am&quot;, &quot;I&quot;]</pre>
 <h4 id="round">round(<var>number</var>, <var>place</var>)</h4>
 <p>If <var>place</var> is <code>0</code> or <code>null</code>, the <var>number</var> is rounded to the nearest integer. If <var>place</var> is a small integer,
     then the <var>number</var> is rounded to that many decimal places.</p>
-<p>Examples:</p>
+<h6>Examples:</h6>
 <pre>
 round(12.3775)         # 12
 round(12.3775, -2)     # 12.38
@@ -832,7 +832,7 @@ round(-12.3775, -2)    # -12.38</pre>
     of key or any error in the key calculation will cause the sort to fail, returning <code>null</code>. The sort is ascending. The sort is stable, so the relative order of equal
     keys is preserved.</p>
 <p>The optional <var>select</var> input determines how the sort key for each element is selected.</p>
-<table cellpadding="2">
+<table class=center cellpadding="2">
     <tr>
         <th> <var>select</var> type </th>
         <th valign="middle" nowrap>Sort key for <var>array</var><code>[</code><var>index</var><code>]</code></th>
@@ -863,7 +863,7 @@ round(-12.3775, -2)    # -12.38</pre>
     </tr>
 </table>
 <p style="clear: both;">It returns a new, sorted array.</p>
-<p>Examples:</p>
+<h6>Examples:</h6>
 <pre>def foods: [&quot;oats&quot;, &quot;peas&quot;, &quot;beans&quot;, &quot;barley&quot;]
 def result: sort(foods)    # result is [&quot;barley&quot;, &quot;beans&quot;, &quot;oats&quot;, &quot;peas&quot;]
 
@@ -906,7 +906,7 @@ assign stooges: sort(stooges, [50, 60, 20, 40, 10, 30])
     If the <var>number</var> is negative, the result is the same as <var></var><code>ceiling(</code><var>place</var><code>)</code>.</p>
 <p>If <var>place</var> is a small integer, then the <var>number</var> is rounded
     down to that many decimal places. This is like discarding decimal places.</p>
-<p>Examples:</p>
+<h6>Examples:</h6>
 <pre>assign result: trunc(12.3775, 0)     # result is 12
 assign result: trunc(12.3775, 2)     # result is 12.37
 assign result: trunc(-12.3775)       # result is -12
@@ -918,6 +918,6 @@ assign result: trunc(-12.3775, 2)    # result is -12.37</pre>
 <h4 id="upper">upper(<var>text</var>)</h4>
 <p>The <code>upper</code> function returns a text in which all lowercase characters
     are converted to uppercase.</p>
-<p>Example:</p>
+<h6>Example:</h6>
 <pre>assign result: upper(&quot;Carl Hollywood&quot;)    # result is &quot;CARL HOLLYWOOD&quot;</pre>
 </body></html>

@@ -67,7 +67,7 @@ open_elements
   number of expressions. The length of an array is fixed at its creation. In closed form, the expressions are separated by commas
   and spaces. In open form, the expressions are separated by end of line and
 indentation.</p>
-<p>Example:</p>
+<h6>Example:</h6>
 <pre>var stooges: [&quot;Curly&quot;, &quot;Larry&quot;, &quot;Moe&quot;]
 length(stooges)    # 3
 var bears: [
@@ -97,7 +97,7 @@ length(empty)      # 0
 <blockquote>
   <p><var>array</var><code>[</code><var>ordinal<sub>0</sub></var><code>][</code><var>ordinal<sub>1</sub></var><code>][</code><var>ordinal<sub>2</sub></var><code>]</code></p>
 </blockquote>
-<p>Example:</p>
+<h6>Example:</h6>
 <pre>
 assign my_stooge: stooges[0]    # my_stooge is &quot;Curly&quot;
 assign stooges[0]: &quot;Shemp&quot;      # stooges is [&quot;Shemp&quot;, &quot;Larry&quot;, &quot;Moe&quot;]
@@ -293,7 +293,7 @@ def object: {
 <p>The dot notation is usually the most convenient notation for accessing the
     fields of a record. It takes a record, a <code>.</code><small>period</small>, and an identifier. The dot notation is only allowed when the key is a text that conforms to the rules of a valid identifier. A key <code>&quot;a&quot;</code> (lower case) is distinct from
     a key <code>&quot;A&quot;</code> (upper case).</p>
-<p>Example:</p>
+<h6>Example:</h6>
 <pre>var stooge: {first: &quot;Curly&quot;, last: &quot;Howard&quot;}
 var first_name: stooge.first          # first_name is &quot;Curly&quot;
 assign first_name: null.first         # first_name is null
@@ -305,7 +305,7 @@ assign last_name: new_stooge.last     # last_name is &quot;Howard&quot;</pre>
     field names.</p>
 <p>The subscript expression is wrapped
     in <code>[</code><small>left bracket</small> and <code>]</code><small>right bracket</small>.</p>
-<p>Example:</p>
+<h6>Example:</h6>
 <pre>def stooge: {first: &quot;Curly&quot;, last: &quot;Howard&quot;}
 assign first_name: stooge[&quot;first&quot;]           # first_name is &quot;Curly&quot;
 assign stooge.first: "Jerome"                # {first: &quot;Curly&quot;, last: &quot;Howard&quot;}
@@ -421,7 +421,7 @@ more_hex
 <p>The table shows all of the legal escape sequences.
     If <code>\</code><small>reverse solidus</small> does not form an escape
     sequence, then there is a syntax error.</p>
-<p>Examples:</p>
+<h6>Examples:</h6>
 <pre>&quot;This is a text.&quot;
 
 &quot;So is this.&quot;

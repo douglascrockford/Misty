@@ -111,7 +111,7 @@ def_value
 <pre>def double: function double (number) (number + number)
 def double(number) (number + number)</pre>
 <p>Variables must be defined before they are used. The <dfn>name</dfn> may not be used on the right side of the <code>:</code><small>colon</small>.</p>
-<p>Example:</p>
+<h6>Example:</h6>
 <pre>def pi: 3.1415926535897932
 </pre>
 <h3 id="disrupt">The <code>disrupt</code> statement</h3>
@@ -140,7 +140,7 @@ do_label
 Loop labels are in their own name space. A function may contain two or more loops with the same label as long
 as they are not nested in each other.
 </p>
-<p>Example:</p>
+<h6>Example:</h6>
 <pre>
 do
     assign factor: factor * second
@@ -180,7 +180,7 @@ else_consequence
     space then_clause
     indent statements outdent
 </p>
-<p>Example:</p>
+<h6>Example:</h6>
 <pre>if first_name = &quot;Curly&quot; \/ first_name = &quot;Moe&quot; \/ first_name = &quot;Shemp&quot;
     assign last_name: &quot;Howard&quot;
 else if first_name = &quot;Larry&quot;
@@ -189,7 +189,7 @@ else
     assign last_name: &quot;(unknown)&quot;
 fi</pre>
 <p>The <code>if</code> statement can be nested.</p>
-<p>Example:</p>
+<h6>Example:</h6>
 <pre>if fee
     if fie
         assign ok: fee
@@ -199,7 +199,7 @@ else
 fi</pre>
 <p>The <code></code><code>else if</code>
   form makes it possible to have alternatives without deep indentation.</p>
-<p>Example:</p>
+<h6>Example:</h6>
 <pre>if character(list[at].op) = &quot;j&quot;
     assign list[at].yz: list[at].yz - 1
 else if list[at].op = &quot;opx&quot;
@@ -216,16 +216,19 @@ log_statement
 </p>
 <p>The <code>log</code> statement may send an expression to the named log. It is used to record information about the execution of the program for later analysis.</p>
 <p>If logging to the named log  has not been enabled, then the <code>log</code> statement does nothing. <a href="system.html#policy">Policies</a> can be configured to only enable certain logs. A policy may block the execution of programs that  attempt to use restricted logs.</p>
-<p>The <dfn>name</dfn> of a log can be any name. For example:</p>
+<h6>The <dfn>name</dfn> of a log can be any name. For example:</h6>
 <blockquote>
-    <code>abort alert compliance console crash debug development disaster emergency error
-    event failure fatal feature fraud hygiene info kyc maintenance memory mishap
-    normal page probe recover range risk security serious spam test time trace trivial type usage
-    verbose violation warning world</code>
+    <code>abort alert authorization breech compliance console crash data debug
+        demo development disaster emergency epic error event example experimental
+        failure fatal feature format fraud hygiene inconsistent info kyc local
+        maintenance memory mishap normal offline page panic permission policy
+        practice privacy probe protocol prototype recover range risk security
+        serious spam storage store suspicious syntax test time trace training
+        trivial type usage verbose violation warning world</code>
 </blockquote>
 <p>It is usually good to <code>log</code> before <code>disrupt</code>. Logging does not change the behavior of a program.</p>
 <p>Logs can be ephemeral or durable. Logs can be local or remote. See <a href="programs.html#logging">logging</a>.</p>
-<p>Example:</p>
+<h6>Example:</h6>
 <pre>log debug: &quot;index&quot; &amp;&amp; index</pre>
 <h3 id="return">The <code>return</code> statement</h3>
 <p class="rule">
@@ -242,7 +245,7 @@ return_value
   then the tail call optimization might be performed.</p>
 <p>If a return value is not provided, then <code>null</code> is assumed. A function may  return <code>null</code> implicitly by falling
     thru the bottom.</p>
-<p>Example:</p>
+<h6>Example:</h6>
 <pre>def double(number) {
     return number * 2
 }
@@ -265,7 +268,7 @@ callback
 The left <dfn>expression</dfn> must resolve to an actor address object or a message object that is expecting a reply because it was sent with a callback. The right <dfn>expression</dfn> is a record containing the outgoing message. The outgoing message record must not  contain functions or patterns or cyclic structures.</p>
 <p>If a <dfn>callback</dfn> function is included, then the <dfn>callback</dfn> function will receive the reply, not the receiver function.</p>
 <p>See <a href="programs.html">programs</a>.</p>
-<p>Example:</p>
+<h6>Example:</h6>
 <pre>send server: message</pre>
 <h3 id="use">The <code>use</code> statement</h3>
 <p class="rule">
@@ -286,7 +289,7 @@ locator
 <p>The modules are stored in the program shop, which contains the standard modules that are located with the <dfn>name</dfn> form, and the extra modules that are located with the <dfn>text_literal</dfn> form. In the <dfn>text_literal</dfn> form, it is recommended that the text contain a prefix to indicate the source or usage of the module. Guest code (programs from third parties that are not fully trusted) may be restricted from use of the <code>use</code> statement, or may have restrictions on which modules they can employ.</p>
 <p id="power">A <a href="system.html#policy">system</a> may provide <strong>power modules</strong> that act as interfaces to powerful affordances such as communication devices, data storage devices, input devices (like keyboards, camera, and microphones),  output devices (like printers, displays, and speakers), and operating system services. Typically, access to power modules is limited to modules that will attenuate the power, presenting limited capabilities to other modules and programs.</p>
 <p> The <code>use</code> statement can not appear in a function or an <code>if</code> or <code>do</code>. The <code>use</code> statement can only appear in the outermost level of a <code>program</code> or <code>module</code>.</p>
-<p>Example:</p>
+<h6>Example:</h6>
 <pre>use lang: language_library(&quot;en&quot;)</pre>
 <h3 id="var">The <code>var</code> statement</h3>
 <p class="rule">
@@ -296,7 +299,7 @@ locator
 <p>The <code>var</code> statement creates a variable in the current function scope.
 The value of a variable can be replaced by <a href="#assign">the <code>assign</code> statement</a>. The <code>var</code> statement can not appear in an <code>if</code> or <code>do</code>. The <dfn>name</dfn> is the name of a new variable in this scope. The expression on the right side of the <code>:</code><small>colon</small> gives the initial value of the variable.  The <dfn>name</dfn> may not be  used on the right side of the <code>:</code><small>colon</small>.</p>
 <p>Variables must be declared before they are used or assigned values. Note that <code>:</code> <dfn>expression</dfn> is not optional.</p>
-<p>Examples:</p>
+<h6>Examples:</h6>
 <pre>var first_name: &quot;&quot;
 var last_name: &quot;&quot;
 var node_nr: 0</pre>

@@ -175,7 +175,7 @@ disruption
   If there is no caller, then the actor halts.</p>
 <p>A <code>disruption</code> clause may not contain an inner function, but it may call another function that has an inner function.
 </p>
-<p>Example:</p>
+<h6>Example:</h6>
 <pre>disruption
     return plan_R()
 </pre>
@@ -194,7 +194,7 @@ disruption
 <p>The <var>function</var> will be called with the <var>name</var> of the method and an array
   of input values. The result that is returned by the <var>function</var>
   will be given to the caller. </p>
-<p>Example:</p>
+<h6>Example:</h6>
 <pre>def my_record: {
     a(value) (
         "a-" & value
@@ -243,7 +243,7 @@ function_operator
 </p>
 <p>The <a href="operators.html">operators</a> can be used as functions by prefixing the operators with <code>'</code><small>apstrophe</small>. These operator functions, or functinos, can be used like any other functions. They can be passed as input values or stored in records and arrays.</p>
 <p>So <code>'+</code> is the binary add function that can be passed to <a href="intrinsic.html#reduce">the <code>reduce</code> function</a> to make sums. </p>
-<p>Examples: </p>
+<h6>Examples:</h6>
 <pre>
 '/\(3, 4)   # null  <small>and</small>
 '\/(3, 4)   # null  <small>or</small>
@@ -270,7 +270,7 @@ function_operator
     The result is <code>true</code> if the absolute value of the difference between the
     two numbers is less than or equal to the <var>tolerance</var>.</p>
 <p>If the input values are texts, and if the <var>tolerance</var> is <code>true</code>, then the comparison is case-insensitive.</p>
-<p>Examples:</p>
+<h6>Examples:</h6>
 <pre>def first: 12.3775
 def second: 12.38
 assign exactly: '=(first, second)         # exactly is false

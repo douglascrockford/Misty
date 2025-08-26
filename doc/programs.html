@@ -57,7 +57,7 @@ So if the <code>example</code> program is endowed with a superpower,  the superp
 An actor object can be transmitted to other actors, even on other machines.</p>
 <p>An actor address object is an immutable black box. It can be used in a <a href="statements.html#send"><code>send</code> statement</a> to send a message to the actor associated with the actor address object. Process address objects can be sent to other actors, giving them the capability to also send messages to the actor associated with the actor address object. </p>
 <p>None of the contents of the actor object are visible or accessible. </p>
-<p>Example:</p>
+<h6>Examples:</h6>
 <pre>
 actor?(@)                         # true
 actor?(my_process)                # true
@@ -155,7 +155,7 @@ Any messages sent in this final turn will not be put into the outgoing queue.</p
 <p>The <var>program</var> text  identifies the  executable in  the program shop that the new actor runs. </p>
 <p>The <var>arguments</var> array contains up to four arguments of type logical, number, text, or actor address object.</p>
 <p>The current actor is the overling of the new actor, and it is notified when the new actor stops. The new actor is an underling of the current actor.</p>
-<p>Example:</p>
+<h6>Example:</h6>
 <pre>call @.start(
     callback
     &quot;example.mst&quot;
