@@ -33,9 +33,8 @@ misty_type
 <p>A module  is a chunk of independent program. These can be used to build reusable libraries. The body of the module contains a string of statements. The statements in the body may not include  <code>do</code>, although a body may contain functions which can include <code>do</code>. </p>
 <p>The last statement in a <code>module</code> is a <a href="statements.html#return"><code>return</code></a> statement, which usually returns a function or a record containing functions. That return value is bound to the name in a <code>use</code> statement. A <code>program</code> file does not end with a <code>return</code> statement. </p>
 <p>When an actor is started, the statements in the <code>program</code> file are executed. The statements should start the execution of the actor, which usually involves the setting of a receiver so that the actor can receive messages. Other sorts of initialization may take place as well. </p>
-<p>The program can pull in code from the module library with the <a href="statements.html#use"><code>use</code></a> statement. A module executes its body, as a function does, and returns a value that is bound to the name in the <code>use</code> statement. Typically, it will return a constructor function, but it can also return a record of functions. The return value is stone.</p>
-<p>Modules can also contain <code>use</code> statements. It is possible that two or more <code>use</code> statements might reference the same module. Should this occur, the module is executed once<code></code>. A single stone module product is shared by all uses. </p>
-<p>If two actors reference the same module, the module is executed twice. Actors never share memory.</p>
+<p>The program can pull in code from the module library with the <a href="statements.html#use"><code>use</code></a> statement. A module executes its body, as a function does, and returns a value that is bound to the name in the <code>use</code> statement. Typically, it will return a constructor function, but it can also return a record of functions. The return value is stone. Modules can be used to protect capabilities. For example, a trust module might be given access to a block of display memory. The module will be able to modify the pixels. A program using the module will only be able to access the pixels as permitted by the functions that the module provides. This allows for allowing untrusted programs to use trusted modules. If the trusted module is properly constructed, the program can not abuse it.</p>
+<p>Modules can also contain <code>use</code> statements. If two actors reference the same module, the module is executed twice. Actors never share memory.</p>
 <p>Modules can not have cyclical dependences.
     Module <code>a</code> can not use module <code>b</code> if module <code>b</code> uses module <code>a</code>.</p>
 <p>In this example, the <code>example</code> program imports the <code>app_master_2000</code> module,
@@ -141,12 +140,8 @@ Any messages sent in this final turn will not be put into the outgoing queue.</p
     The <var>function</var> will receive the record containing the request. The record can have a reply sent through it.
     A portal can respond by <a href="#start">starting</a> a new actor, or finding an existing actor, or by forwarding the contact message to another actor.
     This is how distributed Misty networks are bootstrapped. The <code>portal</code> function returns <code>null</code>.</p>
-<h3 id="random"><code>random</code> functions</h3>
-<h4>@.random()</h4>
-<p>The <code>random</code> function returns a number between <code>0</code> and <code>1</code>. There is a 50% chance that the result is less than <code>0.5</code>.</p>
-<h4>@.<span id="random_fit">random_fit</span>()</h4>
-<p>The <code>random_fit</code> function returns an integer in the range <code>-36028797018963968</code> thru <code>36028797018963967</code> that contains 56 random bits. See <a href="fit.html">fit</a>.</p>
 <h3 id="receiver"><code>receiver</code> function</h3>
+<p>If any of these functions is given an input that is not fit or not in range, the result is <code>null</code>.</p>
 <h4>@.receiver(<var>function</var>)</h4>
 <p>The <code>receiver</code> function registers a <var>function</var> that will receive all messages sent to the actor except for <a href="intrinsic.html#delay">delay</a> events, reply messages (which are sent to the <a href="statements.html#send"><code>send</code></a> <var>callback</var>), the <a href="#unneeded"><code>unneeded</code></a> message, and <a href="#portal">portal</a> <a href="#contact">contact</a> messages. The <code>receiver</code> function returns <code>null</code>.</p>
 <h3 id="start"><code>start</code> function</h3>
@@ -193,7 +188,7 @@ Turns can be timesliced. There are no concurrency issues because actors do not s
 They communicate with other actors and the world only by  message passing. </p>
 <h2 id="endowment">Endowment</h2>
 <p>The <dfn>name</dfn> of a program or module can contain endowed constants. These constants can be used to customize a program. The constants are accessed by the <code><a href="operators.html#period">.</a></code><a href="operators.html#period"><small>period</small> operator</a>. The endowment constants can be specified when the program executable is produced.</p>
-<p>An endowment can also contain functions that give access to system powers will I/O. See <a href="system.html#policy">Policy</a>.</p>
+<p>An endowment can also contain functions that give access to system powers like I/O. See <a href="system.html#policy">Policy</a>.</p>
 <pre>misty program example
 if example.test
     # stuff that executes if test is true
