@@ -678,9 +678,7 @@ text<code>)</code>. If it returns a text, then the substitution is made.</p>
 <pre>var result: format(&quot;{0} in {1}!&quot;, [&quot;Malmborg&quot;, &quot;Plano&quot;])
     # result is &quot;Malmborg in Plano!&quot;</pre>
 <h4 id="fraction">fraction(<var>number</var>)</h4>
-<p>The <code>fraction</code> function returns the fractional part of a number It returns <code>null</code> for non-numbers.</p>
-<h4 id="integer">integer(<var>number</var>)</h4>
-<p>The <code>integer</code> function returns the integer part. It returns <code>null</code> for non-numbers.</p>
+<p>The <code>fraction</code> function returns the fractional part of a <var>number</var> It returns <code>null</code> for non-numbers. Also see <code><a href="#whole">whole</a></code>.</p>
 <h4 id="length">length(<var>value</var>)</h4>
 <table><caption>The <code>length</code> function</caption>
     <tr>
@@ -920,4 +918,6 @@ assign result: trunc(-12.3775, 2)    # result is -12.37</pre>
     are converted to uppercase.</p>
 <h6>Example:</h6>
 <pre>assign result: upper(&quot;Carl Hollywood&quot;)    # result is &quot;CARL HOLLYWOOD&quot;</pre>
+<h4 id="whole">whole(<var>number</var>)</h4>
+<p>The <code>whole</code> function returns the whole part of a <var>number</var>. It returns <code>null</code> for non-numbers. Also see <code><a href="#fraction">fraction</a></code>.</p>
 </body></html>
