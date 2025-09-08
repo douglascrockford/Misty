@@ -6,6 +6,10 @@
     src: url('https://mistysystem.com/woff/Programma-Bold.woff2') format('woff2');
 }
 
+body, p, li, h3, h4, h5, h6 {
+    font-size: 12pt;
+}
+
 textarea {
     box-sizing: border-box;
     font-size: 10pt;
@@ -49,7 +53,6 @@ body, p, .rule i, li, h5, h6  {
 
 body {
     background-color: mistyrose;
-    font-size: 14pt;
     margin-left: 7%;
     margin-right: 7%;
     border-left: 1em solid rosybrown;
@@ -95,7 +98,6 @@ h3 {
     border-color: black;
     border-style: solid;
     border-width: 1pt 0 0 0;
-    font-size: 14pt;
     letter-spacing: 0;
     padding-bottom: 0px;
     padding-top: 0.5em;
@@ -104,7 +106,6 @@ h3 {
 }
 
 h4 {
-    font-size: 14pt;
     margin-bottom: 0.5em;
     padding-bottom: 0px;
     text-align: left;
@@ -127,7 +128,6 @@ h4 var {
 }
 
 h5 {
-    font-size: 14pt;
     margin-bottom: 0;
     margin-top: 0;
 }
