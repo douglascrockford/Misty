@@ -209,7 +209,25 @@
     padding-right: 3pt;
     text-align: justify;
     text-align-last: justify;
-">6 4</td>
+">6</td>
+  <td style="
+    background-color: inherit;
+    border: 0;
+    font-weight: lighter;
+    padding-left: 3pt;
+    padding-right: 3pt;
+    text-align: justify;
+    text-align-last: justify;
+">5</td>
+  <td style="
+    background-color: inherit;
+    border: 0;
+    font-weight: lighter;
+    padding-left: 3pt;
+    padding-right: 3pt;
+    text-align: justify;
+    text-align-last: justify;
+">4</td>
   <td style="
     background-color: inherit;
     border: 0;
@@ -231,7 +249,9 @@
   <tr>
     <td width=56% align="center">capacity</td>
     <td width=1% align="center" style="padding: 0;">r</td>
-    <td width=3% align="center" style="padding: 0;"><code>000</code></td>
+    <td width=3% align="center" style="padding: 0;"><code>0</code></td>
+    <td width=3% align="center" style="padding: 0;">a</td>
+    <td width=3% align="center" style="padding: 0;">p</td>
     <td width=1% align="center" style="padding: 0;">s</td>
     <td width=3% align="center" style="padding: 0;">type</td>
   </tr></tbody>
@@ -283,6 +303,10 @@
     <p>The units of the capacity depend on the type.</p>
     <li>a 1 bit memory reclamation flag: r</li>
     <p>This is used by the memory reclaimer to note that this object has already been assigned a new address. </p>
+    <li>a 1 bit actor address flag: a</li>
+    <p>The stone bit indicates that the object is an actor address object. </p>
+    <li>a 1 bit pattern flag: p</li>
+    <p>The stone bit indicates that the object is a pattern. </p>
     <li>a 1 bit stone flag: s</li>
     <p>The stone bit indicates that the object is immutable. </p>
     <li>a 3 bit type</li>
