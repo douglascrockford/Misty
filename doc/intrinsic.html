@@ -407,20 +407,20 @@ text(my_text, 2, 1)        # null
 <p align="left">The sensory functions end with <code>?</code><small>question mark</small>. They always return a <a href="types.html#logical">logical</a> value.</p>
 <h4 id="actor?">actor?(<var>value</var>)</h4>
 <p>Is the <var>value</var> an actor address object?</p>
-<pre>actor?(@)               # true
+<pre>actor?(me!)             # true
 actor?("actor")         # false
 actor?({actor: true})   # false
 </pre>
 <h4 id="array?">array?(<var>value</var>)</h4>
 <p>Is the <var>value</var> an array? If the <var>value</var> is an array, the result is <code>true</code>.
     Otherwise, the result is <code>false</code>.</p>
-<pre>array?(0)                              # false
-array?({})                             # false
-array?([])                             # true
-not(array?([]))                        # false
-array?(&para; (1- {letter digit &quot;_-%&quot;}))    # false
-array?(null)                           # false
-array?(&quot;array&quot;)                        # false</pre>
+<pre>array?(0)                                    # false
+array?({})                                   # false
+array?([])                                   # true
+not(array?([]))                              # false
+array?(pattern (1- {letter digit &quot;_-%&quot;}))    # false
+array?(null)                                 # false
+array?(&quot;array&quot;)                              # false</pre>
 <h4 id="blob?">blob?(<var>value</var>)</h4>
 <p>Is the <var>value</var> a blob?  If the <var>value</var> is a
     <a href="blob.html">blob</a>, the result is <code>true</code>. Otherwise, the result
