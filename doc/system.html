@@ -54,7 +54,7 @@
 <h2 id="mr">Memory Reclamation</h2>
 <p>When an actor uses up its data memory, it becomes exhausted. The memory reclaimer is run on exhausted actors. It uses a Cheney copying algorithm. Normally, Cheney uses semispace, where memory is divided into halves. Only one half is used during execution. During memory reclamation, live data is copied into the other half, and the roles of the two halves are swapped. </p>
 <p>The misty system does not use semispace. Instead, the system allocates a new block of system memory. Live data is copied into the new block. Then the old block is returned to the system. If the actor previously did not reclaim enough space, then the new block will be twice as large.</p>
-<p>The model is not <strong>Pause the World</strong>. It is <strong>Pause an actor</strong>, which will likely have a much smaller impact on performance.</p>
+<p>The model is not <strong>Pause the World</strong>. It is <strong>Pause an actor</strong>, which will likely have a much smaller impact on performance. An individual actor is much smaller than the whole system, so reclamation should be brief.</p>
 <h2 id="ar">Actor Reclamation</h2>
 <p>Generally, an actor should be kept in memory as long as any other actor has its address and might send a message to it. When an actor is no longer addressed by other actors, it may be stopped and its memory reclaimed. This is easily managed within a system, but may become much more complicated when there are many systems interacting with each other. Actors are free to transmit actor addresses in messages, so  meshes can develop. This can make it difficult to determine if an actor can still be useful or not. </p>
 <p>It is particularly difficult when cycles form. There are solutions, such as <a href="https://www.crockford.com/ec/dgc.html">The Bejar Algorithm</a>, but it is messy business. The misty system takes a simpler approach.</p>
@@ -89,7 +89,7 @@
 <h3>Versioning and Updating</h3>
 <p>Executables can be updated at any time. The actors that are currently running are not affected, but they can be stopped and started again with new executables if necessary, or they can continue to run beside updated actors.</p>
 <h2 id="build">Build</h2>
-<p>The Build tools make the executables that are in the <a href="#shop">Program Shop</a>. Most of the tools are written in Misty and are part of the standard tools. The exception is the <a href="#endow">endow</a> tool.</p>
+<p>The Build tools make the executables that are in the <a href="#shop">Program Shop</a>. Most of the tools are written in Misty and are part of the standard tools. </p>
 <h3>Tokenize</h3>
 <p>Take a program source text or module source text, and produce an array of tokens.</p>
 <h3>Parse</h3>
@@ -98,12 +98,7 @@
 <p>Take a parse tree and optimize it by constant folding, strength reduction, and other techniques.</p>
 <h3 id="endow">Endow</h3>
 <p>Take a program parse tree and combine it with its module's parse trees. Also give values to the endowment expressions, and provide native interfaces for access to things like display systems and file systems.</p>
-<p>The default endow tool grants all requested configurations, and in development, this can be sufficient. However, in production, it may be necessary to have policies that determine:</p>
-<ul>
-    <li>What endowments are bestowed on which programs and modules</li>
-    <li>Which modules a program or module can use</li>
-    <li>Which executables a program can start with <a href="programs.html#start"><code>@.start</code></a>.</li>
-</ul>
+<p>The  endow tool works with <a href="#policy">the policy machine</a> to grant all requested configurations.</p>
 <h3 id="linear">Linear</h3>
 <p>Take a parse tree and produce a list of three operand instructions (<dfn>mcode</dfn>).</p>
 <h3 id="streamline">Streamline</h3>
@@ -111,20 +106,23 @@
 <h3 id="codegen">Codegen</h3>
 <p>Take an mcode list and generate an executable.</p>
 <h2 id="policy">Policy Machine</h2>
-<p>The policy machine governs the use of power within a system. </p>
+<p>The policy machine governs the use of power within a program. </p>
 <ul>
-    <li>Endowing of constants to modules and programs</li>
-    <li>Endowing of native powers to modules</li>
-    <li>Allowing modules to <a href="statement.html#use"><code>use</code></a> certain modules</li>
-    <li>Allowing programs to <code><a href="statement.html#use">use</a></code> certain modules</li>
-    <li>Allowing programs to access <a href="programs.html#at"><code>@</code> functions such as <code>clock</code>, <code>contact</code>, <code>couple</code>, <code>delay</code>, <code>portal</code>, <code>random</code>,
-    <code>random_fit</code>, <code>start</code>, <code>stop</code>, <code>unneeded</code></a></li>
-    <li>Setting maximum mutable memory limits and time limits on programs</li>
+    <li>Endowing of constants to modules and programs.</li>
+    <li>Endowing of native powers to modules.</li>
     <li>Permitting use of cryptographic key pairs</li>
-    <li>Enabling access to <a href="statements.html#log">logs</a>.</li>
+    <li>Endowing of special  constants and secrets to modules.</li>
+    <li>Allowing modules to <a href="statement.html#use"><code>use</code></a> certain modules.</li>
+    <li>Allowing programs to <code><a href="statement.html#use">use</a></code> certain modules.</li>
+    <li>Allowing programs to access time functions such as <code><a href="programs.html#clock">clock!</a></code>, <code><a href="programs.html#delay">delay!</a>.</code></li>
+    <li>Allowing programs to access actor functions such as <code><a href="programs.html#contact">contact!</a></code>, <code><a href="programs.html#coujple">couple!</a></code>, <code><a href="programs.html#portal">portal!</a></code>, <code><a href="programs.html">start!</a></code>, <code><a href="programs.html#stop">stop!</a></code>, <code><a href="programs.html#unneeded">unneeded</a></code><a href="programs.html#unneeded">!</a>.</li>
+    <li>Allowing programs and modules to use actor addresses such as <code><a href="programs.html#me">me!</a></code> and <code><a href="program.html#overling">overling!</a></code>.</li>
+    <li>Setting maximum mutable memory limits and time limits on programs.</li>
+    <li>Enabling access to specific <a href="statements.html#log">logs</a>.</li>
 </ul>
 <p>In a development system, the policy might be to allow everything. In production, policies will be more restricted, especially if there is sensitive data or code from multiple parties involved.</p>
 <p>A source program that violates policy will not produce an executable.</p>
 <p>Distributed policy machines can be set up to manage policies over a network of machines.</p>
 <p>Policies are expressed as misty programs that use the <code>policy</code> module.</p>
+<p>The build tools are written in Misty. The build tools interact with the policy machine, which is written in Misty, to determine whether and how executables are made. Because policies are Misty programs, it is possible to distribute policy management throughout a network.</p>
 </body></html>

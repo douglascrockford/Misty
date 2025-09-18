@@ -26,22 +26,18 @@ div.scope {
   of the function, but will be visible to inner functions. </p>
 <h2>Making Functions</h2>
 <p>Function objects are made with the <code>function</code> operator that takes an input list and a body and produces a function object. </p>
+
 <p class="rule">
 function_literal
     <code>"function"</code> space optional_function_name input_list space body
-    <code>'''</code> function_stuff
 </p>
-<p class="rule">
-function_stuff
-    function_operators
-    optional_name input_list space body
-</p>
+
 <p class="rule">
 optional_function_name
     <code>""</code>
     name
 </p>
-<p>A function may be given a name for recursion and documentation. </p>
+<p>A function may be given a name for recursion and documentation.</p>
 <p>A function literal may not be placed in a <code>do</code> loop.</p>
 <p>Functions can also be made with the <a href="statements.html#def"><code>def</code> statement</a> and <a href="types.html#record literal">record literals</a>.</p>
 <h3 id="input">Input List</h3>
@@ -223,48 +219,49 @@ pseudorecord.b("ok")    # disrupt</pre>
 <h2 id="functino">Operator Functions</h2>
 <p class="rule">
 function_operator
-    <code>"/\"</code>
-    <code>"\/"</code>
-    <code>'|'</code>
-    <code>'='</code>
-    <code>"&lt;&gt;"</code>
-    <code>'&lt;'</code>
-    <code>"&lt;="</code>
-    <code>'&gt;'</code>
-    <code>"&gt;="</code>
-    <code>'&'</code>
-    <code>"&&"</code>
-    <code>'+'</code>
-    <code>'-'</code>
-    <code>'*'</code>
-    <code>'/'</code>
-    <code>'//'</code>
-    <code>"[]"</code>
+    <code>"/\!"</code>
+    <code>"\/!"</code>
+    <code>"|!"</code>
+    <code>"=!"</code>
+    <code>"&lt;&gt;!"</code>
+    <code>"&lt;!"</code>
+    <code>"&lt;=!"</code>
+    <code>"&gt;!"</code>
+    <code>"&gt;=!"</code>
+    <code>"&!"</code>
+    <code>"&&!"</code>
+    <code>"+!"</code>
+    <code>"-!"</code>
+    <code>"*!"</code>
+    <code>"/!"</code>
+    <code>"//!"</code>
+    <code>"[]!"</code>
 </p>
-<p>The <a href="operators.html">operators</a> can be used as functions by prefixing the operators with <code>'</code><small>apstrophe</small>. These operator functions, or functinos, can be used like any other functions. They can be passed as input values or stored in records and arrays.</p>
-<p>So <code>'+</code> is the binary add function that can be passed to <a href="intrinsic.html#reduce">the <code>reduce</code> function</a> to make sums. </p>
+<p>The <a href="operators.html">operators</a> can be used as functions by suffixing the operators with <code>!</code><small>exclamation mark</small>. These operator functions, or <b>functinos</b>, can be used like any other functions. They can be passed as input values or stored in records and arrays.</p>
+<p>So <code>+!</code> is the binary add function that can be passed to <a href="intrinsic.html#reduce">the <code>reduce</code> function</a> to make sums. </p>
+<pre>assign total: reduce(data, +!)</pre>
 <h6>Examples:</h6>
 <pre>
-'/\(3, 4)   # null  <small>and</small>
-'\/(3, 4)   # null  <small>or</small>
-'|(3, 4)    # 3     <small>default</small>
-'=(3, 4)    # false <small>equal</small>
-'&lt;&gt;(3, 4)   # true  <small>not equal</small>
-'&lt;(3, 4)    # true  <small>less</small>
-'&lt;=(3, 4)   # true  <small>less or equal</small>
-'&gt;(3, 4)    # false <small>greater</small>
-'&gt;=(3, 4)   # false <small>greater or equal</small>
-'&(3, 4)    # "34"  <small>concat</small>
-'&&(3, 4)   # "3 4" <small>concat with space</small>
-'+(3, 4)    # 7     <small>add</small>
-'-(3, 4)    # -1    <small>subtract</small>
-'*(3, 4)    # 12    <small>multiply</small>
-'/(3, 4)    # 0.75  <small>divide</small>
-'//(3, 4)    # 0     <small>integer divide</small>
-'[](3, 4)   # null  <small>get</small>
+/\!(3, 4)   # null  <small>and</small>
+\/!(3, 4)   # null  <small>or</small>
+|!(3, 4)    # 3     <small>default</small>
+=!(3, 4)    # false <small>equal</small>
+&lt;&gt;!(3, 4)   # true  <small>not equal</small>
+&lt;!(3, 4)    # true  <small>less</small>
+&lt;=!(3, 4)   # true  <small>less or equal</small>
+&gt;!(3, 4)    # false <small>greater</small>
+&gt;=!(3, 4)   # false <small>greater or equal</small>
+&!(3, 4)    # "34"  <small>concat</small>
+&&!(3, 4)   # "3 4" <small>concat with space</small>
++!(3, 4)    # 7     <small>add</small>
+-!(3, 4)    # -1    <small>subtract</small>
+*!(3, 4)    # 12    <small>multiply</small>
+/!(3, 4)    # 0.75  <small>divide</small>
+//!(3, 4)   # 0     <small>integer divide</small>
+[]!(3, 4)   # null  <small>get</small>
 </pre>
-<p>Three  are short circuiting in their operator form, but not in their operator function form: <code>'/\</code><small>and</small>&nbsp;&nbsp; <code>'\/</code><small>or</small>&nbsp;&nbsp; <code>'|</code><small>default</small>.</p>
-<h4>'=<small>equal</small></h4>
+<p>Three  are short circuiting in their operator form, but not in their functino form: <code>/\!</code><small>and</small>&nbsp;&nbsp; <code>\/!</code><small>or</small>&nbsp;&nbsp; <code>|!</code><small>default</small>.</p>
+<h4>=!<small>equal</small></h4>
 <p>The equal function can take two or three input values. The first two input values are values to be compared.
     If all of the inputs are numbers, an optional <var>tolerance</var> input value may be included which must be a non-negative number.
     The result is <code>true</code> if the absolute value of the difference between the
@@ -273,34 +270,38 @@ function_operator
 <h6>Examples:</h6>
 <pre>def first: 12.3775
 def second: 12.38
-assign exactly: '=(first, second)         # exactly is false
-assign sloppy: '=(first, second, 0.01)    # sloppy is true
+assign exactly: =!(first, second)         # exactly is false
+assign sloppy: =!(first, second, 0.01)    # sloppy is true
 
 def first: "vorpal"
 def second: "VORPAL"
-assign exactly: '=(first, second)         # exactly is false
-assign sloppy: '=(first, second, true)    # sloppy is true</pre>
-<h4 id="'&lt;&gt;">'&lt;&gt;<small>not equal</small></h4>
+assign exactly: =!(first, second)         # exactly is false
+assign sloppy: =!(first, second, true)    # sloppy is true</pre>
+<h4 id="'&lt;&gt;">&lt;&gt;!<small>not equal</small></h4>
 <p>The not equal function can take two or three input values. The first two input values are values to be compared. The optional third input value is a tolerance. When comparing numbers, the tolerance is a number that indicates the allowable difference. When comparing texts, the tolerance is a logical that if <code>true</code> ignores case.</p>
-<h4><span id="'[]">'[]</span><small>get</small></h4>
+<h4><span id="'[]">[]!</span><small>get</small></h4>
 <p>The get function  takes two input values. The first input value is an array, record, or text. The second input value is an element number or key. It returns an element, a property, or a character, or <code>null</code>.</p>
-<h2>Callback</h2>
-<p>These  functions take a <var>callback</var> input value: </p>
+<h2 id="callback">Callback</h2>
+<p>These endowment functions take a <var>callback</var> input value: </p>
 <ul>
-    <li><code><a href="programs.html#new">@.new</a></code></li>
-    <li><code><a href="programs.html#contact">@.contact</a></code></li>
-    <li><code><a href="programs.html#connection">@.connection</a></code></li>
+    <li><code><a href="programs.html#clock">clock!</a></code></li>
+    <li><code><a href="programs.html#delay">delay!</a></code></li><br>
+    <li><code><a href="programs.html#contact">contact!</a></code></li>
+    <li><code><a href="programs.html#portal">portal!</a></code></li>
+    <li><code><a href="programs.html#start">start!</a></code></li>
+    <li><code><a href="programs.html#unneeded">unneeded!</a></code></li>
     <li>functions returned by these intrinsic functions:
         <ul>
             <li><code><a href="intrinsic.html#fallback">fallback</a></code></li>
-            <li><a href="intrinsic.html#parallel"><code>parallel</code></a></li>
+            <li><a href="intrinsic.html#par_all"><code>par_all</code></a></li>
+            <li><a href="intrinsic.html#par_any"><code>par_any</code></a></li>
             <li><code><a href="intrinsic.html#race">race</a></code></li>
             <li><code><a href="intrinsic.html#sequence">sequence</a></code></li>
         </ul>
     </li>
 </ul>
 <p>A <var>callback</var> function has this signature:</p>
-<pre>function  (<var>value</var>, <var>reason</var>)</pre>
-<p>The <var>value</var> is the value of the request if it was successful. The value is <code>null</code> if it was unsuccessful.</p>
-<p>If the <var>value</var> is <code>null</code>, then the <var>reason</var> may include an error message or indication of the cause of the request.</p>
+<pre>function (<var>value</var>, <var>reason</var>)</pre>
+<p>The <var>value</var> is the value of the request if it was successful. The value is <code>null</code> if it is unsuccessful.</p>
+<p>If the <var>value</var> is <code>null</code>, then the <var>reason</var> may include an error message or indication of the cause of the unsuccess.</p>
 </body></html>

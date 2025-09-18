@@ -9,75 +9,77 @@
 <body>
 <img src="../misty.gif" width="204" height="79">
 <h1><a href="https://mistysystem.com/">Misty Programming Language:</a>Programs</h1>
-<p>Misty has direct support for <b>actors</b>. Actors run independently and concurrently. Actors communicate by sending messages. Every actor has its own memory space. Actors do not share memory. Every actor runs an <strong>executable</strong>. An executable is made from a program, zero or more modules, and a build specification.</p>
-<pre id="hello">misty program hello_world()
-log console: &quot;Hello, World!&quot;
-end hello_world</pre>
-<p>A program can use modules. Many programs can work productively together.</p>
+<p>Misty has direct support for the Actor Model of Computation. Actors run executable programs independently and concurrently. Actors communicate by sending messages.  An executable is made from a program source text, and zero or more module source texts. Every actor has its own memory space. Actors can interact with actors on other machines. Actors do not share memory with other actors. </p>
+<p>The first word of a Misty source is <code>misty</code>, declaring that the source is written in Misty.</p>
+<p>The second word of a Misty source is the type, either <code>program</code> or <code>module</code>. </p>
+<p>The third word is the <var>title</var> of the source text. This might be the same as its filename in systems that use filenames. The name is used for documentation.</p>
 <p class="rule">
-misty
-    <code>"misty"</code> space misty_type space name input_list more_statements linebreak <code>"end"</code> space name
+    misty
+    <code>"misty"</code> space misty_type space title input_list more_statements linebreak <code>"end"</code> space title
 </p>
 <p class="rule">
 misty_type
     <code>"program"</code>
     <code>"module"</code>
 </p>
-<p>Every program has an actor object called <code>@</code><small>at sign</small> that contains  the private address of  the actor itself and other powerful capabilities. An actor can pass actor address objects (including an attenuated version of <code>@</code>)  as inputs to functions or in  messages to other actors. If an actor can acquire the actor address object of another actor, then it can send messages to it. Messages may contain numbers, texts, records, arrays, logicals, blobs, and actor address objects. </p>
-<p>An attenuated <code>@</code> object is produced when <code>@</code> is on the right side of an <a href="statements.html#assign"><code>assign</code></a> statement, or when <code>@</code> is passed an input value to a function, or when <code>@</code> is included in an array literal or record literal. An attenuated <code>@</code> object contains the private address of the actor.</p>
-<p>Misty programs are organized into source files. There are two types of Misty source files:</p>
-<ul>
-  <li><code>module</code></li>
-  <li><code>program</code></li>
-</ul>
-<p>A module  is a chunk of independent program. These can be used to build reusable libraries. The body of the module contains a string of statements. The statements in the body may not include  <code>do</code>, although a body may contain functions which can include <code>do</code>. </p>
+<p class="rule">
+title
+    name
+</p>
+<h6>Hello world: </h6>
+<pre id="hello">misty program hello_world()
+log console: &quot;Hello, World!&quot;
+end hello_world</pre>
+<p>A misty program contains the entry point for an executable. </p>
+<p>When an actor is started, the statements in the <code>program</code> file are executed. The statements should start the execution of the actor, which usually involves the setting of a <a href="#receiver">receiver</a> so that the actor can receive messages. Other sorts of initialization may take place as well. </p>
+<p>The program can pull in code from the module library with the <a href="statements.html#use"><code>use</code></a> statement. </p>
+<p>A module  is a subprogram that provides functionality to a program or other modules. These can be used to build reusable libraries. The body of the module contains a string of statements. The statements in the body may not include <code><a href="statements.html#">do</a></code>, although a body may contain functions which can include <code>do</code>. </p>
+<p>A module executes its body, as a function does, and returns a value that is bound to the name in the <code>use</code> statement. Typically, it will return a constructor function, but it can also return a record of functions. The return value is stone. Modules can be used to protect capabilities. For example, a trusted module might be given access to a block of display memory. The module will be able to modify the pixels. A program using the module will only be able to access the pixels as permitted by the functions that the module provides. Untrusted programs to use trusted modules. If the trusted module is properly constructed, the program can not abuse it.</p>
 <p>The last statement in a <code>module</code> is a <a href="statements.html#return"><code>return</code></a> statement, which usually returns a function or a record containing functions. That return value is bound to the name in a <code>use</code> statement. A <code>program</code> file does not end with a <code>return</code> statement. </p>
-<p>When an actor is started, the statements in the <code>program</code> file are executed. The statements should start the execution of the actor, which usually involves the setting of a receiver so that the actor can receive messages. Other sorts of initialization may take place as well. </p>
-<p>The program can pull in code from the module library with the <a href="statements.html#use"><code>use</code></a> statement. A module executes its body, as a function does, and returns a value that is bound to the name in the <code>use</code> statement. Typically, it will return a constructor function, but it can also return a record of functions. The return value is stone. Modules can be used to protect capabilities. For example, a trust module might be given access to a block of display memory. The module will be able to modify the pixels. A program using the module will only be able to access the pixels as permitted by the functions that the module provides. This allows for allowing untrusted programs to use trusted modules. If the trusted module is properly constructed, the program can not abuse it.</p>
-<p>Modules can also contain <code>use</code> statements. If two actors reference the same module, the module is executed twice. Actors never share memory.</p>
+<p> If two actors reference the same module, the module is executed twice. Actors never share memory.</p>
 <p>Modules can not have cyclical dependences.
     Module <code>a</code> can not use module <code>b</code> if module <code>b</code> uses module <code>a</code>.</p>
-<p>In this example, the <code>example</code> program imports the <code>app_master_2000</code> module,
+<p>In this example, the <code>example</code> program uses the <code>app_master_2000</code> module,
     and designates its <code>handler</code> function as the receiver of messages for the actor.</p>
 <pre>misty program example()
 
 use app: &quot;app_master_2000&quot;()
-call @.receiver(app.handler)
+call <var></var>receiver!(app.handler)
 
 end example</pre>
-<p>Actors are started with the <code><a href="#start">@.start(<var>program</var>)</a></code> function. An actor that starts another actor is called an <b id="master">overling</b>. An actor started by an overling is called an <b id="underling">underling</b>. An actor can be a underling to one actor and an overling to many others.</p>
-<p>Communication between actors happens exclusively with messages.</p>
-<p>Messages are usually transmitted over some sort of connection. </p>
-<p>The <dfn>name</dfn> of a <dfn>program</dfn> or <dfn>module</dfn> can contain an <a href="#endowment">endowment</a> of values provided at the time the program is built.
-So if the <code>example</code> program is endowed with a superpower,  the superpower can be accessed as <code>example.superpower</code>.</p>
-<p>A module can have arguments passed to it from a <a href="statements.html#use"><code>use</code> statement</a>. A program can have arguments passed to it from a command line or <code><a href="#start">@.start</a></code>.</p>
+<p>Actors are started with the <code><a href="#start">start!(<var>program</var>)</a></code> function. An actor that starts another actor is called an <b id="master">overling</b>. An actor started by an overling is called an <b id="underling">underling</b>. An actor can be a underling to one actor and an overling to many others.</p>
+<p>Communication between actors happens exclusively with messages with the <a href="statements.html#send">send</a> statement. Messages are usually transmitted over some sort of connection. </p>
+<p>A module can have arguments passed to it from a <a href="statements.html#use"><code>use</code> statement</a>. A program can have arguments passed to it from a command line or <code><a href="#start">start!</a></code>.</p>
 <h2 id="actor_address_object">Actor address object</h2>
 <p>An actor address object contains the information needed to communicate with an actor.
 An actor object can be transmitted to other actors, even on other machines.</p>
-<p>An actor address object is an immutable black box. It can be used in a <a href="statements.html#send"><code>send</code> statement</a> to send a message to the actor associated with the actor address object. Process address objects can be sent to other actors, giving them the capability to also send messages to the actor associated with the actor address object. </p>
+<p>An actor address object is an immutable black box. It can be used in a <a href="statements.html#send"><code>send</code> statement</a> to send a message to the actor associated with the actor address object. Actor address objects can be sent to other actors, giving them the capability to also send messages to the actor associated with the actor address object. </p>
 <p>None of the contents of the actor object are visible or accessible. </p>
+<p>A message that can accept a reply can also be used once as an actor address object.
+See the <a href="statements.html#send">send statement</a>.</p>
+<h2 id="actor?"> The <code>actor?</code> function</h2>
+<h4>actor?(<var>value</var>)</h4>
+<p>The <code>actor?</code> function gives <code>true</code> if the <var>value</var> is an actor address object.</p>
 <h6>Examples:</h6>
 <pre>
-actor?(@)                         # true
+actor?(me!)                       # true
+actor?(overling!)                 # true
 actor?(my_process)                # true
 record?(my_process)               # false
 stone?(my_process)                # true
 my_process = my_process           # true
 my_process = your_process         # false (probably)</pre>
-<h2 id="actor?"> The <code>actor?</code> function</h2>
-<h4>actor?(<var>value</var>)</h4>
-<p>The <code>actor?</code> function gives <code>true</code> if the <var>value</var> is an actor address object.</p>
 <h2 id="lifecycle">Actor lifecycle</h2>
-<p>An actor is created by another actor by <a href="#start"><code>@.start(<var>program</var>)</code></a> which produces a new private address object. Over its existence, an actor will receive messages, which may cause it to change its state and send messages.</p>
+<p>An actor is created by another actor by <a href="#start"><code>start!(<var>program</var>)</code></a> which produces a new private address object. Over its existence, an actor will receive messages, which may cause it to change its state and send messages.</p>
 <p>When an actor stops, it will no longer send or receive messages. Ultimately, there are four ways that an actor stops:</p>
 <h3>Stop</h3>
-<p>An overling actor may stop a underling by calling <code><a href="#stop">@.stop(<var>underling</var>)</a></code>.  If the underling actor is in the middle of executing a turn when it is stopped, any messages sent in that final turn will not be put into the outgoing queue.</p>
-<p>An actor can also stop itself by calling <a href="#stop"><code>@.stop()</code></a>. It might do this as a result of being told to do so by its overling or another trusted actor, or because it has fulfilled its purpose or become <a href="#unneeded">unneeded</a>. Any messages sent in this final turn are put into the outgoing queue. </p>
+<p>An overling actor may stop a underling by calling <code><a href="#stop">stop!(<var>underling</var>)</a></code>.  If the underling actor is in the middle of executing a turn when it is stopped, any messages sent in that final turn will not be put into the outgoing queue.</p>
+<p>An actor can also stop itself by calling <a href="#stop"><code>stop!()</code></a>. It might do this as a result of being told to do so by its overling or another trusted actor, or because it has fulfilled its purpose or become <a href="#unneeded">unneeded</a>. Any messages sent in this final turn are put into the outgoing queue. </p>
 <h3>Disrupt</h3>
 <p>If an explicit or implicit <code>disrupt</code> occurs that is not handled, then the actor stops.
 Any messages sent in this final turn will not be put into the outgoing queue.</p>
 <h3>Coupling</h3>
-<p>If an actor is coupled to an actor that stops, then it also stops. An actor can couple itself to another actor by calling <a href="#couple"><code>@.couple(<var>actor</var>)</code></a>. Every actor is automatically coupled to its overling.</p>
+<p>If an actor is coupled to an actor that stops, then it also stops. An actor can couple itself to another actor by calling <a href="#couple"><code>couple!(<var>actor</var>)</code></a>. Every actor is automatically coupled to its overling.</p>
 <h3>Disaster</h3>
 <p>The system crashes, or an earthquake disables the data center, or there is a nuclear sneak attack, or a software bug. Surviving actors will probably not be immediately notified of the disaster.</p>
 <h2 id="messages">Messages</h2>
@@ -87,15 +89,50 @@ Any messages sent in this final turn will not be put into the outgoing queue.</p
     which, if valid, will cause an actor to immediately stop,
     even if there are undelivered messages waiting for it in the queue. </p>
 <p>Some messages can be used to reply to the original sender of the message.</p>
-<h2 id="at"><code>@</code><small>at sign</small> Functions</h2>
-<p>The <code>@</code> object is only available in  <code>misty</code> <code>program</code> files. The <code>@</code> object is not available in <code>misty</code> <code>module</code> files, although the attenuated actor object and some of the <code>@</code> functions can be passed in. </p>
-<h3 id="clock"><code>clock</code> function</h3>
-<h4><code>@.clock(<var>function</var>)</code></h4>
-<p>The <code>clock</code> function takes a <var>function</var> input value that will eventually be called with  the current time
-    in number form.  See <a href="time.html">time</a>.</p>
-<h3 id="contact"><code>contact</code> function</h3>
-<h4>@.contact(<var>callback</var>, <var>record</var>) </h4>
-<p>The <code>contact</code> function sends a message to a <a href="#portal">portal</a> on another machine to obtain an actor object. </p>
+<h2 id="data">Actor Data Structures</h2>
+<h3 id="address">Actor  Address Object</h3>
+<p>An actor address object is used with the <code><a href="statements.html#send">send</a></code> statement. It contains an actor's private address. A message may contain actor address objects, which will give the recipient actor the capability to send messages to those actors at the private addresses.</a></p>
+<p>There are three ways that an actor can obtain the actor address object of another actor.</p>
+<ul>
+    <li><dfn>construction</dfn>: by being given capabilities by <a href="system.html#policy">the policy machine</a> at the time of the construction of the executable</li>
+    <li><dfn>creation</dfn>: by creating an underling with <code><a href="#start">start!()</a></code></li>
+    <li><dfn>introduction</dfn>: by receiving a message containing an actor's private address object</li>
+</ul>
+<h3 id="message">Message object</h3>
+<p>Ordinarily, a message object is obtained from the <var><a href="function.html#callback">callback</a></var> function that is registered with <code><a href="#receiver">receiver!</a></code>. It acts like an ordinary record. </p>
+<p>When a message is sent using the callback form, the message itself may be used once as an actor's private address for transmitting the reply.</p>
+<h2 id="turns">Turns</h2>
+<p>Computation takes place in an actor in a interval of time called a <dfn>turn</dfn>.
+    A turn starts with the receiving of a message.
+    A function (such as the <var>callback</var> function registered with <code>receive!</code>, <code>portal!</code>, <code>clock</code>!, or <code><a href="intrinsic.html#delay">delay</a></code><a href="#delay">!</a>)
+    will run to completion. Any outgoing messages are held until the turn completes successfully,
+    at which time outgoing messages go into the outgoing message queue and are sent.</p>
+<p>An actor will not receive another message until the turn ends. Each turn will process exactly one message.</p>
+<p>If a machine has multiple computation units, then it is possible for multiple turns of multiple actors to be going on simultaneously.
+    Turns can be timesliced. There are no concurrency issues because actors do not share memory.
+    They communicate with other actors and the world only by  message passing. </p>
+<h2>Endowment</h2>
+<p>Programs and modules can be endowed by the <a href="system.html#policy">Policy Machine</a> with special constants that are identified by names ending in <code>!</code><small>exclamation mark</small>. Often the values are functions, but they can also be numbers, texts, and actor addresses.</p>
+<p>By default, programs and modules may not use the following features. They are only available if specifically allowed by policy.</p>
+<h3>Time functions</h3>
+<p>Time is considered a critical capability.</p>
+<h4 id="clock"><code>clock!(<var>callback</var>)</code></h4>
+<p>The <code>clock!</code> function takes a <var>callback</var> function input value that will eventually be called with  the current time
+    in number form in seconds.  See <a href="time.html">time</a>.</p>
+<h4 id="delay"><code>delay!(</code><var>callback</var><code>,</code> <var>seconds</var><code>)</code></h4>
+<p>The <code>delay!</code> function is used to schedule the invocation of a <var>callback</var> function at a later time. Any value returned
+    from the delayed invocation is ignored. There is no guarantee that the <var>callback</var> will ever be invoked. The delayed invocation will not interrupt
+    normal processing. The invocation is delayed until the actor is
+    waiting for a message. The <code>delay</code>! function returns <code>null</code>.</p>
+<p>The <code>delay!</code> function immediately returns a <code>cancel</code> function. Calling the <code>cancel</code> function will cancel the delayed execution of the <var>callback</var>, if it is not too late.</p>
+<p id="delay2">The <var>seconds</var> input specifies when the invocation will occur,
+    no sooner than <var>seconds</var> seconds after now. The <var>seconds</var> input must be a non-negative number or <code>null</code> which behaves as <code>0</code>.</p>
+<pre>call <var></var>delay!(continuation, 0.1) 
+</pre>
+<h3>Actor functions </h3>
+<p>The following functions are critical for the implementation of actors.</p>
+<h4 id="contact">contact!(<var>callback</var>, <var>record</var>) </h4>
+<p>The <code>contact!</code> function sends a message to a <a href="#portal">portal</a> on another machine to obtain an actor object. This is used to bootstrap a distributed actor network.</p>
 <p>The <var>callback</var> is a function with a <var>actor</var> input and a <var>reason</var> input. If successful, <var>actor</var> is bound to an actor object. If not successful, <var>actor</var> is <code>null</code> and <var>reason</var> may contain an explanation.</p>
 <p>The <var>record</var> can contain:</p>
 <ul>
@@ -104,7 +141,7 @@ Any messages sent in this final turn will not be put into the outgoing queue.</p
             <li>Network address</li>
             <li>Port number</li>
         </ul>
-  </li>
+    </li>
     <li>Authentication
         <ul>
             <li>Public Key</li>
@@ -120,84 +157,44 @@ Any messages sent in this final turn will not be put into the outgoing queue.</p
         </ul>
     </li>
 </ul>
-<h3 id="couple"><code>couple</code> function</h3>
-<h4>@.couple(<var>actor</var>)</h4>
-<p>The <code>couple</code> function causes this actor to stop when another <var>actor</var> stops. The <code>couple</code> function returns <code>null</code>.</p>
-<pre>call @.couple(patron)</pre>
-<h3 id="delay"><code>delay</code> function</h3>
-<h4 id="delay"><code>@.delay(</code><var>function</var><code>,</code> <var>seconds</var><code>)</code></h4>
-<p>The <code>delay</code> function is used to schedule the invocation of a <var>function</var> at a later time. Any value returned
-    from the delayed invocation is ignored. There is no guarantee that the <var>function</var> will ever be invoked. The delayed invocation will not interrupt
-    normal processing. The invocation is delayed until the actor is
-    waiting for a message. The <code>delay</code> function returns <code>null</code>.</p>
-<p>The <code>delay</code> function immediately returns a <code>cancel</code> function. Calling the <code>cancel</code> function will cancel the delayed execution of the function, if it is not too late.</p>
-<p id="delay">The <var>seconds</var> input speicifies when the invocation will occur,
-    no sooner than <var>seconds</var> seconds after now. The <var>seconds</var> input must be a non-negative number or <code>null</code> which behaves as <code>0</code>.</p>
-<pre>call @.delay(continuation, 0.1) </pre>
-<h3 id="portal"><code>portal</code> function</h3>
-<h4>@.portal(<var>function</var>, <var>port</var>) </h4>
-<p>A <dfn>portal</dfn> is a special actor with a public address that  performs introduction services. It listens on a specified <var>port</var> for  contacts by external actors that need to acquire an actor address object.
-    The <var>function</var> will receive the record containing the request. The record can have a reply sent through it.
+<h4 id="cpuple">couple</span>!(<var>actor</var>)</h4>
+<p>The <code>couple!</code> function causes this actor to stop when another <var>actor</var> stops. The <code>couple</code> function returns <code>null</code>.</p>
+<pre>call <var></var>couple!(patron)</pre>
+<h4 id="portal">portal!(<var>callback</var>, <var>port</var>) </h4>
+<p>A <dfn>portal</dfn> is a special actor with a public address that  performs introduction services. It listens on a specified <var>port</var> for  <span id="#contact">contacts</span> by external actors that need to acquire an actor address object.
+    The <var>callback</var> function will receive the record containing the request. The record can have a reply sent through it.
     A portal can respond by <a href="#start">starting</a> a new actor, or finding an existing actor, or by forwarding the contact message to another actor.
     This is how distributed Misty networks are bootstrapped. The <code>portal</code> function returns <code>null</code>.</p>
-<h3 id="receiver"><code>receiver</code> function</h3>
-<p>If any of these functions is given an input that is not fit or not in range, the result is <code>null</code>.</p>
-<h4>@.receiver(<var>function</var>)</h4>
-<p>The <code>receiver</code> function registers a <var>function</var> that will receive all messages sent to the actor except for <a href="intrinsic.html#delay">delay</a> events, reply messages (which are sent to the <a href="statements.html#send"><code>send</code></a> <var>callback</var>), the <a href="#unneeded"><code>unneeded</code></a> message, and <a href="#portal">portal</a> <a href="#contact">contact</a> messages. The <code>receiver</code> function returns <code>null</code>.</p>
-<h3 id="start"><code>start</code> function</h3>
-<h4>@.start(<var>callback</var>, <var>program</var>, <var>arguments</var>)</h4>
-<p>The <code>start</code> function creates a new actor. The <var>callback</var> function receives messages about the new actor, starting with a message containing the new actor's address object.</p>
-<p>The <var>program</var> text  identifies the  executable in  the program shop that the new actor runs. </p>
-<p>The <var>arguments</var> array contains up to four arguments of type logical, number, text, or actor address object.</p>
-<p>The current actor is the overling of the new actor, and it is notified when the new actor stops. The new actor is an underling of the current actor.</p>
+<h4 id="receiver">receiver!(<var>callback</var>)</h4>
+<p>The <code>receiver</code> <var>callback</var> function registers a <var>callback</var> that will receive all messages sent to the actor except for <a href="intrinsic.html#delay">delay</a> events, reply messages (which are sent to the <a href="statements.html#send"><code>send</code></a> <var>callback</var>), the <a href="#unneeded"><code>unneeded</code></a> message, and <a href="#portal">portal</a> <a href="#contact">contact</a> messages. The <code>receiver</code> function returns <code>null</code>.</p>
+<h4 id="start">start!(<var>callback</var>, <var>program</var>)</h4>
+<p>The <code>start</code> function creates a new actor, aka underling. The <var>callback</var> function receives messages about the new actor, starting with a message containing the new actor's address object.</p>
+<p>The <var>program</var> text  identifies the  executable in  the program shop that the new actor runs. The program shop may start an existing executable, or may generate a new executable.</p>
+<p>The current actor is the overling of the new actor The new actor is an underling of the current actor. The overling is notified via the <var>callback</var> when the underling stops. </p>
 <h6>Example:</h6>
-<pre>call @.start(
+<pre>call <var></var>start!(
     callback
     &quot;example.mst&quot;
 )</pre>
-<h3 id="stop"><code>stop</code> function</h3>
-<h4>@.stop(<var>actor</var>) </h4>
-<p>The <code>stop</code> function stops an underling. The <code>stop</code> function returns <code>null</code>.</p>
-<h3 id="unneeded"><code>unneeded</code> function</h3>
-<h4>@.unneeded(<var>function</var>, <var>seconds</var>)</h4>
-<p>The <code>unneeded</code> function registers a <var>function</var> that is called when the actor  has not received a message in the recent <var>seconds</var>.  The default for <var>seconds</var> is the <a href="system.html#ar">ar timer</a>. This likely means that the actor is no longer needed. The actor should finish its work and then <code><a href="#stop">@.stop()</a></code>. </p>
+<h4 id="stop">stop!(<var>actor</var>) </h4>
+<p>The <code>stop!</code> function stops an underling. The <code>stop</code> function returns <code>null</code>.</p>
+<h4 id="unneeded">unneeded!(<var>function</var>, <var>seconds</var>)</h4>
+<p>The <code>unneeded</code>! function registers a <var>function</var> that is called when the actor  has not received a message in the recent <var>seconds</var>.  The default for <var>seconds</var> is the <a href="system.html#ar">ar timer</a>. This likely means that the actor is no longer needed. The actor should finish its work and then <code><a href="#stop">stop!()</a></code>. </p>
 <p>If the <code>unneeded</code> timer is not used, then the <a href="system.html#ar">ar timer</a> is used by default. The <code>unneeded</code> function allows for setting a longer or shorter time than the ar timer.</p>
 <p>This differs from the <a href="system.html#ar">ar timer</a> in two way: It is optional. Second, the actor is notified by the callback <var>function</var> before it is  stopped. </p>
 <p>The <code>unneeded</code> function returns <code>null</code>.</p>
-<h2 id="data">Actor Data Structures</h2>
-<h3>Actor  Address Object</h3>
-<p>An actor object is used with the <code><a href="statements.html#send">send</a></code> statement. It contains an actor's private address. A message may contain actor address objects, which will give the recipient actor the capability to send messages to those actors at the private addresses.</a></p>
-<p>There are three ways that an actor can obtain the actor address object of another actor.</p>
-<ul>
-    <li><dfn>construction</dfn>: by being given addresses by its overling at the time of its construction</li>
-    <li><dfn>creation</dfn>: by creating an actor with <code><a href="#start">@.start()</a></code></li>
-    <li><dfn>introduction</dfn>: by receiving a message containing an actor's private address object</li>
-</ul>
-<h3>Message object</h3>
-<p>A message object is obtained from the callback function that is registered with <code>@.receiver</code>. It acts like an ordinary record. </p>
-<p>When a message is sent using the callback form, the message itself may be used once as an actor's private address for transmitting the reply.</p>
-<h2 id="turns">Turns</h2>
-<p>Computation takes place in an actor in a fragment of time called a <dfn>turn</dfn>.
-A turn starts with the receiving of a message.
-A function (such as the function registered with <code>@.receive</code>, <code>@.portal</code>, <code>@.clock</code>,  or a <code><a href="intrinsic.html#delay">delay</a></code><a href="intrinsic.html#delay"> callback function</a>)
-will run to completion. Any outgoing messages are held until the turn completes successfully,
-at which time they go into the outgoing queue and are sent.</p>
-<p>An actor will not receive another message until the turn ends. Each turn will process exactly one message.</p>
-<p>If a machine has multiple computation units, then it is possible for multiple turns of multiple actors to be going on simultaneously.
-Turns can be timesliced. There are no concurrency issues because actors do not share memory.
-They communicate with other actors and the world only by  message passing. </p>
-<h2 id="endowment">Endowment</h2>
-<p>The <dfn>name</dfn> of a program or module can contain endowed constants. These constants can be used to customize a program. The constants are accessed by the <code><a href="operators.html#period">.</a></code><a href="operators.html#period"><small>period</small> operator</a>. The endowment constants can be specified when the program executable is produced.</p>
-<p>An endowment can also contain functions that give access to system powers like I/O. See <a href="system.html#policy">Policy</a>.</p>
+<h3 id="other">Other functions</h3>
+<p>The Policy Machine can grant access to other functions that access capabilities that are typically associated with operating systems, databases, and cryptographic systems.</p>
+<h3>Constants</h3>
+<p>An endowment can provide compile-time constants. </p>
+<h6>Example:</h6>
 <pre>misty program example
-if example.test
-    # stuff that executes if test is true
+if test!
+    # stuff that executes if test! is true
 else
-    # stuff that execute if test is false
+    # stuff that execute if test! is false
 fi
 end example</pre>
-<h2 id="logging">Logging</h2>
-<p>A log service is built into Misty for the chronicalling of errors and and mishaps. See the <a href="statements.html#log"><code>log</code> statement</a>.</p>
 <h2 id="failure">Failure</h2>
 <p>Fail to a known condition. </p>
 <p>In distributed systems, we can not be certain of failure. Failure may be  presumed.</p>
