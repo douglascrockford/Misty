@@ -6,7 +6,7 @@
     src: url('https://mistysystem.com/woff/Programma-Bold.woff2') format('woff2');
 }
 
-body, p, li, h3, h4, h5, h6 {
+body, p, li, h3, h4, h5, h6, code, pre, textarea {
     font-size: 12pt;
 }
 
@@ -15,7 +15,6 @@ textarea {
     font-size: 10pt;
     padding: 0.75em;
     white-space: pre;
-    width: 100%;
 }
 
 fieldset, legend {
@@ -118,10 +117,6 @@ code, pre, h4, textarea {
     font-weight: bold;
 }
 
-code, pre, h4 {
-    font-size: 100%;
-}
-
 h4 var {
     font-family: Georgia, serif;
     font-weight: 400;
@@ -176,17 +171,21 @@ hr {
     border: 1pt solid black;
 }
 
-pre {
+ul, pre, .rule {
     break-inside: avoid;
+}
+
+pre {
     margin-left: 3em;
 }
 
 small {
-    font-size: 8pt;
+    font-size: 75%;
     font-style: italic;
     letter-spacing: 0;
     margin-left: 2pt;
     margin-right: 0.75pt;
+    text-wrap-mode: nowrap;
 }
 
 caption {
