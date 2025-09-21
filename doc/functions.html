@@ -281,27 +281,51 @@ assign sloppy: =!(first, second, true)    # sloppy is true</pre>
 <p>The not equal function can take two or three input values. The first two input values are values to be compared. The optional third input value is a tolerance. When comparing numbers, the tolerance is a number that indicates the allowable difference. When comparing texts, the tolerance is a logical that if <code>true</code> ignores case.</p>
 <h4><span id="'[]">[]!</span><small>get</small></h4>
 <p>The get function  takes two input values. The first input value is an array, record, or text. The second input value is an element number or key. It returns an element, a property, or a character, or <code>null</code>.</p>
-<h2 id="callback">Callback</h2>
-<p>These endowment functions take a <var>callback</var> input value: </p>
+<h2 id="types">Function Types</h2>
+<p>There are several function types that are essential to Misty. They are</p>
+<ul>
+    <li><a href="#callback">callback</a></li>
+    <li><a href="#requestor_factory">requestor factory</a></li>
+    <li><a href="#requestor">requestor function</a></li>
+    <li><a href="#cancel">cancel</a></li>
+</ul>
+<h3 id="callback">Callback</h3>
+<p>A callback function is a function that is used to deliver functional results from the future. A callback function has this signature:</p>
+<pre>function (<var>value</var>, <var>reason</var>)</pre>
+<p>The <var>value</var> is the value of the operation if it was successful. The <var>value</var> is <code>null</code> if it is unsuccessful.</p>
+<p>If the <var>value</var> is <code>null</code>, then the optional <var>reason</var> may include an error message or indication of the cause of the unsuccess.</p>
+<p><a href="#requestor_function">Requestor functions</a> take a callback.</p>
+<h6>These endowment functions take a callback: </h6>
 <ul>
     <li><code><a href="programs.html#clock">clock!</a></code></li>
-    <li><code><a href="programs.html#delay">delay!</a></code></li><br>
+    <li><code><a href="programs.html#delay">delay!</a></code></li>
     <li><code><a href="programs.html#contact">contact!</a></code></li>
     <li><code><a href="programs.html#portal">portal!</a></code></li>
     <li><code><a href="programs.html#start">start!</a></code></li>
-    <li><code><a href="programs.html#unneeded">unneeded!</a></code></li>
-    <li>functions returned by these intrinsic functions:
-        <ul>
-            <li><code><a href="intrinsic.html#fallback">fallback</a></code></li>
-            <li><a href="intrinsic.html#par_all"><code>par_all</code></a></li>
-            <li><a href="intrinsic.html#par_any"><code>par_any</code></a></li>
-            <li><code><a href="intrinsic.html#race">race</a></code></li>
-            <li><code><a href="intrinsic.html#sequence">sequence</a></code></li>
-        </ul>
-    </li>
+    <li><code><a href="programs.html#unneeded">unneeded!</a></code> </li>
 </ul>
-<p>A <var>callback</var> function has this signature:</p>
-<pre>function (<var>value</var>, <var>reason</var>)</pre>
-<p>The <var>value</var> is the value of the request if it was successful. The value is <code>null</code> if it is unsuccessful.</p>
-<p>If the <var>value</var> is <code>null</code>, then the <var>reason</var> may include an error message or indication of the cause of the unsuccess.</p>
+<p>The <a href="statements.html#send">send</a> statement can take a callback to receive replies.</p>
+<h3 id="requestor_factory">Requestor Factory</h3>
+<p>A requestor factory is a function that returns a <a href="#requewstor">requestor function</a>. These standard functions are requestor factories:</p>
+<p>functions returned by these intrinsic functions: </p>
+<ul>
+    <li><code><a href="intrinsic.html#collect">collect</a></code></li>
+    <li><a href="intrinsic.html#parallel"><code>parallel</code></a></li>
+    <li><a href="intrinsic.html#pipeline"><code>pipeline</code></a></li>
+    <li><code><a href="intrinsic.html#race">race</a></code></li>
+    <li><code><a href="programs.html#time_limit">time_limit!</a></code></li>
+</ul>
+<h3>Requestor Function</h3>
+<p>A requestor function encapsulates a unit of work, communicating the result thru a <a href="#callback">callback</a>, allowing work to progress over many turns. A requestor function has this signature:</p>
+<pre>function (<var>callback</var>, <var>input</var>)</pre>
+<p>When the requestor function is finished, it calls the <a href="#callback"><var>callback</var></a> function with the result.</p>
+<p>The optional <var>input</var> is some value that is used to determine the result.</p>
+<p>A common usage is to send a message to some actor. When the reply eventually arrives, extract a <var>value</var> from the reply and pass it to the <var><a href="#callback">callback</a></var>.</p>
+<p>A requestor function can optionally return a <a href="#cancel">cancel</a> function. </p>
+<h3>Cancel</h3>
+<p>A requestor function may optionally return a <a href="#cancel">cancel</a> function. When the cancel function is called, it attempts to stop the work of the requestor. A cancel function try to send a message to some actor informing it that the result is no longer needed. The purpose of cancel is to stop work that is no longer required. It is advisory. It is not an undo. It is not guaranteed, particularly in the case where cancel is called after some actor has completed its work.</p>
+<p>Cancel is most effective with the <a href="#requestor_factory">requestor factories</a> that are organizing the work.</p>
+<p>A cancel function has this signature:</p>
+<pre>function (reason)</pre>
+<p>The <var>reason</var> is optional, but if included might be logged or propagated.</p>
 </body></html>

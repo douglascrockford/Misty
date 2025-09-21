@@ -266,10 +266,9 @@ callback
 </p>
 <p>The <code>send</code> statement sends a message to another <a href="system.html#actors">actor</a>.
 The left <dfn>expression</dfn> must resolve to an actor address object or a message object that is expecting a reply because it was sent with a callback. The right <dfn>expression</dfn> is a record containing the outgoing message. The outgoing message record must not  contain functions or patterns or cyclic structures.</p>
-<p>If a <dfn>callback</dfn> function is included, then the <dfn>callback</dfn> function will receive the reply, not the receiver function.</p>
-<p>See <a href="programs.html">programs</a>.</p>
+<p>If a <dfn>callback</dfn> function is included, then the <dfn>callback</dfn> function will receive the reply, not the <a href="programs.html#receiver">receiver</a> function. See <a href="functions.html#callback">callback</a>.</p>
 <h6>Example:</h6>
-<pre>send server: message</pre>
+<pre>send server: message: reply_callback</pre>
 <h3 id="use">The <code>use</code> statement</h3>
 <p class="rule">
 use

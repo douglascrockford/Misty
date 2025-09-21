@@ -40,7 +40,7 @@ The <a href="statements.html#use"><code>use</code> statement</a> is not needed t
 <p>Copy. Make a mutable copy of the array.</p>
 <h4>array(<var>array</var>, <var>function</var>, <var>reverse</var>, <var>exit</var>)</h4>
 <p>Map. Call the <var>function</var> with each element of  the <var>array</var>, collecting the return values in a new array. The <var>function</var> is passed each  element and its element number.</p>
-<pre>(element, element_nr)</pre>
+<pre>function (element, element_nr)</pre>
 <p>If <var>reverse</var> is <code>true</code>, then it starts with the last element and works backwards.</p>
 <p>If <var>exit</var> is not <code>null</code>, then when the <var>function</var> returns the <var>exit</var> value, then the <code>array</code> function returns early. The <var>exit</var> value will not be stored into the new array. If the <var>array</var> was processed normally, then the returned array will be shorter than the input <var>array</var>. If the <var>array</var> was processed in <var>reverse</var>, then the returned array will have the same length as the input <var>array</var>, and the first elements will be <code>null</code>. The elements in the new array that were not set due to an early exit will be set to <code>null</code>.</p>
 <p>This is like the <code><a href="#for">for</a></code><a href="#for"> function</a> except that the return values are collected into a new array.</p>
@@ -602,6 +602,12 @@ assign result: ceiling(-12.3775)        # result is -12</pre>
 <p>If the <var>value</var> is a text, it returns the first character. If the <var>value</var> is a non-negative 32-bit integer, it returns the character from that codepoint. Otherwise, it returns the empty string.</p>
 <h4 id="codepoint">codepoint(<var>text</var>)</h4>
 <p>The <code>codepoint</code> function returns the first codepoint in a <var>text</var> as a number. If the input value is not a text, or if it is the empty text, then it returns <code>null</code>.</p>
+<h4 id="collect">collect(<var>requestor_array</var>, <var>throttle</var>)</h4>
+<p>Collect. The <code>collect</code> function is a <a href="programs.html#requestor_factory">requestor factory</a> that takes an array of <a href="functions.html#requestor">requestor</a> functions and returns a <a href="functions.html#requestor">requestor</a> function that 
+    starts all of the <a href="functions.html#requestor">requestors</a> in the <var>requestor_array</var> at once, limited by the <var>throttle</var>. The <var>throttle</var> is optional. If provided, the <var>throttle</var> is a number: the maximum number of requestors to have 
+    running at any time. The <var>throttle</var> can be used to prevent overwhelming of systems.</p>
+<p>The returned requestor function returns a <a href="functions.html#cancel">cancel</a> function that, when called, cancels all of the pending requestors from the <var>requestor_array</var>.</p>
+<p>After all of the requestors have succeeded, failed, or cancelled, the <code>collect</code> operation is finished. If any of the requestor functions from the <var>requestor_array</var> succeeded, then <code>collect</code> succeeds.  The result is an array containing each of the individual results in the same order as the <var>requestor_array</var>. Slots associated with successful requestors  contain values. The other slots contain null.</p> 
 <h4 id="extract">extract(<var>text</var>, <var>pattern</var>, <var>from</var>, <var>to</var>)</h4>
 <p>The <var>text</var> is matched to the <var>pattern</var>. If it does not match, the result is <code>null</code>. If the <var>pattern</var> does match, then the result is a record containing the saved fields.</p>
 <h4>filter(<var>array</var>, <var>function</var>)</h4>
@@ -668,7 +674,7 @@ texts or a record of texts.</p>
     the <var>transformer</var>. If the <var>transformer</var> does not produce
     a function, or if the function does not return a text, then no replacement
     occurs. If <var>transformer</var><code>[</code>right text<code>](</code><var>collection</var><code>[</code>left
-text<code>])</code> produces a text, then the substituation is
+text<code>])</code> produces a text, then the substitution is
     made.</p>
 <p>If the substitution is not made, and if <var>collection</var><code>[</code>left
 text<code>]</code> is a number, then the right text is used as a format
@@ -761,10 +767,30 @@ then the result is <code>null</code>. <var><var>dividend</var></var> and <var>di
 <p>Unicode normalize. Return a text whose textual value is the same as <var>text</var>, but whose binary representation is in the specified Unicode normalization form. The two texts will display the same, but might not be equal.</p>
 <h4 id="not">not(<var>logical</var>)</h4>
 <p>Not. Return the opposite logical. If the input value is not a logical, it returns <code>null</code>.</p>
-<h4>reduce(<var>array</var>, <var>function</var>, <var>initial</var>, <var>reverse</var>)</h4>
-<p>The <code>reduce</code> function takes a <var>function</var> that takes
+<h4 id="parallel">parallel(<var>requestor_array</var>, <var>throttle</var>)</h4>
+<p>Parallel. The <code>parallel</code> function is a <a href="programs.html#requestor_factory">requestor factory</a> that takes an array of <a href="functions.html#requestor">requestor</a> functions and returns a <a href="functions.html#requestor">requestor</a> function. </p>
+<p>When the requestor function is called with a callback function and an input, every requestor in the array is called with the input, and the results are placed in corresponding elements of the results array. This all happens in parallel. The completed results array is passed to the callback function.</p>
+<p> The <var>throttle</var> is optional. If provided, the <var>throttle</var> is a number: the maximum number of requestors to have 
+    running at any time. The <var>throttle</var> can be used to prevent overwhelming of systems.</p>
+<p>The returned requestor function itself returns a <a href="functions.html#cancel">cancel</a> function that cancels all of the pending requestors from the <var>requestor_array</var>.</p>
+<p>If any of the requestor functions from the <var>requestor_array</var> fails, all pending requestors fail and the <code>parallel</code> operation fails.</p>
+<p>The <code>parallel</code> operation succeeds if every requestor in the <var>requestor_array</var> succeeds. The result is an array containing each of the individual results in the same order as the <var>requestor_array</var>.</p>
+<h4 id="parallel2"><span id="pipeline">pipeline</span>(<var>requestor_array</var>)</h4>
+<p>Pipeline. The <code>pipeline</code> function is a <a href="programs.html#requestor_factory">requestor factory</a> that takes an array of <a href="functions.html#requestor">requestor</a> functions and returns a <a href="functions.html#requestor">requestor</a> function that 
+    starts all of the <a href="functions.html#requestor">requestors</a> in the <var>requestor_array</var> one at a time. <var></var>The result of each becomes the input to the next. The last result is the result of the pipeline. </p>
+<p>The pipeline succeeds if every requestor in the requestor_array succeeds</p>
+<h4 id="race">race(<var>requestor_array</var>, <var>throttle</var>)</h4>
+<p>Race. The <code>race</code> function is a <a href="programs.html#requestor_factory">requestor factory</a> that takes an array of <a href="functions.html#requestor">requestor</a> functions and returns a <a href="functions.html#requestor">requestor</a> function that 
+    starts all of the <a href="functions.html#requestor">requestors</a> in the <var>requestor_array</var> at once, limited by the <var>throttle</var>. The <var>throttle</var> is optional. If provided, the <var>throttle</var> is a number: the maximum number of requestors to have 
+running at any time. The <var>throttle</var> can be used to prevent overwhelming of systems.</p>
+<p>The returned requestor function returns a <a href="functions.html#cancel">cancel</a> function that cancels all of the pending requestors from the <var>requestor_array</var>.</p>
+<p>The parallel operation succeeds when the first requestor from the requestor_array succeeds. The losers are cancelled. The result is the value of the winning requestor.</p>
+<h4 id="reduce">reduce(<var>array</var>, <var>function</var>, <var>initial</var>, <var>reverse</var>)</h4>
+<p>Reduce. The <code>reduce</code> function takes a <var>function</var> that takes
     two input values and returns a value.</p>
-<pre>(zeroth, wunth)</pre>
+<pre>function (first, second) {
+    return ...
+}</pre>
 <p>The <var>function</var> is called
     for each element of the <var>array</var>, passing the result of the previous
     iteration to the next iteration.</p>
@@ -791,7 +817,7 @@ then the result is <code>null</code>. <var><var>dividend</var></var> and <var>di
 def total: reduce(data, '+)      # total is 45
 def product: reduce(data, '*)    # product is 362880</pre>
 <h4 id="remainder">remainder(<var>dividend</var>, <var>divisor</var>)</h4>
-<p>For fit integers, the remainder is <var>dividend</var><code> - ((</code><var>dividend</var><code> // </code><var>divisor</var><code>) * </code><var>divisor</var><code>)</code>.</p>
+<p>Remainder. For fit integers, the remainder is <var>dividend</var><code> - ((</code><var>dividend</var><code> // </code><var>divisor</var><code>) * </code><var>divisor</var><code>)</code>.</p>
 <h4 id="replace">replace(<var>text</var>, <var>target</var>, <var>replacement</var><code>, <var>limit</var></code>)</h4>
 <p>Return a new text in which the <var>target</var> is replaced by the <var>replacement</var>.</p>
 <p><var>text</var>: the source text.</p>
