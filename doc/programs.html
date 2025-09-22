@@ -123,13 +123,13 @@ Any messages sent in this final turn will not be put into the outgoing queue.</p
 <p>The <code>delay!</code> function is used to schedule the invocation of a <var>callback</var> function at a later time. Any value returned
     from the delayed invocation is ignored. There is no guarantee that the <var>callback</var> will ever be invoked. The delayed invocation will not interrupt
     normal processing. The invocation is delayed until the actor is
-    waiting for a message. The <code>delay</code>! function returns <code>null</code>.</p>
-<p>The <code>delay!</code> function immediately returns a <a href="#functions.html#cancel">cancel</a> function.
-    Calling the <a href="#requestor">cancel</a> function will cancel the delayed execution of the <var>callback</var>, if it is not too late. If it is too late, the cancel is ignored.</p>
+    waiting for a message. </p>
 <p>The <var>seconds</var> argument specifies when the invocation will occur,
     no sooner than <var>seconds</var> seconds after now. The <var>seconds</var> input must be a non-negative number or <code>null</code> which behaves as <code>0</code>.</p>
+<p>The <code>delay!</code> function immediately returns a <a href="#functions.html#cancel">cancel</a> function.
+    Calling the <a href="#requestor">cancel</a> function will cancel the delayed execution of the <var>callback</var>, if it is not too late. If it is too late, the cancel is ignored.</p>
 <h6>Example:</h6>
-<pre>call delay!(continuation, 0.1)
+<pre>assign cancel_continuation: delay!(continuation, 0.1)
 </pre>
 <h4 id="timeout">time_limit!(<var>requestor</var>, <var>seconds</var>)</h4>
 <p>The <code>time_limit!</code> function is a <a href="programs.html#requestor_factory">requestor factory</a> that takes a <var><a href="programs.html#requestor">requestor</a></var><a href="programs.html#requestor"> function</a> and returns a similar time limited <a href="programs.html#requestor">requestor function</a>, which acts the same, but will automatically <a href="functions.html#cancel">cancel</a> when the time is exceeded.</p>
