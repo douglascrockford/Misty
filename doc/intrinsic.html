@@ -201,17 +201,16 @@ format_separation
 <p class="rule">
 format_style
     <code>'b'</code>
+    <code>'c'</code>
     <code>'e'</code>
     <code>'h'</code>
     <code>'i'</code>
-    <code>'j'</code>
-    <code>'n'</code>
     <code>'l'</code>
+    <code>'n'</code> 
     <code>'o'</code>
     <code>'s'</code>
     <code>'t'</code>
     <code>'u'</code>
-    <code>'v'</code>
 </p>
 <p class="rule">
 format_places
@@ -234,10 +233,11 @@ format_places
     real styles) or the minimum number of digits to display with zero-fill
     (in integer styles). If places is 0, then as many digits as necessary
     are displayed. Places can be zero or one or two digits.</p>
-<table class=center style="clear: both;">
+<table style="clear: both;">
     <tbody>
         <tr>
             <th colspan="2">real style</th>
+            <th align="center">base</th>
             <th align="center">default<br>
                 separation</th>
             <th align="center">default<br>
@@ -249,6 +249,7 @@ format_places
         <tr>
             <td><code>e</code></td>
             <td><i>exponential</i></td>
+            <td rowspan="6" align="center" valign="top">10</td>
             <td rowspan="2" align="center" valign="top">0</td>
             <td rowspan="4" align="center" valign="top">0</td>
             <td rowspan="5" align="center" valign="top"><code>.</code><small>period</small></td>
@@ -276,7 +277,7 @@ format_places
             <td><code>,</code><small>comma</small></td>
         </tr>
         <tr>
-            <td><code>v</code></td>
+            <td><code>c</code></td>
             <td><i>comma</i></td>
             <td align="center"><code>,</code><small>comma</small></td>
             <td><code>.</code><small>period</small></td>
@@ -284,7 +285,7 @@ format_places
         <tr>
             <td><code>l</code></td>
             <td><i>locale</i></td>
-            <td colspan="4" align="center">determined by the locale</td>
+            <td colspan="5" align="center">determined by the locale</td>
         </tr>
     </tbody>
 </table>
@@ -298,7 +299,7 @@ format_places
     <p><code>&quot;d&quot;</code>  uses <code>.</code><small>period</small> as the decimal point and <code>,</code><small>comma</small> as the separator.</p>
     <p><code>&quot;c&quot;</code>  uses <code>,</code><small>comma</small> as the decimal point and <code>.</code><small>period</small> as the separator.</p>
     <p><code>&quot;l&quot;</code>  depends on the locale to determine the characters
-        to use as the decimal point and the separator.</p>
+    to use as the decimal point and the separator.</p>
 </blockquote>
 <p>The optional <var>places</var> determines the number of digits after
     the decimal point. The default is determined by the <var>format</var>, as seen in the table.
@@ -603,11 +604,11 @@ assign result: ceiling(-12.3775)        # result is -12</pre>
 <h4 id="codepoint">codepoint(<var>text</var>)</h4>
 <p>The <code>codepoint</code> function returns the first codepoint in a <var>text</var> as a number. If the input value is not a text, or if it is the empty text, then it returns <code>null</code>.</p>
 <h4 id="collect">collect(<var>requestor_array</var>, <var>throttle</var>)</h4>
-<p>Collect. The <code>collect</code> function is a <a href="programs.html#requestor_factory">requestor factory</a> that takes an array of <a href="functions.html#requestor">requestor</a> functions and returns a <a href="functions.html#requestor">requestor</a> function that 
-    starts all of the <a href="functions.html#requestor">requestors</a> in the <var>requestor_array</var> at once, limited by the <var>throttle</var>. The <var>throttle</var> is optional. If provided, the <var>throttle</var> is a number: the maximum number of requestors to have 
+<p>Collect. The <code>collect</code> function is a <a href="programs.html#requestor_factory">requestor factory</a> that takes an array of <a href="functions.html#requestor">requestor</a> functions and returns a <a href="functions.html#requestor">requestor</a> function that
+    starts all of the <a href="functions.html#requestor">requestors</a> in the <var>requestor_array</var> at once, limited by the <var>throttle</var>. The <var>throttle</var> is optional. If provided, the <var>throttle</var> is a number: the maximum number of requestors to have
     running at any time. The <var>throttle</var> can be used to prevent overwhelming of systems.</p>
 <p>The returned requestor function returns a <a href="functions.html#cancel">cancel</a> function that, when called, cancels all of the pending requestors from the <var>requestor_array</var>.</p>
-<p>After all of the requestors have succeeded, failed, or cancelled, the <code>collect</code> operation is finished. If any of the requestor functions from the <var>requestor_array</var> succeeded, then <code>collect</code> succeeds.  The result is an array containing each of the individual results in the same order as the <var>requestor_array</var>. Slots associated with successful requestors  contain values. The other slots contain null.</p> 
+<p>After all of the requestors have succeeded, failed, or cancelled, the <code>collect</code> operation is finished. If any of the requestor functions from the <var>requestor_array</var> succeeded, then <code>collect</code> succeeds.  The result is an array containing each of the individual results in the same order as the <var>requestor_array</var>. Slots associated with successful requestors  contain values. The other slots contain null.</p>
 <h4 id="extract">extract(<var>text</var>, <var>pattern</var>, <var>from</var>, <var>to</var>)</h4>
 <p>The <var>text</var> is matched to the <var>pattern</var>. If it does not match, the result is <code>null</code>. If the <var>pattern</var> does match, then the result is a record containing the saved fields.</p>
 <h4>filter(<var>array</var>, <var>function</var>)</h4>
@@ -770,18 +771,18 @@ then the result is <code>null</code>. <var><var>dividend</var></var> and <var>di
 <h4 id="parallel">parallel(<var>requestor_array</var>, <var>throttle</var>)</h4>
 <p>Parallel. The <code>parallel</code> function is a <a href="programs.html#requestor_factory">requestor factory</a> that takes an array of <a href="functions.html#requestor">requestor</a> functions and returns a <a href="functions.html#requestor">requestor</a> function. </p>
 <p>When the requestor function is called with a callback function and an input, every requestor in the array is called with the input, and the results are placed in corresponding elements of the results array. This all happens in parallel. The completed results array is passed to the callback function.</p>
-<p> The <var>throttle</var> is optional. If provided, the <var>throttle</var> is a number: the maximum number of requestors to have 
+<p> The <var>throttle</var> is optional. If provided, the <var>throttle</var> is a number: the maximum number of requestors to have
     running at any time. The <var>throttle</var> can be used to prevent overwhelming of systems.</p>
 <p>The returned requestor function itself returns a <a href="functions.html#cancel">cancel</a> function that cancels all of the pending requestors from the <var>requestor_array</var>.</p>
 <p>If any of the requestor functions from the <var>requestor_array</var> fails, all pending requestors fail and the <code>parallel</code> operation fails.</p>
 <p>The <code>parallel</code> operation succeeds if every requestor in the <var>requestor_array</var> succeeds. The result is an array containing each of the individual results in the same order as the <var>requestor_array</var>.</p>
 <h4 id="parallel2"><span id="pipeline">pipeline</span>(<var>requestor_array</var>)</h4>
-<p>Pipeline. The <code>pipeline</code> function is a <a href="programs.html#requestor_factory">requestor factory</a> that takes an array of <a href="functions.html#requestor">requestor</a> functions and returns a <a href="functions.html#requestor">requestor</a> function that 
+<p>Pipeline. The <code>pipeline</code> function is a <a href="programs.html#requestor_factory">requestor factory</a> that takes an array of <a href="functions.html#requestor">requestor</a> functions and returns a <a href="functions.html#requestor">requestor</a> function that
     starts all of the <a href="functions.html#requestor">requestors</a> in the <var>requestor_array</var> one at a time. <var></var>The result of each becomes the input to the next. The last result is the result of the pipeline. </p>
 <p>The pipeline succeeds if every requestor in the requestor_array succeeds</p>
 <h4 id="race">race(<var>requestor_array</var>, <var>throttle</var>)</h4>
-<p>Race. The <code>race</code> function is a <a href="programs.html#requestor_factory">requestor factory</a> that takes an array of <a href="functions.html#requestor">requestor</a> functions and returns a <a href="functions.html#requestor">requestor</a> function that 
-    starts all of the <a href="functions.html#requestor">requestors</a> in the <var>requestor_array</var> at once, limited by the <var>throttle</var>. The <var>throttle</var> is optional. If provided, the <var>throttle</var> is a number: the maximum number of requestors to have 
+<p>Race. The <code>race</code> function is a <a href="programs.html#requestor_factory">requestor factory</a> that takes an array of <a href="functions.html#requestor">requestor</a> functions and returns a <a href="functions.html#requestor">requestor</a> function that
+    starts all of the <a href="functions.html#requestor">requestors</a> in the <var>requestor_array</var> at once, limited by the <var>throttle</var>. The <var>throttle</var> is optional. If provided, the <var>throttle</var> is a number: the maximum number of requestors to have
 running at any time. The <var>throttle</var> can be used to prevent overwhelming of systems.</p>
 <p>The returned requestor function returns a <a href="functions.html#cancel">cancel</a> function that cancels all of the pending requestors from the <var>requestor_array</var>.</p>
 <p>The parallel operation succeeds when the first requestor from the requestor_array succeeds. The losers are cancelled. The result is the value of the winning requestor.</p>
