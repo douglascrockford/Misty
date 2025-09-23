@@ -10,6 +10,30 @@ body, p, li, h3, h4, h5, h6, code, pre, textarea {
     font-size: 12pt;
 }
 
+body, p, li, h5, h6  {
+    font-family: Palatino, serif;
+    font-style: normal;
+    font-weight: 400;
+}
+
+i, var {
+    font-family: Palatino, serif;
+    font-style: italic;
+    font-weight: 400;
+}
+
+dfn, h1, h2, h3, caption, legend, .rule {
+    font-family: "Trebuchet MS", sans-serif;
+    font-style: normal;
+    font-weight: 500;
+}
+
+code, pre, h4, textarea {
+    font-family: Programma, monospace;
+    font-style: normal;
+    font-weight: bold;
+}
+
 textarea {
     box-sizing: border-box;
     font-size: 10pt;
@@ -33,24 +57,12 @@ legend {
     padding-right: 1em;
 }
 
-dfn, h1, h2, h3, caption, legend, .rule {
-    font-family: "Trebuchet MS", Futura, "Gill Sans", Arial, Helvetica, sans-serif;
-    font-style: normal;
-    font-weight: 500;
-}
-
 h1, h2, h3, h4, h5, h6 {
     break-after: avoid;
 }
 
 h1, h2, h3, h4 {
     clear: both;
-}
-
-body, p, .rule i, li, h5, h6  {
-    font-family: Georgia, Garamond, serif;
-    font-weight: 400;
-    font-style: normal;
 }
 
 body {
@@ -112,17 +124,6 @@ h4 {
     padding-bottom: 0px;
     text-align: left;
     white-space: pre-wrap;
-}
-
-code, pre, h4, textarea {
-    font-family: Programma, monospace;
-    font-style: normal;
-    font-weight: bold;
-}
-
-h4 var {
-    font-family: Georgia, serif;
-    font-weight: 400;
 }
 
 h5 {
@@ -230,12 +231,6 @@ table.center {
     float: none;
     margin-left: auto;
     margin-right: auto;
-}
-
-i, var {
-    font-family: Georgia, serif;
-    font-style: italic;
-    font-weight: 400;
 }
 
 .rule {
