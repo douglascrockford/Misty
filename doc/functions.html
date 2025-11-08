@@ -306,26 +306,26 @@ assign sloppy: =!(first, second, true)    # sloppy is true</pre>
 </ul>
 <p>The <a href="statements.html#send">send</a> statement can take a callback to receive replies.</p>
 <h3 id="requestor_factory">Requestor Factory</h3>
-<p>A requestor factory is a function that returns a <a href="#requewstor">requestor function</a>. These standard functions are requestor factories:</p>
+<p>A factory function is any function that returns a function. A requestor factory is a function that returns a <a href="#requewstor">requestor function</a>. These standard functions are requestor factories:</p>
 <p>functions returned by these intrinsic functions: </p>
 <ul>
-    <li><code><a href="intrinsic.html#collect">collect</a></code></li>
+    <li><code><a href="intrinsic.html#fallback">fallback</a></code></li>
     <li><a href="intrinsic.html#parallel"><code>parallel</code></a></li>
-    <li><a href="intrinsic.html#pipeline"><code>pipeline</code></a></li>
     <li><code><a href="intrinsic.html#race">race</a></code></li>
+    <li><a href="intrinsic.html#sequence"><code>sequence</code></a></li>
     <li><code><a href="programs.html#time_limit">time_limit!</a></code></li>
 </ul>
 <h3>Requestor Function</h3>
 <p>A requestor function encapsulates a unit of work, communicating the result thru a <a href="#callback">callback</a>, allowing work to progress over many turns. A requestor function has this signature:</p>
-<pre>function (<var>callback</var>, <var>input</var>)</pre>
+<pre>function requestor(<var>callback</var>, <var>value</var>)</pre>
 <p>When the requestor function is finished, it calls the <a href="#callback"><var>callback</var></a> function with the result.</p>
-<p>The optional <var>input</var> is some value that is used to determine the result.</p>
-<p>A common usage is to send a message to some actor. When the reply eventually arrives, extract a <var>value</var> from the reply and pass it to the <var><a href="#callback">callback</a></var>.</p>
+<p>The optional <var>value</var> is some value that is used to determine the result.</p>
+<p>A common usage is to send a message to some actor. When the reply eventually arrives, extract a result from the reply and pass it to the <var><a href="#callback">callback</a></var>.</p>
 <p>A requestor function can optionally return a <a href="#cancel">cancel</a> function. </p>
 <h3>Cancel</h3>
 <p>A requestor function may optionally return a <a href="#cancel">cancel</a> function. When the cancel function is called, it attempts to stop the work of the requestor. A cancel function try to send a message to some actor informing it that the result is no longer needed. The purpose of cancel is to stop work that is no longer required. It is advisory. It is not an undo. It is not guaranteed, particularly in the case where cancel is called after some actor has completed its work.</p>
 <p>Cancel is most effective with the <a href="#requestor_factory">requestor factories</a> that are organizing the work.</p>
 <p>A cancel function has this signature:</p>
-<pre>function (reason)</pre>
-<p>The <var>reason</var> is optional, but if included might be logged or propagated.</p>
+<pre>function cancel(<var>reason</var>, <var>abandon</var> | true)</pre>
+<p>The <var>reason</var> is optional, but if included might be logged or propagated. If <var>abandon</var> is <code>true</code>, then simply stop the requested work. If abandon is <code>false</code>, then if possible, complete the assignment, perhaps by calling the <a href="#callback">callback</a> with the <var>reason</var>.</p>
 </body></html>
