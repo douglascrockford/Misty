@@ -33,7 +33,7 @@ end hello_world</pre>
 <p>A misty program contains the entry point for an executable. </p>
 <p>When an actor is started, the statements in the <code>program</code> file are executed. The statements should start the execution of the actor, which usually involves the setting of a <a href="#receiver">receiver</a> so that the actor can receive messages. Other sorts of initialization may take place as well. </p>
 <p>The program can pull in code from the module library with the <a href="statements.html#use"><code>use</code></a> statement. </p>
-<p>A module  is a subprogram that provides functionality to a program or other modules. These can be used to build reusable libraries. The body of the module contains a string of statements. The statements in the body may not include <code><a href="statements.html#">do</a></code>, although a body may contain functions which can include <code>do</code>. </p>
+<p>A module  is a subprogram that provides functionality to a program or other modules. These can be used to build reusable libraries. The body of the module contains a string of statements. The statements in the body may not include <code><a href="statements.html#">do</a></code>, although a body may contain functions that can include <code>do</code>. </p>
 <p>A module executes its body, as a function does, and returns a value that is bound to the name in the <code>use</code> statement. Typically, it will return a constructor function, but it can also return a record of functions. The return value is stone. Modules can be used to protect capabilities. For example, a trusted module might be given access to a block of display memory. The module will be able to modify the pixels. A program using the module will only be able to access the pixels as permitted by the functions that the module provides. Untrusted programs to use trusted modules. If the trusted module is properly constructed, the program can not abuse it.</p>
 <p>The last statement in a <code>module</code> is a <a href="statements.html#return"><code>return</code></a> statement, which usually returns a function or a record containing functions. That return value is bound to the name in a <code>use</code> statement. A <code>program</code> file does not end with a <code>return</code> statement. </p>
 <p> If two actors reference the same module, the module is executed twice. Actors never share memory.</p>
@@ -125,14 +125,14 @@ Any messages sent in this final turn will not be put into the outgoing queue.</p
     normal processing. The invocation is delayed until the actor is
     waiting for a message. </p>
 <p>The <var>seconds</var> argument specifies when the invocation will occur,
-    no sooner than <var>seconds</var> seconds after now. The <var>seconds</var> input must be a non-negative number or <code>null</code> which behaves as <code>0</code>.</p>
+    no sooner than <var>seconds</var> seconds after now. The <var>seconds</var> input must be a non-negative number or <code>null</code> that behaves as <code>0</code>.</p>
 <p>The <code>delay!</code> function immediately returns a <a href="#functions.html#cancel">cancel</a> function.
     Calling the <a href="#requestor">cancel</a> function will cancel the delayed execution of the <var>callback</var>, if it is not too late. If it is too late, the cancel is ignored.</p>
 <h6>Example:</h6>
 <pre>assign cancel_continuation: delay!(continuation, 0.1)
 </pre>
 <h4 id="timeout">time_limit!(<var>requestor</var>, <var>seconds</var>)</h4>
-<p>The <code>time_limit!</code> function is a <a href="programs.html#requestor_factory">requestor factory</a> that takes a <var><a href="programs.html#requestor">requestor</a></var><a href="programs.html#requestor"> function</a> and returns a similar time limited <a href="programs.html#requestor">requestor function</a>, which acts the same, but will automatically <a href="functions.html#cancel">cancel</a> when the time is exceeded.</p>
+<p>The <code>time_limit!</code> function is a <a href="programs.html#requestor_factory">requestor factory</a> that takes a <var><a href="programs.html#requestor">requestor</a></var><a href="programs.html#requestor"> function</a> and returns a similar time limited <a href="programs.html#requestor">requestor function</a>, that acts the same, but will automatically <a href="functions.html#cancel">cancel</a> when the time is exceeded.</p>
 <p>The requestor function returned by <code>time_limit!</code> returns its own <a href="functions.html#cancel">cancel</a> function.</p>
 <h3>Actor functions </h3>
 <p>The following functions are critical for the implementation of actors.</p>
