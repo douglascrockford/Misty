@@ -32,7 +32,7 @@
 <p>A misty system wants exclusive access to at least one processor core, but can benefit from having most or all of the processor cores. These cores are managed exclusively by the misty system. For efficient operation, the underlying  operating system should not interfere with the misty system's cores by suspending or timeslicing. </p>
 <p>The cores are employed in executing the actors. A core that is not busy looks for a <dfn>ready</dfn> actor to execute. If there are none, it will look for an <dfn>exhausted</dfn> actor for memory reclamation. If there are none, it will look for a <dfn>slow</dfn> actor to resume. If there are none, it might consider going into a low power state.</p>
 <h2 id="actors">Actors</h2>
-<p>An actor runs an executable from the program shop when the actor is created. The name of the executable is specified in an <code><a href="program.html#start">@.start</a></code> call. There will be at least one root actor that is specified in some  way, such as a command line argument or a configuration in the program shop. An actor gets three timers, the <dfn>fast</dfn> timer than governs turns,  a <dfn>slow</dfn> timer that governs <dfn>slow</dfn> actors, and a <dfn>ar</dfn> timer that governs the removal of unneeded actors.</p>
+<p>An actor runs an executable from the program shop when the actor is created. The name of the executable is specified in a <code><a href="program.html#start">start!</a></code> call. There will be at least one root actor that is specified in some  way, such as a command line argument or a configuration in the program shop. An actor gets three timers, the <dfn>fast</dfn> timer than governs turns,  a <dfn>slow</dfn> timer that governs <dfn>slow</dfn> actors, and an a<dfn>r</dfn> timer that governs the removal of unneeded actors.</p>
 <p>Actors run in turns. A turn starts with the reception of a message. A turn ends when the processing of the message is complete. At the end of a turn, outgoing messages are released to the outgoing message queue. A program can send messages, but the messages do not leave until the turn finishes successfully.</p>
 <p>Actors can be in one of these statuses: <dfn>idle</dfn> <dfn>ready</dfn> <dfn>running</dfn> <dfn>exhausted</dfn> <dfn>reclaiming</dfn> <dfn>slow</dfn>.</p>
 <h3 id="idle">Idle</h3>
@@ -63,7 +63,7 @@
 <p>When the <dfn>ar</dfn> timer goes off on an <dfn>idle</dfn> actor, the actor is presumed to be unneeded and is immediately removed from memory. If that presumptuous assumption was erroneous, then the correspondent will fail when attempting to send a message to the now defunct actor. This can trigger a recover/restart protocol that will restore connectivity and service.</p>
 <h2 id="io">Input/Output</h2>
 <p>The misty system can do message passing and computation. It does not do communication (networking, coprocessing), storage (database, file systems), transducing (images, sounds, signals), or actuating (switches, motors). To do these things, Misty relies on its I/O system, which can interact with I/O devices, send and receive messages with the misty system, and  copy stone <a href="blobs.html">blobs</a> to and from actor memory.</p>
-<p>The program shop can  endow modules with affordances that let them interact effectively and securely with the I/O system.</p>
+<p>The program shop can  endow subprograms with interfaces that let them interact effectively and securely with the I/O system.</p>
 <p></p>
 <h2 id="shop">Program Shop</h2>
 <p>The program shop performs many important functions in the misty system. The program shop may be integrated with programming tools,  source control systems,  software libraries, and dashboards. It is expected that there will be many vendors of program shops, each optimized for particular situations.</p>
@@ -71,17 +71,17 @@
 <h3>Configuration</h3>
 <p>This can include start up conditions, timer values.</p>
 <h3>Holding of executables</h3>
-<p>The <a href="prongrams.html#start"><code>@.start</code></a> function obtains its executables from here.</p>
-<h3>Building of executables from modules</h3>
-<p>The program builder gets <code><a href="statements.html#use">use</a></code> modules from here.</p>
-<h3>Granting of endowments to modules</h3>
-<p>The program shop can endow select modules with special access to the I/O system and the key store.</p>
+<p>The <a href="prongrams.html#start"><code>start!</code></a> function obtains its executables from here.</p>
+<h3>Building of executables from subprograms</h3>
+<p>The program builder gets <code><a href="statements.html#use">use</a></code> subprograms from here.</p>
+<h3>Granting of endowments to subprograms</h3>
+<p>The program shop can endow select subprograms with special access to the I/O system and the key store.</p>
 <h3>Locale</h3>
 <p>The program store keeps localization information.</p>
 <h3>Key store</h3>
 <p>The program store holds key pairs and associations for the setup and use of portals and other purposes.</p>
 <h3>Policies</h3>
-<p>The program shop holds the policies that determine which modules get access to which endowments, and which programs get access to which modules. For example, programs from third parties (guests) can be restricted from capabilities that are granted to trusted programs.</p>
+<p>The program shop holds the policies that determine which subprograms get access to which endowments, and which programs get access to which subprograms. For example, programs from third parties (guests) can be restricted from capabilities that are granted to trusted programs.</p>
 <h3>Logs</h3>
 <p> The program shop determines which programs have access to which logs, and determines the usage of the logs (archived, sent to debuggers, summarized and sent to humans, sent to ai for analysis, ignored).</p>
 <h3>Distributed management</h3>
@@ -91,13 +91,13 @@
 <h2 id="build">Build</h2>
 <p>The Build tools make the executables that are in the <a href="#shop">Program Shop</a>. Most of the tools are written in Misty and are part of the standard tools. </p>
 <h3>Tokenize</h3>
-<p>Take a program source text or module source text, and produce an array of tokens.</p>
+<p>Take a program source text or subprogram source text, and produce an array of tokens.</p>
 <h3>Parse</h3>
 <p>Take an array of tokens and produce a parse tree record.</p>
 <h3>Optimize</h3>
 <p>Take a parse tree and optimize it by constant folding, strength reduction, and other techniques.</p>
 <h3 id="endow">Endow</h3>
-<p>Take a program parse tree and combine it with its module's parse trees. Also give values to the endowment expressions, and provide native interfaces for access to things like display systems and file systems.</p>
+<p>Take a program parse tree and combine it with its subprogram's parse trees. Also give values to the endowment expressions, and provide native interfaces for access to things like display systems and file systems.</p>
 <p>The  endow tool works with <a href="#policy">the policy machine</a> to grant all requested configurations.</p>
 <h3 id="linear">Linear</h3>
 <p>Take a parse tree and produce a list of three operand instructions (<dfn>mcode</dfn>).</p>
@@ -108,21 +108,21 @@
 <h2 id="policy">Policy Machine</h2>
 <p>The policy machine governs the use of power within a program. </p>
 <ul>
-    <li>Endowing of constants to modules and programs.</li>
-    <li>Endowing of native powers to modules.</li>
+    <li>Endowing of constants to programs and subprograms.</li>
+    <li>Endowing of native powers to subprograms.</li>
     <li>Permitting use of cryptographic key pairs</li>
-    <li>Endowing of special  constants and secrets to modules.</li>
-    <li>Allowing modules to <a href="statement.html#use"><code>use</code></a> certain modules.</li>
-    <li>Allowing programs to <code><a href="statement.html#use">use</a></code> certain modules.</li>
+    <li>Endowing of special  constants and secrets to subprograms.</li>
+    <li>Allowing subprograms to <a href="statement.html#use"><code>use</code></a> certain subprograms.</li>
+    <li>Allowing programs to <code><a href="statement.html#use">use</a></code> certain subprograms.</li>
     <li>Allowing programs to access time functions such as <code><a href="programs.html#clock">clock!</a></code>, <code><a href="programs.html#delay">delay!</a>.</code></li>
     <li>Allowing programs to access actor functions such as <code><a href="programs.html#contact">contact!</a></code>, <code><a href="programs.html#coujple">couple!</a></code>, <code><a href="programs.html#portal">portal!</a></code>, <code><a href="programs.html">start!</a></code>, <code><a href="programs.html#stop">stop!</a></code>, <code><a href="programs.html#unneeded">unneeded</a></code><a href="programs.html#unneeded">!</a>.</li>
-    <li>Allowing programs and modules to use actor addresses such as <code><a href="programs.html#me">me!</a></code> and <code><a href="program.html#overling">overling!</a></code>.</li>
+    <li>Allowing programs and subprograms to use actor addresses such as <code><a href="programs.html#me">me!</a></code> and <code><a href="program.html#overling">overling!</a></code>.</li>
     <li>Setting maximum mutable memory limits and time limits on programs.</li>
     <li>Enabling access to specific <a href="statements.html#log">logs</a>.</li>
 </ul>
 <p>In a development system, the policy might be to allow everything. In production, policies will be more restricted, especially if there is sensitive data or code from multiple parties involved.</p>
 <p>A source program that violates policy will not produce an executable.</p>
 <p>Distributed policy machines can be set up to manage policies over a network of machines.</p>
-<p>Policies are expressed as misty programs that use the <code>policy</code> module.</p>
+<p>Policies are expressed as misty programs that use the <code>policy</code> subprogram.</p>
 <p>The build tools are written in Misty. The build tools interact with the policy machine, which is written in Misty, to determine whether and how executables are made. Because policies are Misty programs, it is possible to distribute policy management throughout a network.</p>
 </body></html>

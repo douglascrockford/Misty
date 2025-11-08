@@ -26,7 +26,7 @@ This is descriptive of one particular implementation.
 </p>
 <p>The tree can be fully realized as a JSON object.</p>
 <h2 id="token">Tokens</h2>
-<p>The module <code>tokenize.mst</code> takes a source text and produces an array of tokens. The tokens are made up of these fields:</p>
+<p>The subprogram <code>tokenize.mst</code> takes a source text and produces an array of tokens. The tokens are made up of these fields:</p>
 <h4>kind</h4>
 <p><code>&quot;name&quot;</code>, <code>&quot;text&quot;</code>, <code>&quot;number&quot;</code>,
 <code>&quot;comment&quot;</code>, <code>&quot;newline&quot;</code>, <code>&quot;space&quot;</code>,
@@ -54,7 +54,7 @@ and all of the <a href="intrinsic.html">intrinsics</a> and punctuators:</p>
 </pre>
 <p>The <code>kind</code> and <code>text</code> fields will be meaningful to the parser that consumes the token list. The other fields are intended for error reporting.These token records are treated as nodes that are woven into a parse tree.</p>
 <h1 id="tree">Tree</h1>
-<p>The module <code>parse.mst</code> turns a list of tokens into an abstract parse tree by adding new fields. The source notations are retained for error reporting and debugging.</p>
+<p>The subprogram <code>parse.mst</code> turns a list of tokens into an abstract parse tree by adding new fields. The source notations are retained for error reporting and debugging.</p>
 <h2 id="root">Root</h2>
 <p>The root of the tree is a record. Its fields are</p>
 <h4>kind</h4>
@@ -62,7 +62,7 @@ and all of the <a href="intrinsic.html">intrinsics</a> and punctuators:</p>
 <h4>name</h4>
 <p>The name of the file. </p>
 <h4>functions</h4>
-<p>An array of functions. For each<code> function </code>there is a record in this array, plus function <code>0</code>, the program or module body.</p>
+<p>An array of functions. For each<code> function </code>there is a record in this array, plus function <code>0</code>, the program or subprogram body.</p>
 <h4>endowment</h4>
 <p>An array of endowment names.</p>
 <h4>logs</h4>
@@ -75,7 +75,7 @@ and all of the <a href="intrinsic.html">intrinsics</a> and punctuators:</p>
 <h4>intrinsics</h4>
 <p>An array of intrinsics that are used. This information might be used by a linker.</p>
 <h4>uses</h4>
-<p>An array of modules that are mentioned in <code>use</code> statements. This information might be used by a linker.</p>
+<p>An array of subprograms that are mentioned in <code>use</code> statements. This information might be used by a linker.</p>
 <h3 id="program">Program</h3>
 <h4>kind</h4>
 <p><code>&quot;program&quot;</code></p>
@@ -85,10 +85,10 @@ and all of the <a href="intrinsic.html">intrinsics</a> and punctuators:</p>
 <p>A list of name nodes, the inputs. Each has a <code>input_nr</code> field, between 0 and 3. If an input has a default value, it will be in the name token's <code>expression</code> field.</p>
 <h4>statements</h4>
 <p>An array of statements.</p>
-<h3 id="module">Module</h3>
-<p>A module is like an actor except that it does not have access to <code>@</code><small>at</small> (the source of an actor's capabilies) and it has a <code>return</code> statement that the actor does not have.</p>
+<h3 id="subprogram">Subprogram</h3>
+<p>A subprogram is like an actor except that it does not have access to <code>@</code><small>at</small> (the source of an actor's capabilies) and it has a <code>return</code> statement that the actor does not have.</p>
 <h4>kind</h4>
-<p><code>&quot;module&quot;</code></p>
+<p><code>&quot;subprogram&quot;</code></p>
 <h4>function_nr</h4>
 <p><code>0</code></p>
 <h4>list</h4>

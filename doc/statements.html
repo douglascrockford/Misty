@@ -121,7 +121,7 @@ disrupt_statement
 </p>
 <p>The <code>disrupt</code> statement causes the function to abruptly stop, sending control
     to a <a href="functions.html#disruption">function's <code>disruption</code> part</a>. </p>
-<p>The <code>disrupt</code> statement causes control to go to the <code>disruption</code> part of the function or the enclosing module. If control was already in the <code>disruption</code> part, or if there is no <code>disruption</code> part, then control goes
+<p>The <code>disrupt</code> statement causes control to go to the <code>disruption</code> part of the function or the enclosing subprogram. If control was already in the <code>disruption</code> part, or if there is no <code>disruption</code> part, then control goes
     to the most recent function in the calling chain that has a <code>disruption</code> part.</p>
 <h3 id="do">The <code>do</code> statement</h3>
 <p class="rule">
@@ -284,10 +284,10 @@ locator
     text_literal
     name
 </p>
-<p>The <code>use</code> statement makes a module available to a program or another module. The return value of the module is bound to the <dfn>name</dfn>. An optional <dfn>locator</dfn> can be provided for finding the module file in the <a href="system.html#shop">program shop</a>. Standard modules do not require a locator. </p>
-<p>The modules are stored in the program shop, which contains the standard modules that are located with the <dfn>name</dfn> form, and the extra modules that are located with the <dfn>text_literal</dfn> form. In the <dfn>text_literal</dfn> form, it is recommended that the text contain a prefix to indicate the source or usage of the module. Guest code (programs from third parties that are not fully trusted) may be restricted from use of the <code>use</code> statement, or may have restrictions on which modules they can employ.</p>
-<p id="power">A <a href="system.html#policy">system</a> may provide <strong>power modules</strong> that act as interfaces to powerful affordances such as communication devices, data storage devices, input devices (like keyboards, camera, and microphones),  output devices (like printers, displays, and speakers), and operating system services. Typically, access to power modules is limited to modules that will attenuate the power, presenting limited capabilities to other modules and programs.</p>
-<p> The <code>use</code> statement can not appear in a function or an <code>if</code> or <code>do</code>. The <code>use</code> statement can only appear in the outermost level of a <code>program</code> or <code>module</code>.</p>
+<p>The <code>use</code> statement makes a subprogram available to a program or another subprogram. The return value of the subprogram is bound to the <dfn>name</dfn>. An optional <dfn>locator</dfn> can be provided for finding the subprogram file in the <a href="system.html#shop">program shop</a>. Standard subprograms do not require a locator. </p>
+<p>The subprograms are stored in the program shop, which contains the standard subprograms that are located with the <dfn>name</dfn> form, and the extra subprograms that are located with the <dfn>text_literal</dfn> form. In the <dfn>text_literal</dfn> form, it is recommended that the text contain a prefix to indicate the source or usage of the subprogram. Guest code (programs from third parties that are not fully trusted) may be restricted from use of the <code>use</code> statement, or may have restrictions on which subprograms they can employ.</p>
+<p id="power">A <a href="system.html#policy">system</a> may provide <strong>power subprograms</strong> that act as interfaces to powerful affordances such as communication devices, data storage devices, input devices (like keyboards, camera, and microphones),  output devices (like printers, displays, and speakers), and operating system services. Typically, access to powerful subprograms is limited to subprograms that will attenuate the power, presenting limited capabilities to other subprograms and programs.</p>
+<p> The <code>use</code> statement can not appear in a function or an <code>if</code> or <code>do</code>. The <code>use</code> statement can only appear in the outermost level of a <code>program</code> or <code>subprogram</code>.</p>
 <h6>Example:</h6>
 <pre>use lang: language_library(&quot;en&quot;)</pre>
 <h3 id="var">The <code>var</code> statement</h3>

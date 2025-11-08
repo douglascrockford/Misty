@@ -9,9 +9,9 @@
 <body>
 <img src="../misty.gif" width="204" height="79">
 <h1><a href="https://mistysystem.com/">Misty Programming Language:</a>Programs</h1>
-<p>Misty has direct support for the Actor Model of Computation. Actors run executable programs independently and concurrently. Actors communicate by sending messages.  An executable is made from a program source text, and zero or more module source texts. Every actor has its own memory space. Actors can interact with actors on other machines. Actors do not share memory with other actors. </p>
+<p>Misty has direct support for the Actor Model of Computation. Actors run executable programs independently and concurrently. Actors communicate by sending messages.  An executable is made from a program source text, and zero or more subprogram source texts. Every actor has its own memory space. Actors can interact with actors on other machines. Actors do not share memory with other actors. </p>
 <p>The first word of a Misty source is <code>misty</code>, declaring that the source is written in Misty.</p>
-<p>The second word of a Misty source is the type, either <code>program</code> or <code>module</code>. </p>
+<p>The second word of a Misty source is the type, either <code>program</code> or <code>subprogram</code>. </p>
 <p>The third word is the <var>title</var> of the source text. This might be the same as its filename in systems that use filenames. The name is used for documentation.</p>
 <p class="rule">
     misty
@@ -20,7 +20,7 @@
 <p class="rule">
 misty_type
     <code>"program"</code>
-    <code>"module"</code>
+    <code>"subprogram"</code>
 </p>
 <p class="rule">
 title
@@ -32,14 +32,14 @@ log console: &quot;Hello, World!&quot;
 end hello_world</pre>
 <p>A misty program contains the entry point for an executable. </p>
 <p>When an actor is started, the statements in the <code>program</code> file are executed. The statements should start the execution of the actor, which usually involves the setting of a <a href="#receiver">receiver</a> so that the actor can receive messages. Other sorts of initialization may take place as well. </p>
-<p>The program can pull in code from the module library with the <a href="statements.html#use"><code>use</code></a> statement. </p>
-<p>A module  is a subprogram that provides functionality to a program or other modules. These can be used to build reusable libraries. The body of the module contains a string of statements. The statements in the body may not include <code><a href="statements.html#">do</a></code>, although a body may contain functions that can include <code>do</code>. </p>
-<p>A module executes its body, as a function does, and returns a value that is bound to the name in the <code>use</code> statement. Typically, it will return a constructor function, but it can also return a record of functions. The return value is stone. Modules can be used to protect capabilities. For example, a trusted module might be given access to a block of display memory. The module will be able to modify the pixels. A program using the module will only be able to access the pixels as permitted by the functions that the module provides. Untrusted programs to use trusted modules. If the trusted module is properly constructed, the program can not abuse it.</p>
-<p>The last statement in a <code>module</code> is a <a href="statements.html#return"><code>return</code></a> statement, which usually returns a function or a record containing functions. That return value is bound to the name in a <code>use</code> statement. A <code>program</code> file does not end with a <code>return</code> statement. </p>
-<p> If two actors reference the same module, the module is executed twice. Actors never share memory.</p>
-<p>Modules can not have cyclical dependences.
-    Module <code>a</code> can not use module <code>b</code> if module <code>b</code> uses module <code>a</code>.</p>
-<p>In this example, the <code>example</code> program uses the <code>app_master_2000</code> module,
+<p>The program can pull in code from the subprogram library with the <a href="statements.html#use"><code>use</code></a> statement. </p>
+<p>A subprogram  is a subprogram that provides functionality to a program or other subprograms. These can be used to build reusable libraries. The body of the subprogram contains a string of statements. The statements in the body may not include <code><a href="statements.html#">do</a></code>, although a body may contain functions that can include <code>do</code>. </p>
+<p>A subprogram executes its body, as a function does, and returns a value that is bound to the name in the <code>use</code> statement. Typically, it will return a constructor function, but it can also return a record of functions. The return value is stone. Subprograms can be used to protect capabilities. For example, a trusted subprogram might be given access to a block of display memory. The subprogram will be able to modify the pixels. A program using the subprogram will only be able to access the pixels as permitted by the functions that the subprogram provides. Untrusted programs to use trusted subprograms. If the trusted subprogram is properly constructed, the program can not abuse it.</p>
+<p>The last statement in a <code>subprogram</code> is a <a href="statements.html#return"><code>return</code></a> statement, which usually returns a function or a record containing functions. That return value is bound to the name in a <code>use</code> statement. A <code>program</code> file does not end with a <code>return</code> statement. </p>
+<p> If two actors reference the same subprogram, the subprogram is executed twice. Actors never share memory.</p>
+<p>Subprograms can not have cyclical dependences.
+    Subprogram <code>a</code> can not use subprogram <code>b</code> if subprogram <code>b</code> uses subprogram <code>a</code>.</p>
+<p>In this example, the <code>example</code> program uses the <code>app_master_2000</code> subprogram,
     and designates its <code>handler</code> function as the receiver of messages for the actor.</p>
 <pre>misty program example()
 
@@ -49,7 +49,7 @@ call receiver!(app.handler)
 end example</pre>
 <p>Actors are started with the <code><a href="#start">start!(<var>program</var>)</a></code> function. An actor that starts another actor is called an <b id="master">overling</b>. An actor started by an overling is called an <b id="underling">underling</b>. An actor can be a underling to one actor and an overling to many others.</p>
 <p>Communication between actors happens exclusively with messages with the <a href="statements.html#send">send</a> statement. Messages are usually transmitted over some sort of connection. </p>
-<p>A module can have arguments passed to it from a <a href="statements.html#use"><code>use</code> statement</a>. A program can have arguments passed to it from a command line or <code><a href="#start">start!</a></code>.</p>
+<p>A subprogram can have arguments passed to it from a <a href="statements.html#use"><code>use</code> statement</a>. A program can have arguments passed to it from a command line or <code><a href="#start">start!</a></code>.</p>
 <h2 id="actor_address_object">Actor address object</h2>
 <p>An actor address object contains the information needed to communicate with an actor.
 An actor object can be transmitted to other actors, even on other machines.</p>
@@ -112,8 +112,8 @@ Any messages sent in this final turn will not be put into the outgoing queue.</p
     Turns can be timesliced. There are no concurrency issues because actors do not share memory.
     They communicate with other actors and the world only by  message passing. </p>
 <h2 id=endowment>Endowment</h2>
-<p>Programs and modules can be endowed by the <a href="system.html#policy">Policy Machine</a> with special constants that are identified by names ending in <code>!</code><small>exclamation mark</small>. Often the values are functions, but they can also be numbers, texts, and actor addresses.</p>
-<p>By default, programs and modules may not use the following features. They are only available if specifically allowed by policy.</p>
+<p>Programs and subprograms can be endowed by the <a href="system.html#policy">Policy Machine</a> with special constants that are identified by names ending in <code>!</code><small>exclamation mark</small>. Often the values are functions, but they can also be numbers, texts, and actor addresses.</p>
+<p>By default, programs and subprograms may not use the following features. They are only available if specifically allowed by policy.</p>
 <h3>Time functions</h3>
 <p>Time is considered a critical capability.</p>
 <h4 id="clock"><code>clock!(<var>callback</var>)</code></h4>

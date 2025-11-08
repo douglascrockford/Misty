@@ -114,7 +114,7 @@ disruption
 <div class=scope>
     <p>intrinsic</p>
 <div class=scope>
-    <p>module</p>
+    <p>subprogram</p>
 <div class=scope>
     <p>outer function</p>
     <div class=scope>
@@ -131,7 +131,7 @@ The names are declared by</p>
 </ul>
 <p>A name in a function can only be declared once, and it must be declared before it is used.</p>
 <p>In addition to the declared names, a function also has access to the names in the scopes of all of the functions it is nested in,
-    including the misty module and the <span id="intrinsic.html"><a href="intrinsics.html">intrinsics</a></span>.
+    including the misty subprogram and the <span id="intrinsic.html"><a href="intrinsics.html">intrinsics</a></span>.
     A function may use those outer names as if they were its own without declaration.
     Names that were declared with <code>var</code> may have there values replaced by the <code>assign</code> statement.
     A function may continue to enjoy access to the scope of an outer function even after the outer function has returned.</p>

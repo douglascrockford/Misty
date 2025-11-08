@@ -16,8 +16,8 @@
 <p>The grammar of the language is expressed in <a href="http://www.crockford.com/mckeeman.html">McKeeman Form</a>.</p>
 <h2>Overview</h2>
 <p>The Misty System supports the Actor model of distributed computation. It is a transitional language because it also supports a more conventional model with features of a functional language with mutation, similar in some ways to JavaScript. The intention is that a transitional language will be easier for industry to accept than a pure actor language, even if a pure actor language is more deserving of adoption.</p>
-<p>A misty application can be made up of many misty actors, possibly distributed over many machines. The misty actors communicate by <a href="statements.html#send">sending</a> messages. Misty uses a capability model to secure the application.  In a capability system, programs and modules are only given authority on a need-to-do basis. Part of the responsibility of a program is to manage the capabilities of its modules.</p>
-<p>A misty actor runs a misty executable (<code>mex</code>). An executable is made from a misty program source text (<code>mst</code>) and some misty modules (<code>mod</code>) and some build specifications (<code>msp</code>). The role of a program is to manage the work of the modules. Some modules are built into the system and are freely available. Some modules are more restricted. Modules can be provided by third parties. The capability model makes it possible include third party modules securely. Sources and specifications are kept in the program shop. The build specifications determine build-time options such as conditional compilation and access to logs. Build specifications can also provide linkages to capabilities outside of the Misty System, such as access to file systems and display systems.</p>
+<p>A misty application can be made up of many misty actors, possibly distributed over many machines. The misty actors communicate by <a href="statements.html#send">sending</a> messages. Misty uses a capability model to secure the application.  In a capability system, programs and subprograms are only given authority on a need-to-do basis. Part of the responsibility of a program is to manage the capabilities of its subprograms.</p>
+<p>A misty actor runs a misty executable (<code>mex</code>). An executable is made from a misty program source text (<code>mst</code>) and some misty subprograms (<code>msb</code>) and some build specifications (<code>msp</code>). The role of a program is to manage the work of the subprograms. Some subprograms are built into the system and are freely available. Some subprograms are more restricted. Subprograms can be provided by third parties. The capability model makes it possible include third party subprograms securely. Sources and specifications are kept in the program shop. The build specifications determine build-time options such as conditional compilation and access to logs. Build specifications can also provide linkages to capabilities outside of the Misty System, such as access to file systems and display systems.</p>
 <p>Misty programs should be designed for a distributed environment in which failure is always an option. Actors are expected to fail early and often, informing concerned actors as they fail. Because they fail to a known state, recover and resumption can be straightforward.</p>
 <h2 id="space">Space</h2>
 <p>The language is quite strict in its use of spaces and indentation.
@@ -139,7 +139,7 @@ comment_character
 </p>
 
 <h2 id="names">Names</h2>
-<p>Names are used to identify functions, function inputs, fields, variables, modules, and programs.
+<p>Names are used to identify functions, function inputs, fields, variables, subprograms, and programs.
 A name starts with a letter.
 A name may contain any number of letters and digits.
 A name may contain <code>_</code><small>underbar</small> as a separator.
