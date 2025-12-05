@@ -10,8 +10,9 @@
 <body>
 <img src="../misty.gif" width="204" height="79">
 <h1><a href="https://mistysystem.com/">Misty Programming Language:</a>System</h1>
+<p>A misty system is an application that runs in a computer that hosts a drove of misty actors. The actors may create more actors. The actors can send messages to each other, or to actors in other computers, or to the I/O system. The actors can receive messages from each other, from actors on other computers, and from the I/O system.</p>
+<p>A misty system might be running on an operating system, or might itself be an operating system.</p>
 <ul>
-    <li><a href="#system">Misty System</a></li>
     <li><a href="#memory">Memory</a></li>
     <li><a href="#cores">Cores</a></li>
     <li><a href="#actors">Actors</a></li>
@@ -20,9 +21,6 @@
     <li><a href="#shop">Program Shop</a></li>
     <li><a href="#policy">Policy Machine</a></li>
 </ul>
-<h2 id="system">Misty System</h2>
-<p>A misty system is an application that runs in a computer that hosts a drove of misty actors. The actors may create more actors. The actors can send messages to each other, or to actors in other computers, or to the I/O system. The actors can receive messages from each other, from actors on other computers, and from the I/O system.</p>
-<p>A misty system might be running on an operating system, or might itself be an operating system.</p>
 <h2 id="memory">Memory</h2>
 <p>A misty system uses a single block of contiguous real memory to hold the state and programs of its actors. For efficient operation, the underlying operating system should not do paging or faulting on the misty system's memory. </p>
 <p>This block of memory is allocated  to actors in standard sizes using a doubling buddy memory manager. An actor is allocated two chunks of memory. One is for the read-only executable that includes immutable data that was known at build time (texts, field names, non-trivial numbers, stone arrays and records). The other is for the mutable data and actor state.</p>
