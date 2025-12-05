@@ -36,21 +36,23 @@
 <p>Actors run in turns. A turn starts with the reception of a message. A turn ends when the processing of the message is complete. At the end of a turn, outgoing messages are released to the outgoing message queue. A program can send messages, but the messages do not leave until the turn finishes successfully.</p>
 <p>Actors can be in one of these statuses: <dfn>idle</dfn> <dfn>ready</dfn> <dfn>running</dfn> <dfn>exhausted</dfn> <dfn>reclaiming</dfn> <dfn>slow halt</dfn>.</p>
 <h3 id="idle">Idle</h3>
-<p>An <dfn>idle</dfn> actor has nothing to do. It is waiting for a message to arrive. If there are one or more messages for an <dfn>idle</dfn> actor, its status changes to <dfn>ready</dfn>. Also see <a href="#ar"> Actor Reclamation.</a></p>
+<p>An <dfn>idle</dfn> actor has nothing to do. It is waiting for a message to arrive. If there are one or more messages for an <dfn>idle</dfn> actor, its status changes to <dfn>ready</dfn>. If a long time goes by without receiving a message, the actor becomes lonesome and will <a href="#halt"><dfn>halt</dfn></a>.</p>
 <h3 id="ready">Ready</h3>
 <p>A <dfn>ready</dfn> actor can be picked up by any available core. The actor status is set to <dfn>running</dfn>, and it executes under the <dfn>fast</dfn> timer. </p>
-<h3>Running</h3>
+<h3 id="running">Running</h3>
 <p>An actor that was <dfn>ready</dfn>, <dfn>reclaiming</dfn>, or <dfn>slow</dfn> is now executing. If the turn ends, the actor becomes <dfn>idle</dfn>. If it runs out of time, the actor is suspended and its status becomes <dfn>slow</dfn>. If it runs out of memory, the actor is suspended and its status becomes <dfn>exhausted</dfn>. The core can now look for another actor to execute.</p>
 <h3 id="exhausted">Exhausted</h3>
 <p>An actor is <dfn>exhausted</dfn> when it does not have enough memory to continue its operation. This is normal. </p>
 <p>The memory reclaimer changes the actor status to <dfn>reclaiming</dfn>, freeing unreachable memory.</p>
-<h3>Reclaiming</h3>
+<h3 id="reclaiming">Reclaiming</h3>
 <p>When an actor is undergoing memory reclamation, its status changes from <dfn>exhausted</dfn> to <dfn>reclaiming</dfn>. When reclamation is complete, the refreshed actor status changes to <dfn>running</dfn> and it resumes under the previous timer.</p>
 <p>If the amount of memory reclaimed is disappointing, then a note will be made that the next time the actor has memory reclaimed that its memory allocation be doubled, unless it is becoming abusive and must be stopped.</p>
 <p>If the system can not provide memory to the memory reclaimer, the actor stops and is removed from memory. The out of memory event is recorded in a system log, and interested actors are notified.</p>
 <h3 id="slow">Slow</h3>
 <p>Most turns should complete before the <dfn>fast</dfn> timer. Sometimes, a turn will exceed that time. In that case, the actor is marked as <dfn>slow</dfn>. <dfn>Slow</dfn> actors have the lowest priority so that the system can stay responsive, doing as many fast turns as possible.</p>
 <p>When a core picks up a <dfn>slow</dfn> actor, it sets the actor status to <dfn>running</dfn> and resumes from where it paused under the <dfn>slow</dfn> timer. If it finishes the turn, it will go <dfn>idle</dfn> like a normal actor. If it times out again, it will either be paused again with a <dfn>slow</dfn> status, or stopped and removed from memory if it has become abusive.</p>
+<h3 id="halt">Halt</h3>
+<p>An actor can be halted when it becomes abusive, or if it no longer useful, or if it stops. Notifications are sent to other actors, and then the actor's memory is returned to the memory pool.  See <a href="#ar"> Actor Reclamation.</a></p>
 <h2 id="mr">Memory Reclamation</h2>
 <p>When an actor uses up its data memory, it becomes exhausted. The memory reclaimer is run on exhausted actors. It uses a Cheney copying algorithm. Normally, Cheney uses semispace, where memory is divided into halves. Only one half is used during execution. During memory reclamation, live data is copied into the other half, and the roles of the two halves are swapped. </p>
 <p>The misty system does not use semispace. Instead, the system allocates a new block of system memory. Live data is copied into the new block. Then the old block is returned to the system. If the actor previously did not reclaim enough space, then the new block will be twice as large.</p>
