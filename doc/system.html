@@ -12,22 +12,28 @@
 <h1><a href="https://mistysystem.com/">Misty Programming Language:</a>System</h1>
 <p>A misty system is an application that runs in a computer that hosts a drove of misty actors. The actors may create more actors. The actors can send messages to each other, or to actors in other computers, or to the I/O system. The actors can receive messages from each other, from actors on other computers, and from the I/O system.</p>
 <p>A misty system might be running on an operating system, or might itself be an operating system.</p>
-<ul>
-    <li><a href="#memory">Memory</a></li>
-    <li><a href="#cores">Cores</a></li>
-    <li><a href="#actors">Actors</a></li>
-    <li><a href="#ar">Actor Reclamation</a></li>
-    <li><a href="#io">Input/Output</a></li>
-    <li><a href="#shop">Program Shop</a></li>
-    <li><a href="#policy">Policy Machine</a></li>
-</ul>
+<h5><a href="#memory">Memory</a></h5>
+<h5><a href="#cores">Cores</a></h5>
+<h5><a href="#actors">Actors</a></h5>
+<h5><a href="#ar">Actor Reclamation</a></h5>
+<h5><a href="#io">Input/Output</a></h5>
+<h5><a href="#shop">Program Shop</a></h5>
+<h5><a href="#policy">Policy Machine</a></h5>
 <h2 id="memory">Memory</h2>
 <p>A misty system uses a single block of contiguous real memory to hold the state and programs of its actors. For efficient operation, the underlying operating system should not do paging or faulting on the misty system's memory. </p>
 <p>This block of memory is allocated  to actors in standard sizes using a doubling buddy memory manager. An actor is allocated two chunks of memory. One is for the read-only executable that includes immutable data that was known at build time (texts, field names, non-trivial numbers, stone arrays and records). The other is for the mutable data and actor state.</p>
 <p>Within an actor, a program allocates memory from its own available data memory space in any convenient size. Actors never share their memory with other actors. An actor allocates memory to its objects with a simple bump allocator. If there is not sufficient memory available, the actor suspends and its status changes to <dfn>exhausted</dfn>.</p>
 <h2>Cores</h2>
 <p>A misty system wants exclusive access to at least one processor core, but can benefit from having most or all of the processor cores. These cores are managed exclusively by the misty system. For efficient operation, the underlying  operating system should not interfere with the misty system's cores by suspending or timeslicing. </p>
-<p>The cores are employed in executing the actors. A core that is not busy looks for a <dfn>ready</dfn> actor to execute. If there are none, it will look for an <dfn>exhausted</dfn> actor for memory reclamation. If there are none, it will look for a <dfn>slow</dfn> actor to resume. If there are none, it might consider going into a low power state.</p>
+<p>The cores are employed in executing the actors. A core that is not busy looks for an actor to run this this order:</p>
+<ul>
+    <li>System. System messages have higher priority than ordinary messages.</li>
+    <li>Ready. These are actors that have one or more messages in their message queue.</li>
+    <li>Refreshed. The reclamation phase has completed.</li>
+    <li>Exhausted. The actor has exhausted its memory and is waiting for reclamation.</li>
+    <li>Slow. The actor exceed its time allocation. When all of the other queues are empty, a slow actor can resume with a much larger time allocation.</li>
+</ul>
+<p>If there are no runnable actors, the core might consider going into a low power state. Sleeping cores can be awoken when messages arrive.</p>
 <h2 id="actors">Actors</h2>
 <img src="actor state.svg">
 <p>An actor runs an executable from the program shop when the actor is created. The name of the executable is specified in a <code><a href="program.html#start">start!</a></code> call. There will be at least one root actor that is specified in some  way, such as a command line argument or a configuration in the program shop. An actor gets three timers, the <dfn>fast</dfn> timer than governs turns,  a <dfn>slow</dfn> timer that governs <dfn>slow</dfn> actors, and an a<dfn>r</dfn> timer that governs the removal of unneeded actors.</p>
