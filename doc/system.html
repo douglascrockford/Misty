@@ -25,7 +25,7 @@
 <p>Within an actor, a program allocates memory from its own available data memory space in any convenient size. Actors never share their memory with other actors. An actor allocates memory to its objects with a simple bump allocator. If there is not sufficient memory available, the actor suspends and its status changes to <dfn>exhausted</dfn>.</p>
 <h2>Cores</h2>
 <p>A misty system wants exclusive access to at least one processor core, but can benefit from having most or all of the processor cores. These cores are managed exclusively by the misty system. For efficient operation, the underlying  operating system should not interfere with the misty system's cores by suspending or timeslicing. </p>
-<p>The cores are employed in executing the actors. A core that is not busy looks for an actor to run this this order:</p>
+<p>The cores are employed in executing the actors. A core that is not busy looks for an actor to run in this order:</p>
 <ul>
     <li>System. System messages have higher priority than ordinary messages.</li>
     <li>Ready. These are actors that have one or more messages in their message queue.</li>
