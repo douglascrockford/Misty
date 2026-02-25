@@ -108,6 +108,10 @@ h2 {
     padding-top: 0.5em;
 }
 
+h2 code {
+    font-size: 18pt;
+}
+
 h3 {
     border-color: black;
     border-style: solid;
