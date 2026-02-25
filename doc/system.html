@@ -26,13 +26,13 @@
 <h2>Cores</h2>
 <p>A misty system wants exclusive access to at least one processor core, but can benefit from having most or all of the processor cores. These cores are managed exclusively by the misty system. For efficient operation, the underlying  operating system should not interfere with the misty system's cores by suspending or timeslicing. </p>
 <p>The cores are employed in executing the actors. A core that is not busy looks for an actor to run in this order:</p>
-<ul>
+<ol start=0>
     <li>System. System messages have higher priority than ordinary messages.</li>
     <li>Ready. These are actors that have one or more messages in their message queue.</li>
     <li>Refreshed. The reclamation phase has completed.</li>
     <li>Exhausted. The actor has exhausted its memory and is waiting for reclamation.</li>
     <li>Slow. The actor exceed its time allocation. When all of the other queues are empty, a slow actor can resume with a much larger time allocation.</li>
-</ul>
+</ol>
 <p>If there are no runnable actors, the core might consider going into a low power state. Sleeping cores can be awoken when messages arrive.</p>
 <h2 id="actors">Actors</h2>
 <img src="actor state.svg">
@@ -70,7 +70,6 @@
 <h2 id="io">Input/Output</h2>
 <p>The misty system can do message passing and computation. It does not do communication (networking, coprocessing), storage (database, file systems), transducing (images, sounds, signals), or actuating (switches, motors). To do these things, Misty relies on its I/O system, which can interact with I/O devices, send and receive messages with the misty system, and  copy stone <a href="blobs.html">blobs</a> to and from actor memory.</p>
 <p>The program shop can  endow subprograms with interfaces that let them interact effectively and securely with the I/O system.</p>
-<p></p>
 <h2 id="shop">Program Shop</h2>
 <p>The program shop performs many important functions in the misty system. The program shop may be integrated with programming tools,  source control systems,  software libraries, and dashboards. It is expected that there will be many vendors of program shops, each optimized for particular situations.</p>
 <p>A program shop's functionality includes:</p>
@@ -114,21 +113,17 @@
 <h2 id="policy">Policy Machine</h2>
 <p>The policy machine governs the use of power within a program. </p>
 <ul>
-    <li>Endowing of constants to programs and subprograms.</li>
-    <li>Endowing of native powers to subprograms.</li>
-    <li>Permitting use of cryptographic key pairs</li>
-    <li>Endowing of special  constants and secrets to subprograms.</li>
+    <li>Endowing of constants (logicals, numbers, texts, and secret keys) to programs and subprograms.</li>
+    <li>Endowing of native! functions (file system, I/O, etc) to subprograms.</li>
     <li>Allowing subprograms to <a href="statement.html#use"><code>use</code></a> certain subprograms.</li>
     <li>Allowing programs to <code><a href="statement.html#use">use</a></code> certain subprograms.</li>
-    <li>Allowing programs to access time functions such as <code><a href="programs.html#clock">clock!</a></code>, <code><a href="programs.html#delay">delay!</a>.</code></li>
+    <li>Allowing programs to access time functions such as <code><a href="programs.html#clock">clock!</a></code>, <code><a href="programs.html#delay">delay!</a></code>, and <code><a href="programs.html#time_limit">time_limit!</a>.</code></li>
     <li>Allowing programs to access actor functions such as <code><a href="programs.html#contact">contact!</a></code>, <code><a href="programs.html#coujple">couple!</a></code>, <code><a href="programs.html#portal">portal!</a></code>, <code><a href="programs.html">start!</a></code>, <code><a href="programs.html#stop">stop!</a></code>, <code><a href="programs.html#unneeded">unneeded</a></code><a href="programs.html#unneeded">!</a>.</li>
     <li>Allowing programs and subprograms to use actor addresses such as <code><a href="programs.html#me">me!</a></code> and <code><a href="program.html#overling">overling!</a></code>.</li>
     <li>Setting maximum mutable memory limits and time limits on programs.</li>
     <li>Enabling access to specific <a href="statements.html#log">logs</a>.</li>
 </ul>
-<p>In a development system, the policy might be to allow everything. In production, policies will be more restricted, especially if there is sensitive data or code from multiple parties involved.</p>
 <p>A source program that violates policy will not produce an executable.</p>
-<p>Distributed policy machines can be set up to manage policies over a network of machines.</p>
-<p>Policies are expressed as misty programs that use the <code>policy</code> subprogram.</p>
-<p>The build tools are written in Misty. The build tools interact with the policy machine, which is written in Misty, to determine whether and how executables are made. Because policies are Misty programs, it is possible to distribute policy management throughout a network.</p>
+<p>Policies are expressed as misty programs. When a program is built, the builder sends a message to the Policy Machine identifying the program and its purpose. The Policy Machine sends back a policy actor. The build system will call the policy actor for each endowed name, use statement, and log files. The policy actor will reply with values or functions or failure. At the end, the build system will request a program store address from the policy actor for the new executable.</p>
+<p>The build tools are written in Misty. The build tools interact with the policy machine, which is written in Misty, to determine whether and how executables are made. Because policies are Misty programs, it is possible to distribute policy management throughout a network. Distributed policy machines can be set up to manage policies over a network of machines.</p>
 </body></html>
