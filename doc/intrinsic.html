@@ -735,21 +735,26 @@ text<code>)</code>. If it returns a text, then the substitution is made.</p>
 <h6>Example:</h6>
 <pre>assign result: lower(&quot;Carl Hollywood&quot;)    # result is &quot;carl hollywood&quot;</pre>
 <h4 id="max">max(<var>number</var>, <var>number</var>)</h4>
-<p>Maximum. The result is the larger of the two numbers. If either input value is
+<p>Maximum of two. The result is the greater of the two numbers. If either input value is
     not a number, the result is <code>null</code>.</p>
-<pre>max(3, 4)             # 4</pre>
+<pre>max(3, 4)             # 4
+max(1, null)          # null
+max(null, 1)          # null</pre>
 <p><code>max</code> can be used with <code>min</code> to constrain values
     within an acceptable range.</p>
 <pre>min(max(2, 3), 7)     # 3
 min(max(4, 3), 7)     # 4
-min(max(8, 3), 7)     # 7
-max(1, null)          # null
-max(null, 1)          # null
-</pre>
+min(max(8, 3), 7)     # 7</pre>
+<h4>max(<var>array</var>) </h4>
+<p>Maximum. The result is the largest number in the <var>array</var>. If the array is empty or contains a non-number, the result is <code>null</code>.</p>
+<pre>max(12, 48, 24)      # 48</pre>
 <h4 id="min">min(<var>number</var>,<var>number</var>)</h4>
-<p>Minimum. The result is the smaller of the two numbers. If either input value is
+<p>Minimum. The result is the least of the two numbers. If either input value is
     not a number, the result is <code>null</code>.</p>
 <pre>min(3, 4)            # 3</pre>
+<h4>min(<var>array</var>) </h4>
+<p>Minimum. The result is the lest number in the <var>array</var>. If the array is empty or contains a non-number, the result is <code>null</code>.</p>
+<pre>max(12, 48, 24)      # 12</pre>
 <h4>modulo(<var>dividend</var>, <var>divisor</var>)</h4>
 <p>The result of <code>modulo(<var>dividend</var>, <var>divisor</var>)</code> is
 <code><var>dividend</var> - (<var>divisor</var> * floor(<var>dividend</var> / <var>divisor</var>))</code>.
