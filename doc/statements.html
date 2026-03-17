@@ -18,8 +18,8 @@ statement
     def_statement
     disrupt_statement
     do_statement
-    go_statement
     if_statement
+    jump_statement
     log_statement
     return_statement
     send_statement
@@ -81,13 +81,14 @@ call_statement
 </p>
 <p class="rule">
 callee
-    <code>'@'</code> selection invocation
     name activate
 </p>
 <p class="rule">
 activate
     selection activate
     subscript activate
+    invocation activate
+    invocation
 </p>
 <p>The <code>call</code> statement invokes a function and ignores the return value.
 </p>
@@ -108,8 +109,12 @@ def_value
   then the value's members or elements may be changed with the <code>assign</code> statement.
   The <code>def</code> statement can not appear in an <code>if</code> or <code>do</code>.</p>
 <p>If the <code>def</code> is followed by a <a href="funct6ions.html">function literal</a>, then a read only variable having the same name as the function is created and given the value of the function object. So these two statements do the same thing:</p>
-<pre>def double: function double (number) (number + number)
-def double(number) (number + number)</pre>
+<pre>def double: function double (number) {
+    return number + number
+}
+def double(number) {
+    return number + number
+}</pre>
 <p>Variables must be defined before they are used. The <dfn>name</dfn> may not be used on the right side of the <code>:</code><small>colon</small>.</p>
 <h6>Example:</h6>
 <pre>def pi: 3.1415926535897932
@@ -152,15 +157,15 @@ do
     assign divisor: divisor + 1
 od
 </pre>
-<h3 id="go">The <code>go</code> statement</h3>
+<h3 id="jump">The <code>jump</code> statement</h3>
 <p class="rule">
-go_statement
-    <code>"go"</code> space callee
+jump_statement
+    <code>"jump"</code> space callee
 </p>
-<p>The <code>go</code> statement is parameterized jump to a function. It is similar to <a href="#return"><code>return</code></a> except that control will ultimately go to the caller's caller, not the caller. In some languages, this is called tail call optimization. It can significantly reduce the rate at which memory is consumed, making looping by recusion and continuation passintg style feasible.</p>
-<p>The <code>go</code> statement is not allowed in functions that have a <a href="functions.html#disruption"><code>disruption</code></a> clause.</p>
-<p>The <code>go</code> statement is not allowed in functions that have inner functions.</p>
-<p>&nbsp;</p>
+<p>The <code>jump</code> statement is parameterized jump to a function. It is similar to <a href="#return"><code>return</code></a> except that control will ultimately go to the caller's caller, not the caller. In some languages, this is called tail call optimization. It can significantly reduce the rate at which memory is consumed, making looping by recusion and continuation passintg style feasible.</p>
+<p>The <code>jump</code> statement is not allowed in functions that have a <a href="functions.html#disruption"><code>disruption</code></a> clause.</p>
+<p>The <code>jump</code> statement is not allowed in functions that make inner functions.</p>
+
 <h3 id="if">The <code>if</code> statement</h3>
 <p class="rule">
 if_statement
@@ -292,7 +297,7 @@ locator
 <pre>use lang: language_library(&quot;en&quot;)</pre>
 <h3 id="var">The <code>var</code> statement</h3>
 <p class="rule">
-    var_statement
+var_statement
     <code>&quot;var&quot;</code> space name <code>':'</code> space expression
 </p>
 <p>The <code>var</code> statement creates a variable in the current function scope.
