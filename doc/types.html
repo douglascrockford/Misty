@@ -337,7 +337,7 @@ assign stooge: {}                            # disrupt
 <p class="rule">
 text_literal
     quote
-    chevron
+    doublebrace
 </p>
 <p class="rule">
 quote
@@ -356,8 +356,8 @@ more_quote_characters
 <p class="rule">
 escape
     <code>'b'</code>
+    <code>'d'</code>
     <code>'g'</code>
-    <code>'l'</code>
     <code>'n'</code>
     <code>'q'</code>
     <code>'r'</code>
@@ -380,20 +380,32 @@ more_hex
         <th><var>result</var></th>
     </tr>
     <tr>
+        <td><code>\a</code></td>
+        <td><code>&amp;</code><small>ampersand</small></td>
+    </tr>
+    <tr>
         <td><code>\b</code></td>
         <td><code>\</code><small>backslash</small></td>
     </tr>
     <tr>
+        <td><code>\c</code></td>
+        <td>}<small>close brace</small></td>
+    </tr>
+    <tr>
         <td><code>\g</code></td>
-        <td><code>&gt;</code><small>greater</small></td>
+        <td>&gt;<small>greater</small></td>
     </tr>
     <tr>
         <td><code>\l</code></td>
-        <td><code>&lt;</code><small>less</small></td>
+        <td>&lt;<small>less</small></td>
     </tr>
     <tr>
         <td><code>\n</code></td>
         <td><code>&nbsp;</code><small>linefeed</small></td>
+    </tr>
+    <tr>
+        <td><code>\o</code></td>
+        <td>{<small>open brace</small></td>
     </tr>
     <tr>
         <td><code>\q</code></td>
@@ -432,7 +444,8 @@ more_hex
 &quot;\u{0043}\u{0061}\u{0074}&quot;    # &quot;Cat&quot;
 
 &quot;This text contains \qquotes\q.&quot;
-</pre>
+
+&quot;# This is not a comment.&quot;</pre>
 <p>A text must begin and end on the same line. A text may not contain a line break.</p>
 <pre>
 &quot;This is
@@ -442,42 +455,47 @@ an error.&quot;                    # must begin and end on the same line</pre>
 <pre>&quot;This is not\nan error.&quot;
 
 &quot;Neither is\u{A}this.&quot;</pre>
-<h3 id="chevron">Chevron text literals</h3>
+<h3 id="brace">Brace text literals</h3>
 <p class="rule">
-chevron
-    <code>"&lt;&lt;</code> more_chevron_characters  &gt;&gt;"</code>
+doublebrace
+    <code>"{{"</code> more_doublebrace_characters  <code>"}}"</code>
 </p>
 <p class="rule">
-chevron_character
+doublebrace_character
     <code>'0009'</code><small>tab</small>
     <code>'000A'</code><small>linefeed</small>
     <code>'000D'</code><small>carriage return</small>
     <code>'0020' . '10FFFF'</code>
 </p>
 <p class="rule">
-more_chevron_characters
+more_doublebrace_characters
     ""
-    chevron more_chevron_characters
-    chevron_character more_chevron_characters
+    doublebrace more_doublebrace_characters
+    doublebrace_character more_doublebrace_characters
 </p>
-<p>A text literal can also be bounded by <code>&lt;&lt;</code> and <code>&gt;&gt;</code>.
-    (Note that each is two characters: <code>&lt;</code><small>less</small> <code>&lt;</code><small>less</small> and <code>&gt;</code><small>greater</small> <code>&gt;</code><small>greater</small>. )
-    These chevron text literals contain no escape sequences; <code>\</code><small>reverse solidus</small> is treated as an ordinary
-    character. The chevron quote sequences can be nested literally within a
-    chevron text as long as they are properly balanced. The control characters <var>tab</var>, <var>carriage return</var>,
-    and <var>linefeed</var>, are permitted. Comments may not be placed inside of chevron text literals, being treated as ordinary text.</p>
-<pre>&lt;&lt;This text
+<p>A text literal can also be bounded by <code>{{</code><small>2 left braces</small> and <code>}}</code><small>2 right braces</small>.
+    These double brace text literals contain no escape sequences; <code>\</code><small>reverse solidus</small> is treated as an ordinary
+    character. The double brace pairs can be nested literally within a
+    double brace text as long as they are properly balanced. Single <code>{</code><small>left brace</small> and <code>}</code><small>right brace</small> may be in the text without concern for balancing, but  <code>}</code><small>right brace</small> may not be the last character in the text. The control characters <var>tab</var>, <var>carriage return</var>,
+    and <var>linefeed</var>, are permitted. Comments placed inside of double brace text literals are treated as ordinary text.</p>
+<pre>{{This text
 takes up
-three lines.&gt;&gt;
+three lines.}}
 
-&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;Chevrons may be nested when &lt;&lt;properly&gt;&gt; balanced&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
+{{{{{{{{double braces may be nested when {{properly}} balanced}}}}}}}}
 
-&lt;&lt;Now it isn't necessary to escape &quot;double quotes&quot;.&gt;&gt;
+{{Unbalanced single right brace '}' may be included as long as it is not the last character of the text.}}
 
-&lt;&lt;file:c:\nt\autoexec.bat&gt;&gt;    # same as &quot;file:c:\bnt\bautoexec.bat&quot;
+{{Now it isn't necessary to escape "double quotes".}}
 
-&lt;&lt;The chorus entered, said &lt;&lt;France hath in thee found out<br>A nest of hollow bosoms, which he fills
-With treacherous crowns&gt;&gt;, and then exited.&gt;&gt;</pre>
+{{file:c:\nt\autoexec.bat}}    # same as "file:c:\bnt\bautoexec.bat"
+
+{{oops   # no comments in here!
+}}       # same as "oops   # no comments in here!\n"
+
+{{The chorus entered, said {{France hath in thee found out
+A nest of hollow bosoms, which he fills
+With treacherous crowns}}, and then exited.}}</pre>
 <h3 id="subscripting">Subscripting</h3>
 <p><a href="operators.html#brackets">Subscripting</a> can be used to access the individual characters of a text.
     Subscripts are integers that are greater than or equal to zero and less

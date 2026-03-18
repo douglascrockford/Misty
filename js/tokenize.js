@@ -1,5 +1,5 @@
 // tokenize.js  # Misty tokenizer
-// 2025-01-14
+// 2026-03-17
 
 // Tokenize takes a text and converts it into an array of tokens.
 // The input is a source text. The output is an array of token records.
@@ -13,7 +13,7 @@
 //      from_row
 //      to_column
 //      to_row
-//      quote {'"' or '<<'} (only when kind = "text")
+//      quote {'"' or '{{'} (only when kind = "text")
 //      error (only when kind = "text")
 
 // A kind includes
@@ -40,7 +40,6 @@
 // Tokenize can recognize many punctuators that are not legal Misty tokens.
 // In particular, some special characters can be repeated and followed by
 // equal signs. Misty does a little of this. The C family does this a lot.
-// Note that '<<' and '>>' are reserved for text literals.
 
 // Characters outside of Misty's character set that are not enclosed in text
 // literals are encoded as single character punctuators.
@@ -59,10 +58,13 @@ const backslash = "\\";
 const quote = "\"";
 
 const escape = {
+    a: "&",
     b: backslash,
+    c: "»",
     g: ">",
     l: "<",
     n: "\n",
+    o: "«",
     q: quote,
     r: "\r",
     t: "\t"
@@ -257,17 +259,22 @@ function reverse_solidus() {
     seal();
 }
 
-function chevron() {
+function brace() {
+    if (peek() !== "{") {
+        return seal(character);
+    }
+    advance();
     let nesting = 0;
     while (true) {
-        if (peek() === ">" && peek(1) === ">") {
+        if (peek() === "}" && peek(1) === "}") {
             advance();
             advance();
             if (nesting === 0) {
+                token.text = snip(2, 2);
                 break;
             }
             nesting -= 1;
-        } else if (peek() === "<" && peek(1) === "<") {
+        } else if (peek() === "{" && peek(1) === "{") {
             advance();
             advance();
             nesting += 1;
@@ -281,25 +288,19 @@ function chevron() {
             advance();
         } else {
             error("Unclosed text literal");
-            token.kind = "text";
             token.text = snip();
-            token.quote = "<<";
-            return;
+            break;
         }
     }
     token.kind = "text";
-    token.text = snip(2, 2);
-    token.quote = "<<";
+    token.quote = "{{";
 }
 
 function less() {
-    if (peek() === "<") {
-        advance();
-        return chevron();
-    }
     if (peek() === ">") {
         advance();
     } else {
+        repeatable("<");
         repeatable("=");
     }
     seal();
@@ -419,6 +420,7 @@ tokenators = {
     "\r": carriage_return,
     " ": space,
     "#": comment,
+    "{": brace,
     "/": slash,
     "\\": reverse_solidus,
     "|": cish,
