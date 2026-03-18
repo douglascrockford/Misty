@@ -1,5 +1,5 @@
 // tokenize.js  # Misty tokenizer
-// 2026-03-17
+// 2026-03-18
 
 // Tokenize takes a text and converts it into an array of tokens.
 // The input is a source text. The output is an array of token records.
@@ -29,6 +29,7 @@
 // If there is an error in a name or number, it makes a legal name and
 // treats the leftover parts as separate tokens. If there is an error in a
 // text, it adds an 'error' field to the token. Currently, the errors are
+// all due to escapement in text literals.
 //      Unclosed text literal
 //      Missing '{'
 //      Missing '}'
@@ -55,6 +56,8 @@ const error_message = {
 };
 
 const backslash = "\\";
+const closing = "»";
+const opening = "«";
 const quote = "\"";
 
 const escape = {
@@ -259,22 +262,27 @@ function reverse_solidus() {
     seal();
 }
 
-function brace() {
-    if (peek() !== "{") {
+function chevron() {
+    if (peek() !== opening) {
         return seal(character);
     }
     advance();
     let nesting = 0;
+    let closing_count = 0;
     while (true) {
-        if (peek() === "}" && peek(1) === "}") {
+        if (peek() === closing) {
+            closing_count = 1;
             advance();
-            advance();
-            if (nesting === 0) {
+            while (peek() === closing) {
+                closing_count += 1;
+                advance();
+            }
+            nesting -= Math.floor(closing_count / 2);
+            if (nesting <= 0) {
                 token.text = snip(2, 2);
                 break;
             }
-            nesting -= 1;
-        } else if (peek() === "{" && peek(1) === "{") {
+        } else if (peek() === opening && peek(1) === opening) {
             advance();
             advance();
             nesting += 1;
@@ -293,7 +301,7 @@ function brace() {
         }
     }
     token.kind = "text";
-    token.quote = "{{";
+    token.quote = opening + opening;
 }
 
 function less() {
@@ -420,7 +428,6 @@ tokenators = {
     "\r": carriage_return,
     " ": space,
     "#": comment,
-    "{": brace,
     "/": slash,
     "\\": reverse_solidus,
     "|": cish,
@@ -437,6 +444,7 @@ tokenators = {
     "!": cish,
     "^": cish,
     "%": cish,
+    "«": chevron,
     "0": digit,
     "1": digit,
     "2": digit,
