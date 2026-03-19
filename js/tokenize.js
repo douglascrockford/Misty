@@ -1,5 +1,5 @@
 // tokenize.js  # Misty tokenizer
-// 2026-03-18
+// 2026-03-19
 
 // Tokenize takes a text and converts it into an array of tokens.
 // The input is a source text. The output is an array of token records.
@@ -13,7 +13,7 @@
 //      from_row
 //      to_column
 //      to_row
-//      quote {'"' or '{{'} (only when kind = "text")
+//      quote {'"' or '«'} (only when kind = "text")
 //      error (only when kind = "text")
 
 // A kind includes
@@ -263,36 +263,27 @@ function reverse_solidus() {
 }
 
 function chevron() {
-    if (peek() !== opening) {
-        return seal(character);
-    }
-    advance();
-    let nesting = 0;
-    let closing_count = 0;
+    let nesting = 1;
+    let next;
     while (true) {
-        if (peek() === closing) {
-            closing_count = 1;
+        next = peek();
+        if (next === closing) {
             advance();
-            while (peek() === closing) {
-                closing_count += 1;
-                advance();
-            }
-            nesting -= Math.floor(closing_count / 2);
+            nesting -= 1;
             if (nesting <= 0) {
-                token.text = snip(2, 2);
+                token.text = snip(1, 1);
                 break;
             }
-        } else if (peek() === opening && peek(1) === opening) {
-            advance();
+        } else if (next === opening) {
             advance();
             nesting += 1;
-        } else if (peek() === "\n") {
+        } else if (next === "\n") {
             advance();
             newline();
-        } else if (peek() === "\r") {
+        } else if (next === "\r") {
             advance();
             carriage_return();
-        } else if (peek()) {
+        } else if (next) {
             advance();
         } else {
             error("Unclosed text literal");
@@ -301,7 +292,7 @@ function chevron() {
         }
     }
     token.kind = "text";
-    token.quote = opening + opening;
+    token.quote = opening;
 }
 
 function less() {

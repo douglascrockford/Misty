@@ -239,15 +239,15 @@ more_open_fields
     linebreak field more_open_fields
 </p>
 <p>In the record literal notation, the specification of a record begins
-    with <code>{</code><small>left double_chevron</small> and ends with
-    <code>}</code><small>right double_chevron</small>. Between them are zero or more
+    with <code>{</code><small>left chevron</small> and ends with
+    <code>}</code><small>right chevron</small>. Between them are zero or more
     name/value fields, separated by <code>,</code><small>comma</small>.
     A name/value field is an identifier or text, followed by
     <code>:</code><small>colon</small> followed by an expression. (See
     <a href="json.html">JSON</a>.) Each <dfn>field</dfn> contributes a field to
     the record.</p>
 <p>If no value is supplied, then the value is obtained from a variable with the same name.</p>
-<p>An empty record can be made by <code>{}</code><small>double_chevrons</small>.</p>
+<p>An empty record can be made by <code>{}</code><small>chevrons</small>.</p>
 <pre>def empty_record: {}    # empty_record is {}
 </pre>
 <p>The statement:</p>
@@ -337,7 +337,7 @@ assign stooge: {}                            # disrupt
 <p class="rule">
 text_literal
     quote
-    double_chevron
+    chevron
 </p>
 <p class="rule">
 quote
@@ -457,37 +457,37 @@ an error.&quot;                    # must begin and end on the same line</pre>
 &quot;Neither is\u{A}this.&quot;</pre>
 <h3 id="chevron">Chevron text literals</h3>
 <p class="rule">
-double_chevron
-    <code>"««"</code> more_double_chevron_characters  <code>"»»"</code>
+chevron
+    <code>'«'</code> more_chevron_characters <code>'»'</code>
 </p>
 <p class="rule">
-double_chevron_character
+chevron_character
     <code>'0009'</code><small>tab</small>
     <code>'000A'</code><small>linefeed</small>
     <code>'000D'</code><small>carriage return</small>
-    <code>'0020' . '10FFFF'</code>
+    <code>'0020' . '10FFFF' - '«' '»'</code>
 </p>
 <p class="rule">
-more_double_chevron_characters
+more_chevron_characters
     ""
-    double_chevron more_double_chevron_characters
-    double_chevron_character more_double_chevron_characters
+    chevron more_chevron_characters
+    chevron_character more_chevron_characters
 </p>
-<p>A text literal can also be bounded by <code>««</code><small>2 left chevrons</small> and <code>»»</code><small>2 right chevrons</small>.
-    These double chevron text literals contain no escape sequences; <code>\</code><small>reverse solidus</small> is treated as an ordinary
-    character. The double chevron pairs can be nested literally within a
-    double chevron text as long as they are properly balanced. Single <code>«</code><small>left chevron</small> and
-    <code>»</code><small>right chevron</small> may be in the text without concern for balancing.
+<p>A text literal can also be bounded by <code>«</code><small>open chevron</small> and <code>»</code><small>close chevron</small>.
+    These  chevron text literals contain no escape sequences; <code>\</code><small>reverse solidus</small> is treated as an ordinary
+    character. The  chevron pairs can be nested literally within a
+    double chevron text as long as they are properly balanced. 
     The control characters <var>tab</var>, <var>carriage return</var>,
     and <var>linefeed</var>, are permitted. Comments placed inside of double chevron text literals are treated as ordinary text.</p>
-<pre>««This text
+<pre>«This text
 takes up
-three lines.»»
+three lines.»
 
-««««««««double chevrons may be nested when ««properly»» balanced»»»»»»»»
+«««««««« chevrons may be nested when ««properly»» balanced »»»»»»»»
 
-«««»»     # same as "«"
-««»»»     # same as "»"
+««»       # error
+«»»       # error
+««»»      # same as "«»" or "\o\c"
 
 ««oops    # no comments in here!
 »»        # same as "oops    # no comments in here!\n"
