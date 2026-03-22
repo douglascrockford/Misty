@@ -165,27 +165,24 @@ Any messages sent in this final turn will not be put into the outgoing queue.</p
 <p>The <code>couple!</code> function causes this actor to stop when another <var>actor</var> stops. The <code>couple</code> function returns <code>null</code>.</p>
 <pre>call couple!(patron)</pre>
 <h4 id="portal">portal!(<var>callback</var>, <var>port</var>) </h4>
-<p>A <dfn>portal</dfn> is a special actor with a public address that  performs introduction services. It listens on a specified <var>port</var> for  <span id="#contact"><a href="#contact">contacts</a></span> by external actors that need to acquire an actor address object.
-    The <var>callback</var> function will receive the record containing the request. The record can have a reply sent through it.
+<p>A <dfn>portal</dfn> is a special actor with a public address that performs introduction services. The <code>portal!</code> function binds a <var>callback</var> function that listens on a specific network <var>port</var> for <a href="#contact">contacts</a> by external actors that need to acquire private actor address objects.
+    The <var>callback</var> function will receive the record containing the request. The record can have a reply <a href="statements.html#send">sent</a> through it.
     A portal can respond by <a href="#start">starting</a> a new actor, or finding an existing actor, or by forwarding the contact message to another actor.
-    This is how distributed Misty networks are bootstrapped. The <code>portal</code> function returns <code>null</code>.</p>
+    This is how distributed Misty networks are bootstrapped. The <code>portal!</code> function returns <code>null</code>.</p>
 <h4 id="receiver">receiver!(<var>callback</var>)</h4>
-<p>The <code>receiver</code> <var>callback</var> function registers a <var>callback</var> that will receive all messages sent to the actor except for <a href="intrinsic.html#delay">delay</a> events, reply messages (which are sent to the <a href="statements.html#send"><code>send</code></a> <var>callback</var>), the <a href="#unneeded"><code>unneeded</code></a> message, and <a href="#portal">portal</a> <a href="#contact">contact</a> messages. The <code>receiver</code> function returns <code>null</code>.</p>
+<p>The <code>receiver!</code> <var>callback</var> function registers a <var>callback</var> that will receive all messages sent to the actor except for <a href="intrinsic.html#delay">delay</a> events, reply messages (which are sent to the <a href="statements.html#send"><code>send</code></a> <var>callback</var>), the <a href="#unneeded"><code>unneeded</code></a> message, and <a href="#portal">portal</a> <a href="#contact">contact</a> messages. The <code>receiver!</code> function returns <code>null</code>.</p>
 <h4 id="start">start!(<var>callback</var>, <var>program</var>)</h4>
-<p>The <code>start</code> function creates a new actor, aka underling. The <var>callback</var> function receives messages about the new actor, starting with a message containing the new actor's address object.</p>
+<p>The <code>start!</code> function creates a new actor. The <var>callback</var> function receives messages about the new actor, starting with a message containing the new actor's address object.</p>
 <p>The <var>program</var> text  identifies the  executable in  the program shop that the new actor runs. The program shop may start an existing executable, or may generate a new executable. If the <var>program</var> text is a text literal, then the Policy Machine will decide if it is permitted at build time. If the <var>program</var> text is an expresion, the Policy Machine will decide at run time</p>
 <p>The current actor is the overling of the new actor The new actor is an underling of the current actor. The overling is notified via the <var>callback</var> when the underling stops. </p>
 <h6>Example:</h6>
-<pre>call start!(
-    callback
-    &quot;example.mst&quot;
-)</pre>
+<pre>call start!(callback, &quot;example.mst&quot;)</pre>
 <h4 id="stop">stop!(<var>actor</var>) </h4>
-<p>The <code>stop!</code> function stops an underling. The <code>stop</code> function returns <code>null</code>.</p>
+<p>The <code>stop!</code> function stops an underling. The <code>stop!</code> function returns <code>null</code>.</p>
 <h4 id="unneeded">unneeded!(<var>function</var>, <var>seconds</var>)</h4>
 <p>The <code>unneeded</code>! function registers a <var>function</var> that is called when the actor  has not received a message in the recent <var>seconds</var>.  The default for <var>seconds</var> is the <a href="system.html#ar">ar timer</a>. This likely means that the actor is no longer needed. The actor should finish its work and then <code><a href="#stop">stop!()</a></code>. </p>
 <p>If the <code>unneeded</code> timer is not used, then the <a href="system.html#ar">ar timer</a> is used by default. The <code>unneeded</code> function allows for setting a longer or shorter time than the ar timer.</p>
-<p>This differs from the <a href="system.html#ar">ar timer</a> in two way: It is optional. Second, the actor is notified by the callback <var>function</var> before it is  stopped. </p>
+<p>This differs from the <a href="system.html#ar">ar timer</a> in two way: It is optional. The actor is notified by the callback <var>function</var> before it is  stopped. </p>
 <p>The <code>unneeded</code> function returns <code>null</code>.</p>
 <h3 id="other">Other functions</h3>
 <p>The Policy Machine can grant access to other functions that access capabilities that are typically associated with operating systems, databases, and cryptographic systems.</p>
