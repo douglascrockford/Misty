@@ -10,8 +10,8 @@
 <img src="../misty.gif" width="204" height="79">
 <h1><a href="https://mistysystem.com/">Misty Programming Language:</a>Programs</h1>
 <p>Misty has direct support for the Actor Model of Computation. Actors run executable programs independently and concurrently. An executable is made from a program source text, and zero or more subprogram source texts. Actors communicate with each other by sending messages.  Actors can interact with actors on other machines. Every actor has its own memory space. Actors do not share memory with other actors. </p>
-<p>The first word of a Misty source is <code>misty</code>, declaring that the source is written in Misty.</p>
-<p>The second word of a Misty source is the type, either <code>program</code> or <code>subprogram</code>. </p>
+<p>The first word of a Misty source is <code>misty</code>, declaring that the source is written in the Misty language.</p>
+<p>The second word of a Misty source is the <var>type</var>, either <code>program</code> or <code>subprogram</code>. </p>
 <p>The third word is the <var>title</var> of the source text. This might be the same as its filename in systems that use filenames. The name is used for documentation.</p>
 <p class="rule">
 misty
@@ -33,7 +33,7 @@ end hello_world</pre>
 <p>A misty program gives the entry point for an executable.</p>
 <p>When an actor is started, the statements in the <code>program</code> file are executed. The statements should start the execution of the actor, which usually involves the setting of a <a href="#receiver">receiver</a> so that the actor can receive messages. Other sorts of initialization may take place as well. </p>
 <p>The program can pull in code from the subprogram library with the <a href="statements.html#use"><code>use</code></a> statement. </p>
-<p>A subprogram  is a subprogram that provides functionality to a program or other subprograms. These can be used to build reusable libraries. The body of the subprogram contains a string of statements. The statements in the body may not include <code><a href="statements.html#">do</a></code>, although a body may contain functions that can include <code>do</code>. </p>
+<p>A subprogram provides functionality to a program or other subprograms. These can be used to build reusable libraries. The body of the subprogram contains a string of statements. The statements in the body may not include <code><a href="statements.html#">do</a></code>, although a body may contain functions that can include <code>do</code>. </p>
 <p>A subprogram executes its body, as a function does, and returns a value that is bound to the name in the <code>use</code> statement. Typically, it will return a constructor function, but it can also return a record of functions. The return value is stone. Subprograms can be used to protect capabilities. For example, a trusted subprogram might be given access to a block of display memory. The subprogram will be able to modify the pixels. A program using the subprogram will only be able to access the pixels as permitted by the functions that the subprogram provides. Untrusted programs to use trusted subprograms. If the trusted subprogram is properly constructed, the program can not abuse it.</p>
 <p>The last statement in a <code>subprogram</code> is a <a href="statements.html#return"><code>return</code></a> statement, which usually returns a function or a record containing functions. That return value is bound to the name in a <code>use</code> statement. A <code>program</code> file does not end with a <code>return</code> statement. </p>
 <p> If two actors reference the same subprogram, the subprogram is executed twice. Actors never share memory.</p>
@@ -122,8 +122,7 @@ Any messages sent in this final turn will not be put into the outgoing queue.</p
 <h4 id="delay"><code>delay!(</code><var>callback</var><code>,</code> <var>seconds</var><code>)</code></h4>
 <p>The <code>delay!</code> function is used to schedule the invocation of a <var>callback</var> function at a later time. Any value returned
     from the <var>callback</var> is ignored. There is no guarantee that the <var>callback</var> will ever be invoked. The delayed invocation will not interrupt
-    normal processing. The invocation is delayed until the actor is
-    waiting for a message. </p>
+    normal processing. The invocation is delayed until a sunsequent turn. </p>
 <p>The <var>seconds</var> argument specifies when the invocation will occur,
     no sooner than <var>seconds</var> seconds after now. The <var>seconds</var> input must be a non-negative number or <code>null</code> that behaves as <code>0</code>. When the time comes, a delay message is placed in the queue like any other message. When the message is delivered to the actor, the <var>callback</var> is called, but the delay message is not passed to it.</p>
 <p>The <code>delay!</code> function immediately returns a <a href="#functions.html#cancel">cancel</a> function.
@@ -166,7 +165,7 @@ Any messages sent in this final turn will not be put into the outgoing queue.</p
 <p>The <code>couple!</code> function causes this actor to stop when another <var>actor</var> stops. The <code>couple</code> function returns <code>null</code>.</p>
 <pre>call couple!(patron)</pre>
 <h4 id="portal">portal!(<var>callback</var>, <var>port</var>) </h4>
-<p>A <dfn>portal</dfn> is a special actor with a public address that  performs introduction services. It listens on a specified <var>port</var> for  <span id="#contact">contacts</span> by external actors that need to acquire an actor address object.
+<p>A <dfn>portal</dfn> is a special actor with a public address that  performs introduction services. It listens on a specified <var>port</var> for  <span id="#contact"><a href="#contact">contacts</a></span> by external actors that need to acquire an actor address object.
     The <var>callback</var> function will receive the record containing the request. The record can have a reply sent through it.
     A portal can respond by <a href="#start">starting</a> a new actor, or finding an existing actor, or by forwarding the contact message to another actor.
     This is how distributed Misty networks are bootstrapped. The <code>portal</code> function returns <code>null</code>.</p>
