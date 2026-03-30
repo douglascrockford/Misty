@@ -181,7 +181,7 @@ Any messages sent in this final turn will not be put into the outgoing queue.</p
 <p>The <code>stop!</code> function stops an underling. The <code>stop!</code> function returns <code>null</code>.</p>
 <h4 id="unneeded">unneeded!(<var>function</var>, <var>seconds</var>)</h4>
 <p>The <code>unneeded</code>! function registers a <var>function</var> that is called when the actor  has not received a message in the recent <var>seconds</var>.  The default for <var>seconds</var> is the <a href="system.html#ar">ar timer</a>. This likely means that the actor is no longer needed. The actor should finish its work and then <code><a href="#stop">stop!()</a></code>. </p>
-<p>If the <code>unneeded</code> timer is not used, then the <a href="system.html#ar">ar timer</a> is used by default. The <code>unneeded</code> function allows for setting a longer or shorter time than the ar timer.</p>
+<p>If the <code>unneeded</code> timer is not used, then the <a href="system.html#ar">ar timer</a> is used by default. The <code>unneeded!</code> function allows for setting a longer or shorter time than the ar timer.</p>
 <p>This differs from the <a href="system.html#ar">ar timer</a> in two way: It is optional. The actor is notified by the callback <var>function</var> before it is  stopped. </p>
 <p>The <code>unneeded</code> function returns <code>null</code>.</p>
 <h3 id="other">Other functions</h3>
@@ -193,7 +193,7 @@ Any messages sent in this final turn will not be put into the outgoing queue.</p
 if test!
     # stuff that executes if test! is true
 else
-    # stuff that execute if test! is false
+    # stuff that executes if test! is false
 fi
 end example</pre>
 <h2 id="failure">Failure</h2>
