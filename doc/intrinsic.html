@@ -70,7 +70,7 @@ fi
 if <var>value</var> = 1 \/ <var>value</var> = true \/ <var>value</var> = "true"
     return true
 fi
-return null
+disrupt
 </pre>
 <h3 align="left" id="number">Number</h3>
 <h4>number(<var>logical</var>)</h4>
@@ -151,6 +151,8 @@ return null
 <p> If it is unable to (possibly because of a formatting error), it returns <code>null</code>. The  <var>format</var> character determines
     how the text is interpreted. If the format is not one of those listed,
     then <code>null</code> is returned.</p>
+<h4>number(<var>other</var>)</h4>
+<p>If <var>other</var> is <code>null</code>, or a function, or a pattern, or an actor adress object, then disrupt.</p>
 <h6>Examples:</h6>
 <pre>assign result: number(&quot;123,456,789.10&quot;, &quot;d&quot;)    # result is 123456789.1
 assign result: number(&quot;123.456.789,10&quot;, &quot;v&quot;)    # result is 123456789.1
@@ -165,6 +167,10 @@ assign result: number(&quot;666&quot;, &quot;o&quot;)               # result is 
 assign result: number(&quot;666&quot;, &quot;h&quot;)               # result is 1638
 assign result: number(&quot;666&quot;, &quot;t&quot;)               # result is 6342
 assign result: number(&quot;0666&quot;)                   # result is 666
+assign result: number(true)                     # result is 1
+assign result: number(false)                    # result is 0
+assign result: number(42)                       # result is 42
+assign result: number(null)                     # disrupt
 </pre>
 <h3 align="left" id="record">Record</h3>
 <h4 id="copy record">record(<var>record</var>)</h4>
