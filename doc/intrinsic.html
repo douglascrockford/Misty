@@ -681,7 +681,7 @@ text<code>)</code>. If it returns a text, then the substitution is made.</p>
 <pre>var result: format(&quot;{0} in {1}!&quot;, [&quot;Malmborg&quot;, &quot;Plano&quot;])
     # result is &quot;Malmborg in Plano!&quot;</pre>
 <h4 id="fraction">fraction(<var>number</var>)</h4>
-<p>The <code>fraction</code> function returns the fractional part of a <var>number</var> It returns <code>null</code> for non-numbers. Also see <code><a href="#whole">whole</a></code>.</p>
+<p>The <code>fraction</code> function returns the fractional part of a <var>number</var> The result has the same sign as the <var>number</var>, so that <code>fraction(<var>number</var>) + whole(<var>number</var>) = <var>number</var></code> is <code>true</code>. It returns <code>null</code> for non-numbers. Also see <code><a href="#whole">whole</a></code>.</p>
 <h4 id="length">length(<var>value</var>)</h4>
 <table><caption>The <code>length</code> function</caption>
     <tr>
