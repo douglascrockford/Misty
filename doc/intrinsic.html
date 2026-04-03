@@ -42,7 +42,7 @@ The <a href="statements.html#use"><code>use</code> statement</a> is not needed t
 <p>Map. Call the <var>function</var> with each element of  the <var>array</var>, collecting the return values in a new array. The <var>function</var> is passed each  element and its element number.</p>
 <pre>function (element, element_nr)</pre>
 <p>If <var>reverse</var> is <code>true</code>, then it starts with the last element and works backwards.</p>
-<p>If <var>exit</var> is not <code>null</code>, then when the <var>function</var> returns the <var>exit</var> value, then the <code>array</code> function returns early. The <var>exit</var> value will not be stored into the new array. If the <var>array</var> was processed normally, then the returned array will be shorter than the input <var>array</var>. If the <var>array</var> was processed in <var>reverse</var>, then the returned array will have the same length as the input <var>array</var>, and the first elements will be <code>null</code>. The elements in the new array that were not set due to an early exit will be set to <code>null</code>.</p>
+<p>If <var>exit</var> is not <code>null</code>, then when the <var>function</var> returns the <var>exit</var> value, then the <code>array</code> function returns early. The <var>exit</var> value will not be stored into the new array. If the <var>array</var> was processed normally, then the returned array will be shorter than the input <var>array</var>. If the <var>array</var> was processed in <var>reverse</var>, then the returned array will have the same length as the input <var>array</var>. The elements in the new array that were not set due to an early exit will be set to <code>null</code>.</p>
 <p>This is like the <code><a href="#for">for</a></code><a href="#for"> function</a> except that the return values are collected into a new array.</p>
 <h4>array(<var>array</var>, <var>another_array</var>)</h4>
 <p>Concat. Produce a new array that concatenates the <var>array</var> and <var>another_array</var>.</p>
@@ -187,7 +187,7 @@ assign result: number(null)                     # disrupt
 <p>Functional Value Set. Make a record using the array as the source of the keys. The <var>function</var> is called for each key, yielding the field values.</p>
 <h3 align="left" id="text">Text</h3>
 <h4>text(<var>array</var>)</h4>
-<p>Convert an array to text. The array can contain text and unicode codepoints. All are concatenated together to make a single text.</p>
+<p>Convert an array to text. The array can contain text and unicode codepoints. All are concatenated together to make a single text. If other values are in the array, then it disrupts.</p>
 <h4>text(<var>array</var>, <var>separator</var>)</h4>
 <p>Convert an array to text. The <var>array</var> can contain text and unicode codepoints. All are concatenated together to make a single text. The <var>separator</var> text is inserted between each piece. The default <var>separator</var> is the empty text.</p>
 <h4>text(<var>number</var>, <var>radix</var>)</h4>
@@ -445,7 +445,7 @@ character?(&quot;\u{FFFE}&quot;)   # true
 character?()             # false
 character?(&quot;/q&quot;)         # false
 character?(&quot;\q&quot;)         # true
-character?(&lt;&lt;&quot;&gt;&gt;)        # true
+character?(«&quot;»)          # true
 character?(null)         # false</pre>
 <h4 id="data?">data?(<var>value</var>)</h4>
 <p>Is the <var>value</var> data? If the <var>value</var> is a text, number,  logical, array, blob, or record, then the result is <code>true</code>.
@@ -468,16 +468,22 @@ digit?(1)           # false
 digit?([&quot;0&quot;])       # false
 digit?(&quot;Z&quot;)         # false</pre>
 <h4><span id="false?">false?</span>(<var>value</var>)</h4>
-<p>Is the <var>value</var> false?</p>
+<p>Is the <var>value</var> <code>false</code>? Also see <a href="#not">not</a>.</p>
+<pre>false?(false)      # true
+false?(true)       # false
+false?(&quot;false&quot;)    # false
+false?(null)       # false</pre>
 <h4><span id="fit?">fit?</span>(<var>number</var>)</h4>
 <p>Is the <var>number</var> a fit number? A number is a fit number if it is an integer that fits in 56 bits.  All fit numbers are integers in the range <code>-36028797018963968</code> thru <code>36028797018963967</code>. Only <a href="fit.html">fit</a> numbers can be given to <a href="fit.html">the <dfn>fit</dfn> functions</a>. Misty has additional integers that are too big to  fit.</p>
 <h4><span id="function?">function?</span>(<var>value</var>)</h4>
 <p>Is the <var>value</var> a function? If the <var>value</var> is a function, then the result is <code>true</code>. Otherwise, the result is <code>false</code>.</p>
-<pre>function?(0)                    # false
-function?(function () (null))   # true
-function?(&quot;function&quot;)           # false
-function?(null)                 # false
-function?(function?)            # true</pre>
+<pre>function?(0)              # false
+function?(function () {
+    return null;
+})                        # true
+function?(&quot;function&quot;)     # false
+function?(null)           # false
+function?(function?)      # true</pre>
 <h4 id="integer?">integer?(<var>value</var>)</h4>
 <p>Is the <var>value</var> an integer? If the <var>value</var> is a number and if its fraction part
 is zero, then the result is <code>true</code>. Otherwise, the result is <code>false</code>.</p>
@@ -489,7 +495,7 @@ integer?(65.0000001)           # false
 integer?(null)                 # false
 integer?(true)                 # false
 integer?(1)                    # true
-integer?(36028797018963968)    # true
+integer?(360287970189639670)   # true
 integer?(1.00001e100)          # true</pre>
 <h4 id="letter?">letter?(<var>value</var>)</h4>
 <p>Is the <var>value</var> a letter? If the <var>value</var> is a text with a <code>length</code> of 1 and is a
@@ -561,7 +567,7 @@ text?(&quot;number&quot;)    # true
 text?(&quot;&quot;)          # true
 text?(null)        # false</pre>
 <h4><span id="true?">true?</span>(<var>value</var>)</h4>
-<p>Is the <var>value</var> true?</p>
+<p>Is the <var>value</var> true? Also see <a href="#false?"><code>false?</code></a>.</p>
 <h4><span id="upper?">upper?</span>(<var>value</var>)</h4>
 <p>Is the <var>value</var> an upper case letter? If the <var>value</var> is a text with a <code>length</code> of <code>1</code> and is an upper case letter, then the result is <code>true</code>. Otherwise,
     the result is <code>false</code>.</p>
@@ -774,7 +780,7 @@ then the result is <code>null</code>. <var><var>dividend</var></var> and <var>di
 <h4 id=normalize>normalize(<var>text</var>)</h4>
 <p>Unicode normalize. Return a text whose textual value is the same as <var>text</var>, but whose binary representation is in the specified Unicode normalization form. The two texts will display the same, but might not be equal.</p>
 <h4 id="not">not(<var>logical</var>)</h4>
-<p>Not. Return the opposite logical. If the input value is not a logical, it returns <code>null</code>.</p>
+<p>Not. Return the opposite logical. If the input value is not a logical, it returns <code>null</code>. Also see <a href="#false?"><code>false?</code></a>.</p>
 <h4 id="parallel">parallel(<var>requestor_array</var>, <var>throttle</var>, <var>need</var>)</h4>
 <p>Parallel. The <code>parallel</code> <a href="programs.html#requestor_factory">requestor factory</a> returns a <a href="functions.html#requestor">resquestor function</a>. When the <a href="functions.html#requestor">requestor function</a> is called with a <a href="functions.html#callback">callback</a> function and a value, every requestor in the <var>requestor_array</var> is called with the value, and the results are placed in corresponding elements of the results array. This all happens in parallel. The value produced by the first element of the <var>requestor_array</var> provides the first element of the result. The completed results array is passed to the <a href="functions.html#callback">callback</a> function.</p>
 <p>By default, it starts all of the requestors in the <var>requestor_array</var> at once, each in its own turn so that they do not interfere with each other. This can shock some systems by unleashing a lot of demand all at once. To mitigate the shock, the optional <var>throttle</var> argument sets the maximum number of requestors running at a time. As requestors succeed or fail, waiting requestors can be started. The <var>throttle</var> is optional. If provided, the <var>throttle</var> is a number: the maximum number of requestors to have
