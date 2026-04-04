@@ -1,5 +1,5 @@
 // tokenize.js  # Misty tokenizer
-// 2026-03-19
+// 2026-04-04
 
 // Tokenize takes a text and converts it into an array of tokens.
 // The input is a source text. The output is an array of token records.
@@ -13,7 +13,6 @@
 //      from_row
 //      to_column
 //      to_row
-//      quote {'"' or '«'} (only when kind = "text")
 //      error (only when kind = "text")
 
 // A kind includes
@@ -29,8 +28,8 @@
 // If there is an error in a name or number, it makes a legal name and
 // treats the leftover parts as separate tokens. If there is an error in a
 // text, it adds an 'error' field to the token. Currently, the errors are
-// all due to escapement in text literals.
-//      Unclosed text literal
+// due to escapement and closing in text literals.
+//      Unclosed
 //      Missing '{'
 //      Missing '}'
 //      Missing codepoint
@@ -52,7 +51,7 @@ const error_message = {
     "Missing '{'": "Missing '{'",
     "Missing '}'": "Missing '}'",
     "Missing codepoint": "Missing codepoint",
-    "Unclosed text literal": "Unclosed text literal"
+    "Unclosed": "Unclosed"
 };
 
 const backslash = "\\";
@@ -262,39 +261,6 @@ function reverse_solidus() {
     seal();
 }
 
-function chevron() {
-    let nesting = 1;
-    let next;
-    while (true) {
-        next = peek();
-        if (next === closing) {
-            advance();
-            nesting -= 1;
-            if (nesting <= 0) {
-                token.text = snip(1, 1);
-                break;
-            }
-        } else if (next === opening) {
-            advance();
-            nesting += 1;
-        } else if (next === "\n") {
-            advance();
-            newline();
-        } else if (next === "\r") {
-            advance();
-            carriage_return();
-        } else if (next) {
-            advance();
-        } else {
-            error("Unclosed text literal");
-            token.text = snip();
-            break;
-        }
-    }
-    token.kind = "text";
-    token.quote = opening;
-}
-
 function less() {
     if (peek() === ">") {
         advance();
@@ -341,6 +307,21 @@ function error(reason, evidence = "") {
     token.error = error_message[reason] + evidence;
 }
 
+function single_quote() {
+    advance();
+    while (true) {
+        if (ender(peek())) {
+            error("Unclosed");
+            break;
+        }
+        advance();
+        if (peek() === "'") {
+            break;
+        }
+    }
+    seal();
+}
+
 function double_quote() {
     let value = "";
     let escapee;
@@ -351,7 +332,7 @@ function double_quote() {
             break;
         }
         if (ender(peek())) {
-            error("Unclosed text literal");
+            error("Unclosed");
             break;
         }
         if (peek() === backslash) {
@@ -365,7 +346,7 @@ function double_quote() {
                 if (peek() !== "{") {
                     error("Missing ", "'{'");
                 } else if (ender(peek())) {
-                    error("Unclosed text literal");
+                    error("Unclosed");
                 } else {
                     advance();
                     escapee = "";
@@ -398,7 +379,7 @@ function double_quote() {
                     }
                 }
             } else if (ender(peek())) {
-                error("Unclosed text literal");
+                error("Unclosed");
             } else {
                 error("Bad escapement ", peek());
                 value += peek();
@@ -411,7 +392,6 @@ function double_quote() {
     }
     token.kind = "text";
     token.text = value;
-    token.quote = quote;
 }
 
 tokenators = {
@@ -424,6 +404,7 @@ tokenators = {
     "|": cish,
     "&": cish,
     "\"": double_quote,
+    "'": single_quote,
     "-": minus,
     "+": cish,
     "*": cish,
@@ -435,7 +416,6 @@ tokenators = {
     "!": cish,
     "^": cish,
     "%": cish,
-    "«": chevron,
     "0": digit,
     "1": digit,
     "2": digit,
