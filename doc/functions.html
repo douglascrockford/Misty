@@ -219,49 +219,35 @@ pseudorecord.b("ok")    # disrupt</pre>
 <h2 id="functino">Operator Functions</h2>
 <p class="rule">
 function_operator
-    <code>"/\!"</code>
-    <code>"\/!"</code>
-    <code>"|!"</code>
-    <code>"=!"</code>
-    <code>"&lt;&gt;!"</code>
-    <code>"&lt;!"</code>
-    <code>"&lt;=!"</code>
-    <code>"&gt;!"</code>
-    <code>"&gt;=!"</code>
-    <code>"&!"</code>
-    <code>"&&!"</code>
-    <code>"+!"</code>
-    <code>"-!"</code>
-    <code>"*!"</code>
-    <code>"/!"</code>
-    <code>"//!"</code>
-    <code>"[]!"</code>
+    <code>"'[]'"</code>
+    <code>'''</code> infix_operator <code>'''</code>
 </p>
-<p>The <a href="operators.html">operators</a> can be used as functions by suffixing the operators with <code>!</code><small>exclamation mark</small>. These operator functions, or <b>functinos</b>, can be used like any other functions. They can be passed as input values or stored in records and arrays.</p>
-<p>So <code>+!</code> is the binary add function that can be passed to <a href="intrinsic.html#reduce">the <code>reduce</code> function</a> to make sums. </p>
-<pre>assign total: reduce(data, +!)</pre>
+<p>The <a href="operators.html">operators</a> can be used as functions by wrapping the operators with <code>'</code><small>single quote</small>. These operator functions, or <b>functinos</b>, can be used like any other functions. They can be passed as input values or stored in records and arrays.</p>
+<p>So <code>'+'</code> is the binary add function that can be passed to <a href="intrinsic.html#reduce">the <code>reduce</code> function</a> to make sums. </p>
+<pre>assign total: reduce(data, '+')</pre>
 <h6>Examples:</h6>
 <pre>
-/\!(3, 4)   # null  <small>and</small>
-\/!(3, 4)   # null  <small>or</small>
-|!(3, 4)    # 3     <small>default</small>
-=!(3, 4)    # false <small>equal</small>
-&lt;&gt;!(3, 4)   # true  <small>not equal</small>
-&lt;!(3, 4)    # true  <small>less</small>
-&lt;=!(3, 4)   # true  <small>less or equal</small>
-&gt;!(3, 4)    # false <small>greater</small>
-&gt;=!(3, 4)   # false <small>greater or equal</small>
-&!(3, 4)    # "34"  <small>concat</small>
-&&!(3, 4)   # "3 4" <small>concat with space</small>
-+!(3, 4)    # 7     <small>add</small>
--!(3, 4)    # -1    <small>subtract</small>
-*!(3, 4)    # 12    <small>multiply</small>
-/!(3, 4)    # 0.75  <small>divide</small>
-//!(3, 4)   # 0     <small>integer divide</small>
-[]!(3, 4)   # null  <small>get</small>
+'/\'(3, 4)   # null  <small>and</small>
+'\/'(3, 4)   # null  <small>or</small>
+'|'(3, 4)    # 3     <small>default</small>
+'='(3, 4)    # false <small>equal</small>
+'&lt;&gt;'(3, 4)   # true  <small>not equal</small>
+'&lt;'(3, 4)    # true  <small>less</small>
+'&lt;='(3, 4)   # true  <small>less or equal</small>
+'&gt;'(3, 4)    # false <small>greater</small>
+'&gt;='(3, 4)   # false <small>greater or equal</small>
+'&'(3, 4)    # "34"  <small>concat</small>
+'&&'(3, 4)   # "3 4" <small>concat with space</small>
+'+'(3, 4)    # 7     <small>add</small>
+'-'(3, 4)    # -1    <small>subtract</small>
+'*'(3, 4)    # 12    <small>multiply</small>
+'/'(3, 4)    # 0.75  <small>divide</small>
+'//'(3, 4)   # 0     <small>integer divide</small>
+'[]'(3, 4)   # null  <small>get</small>
 </pre>
-<p>Three  are short circuiting in their operator form, but not in their functino form: <code>/\!</code><small>and</small>&nbsp;&nbsp; <code>\/!</code><small>or</small>&nbsp;&nbsp; <code>|!</code><small>default</small>.</p>
-<h4>=!<small>equal</small></h4>
+<p>Three  are short circuiting in their operator form, but not in their functino form:
+    <code>'/\'</code><small>and</small>&nbsp;&nbsp; <code>'\/'</code><small>or</small>&nbsp;&nbsp; <code>'|'</code><small>default</small>.</p>
+<h4>'='<small>equal</small></h4>
 <p>The equal function can take two or three input values. The first two input values are values to be compared.
     If all of the inputs are numbers, an optional <var>tolerance</var> input value may be included which must be a non-negative number.
     The result is <code>true</code> if the absolute value of the difference between the
@@ -270,16 +256,16 @@ function_operator
 <h6>Examples:</h6>
 <pre>def first: 12.3775
 def second: 12.38
-assign exactly: =!(first, second)         # exactly is false
-assign sloppy: =!(first, second, 0.01)    # sloppy is true
+assign exactly: '='(first, second)         # exactly is false
+assign sloppy: '='(first, second, 0.01)    # sloppy is true
 
 def first: "vorpal"
 def second: "VORPAL"
-assign exactly: =!(first, second)         # exactly is false
-assign sloppy: =!(first, second, true)    # sloppy is true</pre>
-<h4 id="'&lt;&gt;">&lt;&gt;!<small>not equal</small></h4>
+assign exactly: '='(first, second)         # exactly is false
+assign sloppy: '='(first, second, true)    # sloppy is true</pre>
+<h4 id="'&lt;&gt;'">'&lt;&gt;'<small>not equal</small></h4>
 <p>The not equal function can take two or three input values. The first two input values are values to be compared. The optional third input value is a tolerance. When comparing numbers, the tolerance is a number that indicates the allowable difference. When comparing texts, the tolerance is a logical that if <code>true</code> ignores case.</p>
-<h4><span id="'[]">[]!</span><small>get</small></h4>
+<h4><span id="'[]'">'[]'</span><small>get</small></h4>
 <p>The get function  takes two input values. The first input value is an array, record, or text. The second input value is an element number or key. It returns an element, a property, or a character, or <code>null</code>.</p>
 <h2 id="types">Function Types</h2>
 <p>There are several function types that are essential to Misty. They are</p>
