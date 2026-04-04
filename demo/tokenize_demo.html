@@ -20,6 +20,9 @@ input[type=button] {
 input[type=button]:hover {
     background-color: thistle;
 }
+textarea {
+    width:100%;
+}
 </style>
 </head>
 <body>
@@ -28,7 +31,7 @@ input[type=button]:hover {
 <p>Put misty source text in the box and push the button.</p>
 <fieldset style="clear: both;">
     <legend>Source text</legend>
-    <textarea id="inputation" rows=24 autocomplete=off autocorrect=off spellcheck=false></textarea>
+    <textarea id="inputation" rows=24 cols=80 autocomplete=off autocorrect=off spellcheck=false></textarea>
 </fieldset>
 <p style="text-align: center;">
     <input id=clear type=button value="clear">
