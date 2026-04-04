@@ -27,6 +27,7 @@ This is descriptive of one particular implementation.
 <p>The tree can be fully realized as a JSON object.</p>
 <h2 id="token">Tokens</h2>
 <p>The subprogram <code>tokenize.mst</code> takes a source text and produces an array of tokens. The tokens are made up of these fields:</p>
+<p>The <code>kind</code> and <code>text</code> fields will be meaningful to the parser that consumes the token list. The other fields are intended for error reporting.These token records are treated as nodes that are woven into a parse tree.</p>
 <h4>kind</h4>
 <p><code>&quot;name&quot;</code>, <code>&quot;text&quot;</code>, <code>&quot;number&quot;</code>,
 <code>&quot;comment&quot;</code>, <code>&quot;newline&quot;</code>, <code>&quot;space&quot;</code>,
@@ -48,11 +49,6 @@ and all of the <a href="intrinsic.html">intrinsics</a> and punctuators:</p>
 <p>The line number if the last character of the token.</p>
 <h4>to_column</h4>
 <p>The column number of the character past the token.</p>
-<h4>quote</h4>
-<p>For <code>kind: &quot;text&quot;</code> tokens, one of:</p>
-<pre>&quot;<small>double quote</small> &nbsp;  «<small>open chevron</small>
-</pre>
-<p>The <code>kind</code> and <code>text</code> fields will be meaningful to the parser that consumes the token list. The other fields are intended for error reporting.These token records are treated as nodes that are woven into a parse tree.</p>
 <h1 id="tree">Tree</h1>
 <p>The subprogram <code>parse.mst</code> turns a list of tokens into an abstract parse tree by adding new fields. The source notations are retained for error reporting and debugging.</p>
 <h2 id="root">Root</h2>
