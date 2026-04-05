@@ -439,7 +439,7 @@ an error.&quot;                    # must begin and end on the same line</pre>
 <h3 id="long">Long text literals</h3>
 <p class="rule">
 long_text_literal
-    spaces more_long_lines linebreak quote
+    more_long_lines linebreak quote
 </p>
 <p class="rule">
 more_long_lines
@@ -448,12 +448,7 @@ more_long_lines
 </p>
 <p class="rule">
 long_line
-    linefeed more_spaces quote quote more_long_characters
-</p>
-<p class="rule">
-more_spaces
-    ""
-    space more_spaces
+    linebreak quote quote more_long_characters
 </p>
 <p class="rule">
 more_long_characters
@@ -467,9 +462,8 @@ long_character
 <p>A long text literal can make a text over several lines.
 This is done by using a pairs of quotes as a prefixes rather than as brackets.
 An opening quote at the end of a line signals the beginning of a long text literal.
-Each line starts with zero or more spaces, followed by two quotes. 
-The leading spaces and the two quotes are not included in the text.
-The leading spaces are exempt from the normal indentation rules.
+Each line is indented, followed by two quotes. 
+The indentation and the two quotes are not included in the text.
 All of the remaining characters on the line are included in the text without escapement.
 There can be zero or more of these lines.
 A <code>"\n"</code><small>linefeed</small> character is inserted into the text between the lines.
@@ -481,8 +475,8 @@ The long text literal is closed by a quote on the next line at the normal indent
 "                          # "This text\ntakes up\nthree lines."
 
 "
-""\u{43}\u{061}\u{0074}
-"                          # "\\u{43}\\u{061}\\u{0074}"
+    ""\u{43}\u{061}\u{0074}
+"                          # "\bu{43}\bu{061}\nu{0074}"
 
 "
     "" Nesting and escapement are not problems.
@@ -494,7 +488,7 @@ The long text literal is closed by a quote on the next line at the normal indent
     """
 "
 
-def speeches: {
+def examples: {
     walrus: "
         """The time has come," the actor said, "to talk of what comes next:
         ""of queues and chips and coding hacks, of characters and text,
@@ -505,20 +499,22 @@ def speeches: {
         ""than "computing".
     ",
     comment: "
-""                         # This is not a comment.
+        ""                 # This is not a comment.
     ",                     # This is a comment.
-    example: "
+    this: "
         ""This is a text.
     ",
     also: "
         ""So is this.
     ",
-    yet: "
+    not: "
         ""This is not
-            ""an error.
+        ""an error.
     ",
     quote: "
-    ""This record contains "quotes".
+        ""This record contains "quotes".
+    ",
+    empty: "
     "
 }
 
