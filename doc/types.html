@@ -217,15 +217,15 @@ more_open_fields
     linebreak field more_open_fields
 </p>
 <p>In the record literal notation, the specification of a record begins
-    with <code>{</code><small>left chevron</small> and ends with
-    <code>}</code><small>right chevron</small>. Between them are zero or more
+    with <code>{</code><small>left long</small> and ends with
+    <code>}</code><small>right long</small>. Between them are zero or more
     name/value fields, separated by <code>,</code><small>comma</small>.
     A name/value field is an identifier or text, followed by
     <code>:</code><small>colon</small> followed by an expression. (See
     <a href="json.html">JSON</a>.) Each <dfn>field</dfn> contributes a field to
     the record.</p>
 <p>If no value is supplied, then the value is obtained from a variable with the same name.</p>
-<p>An empty record can be made by <code>{}</code><small>chevrons</small>.</p>
+<p>An empty record can be made by <code>{}</code><small>longs</small>.</p>
 <pre>def empty_record: {}    # empty_record is {}
 </pre>
 <p>The statement:</p>
@@ -302,6 +302,7 @@ assign stooge: {}                            # disrupt
 </blockquote>
 <p>The <var>record</var> is searched for a field matching the <var>method_name</var>.
     If the result of that search is not a function, then it disrupts.</p>
+
 <h2 id="text">Text</h2>
 <p>A <var>text</var> is a sequence of zero or more 32-bit characters. Texts
     are immutable. It is not possible to alter a text, but it is very easy to
@@ -311,31 +312,41 @@ assign stooge: {}                            # disrupt
     or <a href="operators.html#doubleampersand">the <code>&&</code><small>double ampersand</small> operator</a>.
     <a href="intrinsic.html#length">The <code>length</code> function</a> is used to determine the number
     of characters in a text.</p>
-<h3>Text literals</h3>
-<p class="rule">
-text_literal
-    quote
-    chevron
-</p>
+<p>A text literal starts with <code>"</code><small>doublequote</small>. Text literals can either be short or long.</p>
 <p class="rule">
 quote
-    <code>'&quot;'</code> more_quote_characters <code>'&quot;'</code>
+    <code>'"'</code>
 </p>
 <p class="rule">
-quote_character
+text_literal
+    quote short_or_long
+</p>
+<p class="rule">
+short_or_long
+    short_text_literal
+    long_text_literal
+</p>
+<h3 id="short">Short Text literals</h3>
+<p class="rule">
+short_text_literal
+    more_short_characters quote
+</p>
+<p class="rule">
+more_short_characters
+    <code>""</code>
+    short_character more_short_characters
+</p>
+<p class="rule">
+short_character
     <code>'\'</code> escape
     <code>'0020'</code> . <code>'10ffff'</code> - <code>'"'</code> - <code>'\'</code>
 </p>
 <p class="rule">
-more_quote_characters
-    <code>""</code>
-    quote_character more_quote_characters
-</p>
-<p class="rule">
 escape
+    <code>'a'</code>
     <code>'b'</code>
-    <code>'d'</code>
     <code>'g'</code>
+    <code>'l'</code>
     <code>'n'</code>
     <code>'q'</code>
     <code>'r'</code>
@@ -366,10 +377,6 @@ more_hex
         <td><code>\</code><small>backslash</small></td>
     </tr>
     <tr>
-        <td><code>\c</code></td>
-        <td>»<small>close chevron</small></td>
-    </tr>
-    <tr>
         <td><code>\g</code></td>
         <td>&gt;<small>greater</small></td>
     </tr>
@@ -380,10 +387,6 @@ more_hex
     <tr>
         <td><code>\n</code></td>
         <td><code>&nbsp;</code><small>linefeed</small></td>
-    </tr>
-    <tr>
-        <td><code>\o</code></td>
-        <td>«<small>open chevron</small></td>
     </tr>
     <tr>
         <td><code>\q</code></td>
@@ -402,7 +405,7 @@ more_hex
         <td><code>&nbsp;</code><small>unicode</small></td>
     </tr>
 </table>
-<p>A text literal is bounded by a pair of
+<p>A text literal is jacketed by a pair of
     <code>&quot;</code><small>double quote</small>. Between the quotes are zero
     or more characters and escape sequences. The escape sequences are a
     <code>\</code><small>reverse solidus</small> followed by 1 to 11 additional
@@ -423,7 +426,7 @@ more_hex
 
 &quot;This text contains \qquotes\q.&quot;
 
-&quot;# This is not a comment.&quot;</pre>
+&quot;  # This is not a comment.&quot;</pre>
 <p>A text must begin and end on the same line. A text may not contain a line break.</p>
 <pre>
 &quot;This is
@@ -433,46 +436,93 @@ an error.&quot;                    # must begin and end on the same line</pre>
 <pre>&quot;This is not\nan error.&quot;
 
 &quot;Neither is\u{A}this.&quot;</pre>
-<h3 id="chevron">Chevron text literals</h3>
+<h3 id="long">Long text literals</h3>
 <p class="rule">
-chevron
-    <code>'«'</code> more_chevron_characters <code>'»'</code>
+long_text_literal
+    spaces more_long_lines linebreak quote
 </p>
 <p class="rule">
-chevron_character
-    <code>'0009'</code><small>tab</small>
-    <code>'000A'</code><small>linefeed</small>
-    <code>'000D'</code><small>carriage return</small>
-    <code>'0020' . '10FFFF' - '«' '»'</code>
-</p>
-<p class="rule">
-more_chevron_characters
+more_long_lines
     ""
-    chevron more_chevron_characters
-    chevron_character more_chevron_characters
+    long_line more_long_lines
 </p>
-<p>A text literal can also be bounded by <code>«</code><small>open chevron</small> and <code>»</code><small>close chevron</small>.
-    These  chevron text literals contain no escape sequences; <code>\</code><small>reverse solidus</small> is treated as an ordinary
-    character. The  chevron pairs can be nested literally within a
-    double chevron text as long as they are properly balanced.
-    The control characters <var>tab</var>, <var>carriage return</var>,
-    and <var>linefeed</var>, are permitted. Comments placed inside of double chevron text literals are treated as ordinary text.</p>
-<pre>«This text
-takes up
-three lines.»
+<p class="rule">
+long_line
+    linefeed more_spaces quote quote more_long_characters
+</p>
+<p class="rule">
+more_spaces
+    ""
+    space more_spaces
+</p>
+<p class="rule">
+more_long_characters
+    ""
+    long_character more_long_characters
+</p>
+<p class="rule">
+long_character
+    <code>'0020'</code> . <code>'10ffff'</code>
+</p>
+<p>A long text literal can make a text over several lines.
+This is done by using a pairs of quotes as a prefixes rather than as brackets.
+An opening quote at the end of a line signals the beginning of a long text literal.
+Each line starts with zero or more spaces, followed by two quotes. 
+The leading spaces and the two quotes are not included in the text.
+The leading spaces are exempt from the normal indentation rules.
+All of the remaining characters on the line are included in the text without escapement.
+There can be zero or more of these lines.
+A <code>"\n"</code><small>linefeed</small> character is inserted into the text between the lines.
+The long text literal is closed by a quote on the next line at the normal indentation. </p>
+<pre>"
+    ""This text
+    ""takes up
+    ""three lines.
+"                          # "This text\ntakes up\nthree lines."
 
-«««««««« chevrons may be nested when ««properly»» balanced »»»»»»»»
+"
+""\u{43}\u{061}\u{0074}
+"                          # "\\u{43}\\u{061}\\u{0074}"
 
-««»       # error
-«»»       # error
-««»»      # same as "«»" or "\o\c"
+"
+    "" Nesting and escapement are not problems.
+"
 
-««oops    # no comments in here!
-»»        # same as "oops    # no comments in here!\n"
+"
+    """
+    ""    "" Nesting and escapement are not problems.
+    """
+"
 
-««file:c:\nt\autoexec.bat»»  # same as "file:c:\bnt\bautoexec.bat"
+def speeches: {
+    walrus: "
+        """The time has come," the actor said, "to talk of what comes next:
+        ""of queues and chips and coding hacks, of characters and text,
+        ""and why the null is full of null, and policy is flexed."
+    ",
+    com: "
+        ""We call them computers, but they do a lot more "communicating"
+        ""than "computing".
+    ",
+    comment: "
+""                         # This is not a comment.
+    ",                     # This is a comment.
+    example: "
+        ""This is a text.
+    ",
+    also: "
+        ""So is this.
+    ",
+    yet: "
+        ""This is not
+            ""an error.
+    ",
+    quote: "
+    ""This record contains "quotes".
+    "
+}
 
-««Now it isn't necessary to escape "double quotes".»»</pre>
+</pre>
 <h3 id="subscripting">Subscripting</h3>
 <p><a href="operators.html#brackets">Subscripting</a> can be used to access the individual characters of a text.
     Subscripts are integers that are greater than or equal to zero and less
