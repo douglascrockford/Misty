@@ -55,8 +55,6 @@ const error_message = {
 };
 
 const backslash = "\\";
-const closing = "»";
-const opening = "«";
 const quote = "\"";
 
 const escape = {
@@ -308,17 +306,19 @@ function error(reason, evidence = "") {
 }
 
 function single_quote() {
-    advance();
+    let single = true;
     while (true) {
         if (ender(peek())) {
             error("Unclosed");
             break;
         }
-        advance();
-        if (peek() === "'") {
+        if (peek() === "'" && !single) {
             break;
         }
+        advance();
+        single = false;
     }
+    advance();
     seal();
 }
 
