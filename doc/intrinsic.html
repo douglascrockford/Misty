@@ -212,7 +212,7 @@ format_style
     <code>'h'</code>
     <code>'i'</code>
     <code>'l'</code>
-    <code>'n'</code> 
+    <code>'n'</code>
     <code>'o'</code>
     <code>'s'</code>
     <code>'t'</code>
@@ -445,7 +445,6 @@ character?(&quot;\u{FFFE}&quot;)   # true
 character?()             # false
 character?(&quot;/q&quot;)         # false
 character?(&quot;\q&quot;)         # true
-character?(«&quot;»)          # true
 character?(null)         # false</pre>
 <h4 id="data?">data?(<var>value</var>)</h4>
 <p>Is the <var>value</var> data? If the <var>value</var> is a text, number,  logical, array, blob, or record, then the result is <code>true</code>.
@@ -857,9 +856,9 @@ round(-12.3775, -2)    # -12.38</pre>
 <p><var>target</var>: a text or pattern that should be found in the source.</p>
 <p><var>from</var>: The starting position for the search. The default is <code>0</code>, the beginning of the text. If from is negative, it is added to <code>length(</code><var>text</var><code>)</code>.</p>
 <h4 id="sequence">sequence(<var>requestor_array</var>)</h4>
-<p>Sequence. The <code>sequence</code> <a href="programs.html#requestor_factory">requestor factory</a> 
+<p>Sequence. The <code>sequence</code> <a href="programs.html#requestor_factory">requestor factory</a>
 that takes a <var>requestor_array</var> and returns a <a href="functions.html#requestor">requestor</a> function that
-    starts all of the <a href="functions.html#requestor">requestors</a> in the <var>requestor_array</var> one at a time. 
+    starts all of the <a href="functions.html#requestor">requestors</a> in the <var>requestor_array</var> one at a time.
     The result of each becomes the input to the next. The last result is the result of the sequence. </p>
 <p><code>sequence</code> returns a <a href="functions.html#requestor">requestor</a> that returns a <a href="functions.html#cancel">cancel function</a> and processes each <a href="functions.html#requestor">requestor</a> in <code>requestor_array</code> one at a time. Each of those requestors is passed the result of the previous <a href="functions.html#requestor">requestor</a> as its <code>value</code> argument. If all succeed, then the sequence succeeds, giving the result of the last of the requestors. If any fail, then the sequence fails.The sequence succeeds if every requestor in the <var>requestor_array</var> succeeds</p>
 <h4 id="sign">sign(<var>number</var><var></var>)</h4>
