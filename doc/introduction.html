@@ -99,13 +99,11 @@ linefeed
         call take_action()
     }
 )</pre>
-<p>In complex expressions, parens can allow a line break. In this form, expressions may be broken before some operators. (See <a href="operators.html">operators</a>.)</p>
+<p>In complex expressions, parens can allow a line break. (See <a href="operators.html">operators</a>.)</p>
 <pre>def atan(slope) (
     math.sine(
-        slope
-        / (math.sqrt(
-            slope
-            * slope
+        slope / (math.sqrt(
+            slope * slope
         ) + 1)
     )
 )
