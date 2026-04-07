@@ -1,5 +1,5 @@
 // tokenize.js  # Misty tokenizer
-// 2026-04-04
+// 2026-04-07
 
 // Tokenize takes a text and converts it into an array of tokens.
 // The input is a source text. The output is an array of token records.
@@ -13,6 +13,7 @@
 //      from_row
 //      to_column
 //      to_row
+//      indentation (only on long text)
 //      error (only when kind = "text")
 
 // A kind includes
@@ -35,6 +36,7 @@
 //      Missing codepoint
 //      Bad codepoint
 //      Bad escapement
+//      Bad indent
 //      Lower case hex
 
 // Tokenize can recognize many punctuators that are not legal Misty tokens.
@@ -47,6 +49,7 @@
 const error_message = {
     "Bad codepoint ": "Bad codepoint ",
     "Bad escapement ": "Bad escapement ",
+    "Bad indent": "Bad indent",
     "Lower case hex ": "Lower case hex ",
     "Missing '{'": "Missing '{'",
     "Missing '}'": "Missing '}'",
@@ -169,6 +172,9 @@ function space() {
     repeatable(" ");
     token.kind = "space";
     token.text = snip();
+    if (token.from_column === 0) {
+        indentation = token.text.length;
+    }
 }
 
 function digit() {
@@ -322,10 +328,67 @@ function single_quote() {
     seal();
 }
 
+function long() {
+    let value = "";
+    let indentation;
+    let indentation_4;
+    while (true) {
+        if (peek() === "\r" && peek(1) === "\n") {
+            at += 1;
+        }
+        advance();
+        column_nr = 0;
+        row_nr += 1;
+        indentation = 0;
+        while (true) {
+            if (peek() !== " ") {
+                break;
+            }
+            indentation += 1;
+            advance();
+        }
+        if (peek() !== quote) {
+            error("Unclosed");
+            token.kind = "text";
+            token.text = value;
+            return;
+        }
+        advance();
+        if (peek() !== quote) {
+            break;
+        }
+        advance();
+        if (indentation_4 === undefined) {
+            indentation_4 = indentation;
+        } else {
+            value += "\n";
+            if (indentation_4 !== indentation) {
+                error("Bad indent");
+            }
+        }
+        while (true) {
+            if (ender(peek())) {
+                break;
+            }
+            value += peek();
+            advance();
+        }
+    }
+    if (indentation_4 !== undefined && indentation_4 !== indentation + 4) {
+        error("Bad indent");
+    }
+    token.kind = "text";
+    token.text = value;
+    token.indentation = indentation;
+}
+
 function double_quote() {
     let value = "";
     let escapee;
     let codepoint = 0;
+    if (ender(peek())) {
+        return long();
+    }
     while (true) {
         if (peek() === quote) {
             advance();
@@ -347,6 +410,7 @@ function double_quote() {
                     error("Missing ", "'{'");
                 } else if (ender(peek())) {
                     error("Unclosed");
+                    break;
                 } else {
                     advance();
                     escapee = "";
