@@ -31,7 +31,7 @@ This is descriptive of one particular implementation.
 <h4>kind</h4>
 <p><code>&quot;name&quot;</code>, <code>&quot;text&quot;</code>, <code>&quot;number&quot;</code>,
 <code>&quot;comment&quot;</code>, <code>&quot;newline&quot;</code>, <code>&quot;space&quot;</code>,
-and all of the <a href="intrinsic.html">intrinsics</a> and punctuators:</p>
+and all of the <a href="intrinsic.html">intrinsics</a>, functinos, and punctuators, including:</p>
 <pre>.  ,  :  (  )  [  ]  {  }  +  -  *  /  //  &amp;  &amp;&amp;  =   &lt;&gt;  &lt;  &gt;  &lt;=   &gt;=  /\  \/  |  '</pre>
 <h4>text</h4>
 <p>The characters making up the token. </p>
@@ -49,6 +49,8 @@ and all of the <a href="intrinsic.html">intrinsics</a> and punctuators:</p>
 <p>The line number if the last character of the token.</p>
 <h4>to_column</h4>
 <p>The column number of the character past the token.</p>
+<h4>indentation</h4>
+<p>The indentation of the closing of a long text literal. It should match the current indentation.</p>
 <h1 id="tree">Tree</h1>
 <p>The subprogram <code>parse.mst</code> turns a list of tokens into an abstract parse tree by adding new fields. The source notations are retained for error reporting and debugging.</p>
 <h2 id="root">Root</h2>
