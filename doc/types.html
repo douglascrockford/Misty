@@ -405,7 +405,7 @@ more_hex
         <td><code>&nbsp;</code><small>unicode</small></td>
     </tr>
 </table>
-<p>A text literal is jacketed by a pair of
+<p>A short text literal is jacketed by a pair of
     <code>&quot;</code><small>double quote</small>. Between the quotes are zero
     or more characters and escape sequences. The escape sequences are a
     <code>\</code><small>reverse solidus</small> followed by 1 to 11 additional
@@ -427,11 +427,11 @@ more_hex
 &quot;This text contains \qquotes\q.&quot;
 
 &quot;  # This is not a comment.&quot;</pre>
-<p>A text must begin and end on the same line. A text may not contain a line break.</p>
+<p>A short text literal must begin and end on the same line. </p>
 <pre>
 &quot;This is
 an error.&quot;                    # must begin and end on the same line</pre>
-<p>A text literal can not contain a literal control character, but control characters
+<p>A short text literal can not contain a literal control character, but control characters
     can be embedded in texts with escape sequences.</p>
 <pre>&quot;This is not\nan error.&quot;
 
