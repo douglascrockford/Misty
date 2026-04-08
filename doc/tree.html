@@ -51,6 +51,16 @@ and all of the <a href="intrinsic.html">intrinsics</a>, functinos, and punctuato
 <p>The column number of the character past the token.</p>
 <h4>indentation</h4>
 <p>The indentation of the closing of a long text literal. It should match the current indentation.</p>
+<p>&nbsp;</p>
+<p>If the token contains an error, then it will also contain these fields:</p>
+<h4>error</h4>
+<p>A brief description of the error. Numbers, texts, and functinos can contain errors.</p>
+<h4>error_at</h4>
+<p>The character position in the source text where the error was identified<code></code>.</p>
+<h4>error_column</h4>
+<p>The column where the error was identified.</p>
+<h4>error_row</h4>
+<p>The row at which the error was identified.</p>
 <h1 id="tree">Tree</h1>
 <p>The subprogram <code>parse.mst</code> turns a list of tokens into an abstract parse tree by adding new fields. The source notations are retained for error reporting and debugging.</p>
 <h2 id="root">Root</h2>
