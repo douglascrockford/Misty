@@ -1,5 +1,5 @@
 // tokenize.js  # Misty tokenizer
-// 2026-04-07
+// 2026-04-08
 
 // Tokenize takes a text and converts it into an array of tokens.
 // The input is a source text. The output is an array of token records.
@@ -14,7 +14,11 @@
 //      to_column
 //      to_row
 //      indentation (only on long text)
-//      error (only when kind = "text")
+// Only when a token contains an error
+//      error
+//      error_at
+//      error_column
+//      error_row
 
 // A kind includes
 //      name
@@ -25,20 +29,6 @@
 //      comment
 // Punctuators are their own kinds.
 
-// Tokenize does not directly report errors. It always completes the file.
-// If there is an error in a name or number, it makes a legal name and
-// treats the leftover parts as separate tokens. If there is an error in a
-// text, it adds an 'error' field to the token. Currently, the errors are
-// due to escapement and closing in text literals.
-//      Unclosed
-//      Missing '{'
-//      Missing '}'
-//      Missing codepoint
-//      Bad codepoint
-//      Bad escapement
-//      Bad indent
-//      Lower case hex
-
 // Tokenize can recognize many punctuators that are not legal Misty tokens.
 // In particular, some special characters can be repeated and followed by
 // equal signs. Misty does a little of this. The C family does this a lot.
@@ -46,15 +36,17 @@
 // Characters outside of Misty's character set that are not enclosed in text
 // literals are encoded as single character punctuators.
 
+// Tokenize does not directly report errors. It always completes the file.
+// If there is an error in a name or number, it makes a token containing an
+// 'error', 'error_at', 'error_row', and 'error_column' fields.
+//      Bad
+//      Missing
+//      Unclosed
+
 const error_message = {
-    "Bad codepoint ": "Bad codepoint ",
-    "Bad escapement ": "Bad escapement ",
-    "Bad indent": "Bad indent",
-    "Lower case hex ": "Lower case hex ",
-    "Missing '{'": "Missing '{'",
-    "Missing '}'": "Missing '}'",
-    "Missing codepoint": "Missing codepoint",
-    "Unclosed": "Unclosed"
+    bad: "Bad ",
+    missing: "Missing ",
+    unclosed: "Unclosed"
 };
 
 const backslash = "\\";
@@ -63,11 +55,9 @@ const quote = "\"";
 const escape = {
     a: "&",
     b: backslash,
-    c: "»",
     g: ">",
     l: "<",
     n: "\n",
-    o: "«",
     q: quote,
     r: "\r",
     t: "\t"
@@ -99,6 +89,15 @@ let source;
 let token;
 let tokenators;
 
+function error(reason, evidence = "") {
+    if (!token.error) {
+        token.error = error_message[reason] + evidence;
+        token.error_at = at;
+        token.error_row = row_nr;
+        token.error_column = column_nr;
+    }
+}
+
 function peek(ahead = 0) {
     return source[at + ahead];
 }
@@ -127,6 +126,10 @@ function repeatable(character) {
 }
 
 function cish() {
+
+// The character can be repeated, and may also be appended with one or more
+// equal signs.
+
     repeatable(peek(-1));
     repeatable("=");
     seal();
@@ -172,53 +175,37 @@ function space() {
     repeatable(" ");
     token.kind = "space";
     token.text = snip();
-    if (token.from_column === 0) {
-        indentation = token.text.length;
+}
+
+function int(first) {
+    if (tokenators[peek()] === digit) {
+        advance();
+        return int();
+    }
+    if (first) {
+        error("bad", "number");
+    }
+    if (peek() === "_") {
+        advance();
+        return int(true);
     }
 }
 
 function digit() {
-    let e_seen = false;
-    let period_seen = false;
-    while (true) {
-        if (tokenators[peek()] === digit) {
+    int();
+    if (peek() === ".") {
+        advance();
+        int(true);
+    }
+    if (peek() === "e") {
+        advance();
+        if (peek() === "-") {
             advance();
-        } else {
-            if (peek() === ".") {
-                if (period_seen || e_seen) {
-                    break;
-                }
-                period_seen = true;
-                if (tokenators[peek(1)] !== digit) {
-                    break;
-                }
-                advance();
-            } else if (peek() === "e") {
-                if (e_seen) {
-                    break;
-                }
-                e_seen = true;
-                period_seen = true;
-                if (peek(1) === "-") {
-                    if (tokenators[peek(2)] !== digit) {
-                        break;
-                    }
-                    advance();
-                } else {
-                    if (tokenators[peek(1)] !== digit) {
-                        break;
-                    }
-                }
-                advance();
-            } else if (peek() === "_") {
-                if (tokenators[peek(1)] !== digit) {
-                    break;
-                }
-                advance();
-            } else {
-                break;
-            }
+        } else if (peek() === "+") {
+            advance();
+            error("bad", "number");
         }
+        int(true);
     }
     token.kind = "number";
     token.text = snip();
@@ -227,12 +214,11 @@ function digit() {
 
 function minus() {
     if (tokenators[peek()] === digit) {
-        digit();
-    } else {
-        repeatable("-");
-        repeatable("=");
-        seal();
+        return digit();
     }
+    repeatable("-");
+    repeatable("=");
+    return seal();
 }
 
 function slash() {
@@ -242,27 +228,27 @@ function slash() {
         repeatable("/");
         repeatable("=");
     }
-    seal();
+    return seal();
 }
 
 function equal() {
     repeatable("=");
     repeatable(">");
-    seal();
+    return seal();
 }
 
 function left_bracket() {
     if (peek() === "]") {
         advance();
     }
-    seal();
+    return seal();
 }
 
 function reverse_solidus() {
     if (peek() === "/") {
         advance();
     }
-    seal();
+    return seal();
 }
 
 function less() {
@@ -272,7 +258,7 @@ function less() {
         repeatable("<");
         repeatable("=");
     }
-    seal();
+    return seal();
 }
 
 function alphameric(character) {
@@ -307,15 +293,11 @@ function letter() {
     token.text = snip();
 }
 
-function error(reason, evidence = "") {
-    token.error = error_message[reason] + evidence;
-}
-
 function single_quote() {
     let single = true;
     while (true) {
         if (ender(peek())) {
-            error("Unclosed");
+            error("unclosed");
             break;
         }
         if (peek() === "'" && !single) {
@@ -348,7 +330,7 @@ function long() {
             advance();
         }
         if (peek() !== quote) {
-            error("Unclosed");
+            error("unclosed");
             token.kind = "text";
             token.text = value;
             return;
@@ -362,8 +344,11 @@ function long() {
             indentation_4 = indentation;
         } else {
             value += "\n";
+
+// Every line of "" should have the same indentation.
+
             if (indentation_4 !== indentation) {
-                error("Bad indent");
+                error("bad", "indent");
             }
         }
         while (true) {
@@ -374,6 +359,9 @@ function long() {
             advance();
         }
     }
+
+// The closing line should be outdented.
+
     if (indentation_4 !== undefined && indentation_4 !== indentation + 4) {
         error("Bad indent");
     }
@@ -395,7 +383,7 @@ function double_quote() {
             break;
         }
         if (ender(peek())) {
-            error("Unclosed");
+            error("unclosed");
             break;
         }
         if (peek() === backslash) {
@@ -407,45 +395,45 @@ function double_quote() {
             } else if (peek() === "u") {
                 advance();
                 if (peek() !== "{") {
-                    error("Missing ", "'{'");
-                } else if (ender(peek())) {
-                    error("Unclosed");
-                    break;
+                    error("missing", "'{'");
                 } else {
                     advance();
                     escapee = "";
                     while (true) {
-                        if (hex[peek()] === false) {
-                            error("Lower case hex ", peek());
-                        } else if (hex[peek()] !== true) {
+                        if (ender(peek()) || peek() === quote) {
+                            error("missing", "'}'");
                             break;
                         }
-                        escapee += peek();
-                        advance();
-                    }
-                    if (peek() !== "}") {
-                        error("Missing ", "'}'");
-                    } else {
-                        advance();
-                    }
-                    if (escapee === "") {
-                        error("Missing codepoint");
-                    } else {
-                        codepoint = Number.parseInt(escapee, 16);
-                        if (
-                            Number.isFinite(codepoint) &&
-                            codepoint < 4294967296
-                        ) {
-                            value += String.fromCodePoint(codepoint);
-                        } else {
-                            error("Bad codepoint ", escapee);
+                        if (peek() === "}") {
+                            advance();
+                            if (escapee === "") {
+                                error("missing", "codepoint");
+                            } else {
+                                codepoint = Number.parseInt(escapee, 16);
+                                if (
+                                    Number.isFinite(codepoint) &&
+                                    codepoint <= 4294967295 &&
+                                    codepoint >= 0
+                                ) {
+                                    value += String.fromCodePoint(codepoint);
+                                } else {
+                                    error("bad", escapee);
+                                }
+                            }
+                            break;
                         }
+                        if (hex[peek()] === true) {
+                            escapee += peek();
+                        } else {
+                            error("bad", peek());
+                        }
+                        advance();
                     }
                 }
             } else if (ender(peek())) {
-                error("Unclosed");
+                error("unclosed");
             } else {
-                error("Bad escapement ", peek());
+                error("bad", backslash + peek());
                 value += peek();
                 advance();
             }
