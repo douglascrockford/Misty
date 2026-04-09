@@ -1,5 +1,5 @@
 // tokenize.js  # Misty tokenizer
-// 2026-04-08
+// 2026-04-09
 
 // Tokenize takes a text and converts it into an array of tokens.
 // The input is a source text. The output is an array of token records.
@@ -155,14 +155,8 @@ function carriage_return() {
 }
 
 function comment() {
-    let character;
     while (true) {
-        character = peek();
-        if (
-            character === "\n" ||
-            character === "\r" ||
-            character === undefined
-        ) {
+        if (ender(peek())) {
             break;
         }
         advance();
@@ -177,12 +171,12 @@ function space() {
     token.text = snip();
 }
 
-function int(first) {
+function int(must) {
     if (tokenators[peek()] === digit) {
         advance();
         return int();
     }
-    if (first) {
+    if (must) {
         error("bad", "number");
     }
     if (peek() === "_") {
@@ -533,7 +527,6 @@ tokenators = {
 };
 
 export default Object.freeze(function tokenize(source_text) {
-    let character;
     let tokenator;
     source = source_text;
     at = 0;
@@ -549,13 +542,12 @@ export default Object.freeze(function tokenize(source_text) {
         if (!peek()) {
             return tokens;
         }
-        character = peek();
-        tokenator = tokenators[character];
+        tokenator = tokenators[peek()];
         advance();
         if (typeof tokenator === "function") {
             tokenator();
         } else {
-            seal(character);
+            seal();
         }
         token.to_column = column_nr;
         token.to_row = row_nr;
