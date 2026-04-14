@@ -73,9 +73,6 @@ import tokenize from "../js/tokenize.js";
                 break;
             case "text":
                 result = JSON.stringify(value.text);
-                if (value.error) {
-                    result = "\n" + result + " 'ERROR " + value.error + "'\n";
-                }
                 break;
             case "space":
                 result = " \u00A0";
@@ -85,6 +82,9 @@ import tokenize from "../js/tokenize.js";
                 break;
             default:
                 result = value.kind;
+            }
+            if (value.error) {
+                result += "[" + value.error + "] ";
             }
             outputation.append(result + " ");
         });
