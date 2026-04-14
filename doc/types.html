@@ -448,7 +448,7 @@ more_long_lines
 </p>
 <p class="rule">
 long_line
-    quote quote more_long_characters linebreak 
+    more_long_characters linebreak
 </p>
 <p class="rule">
 more_long_characters
@@ -462,58 +462,58 @@ long_character
 <p>A long text literal can make a text over several lines.
 This is done by using a pairs of quotes as a prefixes rather than as brackets.
 An opening quote at the end of a line signals the beginning of a long text literal.
-Each line is indented, followed by two quotes. 
+Each line is indented, followed by two quotes.
 The indentation and the two quotes are not included in the text.
 All of the remaining characters on the line are included in the text without escapement.
 There can be zero or more of these lines.
 A <code>"\n"</code><small>linefeed</small> character is inserted into the text between the lines.
 The long text literal is closed by a quote on the next line at the normal indentation. </p>
 <pre>"
-    ""This text
-    ""takes up
-    ""three lines.
-"                          # "This text\ntakes up\nthree lines."
+    This text
+     takes up
+      three lines.
+"                          # "This text\n takes up\n  three lines."
 
 "
-    ""\u{43}\u{061}\u{0074}
+    \u{43}\u{061}\u{0074}
 "                          # "\bu{43}\bu{061}\nu{0074}"
 
 "
-    "" Nesting and escapement are not problems.
+    Nesting and escapement are not problems.
 "
 
 "
-    """
-    ""    "" Nesting and escapement are not problems.
-    """
+    "
+        Nesting and escapement are not problems.
+    "
 "
 
 def examples: {
     walrus: "
-        """The time has come," the actor said, "to talk of what comes next:
-        ""of queues and chips and coding hacks, of characters and text,
-        ""and why the null is full of null, and policy is flexed."
-    ",
+        &quot;The time has come," the actor said, "to talk of what comes next:
+        of queues and chips and coding hacks, of characters and text,
+        and why the null is full of null, and policy is flexed."
+    "
     com: "
-        ""We call them computers, but they do a lot more "communicating"
-        ""than "computing".
-    ",
+        We call them computers, but they do a lot more "communicating"
+        than "computing".
+    "
     comment: "
-        ""                 # This is not a comment.
-    ",                     # This is a comment.
+                           # This is not a comment.
+    "                      # This is a comment.
     this: "
-        ""This is a text.
-    ",
+        This is a text.
+    "
     also: "
-        ""So is this.
-    ",
+        So is this.
+    "
     not: "
-        ""This is not
-        ""an error.
-    ",
+        This is not
+        an error.
+    "
     quote: "
-        ""This record contains "quotes".
-    ",
+        This record contains "quotes".
+    "
     empty: "
     "
 }
