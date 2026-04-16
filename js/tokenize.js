@@ -1,5 +1,5 @@
 // tokenize.js  # Misty tokenizer
-// 2026-04-09
+// 2026-04-14
 
 // Tokenize takes a text and converts it into an array of tokens.
 // The input is a source text. The output is an array of token records.
@@ -84,6 +84,8 @@ const hex = {
 
 let at;
 let column_nr;
+let fresh;
+let indentation = 0;
 let row_nr;
 let source;
 let token;
@@ -135,6 +137,10 @@ function cish() {
     seal();
 }
 
+function ender(character) {
+    return character === "\n" || character === "\r" || !character;
+}
+
 function newline() {
     token.kind = "newline";
     token.text = "\n";
@@ -169,6 +175,9 @@ function space() {
     repeatable(" ");
     token.kind = "space";
     token.text = snip();
+    if (fresh) {
+        indentation = token.text.length;
+    }
 }
 
 function int(must) {
@@ -260,10 +269,6 @@ function alphameric(character) {
     return tokenator === letter || tokenator === digit;
 }
 
-function ender(character) {
-    return character === "\n" || character === "\r" || !character;
-}
-
 function middle() {
     if (alphameric(peek())) {
         advance();
@@ -306,8 +311,9 @@ function single_quote() {
 
 function long() {
     let value = "";
-    let indentation;
-    let indentation_4;
+    let indent;
+    let content;
+    let contents = [];
     while (true) {
         if (peek() === "\r" && peek(1) === "\n") {
             at += 1;
@@ -315,53 +321,47 @@ function long() {
         advance();
         column_nr = 0;
         row_nr += 1;
-        indentation = 0;
+        indent = 0;
         while (true) {
             if (peek() !== " ") {
                 break;
             }
-            indentation += 1;
+            indent += 1;
             advance();
         }
-        if (peek() !== quote) {
-            error("unclosed");
-            token.kind = "text";
-            token.text = value;
-            return;
-        }
-        advance();
-        if (peek() !== quote) {
+        if (indent < indentation + 4) {
             break;
         }
-        advance();
-        if (indentation_4 === undefined) {
-            indentation_4 = indentation;
-        } else {
-            value += "\n";
-
-// Every line of "" should have the same indentation.
-
-            if (indentation_4 !== indentation) {
-                error("bad", "indent");
-            }
-        }
+        content = " ".repeat(indent - (indentation + 4));
         while (true) {
             if (ender(peek())) {
                 break;
             }
-            value += peek();
+            content += peek();
             advance();
         }
+        contents.push(content);
     }
-
-// The closing line should be outdented.
-
-    if (indentation_4 !== undefined && indentation_4 !== indentation + 4) {
-        error("Bad indent");
+    if (indent !== indentation) {
+        error("bad", "text");
     }
+    if (peek() === quote) {
+        advance();
+    } else {
+        error("missing", "quote");
+    }
+    value = contents.reduce(
+        function (accumulator, current_value, current_index) {
+            return accumulator + (
+                current_index === 0
+                ? ""
+                : "\n"
+            ) + current_value;
+        },
+        ""
+    );
     token.kind = "text";
     token.text = value;
-    token.indentation = indentation;
 }
 
 function double_quote() {
@@ -551,6 +551,12 @@ export default Object.freeze(function tokenize(source_text) {
         }
         token.to_column = column_nr;
         token.to_row = row_nr;
+        if (token.kind === "linebreak") {
+            indentation = 0;
+            fresh = true;
+        } else {
+            fresh = false;
+        }
         tokens.push(token);
     }
 });
