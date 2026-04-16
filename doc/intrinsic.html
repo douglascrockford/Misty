@@ -15,20 +15,28 @@ The <a href="statements.html#use"><code>use</code> statement</a> is not needed t
     <li>A programmer is not obliged to consult the list of intrinsics before naming a new variable or input.</li>
     <li>New intrinsics may be added to Misty without breaking existing programs.</li>
 </ul>
-<h2 align="left" id=constants>Constants</h2>
-<h4 align="left" id=false>false</h4>
-<p align="left">This is the value of <code>1 = 0</code>. The <code>false</code> value is one of the two logical values.</p>
-<h4 align="left" id=true>true</h4>
-<p align="left">This is the value of <code>1 = 1</code>. The <code>true</code> value is one of the two logical values.</p>
-<h4 align="left" id=null>null</h4>
-<p align="left">This is the value of <code>1 / 0</code>. The <code>null</code> value is an empty immutable object. All attempts to obtain a value from <code>null</code> by <a href="operators.html#refinement">refinement</a> will produce <code>null</code>.</p>
+<p>These are the classes of intrinsics:</p>
+<h5><a href="constants">Constants</a></h5>
+<h5><a href="creator">Creator functions</a></h5>
+<h5><a href="sensory">Sensory functions</a></h5>
+<h5><a href="standard">Standard functions</a></h5>
+<h5><a href="structurals">Structurals</a></h5>
+<h2 id=constants>Constants</h2>
+<h4 id=false>false</h4>
+<p>This is the value of <code>1 = 0</code>. The <code>false</code> value is one of the two logical values.</p>
+<h4 id=true>true</h4>
+<p>This is the value of <code>1 = 1</code>. The <code>true</code> value is one of the two logical values.</p>
+<h4 id=null>null</h4>
+<p>This is the value of <code>1 / 0</code>. The <code>null</code> value is an empty immutable object. All attempts to obtain a value from <code>null</code> by <a href="operators.html#refinement">refinement</a> will produce <code>null</code>.</p>
 <p>Any attempt to modify <code>null</code> will disrupt. Any attempt to call <code>null</code> as a function will disrupt.</p>
 <p><code>null</code> is the value of  missing input values,  missing fields in records, and invalid numbers. The <a href="operators.html#default"><code>|</code><small>default</small></a> operator can detect the presence of <code>null</code> and substitute another value.</p>
-<h4 align="left">pi</h4>
-<p align="left">This is an approximation of the circle expression <var>circumference</var><code> / </code><var>diameter</var>, or to be precisely approximate, <code>3.1415926535897932</code>.</p>
-<h2 align="left">Creator Functions</h2>
-<p align="left">The creator functions are used to make new objects. Some of them can take various types. All of these functions can return <code>null</code> if their inputs are not suitable.</p>
-<h3 align="left" id="array">Array</h3>
+<h4 id=pi>pi</h4>
+<p>This is an approximation of the circle expression <var>circumference</var><code> / </code><var>diameter</var>, or to be precisely approximate, <code>3.1415926535897932</code>.</p>
+<h4 id=e>e</h4>
+<p>This is Euler's Number, or to be precisely approximate, <code>2.7182818284590452</code>.</p>
+<h2 id="creator">Creator Functions</h2>
+<p>The creator functions are used to make new objects. Some of them can take various types. All of these functions can return <code>null</code> if their inputs are not suitable.</p>
+<h3 id="array">Array</h3>
 <h4>array(<var>number</var>)</h4>
 <p>Make an array. All of the elements are initialized to <code>null</code>.</p>
 <p><var>number</var> is a non-negative integer, the intended length of the new array.</p>
@@ -62,9 +70,9 @@ text keys in the <var>record</var>. The keys are not guaranteed
 <p>Split the <var>text</var> into an array of subtexts. The <var>separator</var>  can be a text or pattern.</p>
 <h4>array(<var>text</var>, <var>length</var>)</h4>
 <p>Dice the text into an array of subtexts of a given <var>length</var>.</p>
-<h3 align="left" id="logical">Logical</h3>
-<h4 align="left">logical(<var>value</var>)</h4>
-<pre align="left">if <var>value</var> = 0 \/ <var>value</var> = false \/ <var>value</var> = "false" \/ <var>value</var> = null
+<h3 id="logical">Logical</h3>
+<h4>logical(<var>value</var>)</h4>
+<pre>if <var>value</var> = 0 \/ <var>value</var> = false \/ <var>value</var> = "false" \/ <var>value</var> = null
     return false
 fi
 if <var>value</var> = 1 \/ <var>value</var> = true \/ <var>value</var> = "true"
@@ -72,7 +80,7 @@ if <var>value</var> = 1 \/ <var>value</var> = true \/ <var>value</var> = "true"
 fi
 disrupt
 </pre>
-<h3 align="left" id="number">Number</h3>
+<h3 id="number">Number</h3>
 <h4>number(<var>logical</var>)</h4>
 <p>The result is <code>1</code> or <code>0</code>.</p>
 <h4><code>number(<var>number</var>)</code></h4>
@@ -172,7 +180,7 @@ assign result: number(false)                    # result is 0
 assign result: number(42)                       # result is 42
 assign result: number(null)                     # disrupt
 </pre>
-<h3 align="left" id="record">Record</h3>
+<h3 id="record">Record</h3>
 <h4 id="copy record">record(<var>record</var>)</h4>
 <p>Copy. Make a mutable copy.</p>
 <h4>record(<var>record</var>, <var>another_record</var>)</h4>
@@ -185,7 +193,7 @@ assign result: number(null)                     # disrupt
 <p>Value Set. Make a record using the array as the source of the keys. Each field value is <var>value</var>.</p>
 <h4>record(<var>array_of_keys</var>, <var>function</var>)</h4>
 <p>Functional Value Set. Make a record using the array as the source of the keys. The <var>function</var> is called for each key, yielding the field values.</p>
-<h3 align="left" id="text">Text</h3>
+<h3 id="text">Text</h3>
 <h4>text(<var>array</var>)</h4>
 <p>Convert an array to text. The array can contain text and unicode codepoints. All are concatenated together to make a single text. If other values are in the array, then it disrupts.</p>
 <h4>text(<var>array</var>, <var>separator</var>)</h4>
@@ -410,8 +418,8 @@ text(my_text, 10)          # &quot;&quot;
 text(my_text, 11)          # null
 text(my_text, 2, 1)        # null
 </pre>
-<h2 align="left" id="sensory">Sensory Functions</h2>
-<p align="left">The sensory functions end with <code>?</code><small>question mark</small>. They always return a <a href="types.html#logical">logical</a> value.</p>
+<h2 id="sensory">Sensory Functions</h2>
+<p>The sensory functions end with <code>?</code><small>question mark</small>. They always return a <a href="types.html#logical">logical</a> value.</p>
 <h4 id="actor?">actor?(<var>value</var>)</h4>
 <p>Is the <var>value</var> an actor address object?</p>
 <pre>actor?(me!)             # true
@@ -591,7 +599,7 @@ whitespace?(&quot;space&quot;)    # false
 whitespace?(&quot;     &quot;)    # true
 whitespace?(&quot; L&quot;)       # false
 whitespace?(&quot;&quot;)         # false</pre>
-<h2 align="left" id="standard">Standard Functions</h2>
+<h2 id="standard">Standard Functions</h2>
 <h4 id="abs">abs(<var>number</var>)</h4>
 <p>Absolute value. Return the positive form of the number. If the input value is not a number, the result is <code>null</code>.</p>
 <h4 id="apply">apply(<var>function</var>, <var>array</var>)</h4>
@@ -959,4 +967,11 @@ assign result: trunc(-12.3775, 2)    # result is -12.37</pre>
 <pre>assign result: upper(&quot;Carl Hollywood&quot;)    # result is &quot;CARL HOLLYWOOD&quot;</pre>
 <h4 id="whole">whole(<var>number</var>)</h4>
 <p>The <code>whole</code> function returns the whole part of a <var>number</var>. It returns <code>null</code> for non-numbers. Also see <code><a href="#fraction">fraction</a></code>.</p>
+<h2 id="structurals">Structurals</h2>
+<p>The structurals are words that are used to create syntactic structures in the language, If you do not need those structures, you can reuse those words. Currently, the structural words are:</p>
+<ul>
+    <li><code><a href="functions.html">function</a></code></li>
+    <li><code><a href="patterns.html">pattern</a></code></li>
+    <li><code><a href="operators.html#paren">then</a></code></li>
+</ul>
 </body></html>
