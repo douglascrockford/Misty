@@ -18,7 +18,7 @@
 <p>Misty also provides a <code>JSON</code> record that contains functions
   that process JSON text strictly. Strict JSON has better security and interoperability
   properties.</p>
-<h4>json.decode(<var>text</var>, <var>reviver</var>)</h4>
+<h4>json.decode(<var>text</var> <var>reviver</var>)</h4>
 <p>The <var>text</var> text is parsed, and the resulting value (usually
   a record or an array) is returned.</p>
 <p>The optional <var>reviver</var> input is a method that will be called
@@ -28,13 +28,13 @@
   transform date strings into seconds.</p>
 <pre>assign my_data: json.decode(
     text
-    function (key, value) (
+    function (key value) (
         key.find(&quot;date&quot;)
         then time.number(value)
         else value
     )
 )</pre>
-<h4>json.encode(<var>value</var>, <var>space</var>, <var>replacer</var>, <var>whitelist</var>)</h4>
+<h4>json.encode(<var>value</var> <var>space</var> <var>replacer </var> <var>whitelist</var>)</h4>
 <p>Produce a JSON text from a Misty <var>value</var>.  If a record value, at
   any level, contains a <code>json()</code> method, it will be called, and
   the value it returns (usually a simpler record) will be JSONified.</p>

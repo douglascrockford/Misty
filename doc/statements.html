@@ -64,8 +64,8 @@ created by <a href="#var">the <code>var</code> statement</a>.</p>
     <li>Create a new field in a mutable record.</li>
     <li>Replace a field of a mutable record.</li>
     <li>Delete a field from a mutable record by assigning <code>null</code>.</li>
-    <li>Append an element to an array: <code>assign <var>array</var>[]: <var>value</var></code></li>
-    <li>Remove an element from the end of an array: <code>assign <var>variable</var>: <var>array</var>[]</code></li>
+    <li>Append (or push) an element to an array: <code>assign <var>array</var>[]: <var>value</var></code></li>
+    <li>Remove (or pop) an element from the end of an array: <code>assign <var>variable</var>: <var>array</var>[]</code></li>
 </ul>
 <p>Attempting any of those changes on a <a href="intrinsic.html#stone">stone</a> object will <a href="#disrupt">disrupt</a>.</p>
 <h3 id="break">The <code>break</code> statement</h3>
@@ -73,7 +73,8 @@ created by <a href="#var">the <code>var</code> statement</a>.</p>
 break_statement
     <code>"break"</code> do_label
 </p>
-<p>The <code>break</code> statement is used to break out of <a href="#do">loops</a>.</p>
+<p>The <code>break</code> statement is used to break out of <a href="#do"><code>do</code> loops</a>.
+    Execution continues with the statement after <code>od</code>.</p>
 <h3 id="call">The <code>call</code> statement</h3>
 <p class="rule">
 call_statement
@@ -100,7 +101,7 @@ def_statement
 <p class="rule">
 def_value
     <code>':'</code> space expression
-    input_list space body
+    parameter_list space body
 </p>
 <p>The <code>def</code> statement defines a read-only variable within
     the current function. The variable is read-only, but the value it contains
@@ -117,7 +118,7 @@ def double(number) {
 }</pre>
 <p>Variables must be defined before they are used. The <dfn>name</dfn> may not be used on the right side of the <code>:</code><small>colon</small>.</p>
 <h6>Example:</h6>
-<pre>def pi: 3.1415926535897932
+<pre>def sqrt_2: 1.4142135623730950
 </pre>
 <h3 id="disrupt">The <code>disrupt</code> statement</h3>
 <p class="rule">
@@ -125,9 +126,10 @@ disrupt_statement
     <code>"disrupt"</code>
 </p>
 <p>The <code>disrupt</code> statement causes the function to abruptly stop, sending control
-    to a <a href="functions.html#disruption">function's <code>disruption</code> part</a>. </p>
-<p>The <code>disrupt</code> statement causes control to go to the <code>disruption</code> part of the function or the enclosing subprogram. If control was already in the <code>disruption</code> part, or if there is no <code>disruption</code> part, then control goes
-    to the most recent function in the calling chain that has a <code>disruption</code> part.</p>
+    to the function's <a href="functions.html#disruption"><code>disruption</code> clause</a>.
+    If control was already in the <code>disruption</code> clause, or if there is no <code>disruption</code> clause,
+    then control goes to the most recent function in the calling chain that has a <code>disruption</code> part.
+    If there is none, then the program halts.</p>
 <h3 id="do">The <code>do</code> statement</h3>
 <p class="rule">
 do_statement
@@ -138,8 +140,8 @@ do_label
     <code>""</code>
     space name
 </p>
-<p>The <code>do</code> statement executes a list of statements until the loop is broken by <code>break</code>, <code>go</code>,
-<code>return</code>, or <code>disrupt</code>.
+<p>The <code>do</code> statement executes a list of statements until the loop
+    is broken by <code>break</code>, <code>jump</code>, <code>return</code>, or <code>disrupt</code>.
 </p>
 <p>
 Loop labels are in their own name space. A function may contain two or more loops with the same label as long
@@ -162,7 +164,10 @@ od
 jump_statement
     <code>"jump"</code> space callee
 </p>
-<p>The <code>jump</code> statement is parameterized jump to a function. It is similar to <a href="#return"><code>return</code></a> except that control will ultimately go to the caller's caller, not the caller. In some languages, this is called tail call optimization. It can significantly reduce the rate at which memory is consumed, making looping by recusion and continuation passintg style feasible.</p>
+<p>The <code>jump</code> statement is parameterized jump to a function.
+    It is similar to <a href="#return"><code>return</code></a> except that control will ultimately go to the caller's caller, not the caller.
+    In some languages, this is called tail call optimization.
+    It can significantly reduce the rate at which memory is consumed, making looping by recusion and continuation passintg style feasible.</p>
 <p>The <code>jump</code> statement is not allowed in functions that have a <a href="functions.html#disruption"><code>disruption</code></a> clause.</p>
 <p>The <code>jump</code> statement is not allowed in functions that make inner functions.</p>
 
@@ -184,7 +189,10 @@ else_clause
 else_consequence
     space then_clause
     indent statements outdent
-</p>
+</p><p>The <code>if</code> statement creates forks in the control flow of a function.
+    The <code></code><code>else if</code>
+  form makes it possible to have alternatives without deep indentation.
+  The <code>if</code> statement can be nested.</p>
 <h6>Example:</h6>
 <pre>if first_name = &quot;Curly&quot; \/ first_name = &quot;Moe&quot; \/ first_name = &quot;Shemp&quot;
     assign last_name: &quot;Howard&quot;
@@ -192,28 +200,32 @@ else if first_name = &quot;Larry&quot;
     assign last_name: &quot;Fine&quot;
 else
     assign last_name: &quot;(unknown)&quot;
-fi</pre>
-<p>The <code>if</code> statement can be nested.</p>
-<h6>Example:</h6>
-<pre>if fee
+fi
+
+if fee
     if fie
         assign ok: fee
     fi
 else
     assign ok: fie
-fi</pre>
-<p>The <code></code><code>else if</code>
-  form makes it possible to have alternatives without deep indentation.</p>
-<h6>Example:</h6>
-<pre>if character(list[at].op) = &quot;j&quot;
+fi
+
+if character(list[at].op) = &quot;j&quot;
     assign list[at].yz: list[at].yz - 1
 else if list[at].op = &quot;opx&quot;
     assign list[at].yz: list[at].yz + 1
 fi
 assign at: at + 1</pre>
-<p>The <code>if</code> statement creates forks in the control flow of a
-  function. An <code>if</code> statement can not contain <code>var</code>
-  and <code>def</code> statements. </p>
+<p>An <code>if</code> statement may contain <code>def</code> and <code>use</code>
+  statements only if the name being defined appears in both the then branch and the else branch.
+  The name ia visible to the rest of the function.
+</p>
+<h6>Example:</h6>
+<pre>if allowed1
+    use retricted: "hard to get stuff"()
+else
+    def restricted: null
+fi</pre>
 <h3 id="log">The <code>log</code> statement</h3>
 <p class="rule">
 log_statement
@@ -246,9 +258,8 @@ return_value
     space expression
 </p>
 <p>The <code>return</code> statement provides for the normal exit of a function
-    and the specification of its return value. If the expression is a function invocation,
-  then the tail call optimization might be performed.</p>
-<p>If a return value is not provided, then <code>null</code> is assumed. A function may  return <code>null</code> implicitly by falling
+    and the specification of its return value.</p>
+<p>If a return value is not provided, then <code>null</code> is assumed. A function may return <code>null</code> implicitly by falling
     thru the bottom.</p>
 <h6>Example:</h6>
 <pre>def double(number) {
@@ -290,9 +301,15 @@ locator
     name
 </p>
 <p>The <code>use</code> statement makes a subprogram available to a program or another subprogram. The return value of the subprogram is bound to the <dfn>name</dfn>. An optional <dfn>locator</dfn> can be provided for finding the subprogram file in the <a href="system.html#shop">program shop</a>. Standard subprograms do not require a locator. </p>
-<p>The subprograms are stored in the program shop, which contains the standard subprograms that are located with the <dfn>name</dfn> form, and the extra subprograms that are located with the <dfn>text_literal</dfn> form. In the <dfn>text_literal</dfn> form, it is recommended that the text contain a prefix to indicate the source or usage of the subprogram. Guest code (programs from third parties that are not fully trusted) may be restricted from use of the <code>use</code> statement, or may have restrictions on which subprograms they can employ.</p>
-<p id="power">A <a href="system.html#policy">system</a> may provide <strong>power subprograms</strong> that act as interfaces to powerful affordances such as communication devices, data storage devices, input devices (like keyboards, camera, and microphones),  output devices (like printers, displays, and speakers), and operating system services. Typically, access to powerful subprograms is limited to subprograms that will attenuate the power, presenting limited capabilities to other subprograms and programs.</p>
-<p> The <code>use</code> statement can not appear in a function or an <code>if</code> or <code>do</code>. The <code>use</code> statement can only appear in the outermost level of a <code>program</code> or <code>subprogram</code>.</p>
+<p>The subprograms are stored in the program shop, which contains the standard subprograms that are located with the <dfn>name</dfn> form, and the extra subprograms that are located with the <dfn>text_literal</dfn> form.
+    In the <dfn>text_literal</dfn> form, it is recommended that the text contain a prefix to indicate the source or usage of the subprogram. Guest code (programs from third parties that are not fully trusted) may be restricted from use of the <code>use</code> statement, or may have restrictions on which subprograms they can employ.</p>
+<p id="power">A <a href="system.html#policy">system</a> may provide
+    <strong>power subprograms</strong> that act as interfaces to powerful
+    affordances such as communication devices, data storage devices, input
+    devices (like keyboards, camera, and microphones),  output devices (like
+    printers, displays, and speakers), and operating system services.
+    Typically, access to powerful subprograms is limited to subprograms that will attenuate the power, presenting limited capabilities to other subprograms and programs.</p>
+<p> The <code>use</code> statement can not appear in a function or <code>do</code> loop.</p>
 <h6>Example:</h6>
 <pre>use lang: language_library(&quot;en&quot;)</pre>
 <h3 id="var">The <code>var</code> statement</h3>

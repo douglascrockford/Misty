@@ -21,7 +21,7 @@
 <p>As an alternative, the Misty Programming Language has <dfn>patterns</dfn>.
   A pattern is a special kind of object that can be used to match patterns
   in texts. Patterns are less terse than regular expressions, and much
-  easier to read and write. </p>
+  easier to read and write.</p>
 <p>A pattern literal,  written as  <code>pattern</code><small></small> followed by
   a pattern expression, produces an immutable pattern object.</p>
 <h2 id="first example">An Example</h2>
@@ -45,23 +45,23 @@ def url: pattern (lib) {
 }
 </pre>
 <p>We can use the <code>extract</code> function to match a pattern against a text.</p>
-<pre>var result: extract(&quot;http://www.mistysystem.com/index.html#top&quot;, url)</pre>
-<p><code>json.encode(result, true)</code> is</p>
+<pre>var result: extract(&quot;http://www.mistysystem.com/index.html#top&quot; url)</pre>
+<p><code>json.encode(result true)</code> is</p>
 <pre>{
-    hash: &quot;top&quot;
-    host: &quot;www.mistysystem.com&quot;
-    path: &quot;index.html&quot;
-    scheme: &quot;http&quot;
+    hash: &quot;top&quot;,
+    host: &quot;www.mistysystem.com&quot;,
+    path: &quot;index.html&quot;,
+    scheme: &quot;http&quot;,
     slash: &quot;//&quot;
 }</pre>
 <p>We can call <code>match</code> again with a different text:</p>
-<pre>assign result: extract(&quot;216.168.224.111:9997?clearance=top&quot;, url)</pre>
-<p><code>json.encode(result, true)</code> is</p>
+<pre>assign result: extract(&quot;216.168.224.111:9997?clearance=top&quot; url)</pre>
+<p><code>json.encode(result true)</code> is</p>
 <pre>{
-    host: &quot;216.168.224.111&quot;
-    octet: [&quot;216&quot;, &quot;168&quot;, &quot;224&quot;, &quot;111&quot;]
-    port: &quot;9997&quot;
-    query: &quot;clearance=top&quot;
+    host: &quot;216.168.224.111&quot;,
+    octet: [&quot;216&quot; &quot;168&quot; &quot;224&quot; &quot;111&quot;],
+    port: &quot;9997&quot;,
+    query: &quot;clearance=top&quot;,
     slash: &quot;&quot;
 }</pre>
 <p>To contrast, this is a JavaScript regular expression that does a similar thing:</p>
@@ -73,9 +73,9 @@ def url: pattern (lib) {
 <pre>ip4: pattern {4 {&quot;octet&quot;: 1-3 digit / &quot;.&quot;}}</pre>
 <p>It matches exactly four groups of one to three digits separated by <code>.</code><small>period</small>.
   Each group of digits is stored in the result under the name <code>octet</code>.
-  So </p>
+  So</p>
 <pre>lib.id.extract(&quot;198.137.240.92&quot;)
-    # {octet: [&quot;198&quot;, &quot;137&quot;, &quot;240&quot;, &quot;92&quot;]}</pre>
+    # {octet: [&quot;198&quot; &quot;137&quot; &quot;240&quot; &quot;92&quot;]}</pre>
 <p>The <code>/</code><small>slash</small> operator allows us to specify a separator.
   The pattern could be written without the <code>/</code><small>slash</small>
   operator but the pattern would be longer.</p>
@@ -83,9 +83,9 @@ def url: pattern (lib) {
 <p>If we attached the name <code>octet</code>: on an outer
   level</p>
 <pre>ip4: pattern {&quot;octet&quot;: 4 {1-3 digit / &quot;.&quot;}}</pre>
-<p>then the result would have been </p>
+<p>then the result would have been</p>
 <pre>    # {octet: &quot;198.137.240.92&quot;}</pre>
-<p>The second pattern matches a name. </p>
+<p>The second pattern matches a name.</p>
 <pre>
 name: pattern {1- [letter digit &quot;_-%&quot;]}
 </pre>
@@ -157,7 +157,7 @@ record?(url)        # false</pre>
 <p>When an ordinary text is used as a pattern, it will match identical text.</p>
 <h3>Functions</h3>
 <p>A function in a pattern library should have this signature:</p>
-<pre>(text, from)</pre>
+<pre>(text from)</pre>
 <p> A function
   will be passed the complete <code>text</code> being matched and the
   index of the character that is currently being considered. If the function
@@ -170,7 +170,7 @@ record?(url)        # false</pre>
   <code>null</code> or <code>false</code> if the character is not in the class.</p>
 <p>Functions make it possible to efficiently express a much larger class of patterns.</p>
 <h6>Example:</h6>
-<pre>function end(text, from) {
+<pre>function end(text from) {
 
 # Match a carriage return and/or linefeed.
 
@@ -208,10 +208,10 @@ pattern_library_list_open
 <p class="rule">
 pattern_library_list_closed
     <code>""</code>
-    <code>','</code> space expression pattern_library_list_closed
+    space expression pattern_library_list_closed
 </p>
 <p>A pattern literal is <code>pattern</code> optionally followed
-  by one or more <a href="#library">pattern libraries</a> wrapped in <code>( )</code><small>parens</small>, followed by a pattern group wrapped in <code>{&nbsp;}</code><small>braces</small>.  </p>
+  by one or more <a href="#library">pattern libraries</a> wrapped in <code>( )</code><small>parens</small>, followed by a pattern group wrapped in <code>{&nbsp;}</code><small>braces</small>.</p>
 <h3 style="clear: both;">Group</h3>
 <p class="rule">
 pattern_group
@@ -409,19 +409,19 @@ pattern_text_extent
   text, character class, or function.</p>
 <h4>Literal text</h4>
 <p>A text contains characters in the class. You can have one big text or lots
-  of little texts. </p>
+  of little texts.</p>
 <h4>Range</h4>
 <p>If there is a <code>-</code><small>minus sign</small> between two texts, then
   an inclusive range is made from the last character of the first text thru the first character of the second text.</p>
 <p><code>[&quot;0&quot; - &quot;9&quot;]</code> matches a digit, as does <code>[&quot;0123456789&quot;]</code>.</p>
 <h4>Anticlass</h4>
 <p>The <code>/</code><small>slash</small> signals characters to be excluded
-  from the class. </p>
+  from the class.</p>
 <pre>[&quot;a&quot; - &quot;z&quot; / &quot;aeiou&quot;]    # matches a lower case consonant.
 
 [/ digit]                # matches any character that is not a digit.</pre>
 <p>A second <code>/</code><small>slash</small> signals an intersection
-  operation on the current set. </p>
+  operation on the current set.</p>
 <pre>[ascii / / upper]            # matches upper case ASCII letters.</pre>
 <h2>Repetition</h2>
 <table>
@@ -454,14 +454,14 @@ pattern_quantifier
     number_literal <code>'-'</code> space
     number_literal space
 </p>
-<p>By default a pattern expression matches exactly once. </p>
+<p>By default a pattern expression matches exactly once.</p>
 <pre>item</pre>
 <p>Any pattern expression can be preceded by a repetition factor. It determines
   the number of times that the item must match.</p>
 <pre>5 item</pre>
 <p>A range can be specified with two numbers separated by <code>-</code><small>minus</small>.
   The item will match no fewer than the first number, and no more than the
-  second number. </p>
+  second number.</p>
 <pre>1-5 item</pre>
 <p>If the second number is omitted, then there is no limit to how many times the
   item can be matched.</p>
@@ -488,20 +488,20 @@ pattern_depot
   pattern expression will be saved in the result record, using the <var>text</var>
   or <var>name</var> as the key. If multiple matches are made (because of repetition or multiple
   uses of the same <var>text</var>), then all of the matches will be saved
-  in an array under the <var>text</var> or <var>name</var>. </p>
+  in an array under the <var>text</var> or <var>name</var>.</p>
 <h2>Pattern Functions</h2>
-<p>Patterns can be used with some of the built-in functions. </p>
+<p>Patterns can be used with some of the intrinsic functions.</p>
 <blockquote>
-    <pre><a href="intrinsic.html#array"><code>array(text, pattern)</code></a> </pre>
-    <pre><code><a href="intrinsic.html#extract">extract(text, pattern, from, to</a>) </code></pre>
-    <pre><code><a href="intrinsic.html#replace">replace(text, pattern, replacement, limit) </a></code></pre>
-    <pre><code><a href="intrinsic.html#search">search(text, pattern, from)</a> </code></pre>
+    <pre><a href="intrinsic.html#array"><code>array</a>(text pattern)</code> </pre>
+    <pre><code><a href="intrinsic.html#extract">extract</a>(text pattern from to)</code></pre>
+    <pre><code><a href="intrinsic.html#replace">replace</a>(text pattern replacement limit)</code></pre>
+    <pre><code><a href="intrinsic.html#search">search</a>(text pattern from)</code></pre>
 </blockquote>
 <p>For example, the <code>array()</code> method can be used
     to break the contents of a file into an array of lines. If the <var>separator</var> pattern is found in the <var>text</var>, then the subtext before the match
     is stored in the new array, and the match is repeated on the remainder
     until no more matches are possible. The remainder of the text is stored
-    in the array and the array is result. </p>
+    in the array and the array is result.</p>
 <pre>var lines: array(file, pattern {end})</pre>
 <p>This will break on <dfn>linefeed</dfn>, <dfn>carriage return</dfn>, and <dfn>carriage return
     linefeed</dfn>.</p>

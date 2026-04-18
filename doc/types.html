@@ -52,13 +52,13 @@ array_filling
 <p class="rule">
 elements
     <code>""</code>
-    <code>','</code> space expression elements
+   space expression elements
 </p>
 
 <p class="rule">
 open_elements
     <code>""</code>
-    <code>','</code> space expression open_elements
+    space expression open_elements
     linebreak expression open_elements
 </p>
 
@@ -69,7 +69,7 @@ open_elements
   and spaces. In open form, the expressions are separated by end of line and
 indentation.</p>
 <h6>Example:</h6>
-<pre>var stooges: [&quot;Curly&quot;, &quot;Larry&quot;, &quot;Moe&quot;]
+<pre>var stooges: [&quot;Curly&quot; &quot;Larry&quot; &quot;Moe&quot;]
 length(stooges)    # 3
 var bears: [
     &quot;Papa&quot;
@@ -101,9 +101,9 @@ length(empty)      # 0
 <h6>Example:</h6>
 <pre>
 assign my_stooge: stooges[0]    # my_stooge is &quot;Curly&quot;
-assign stooges[0]: &quot;Shemp&quot;      # stooges is [&quot;Shemp&quot;, &quot;Larry&quot;, &quot;Moe&quot;]
-assign stooges[]: &quot;Joe&quot;         # stooges is [&quot;Shemp&quot;, &quot;Larry&quot;, &quot;Moe&quot;, &quot;Joe&quot;]
-assign popped: stooges[]        # stooges is [&quot;Shemp&quot;, &quot;Larry&quot;, &quot;Moe&quot;]
+assign stooges[0]: &quot;Shemp&quot;      # stooges is [&quot;Shemp&quot; &quot;Larry&quot; &quot;Moe&quot;]
+assign stooges[]: &quot;Joe&quot;         # stooges is [&quot;Shemp&quot; &quot;Larry&quot; &quot;Moe&quot; &quot;Joe&quot;]
+assign popped: stooges[]        # stooges is [&quot;Shemp&quot; &quot;Larry&quot; &quot;Moe&quot;]
                                 # popped is &quot;Joe&quot;
 </pre>
 <h2 id="blob">Blob</h2>
@@ -199,7 +199,7 @@ field
 <p class="rule">
 field_value
     <code>':'</code> space expression
-    input_list space body
+    parameter_list space body
 </p>
 <p class="rule">
 optional_field_value
@@ -209,7 +209,7 @@ optional_field_value
 <p class="rule">
 more_fields
     <code>""</code>
-    <code>','</code> space field more_fields
+    space field more_fields
 </p>
 <p class="rule">
 more_open_fields
@@ -273,7 +273,7 @@ def object: {
     fields of a record. It takes a record, a <code>.</code><small>period</small>, and an identifier. The dot notation is only allowed when the key is a text that conforms to the rules of a valid identifier. A key <code>&quot;a&quot;</code> (lower case) is distinct from
     a key <code>&quot;A&quot;</code> (upper case).</p>
 <h6>Example:</h6>
-<pre>var stooge: {first: &quot;Curly&quot;, last: &quot;Howard&quot;}
+<pre>var stooge: {first: &quot;Curly&quot; last: &quot;Howard&quot;}
 var first_name: stooge.first          # first_name is &quot;Curly&quot;
 assign first_name: null.first         # first_name is null
 assign new_stooge: record(stooge)
@@ -287,8 +287,8 @@ assign last_name: new_stooge.last     # last_name is &quot;Howard&quot;</pre>
 <h6>Example:</h6>
 <pre>def stooge: {first: &quot;Curly&quot;, last: &quot;Howard&quot;}
 assign first_name: stooge[&quot;first&quot;]           # first_name is &quot;Curly&quot;
-assign stooge.first: "Jerome"                # {first: &quot;Curly&quot;, last: &quot;Howard&quot;}
-assign stooge.middle: "Lester"               # {first: &quot;Curly&quot;, middle: &quot;Lester&quot;, last: &quot;Howard&quot;}
+assign stooge.first: "Jerome"                # {first: &quot;Curly&quot; last: &quot;Howard&quot;}
+assign stooge.middle: "Lester"               # {first: &quot;Curly&quot; middle: &quot;Lester&quot; last: &quot;Howard&quot;}
 assign stooge[null]: &quot;Mogo on the Gogogo&quot;    # disrupt
 assign stooge: {}                            # disrupt
 </pre>
@@ -298,7 +298,7 @@ assign stooge: {}                            # disrupt
 <h3>Methods</h3>
 <p>The method invocation pattern is</p>
 <blockquote>
-    <p><var>record</var><code>.</code><var>method_name</var><code>(</code><var>input_list</var><code>)</code></p>
+    <p><var>record</var><code>.</code><var>method_name</var><code>(</code><var>parameter_list</var><code>)</code></p>
 </blockquote>
 <p>The <var>record</var> is searched for a field matching the <var>method_name</var>.
     If the result of that search is not a function, then it disrupts.</p>

@@ -163,7 +163,7 @@ input_values
 <p class="rule">
 closed_input_values
     <code>""</code>
-    <code>','</code> space expression closed_input_values
+    space expression closed_input_values
 </p>
 
 <p class="rule">
@@ -268,7 +268,7 @@ null & &quot;ok&quot;                    # disrupt
   operand. If the second operand is <code>&quot;&quot;</code>,
   then the result is the first operand.</p>
 <pre>3 && 4                            # &quot;3 4&quot;
-&quot;beginning&quot; && &quot;and&quot; && &quot;end&quot;      # &quot;beginning and end&quot;
+&quot;beginning&quot; && &quot;and&quot; && &quot;end&quot;     # &quot;beginning and end&quot;
 &quot;&quot; && &quot;ok&quot;                        # &quot;ok&quot;
 null && &quot;ok&quot;                      # disrupt
 &quot;&quot; && null                        # disrupt
@@ -363,7 +363,6 @@ foo | 0          # 0</pre>
   right. The selection, subscript, and invocation operators have the highest precedence (tightest).
 The ternary operator has the lowest precedence. Grouping can be made explicit with parens.</p>
 <pre>&quot;$&quot; & 3 + 4    # &quot;$7&quot;</pre>
-<ul>
-    <li><a href="https://www.crockford.com/ascii.html">ASCII</a></li></ul>
+<h5><a href="https://www.crockford.com/ascii.html">ASCII</a></h5>
 </body>
 </html>

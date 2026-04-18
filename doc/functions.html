@@ -20,16 +20,16 @@ div.scope {
 <h1><a href="https://mistysystem.com/">Misty Programming Language:</a>Functions</h1>
 <p>A function is a parameterized expression or sequence of statements. Functions are first-class
   values. Functions can be stored in variables, records, and arrays; functions
-  can be passed as inputs to other functions;  functions can be returned
+  can be passed as parameters to other functions;  functions can be returned
   as the results of functions. Functions can not be sent in messages to other processes. Function objects are immutable values. A function introduces
   a new scope: variables defined in a functions are not visible outside
   of the function, but will be visible to inner functions. </p>
 <h2>Making Functions</h2>
-<p>Function objects are made with the <code>function</code> operator that takes an input list and a body and produces a function object. </p>
+<p>Function objects are made with the <code>function</code> operator that takes an parameter list and a body and produces a function object. </p>
 
 <p class="rule">
 function_literal
-    <code>"function"</code> space optional_function_name input_list space body
+    <code>"function"</code> space optional_function_name parameter_list space body
 </p>
 
 <p class="rule">
@@ -39,22 +39,24 @@ optional_function_name
 </p>
 <p>A function may be given a name for recursion and documentation.</p>
 <p>A function literal may not be placed in a <code>do</code> loop.</p>
-<p>Functions can also be made with the <a href="statements.html#def"><code>def</code> statement</a> and <a href="types.html#record literal">record literals</a>.</p>
-<h3 id="input">Input List</h3>
-<p>The input list can be open (each input name on its own line) or closed (all input names on the same line, separated with <code>,</code><small>comma</small>).
- The input names are bound to the input values when the function is called. An input is a <code>def</code> that is initialized by the caller.</p>
+<p>Function objects can also be made with the <a href="statements.html#def"><code>def</code> statement</a> and <a href="types.html#record literal">record literals</a>.</p>
+<h3 id="input">Parameter List</h3>
+<p>The parameter list can be open (each parameter name on its own line) or closed
+    (all parameter names on the same line, separated with a space).
+ The parameter names are bound to the arguments when the function is called. A parameter is a <code>def</code> that is initialized by the caller.</p>
 <p class="rule">
-input_list
-    <code>'('</code> input_list_filler <code>')'</code>
+parameter_list
+    <code>'('</code> parameter_list_filler <code>')'</code>
+    <code>'['</code> name optional_arity <code>']'</code>
 </p>
 <p class="rule">
-input_list_filler
+parameter_list_filler
     <code>""</code>
-    input more_closed_inputs
-    indent input more_open_inputs outdent
+    parameter more_closed_parameters
+    indent parameter more_open_parameters outdent
 </p>
 <p class="rule">
-input
+parameter
     name optional_default
 </p>
 <p class="rule">
@@ -63,22 +65,30 @@ optional_default
     space <code>'|'</code> space expression
 </p>
 <p class="rule">
-more_closed_inputs
+more_closed_parameters
     <code>""</code>
-    <code>','</code> space input more_closed_inputs
+    space parameter more_closed_parameters
 </p>
 <p class="rule">
-more_open_inputs
+more_open_parameters
     <code>""</code>
-    linebreak input more_open_inputs
+    linebreak parameter more_open_parameters
 </p>
-<p>An input list is a list of zero or more names, separated
-  by commas or stacked vertically. When the function is invoked, the input values will be
+<p class="rule">
+optional_arity
+    <code>""</code>
+    space number_literal
+</p>
+<p>When the function is invoked, the arguments will be
   assigned to these names and made available to the body. The
-  body can not modify the inputs, but can modify the values of the inputs if they are not stone. Inputs behave as <code>def</code>, not <code>var</code>. The number of
-  names in the input list determines the function's arity.
-If the function is invoked with too many input values, it disrupts. </p>
-<p>If the function is invoked with too few inputs, the missing values will get <code>null</code>. The <code>|</code><small>default</small> operator is allowed in input lists, replacing a <code>null</code> input value with a value from an <dfn>expression</dfn>.</p>
+  body can not modify the parameters, but can modify the values of the parameters if they are not stone. Parameters behave as <code>def</code>, not <code>var</code>. The number of
+  names in the parameter list determines the function's arity.
+If the function is invoked with too many arguments, it disrupts. </p>
+<p>If the function is invoked with too few parameters, the missing values will get <code>null</code>. The <code>|</code><small>default</small> operator is allowed in parameter lists, replacing a <code>null</code> argument with a value from an <dfn>expression</dfn>.</p>
+<p>There is an alternate form for functions that can receive all of their arguments as a single array.
+    A single parameter is bound to an array of arguments. See <a href="intrinsics.html#apply">apply</a>.
+    An optional arity can be provided that sets the maximum number of arguments and provide a value to the <a href="intrinsics.html#length">length</a> function.
+    The default arity is <code>null</code>, meaning unlimited.</p>
 <h3>Body</h3>
 <p>And then, the body, a string of statements wrapped in <code>{}</code><small>braces</small>.</p>
 <p class="rule">
@@ -90,26 +100,26 @@ disruption
     <code>""</code>
     <code>"disruption"</code> statements
 </p>
-<p><a href="statements.html#return">The <code>return</code> statement</a> or <a href="statements.html#go">the go statement</a> gives the return value. Implicit return (falling through the bottom) returns <code>null</code>.</p>
+<p><a href="statements.html#return">The <code>return</code> statement</a> or <a href="statements.html#jump">the <code>jump</code> statement</a> gives the return value. Implicit return (falling through the bottom) returns <code>null</code>.</p>
 <p>The body can be followed by a <a href="#disruption">disruption clause</a>.</p>
 <h3>Context</h3>
 <p>The <var>context</var> of a function is the function in which it is made.
   An outer function provides the context for an inner function. The inner
   function has access to all of the outer function's variables, definitions,
-  and inputs.The context (or lexical closure)
+  and parameters.The context (or lexical closure)
   remains available to the inner function even after the outer function
-  has finished its invocation and returned.  If an inner function redefines names that are already defined in the context (inputs, <code>def</code>, or <code>var</code>), it is not able to access the outer names. </p>
+  has finished its invocation and returned.  If an inner function redefines names that are already defined in the context (parameters, <code>def</code>, or <code>var</code>), it is not able to access the outer names. </p>
 <h2 id="invocation">Invocation</h2>
 <p>Functions are invoked with the <a href="operators.html#invocation"><code>()</code><small>paren</small> suffix operator</a>.</p>
 <blockquote>
-  <p><var>function_value</var><code>(</code><var>input values</var><code>)</code></p>
+  <p><var>function_value</var><code>(</code><var>parameter values</var><code>)</code></p>
 </blockquote>
 <p>The parens can contain zero thru four expressions whose
-  values will be passed to the function as inputs. Each value will be
-  assigned to a named input. Inputs that do not have values will
-  be initialized to <code>null</code>. If there are too many input values,
+  values will be passed to the function as parameters. Each value will be
+  assigned to a named parameter. Parameters that do not have values will
+  be initialized to <code>null</code>. If there are too many arguments,
   then there is a disruption.</p>
-<pre>call my_function(do, re, mi)    # function invocation</pre>
+<pre>call my_function(do re mi)    # function invocation</pre>
 <h2 id="scope">Scope</h2>
 <div class=scope>
     <p>intrinsic</p>
@@ -124,7 +134,7 @@ disruption
 The names are declared by</p>
 <ul>
     <li>the function's given name</li>
-    <li>each name in the input list</li>
+    <li>each name in the parameter list</li>
     <li>the <code>def</code> statement</li>
     <li>the <code>use</code> statement</li>
     <li>the <code>var</code> statement</li>
@@ -152,7 +162,7 @@ A function is free to reuse any of those outer names by declaration, but in doin
 <h3 id="disruptions"><code>disruption</code> </h3>
 <p>A function can have an optional <code>disruption</code> clause.</p>
 <pre>
-function (<var>input_list</var>) {
+function (<var>parameter_list</var>) {
     <var>statements</var>
 disruption
     <var>statements</var>
@@ -179,16 +189,16 @@ disruption
 <p>A <var>function</var> can be used as a proxy for a record. If a <var>function</var> is called
   as</p>
 <blockquote>
-  <p><var>function</var><code>.</code><var>name</var><code>(</code><var>input_value_a</var><code>,</code>
-    <var>input_value_b</var><code>)</code></p>
+  <p><var>function</var><code>.</code><var>name</var><code>(</code><var>parameter_value_a</var>
+    <var>parameter_value_b</var><code>)</code></p>
 </blockquote>
 <p>then the <var>function</var> will be called as though it had been written as</p>
 <blockquote>
-  <p><var>function</var><code>(&quot;</code><var>name</var><code>&quot;,</code> <code>[</code><var>input_value_a</var><code>,</code>
-    <var>input_value_b</var><code>])</code></p>
+  <p><var>function</var><code>(&quot;</code><var>name</var><code>&quot;</code> <code>[</code><var>parameter_value_a</var>
+    <var>parameter_value_b</var><code>])</code></p>
 </blockquote>
 <p>The <var>function</var> will be called with the <var>name</var> of the method and an array
-  of input values. The result that is returned by the <var>function</var>
+  of arguments. The result that is returned by the <var>function</var>
   will be given to the caller. </p>
 <h6>Example:</h6>
 <pre>def my_record: {
@@ -199,10 +209,10 @@ disruption
 
 def pseudorecord(
     name
-    input_values
+    parameter_values
 ) {
     if function?(my_record[name])
-        return apply(my_record[name], input_values)
+        return apply(my_record[name] parameter_values)
     fi
     log error: "something is wrong with" ≈ name
     disrupt
@@ -222,51 +232,51 @@ function_operator
     <code>"'[]'"</code>
     <code>'''</code> infix_operator <code>'''</code>
 </p>
-<p>The <a href="operators.html">operators</a> can be used as functions by wrapping the operators with <code>'</code><small>single quote</small>. These operator functions, or <b>functinos</b>, can be used like any other functions. They can be passed as input values or stored in records and arrays.</p>
+<p>The <a href="operators.html">operators</a> can be used as functions by wrapping the operators with <code>'</code><small>single quote</small>. These operator functions, or <b>functinos</b>, can be used like any other functions. They can be passed as arguments or stored in records and arrays.</p>
 <p>So <code>'+'</code> is the binary add function that can be passed to <a href="intrinsic.html#reduce">the <code>reduce</code> function</a> to make sums. </p>
-<pre>assign total: reduce(data, '+')</pre>
+<pre>assign total: reduce(data '+')</pre>
 <h6>Examples:</h6>
 <pre>
-'/\'(3, 4)   # null  <small>and</small>
-'\/'(3, 4)   # null  <small>or</small>
-'|'(3, 4)    # 3     <small>default</small>
-'='(3, 4)    # false <small>equal</small>
-'&lt;&gt;'(3, 4)   # true  <small>not equal</small>
-'&lt;'(3, 4)    # true  <small>less</small>
-'&lt;='(3, 4)   # true  <small>less or equal</small>
-'&gt;'(3, 4)    # false <small>greater</small>
-'&gt;='(3, 4)   # false <small>greater or equal</small>
-'&'(3, 4)    # "34"  <small>concat</small>
-'&&'(3, 4)   # "3 4" <small>concat with space</small>
-'+'(3, 4)    # 7     <small>add</small>
-'-'(3, 4)    # -1    <small>subtract</small>
-'*'(3, 4)    # 12    <small>multiply</small>
-'/'(3, 4)    # 0.75  <small>divide</small>
-'//'(3, 4)   # 0     <small>integer divide</small>
-'[]'(3, 4)   # null  <small>get</small>
+'/\'(3 4)   # null  <small>and</small>
+'\/'(3 4)   # null  <small>or</small>
+'|'(3 4)    # 3     <small>default</small>
+'='(3 4)    # false <small>equal</small>
+'&lt;&gt;'(3 4)   # true  <small>not equal</small>
+'&lt;'(3 4)    # true  <small>less</small>
+'&lt;='(3 4)   # true  <small>less or equal</small>
+'&gt;'(3 4)    # false <small>greater</small>
+'&gt;='(3 4)   # false <small>greater or equal</small>
+'&'(3 4)    # "34"  <small>concat</small>
+'&&'(3 4)   # "3 4" <small>concat with space</small>
+'+'(3 4)    # 7     <small>add</small>
+'-'(3 4)    # -1    <small>subtract</small>
+'*'(3 4)    # 12    <small>multiply</small>
+'/'(3 4)    # 0.75  <small>divide</small>
+'//'(3 4)   # 0     <small>integer divide</small>
+'[]'(3 4)   # null  <small>get</small>
 </pre>
 <p>Three  are short circuiting in their operator form, but not in their functino form:
     <code>'/\'</code><small>and</small>&nbsp;&nbsp; <code>'\/'</code><small>or</small>&nbsp;&nbsp; <code>'|'</code><small>default</small>.</p>
 <h4>'='<small>equal</small></h4>
-<p>The equal function can take two or three input values. The first two input values are values to be compared.
-    If all of the inputs are numbers, an optional <var>tolerance</var> input value may be included which must be a non-negative number.
+<p>The equal function can take two or three arguments. The first two arguments are values to be compared.
+    If all of the parameters are numbers, an optional <var>tolerance</var> argument may be included which must be a non-negative number.
     The result is <code>true</code> if the absolute value of the difference between the
     two numbers is less than or equal to the <var>tolerance</var>.</p>
-<p>If the input values are texts, and if the <var>tolerance</var> is <code>true</code>, then the comparison is case-insensitive.</p>
+<p>If the arguments are texts, and if the <var>tolerance</var> is <code>true</code>, then the comparison is case-insensitive.</p>
 <h6>Examples:</h6>
 <pre>def first: 12.3775
 def second: 12.38
-assign exactly: '='(first, second)         # exactly is false
-assign sloppy: '='(first, second, 0.01)    # sloppy is true
+assign exactly: '='(first second)         # exactly is false
+assign sloppy: '='(first second 0.01)     # sloppy is true
 
 def first: "vorpal"
 def second: "VORPAL"
-assign exactly: '='(first, second)         # exactly is false
-assign sloppy: '='(first, second, true)    # sloppy is true</pre>
+assign exactly: '='(first second)         # exactly is false
+assign sloppy: '='(first second true)     # sloppy is true</pre>
 <h4 id="'&lt;&gt;'">'&lt;&gt;'<small>not equal</small></h4>
-<p>The not equal function can take two or three input values. The first two input values are values to be compared. The optional third input value is a tolerance. When comparing numbers, the tolerance is a number that indicates the allowable difference. When comparing texts, the tolerance is a logical that if <code>true</code> ignores case.</p>
+<p>The not equal function can take two or three arguments. The first two arguments are values to be compared. The optional third argument is a tolerance. When comparing numbers, the tolerance is a number that indicates the allowable difference. When comparing texts, the tolerance is a logical that if <code>true</code> ignores case.</p>
 <h4><span id="'[]'">'[]'</span><small>get</small></h4>
-<p>The get function  takes two input values. The first input value is an array, record, or text. The second input value is an element number or key. It returns an element, a property, or a character, or <code>null</code>.</p>
+<p>The get function takes two arguments. The first argument is an array, record, or text. The second argument is an element number or key. It returns an element, a property, or a character, or <code>null</code>.</p>
 <h2 id="types">Function Types</h2>
 <p>There are several function types that are essential to Misty. They are</p>
 <ul>
@@ -277,7 +287,7 @@ assign sloppy: '='(first, second, true)    # sloppy is true</pre>
 </ul>
 <h3 id="callback">Callback</h3>
 <p>A callback function is a function that is used to deliver functional results from the future. A callback function has this signature:</p>
-<pre>function (<var>value</var>, <var>reason</var>)</pre>
+<pre>function (<var>value</var> <var>reason</var>)</pre>
 <p>The <var>value</var> is the value of the operation if it was successful. The <var>value</var> is <code>null</code> if it is unsuccessful.</p>
 <p>If the <var>value</var> is <code>null</code>, then the optional <var>reason</var> may include an error message or indication of the cause of the unsuccess.</p>
 <p><a href="#requestor_function">Requestor functions</a> take a callback.</p>
@@ -303,7 +313,7 @@ assign sloppy: '='(first, second, true)    # sloppy is true</pre>
 </ul>
 <h3>Requestor Function</h3>
 <p>A requestor function encapsulates a unit of work, communicating the result thru a <a href="#callback">callback</a>, allowing work to progress over many turns. A requestor function has this signature:</p>
-<pre>function requestor(<var>callback</var>, <var>value</var>)</pre>
+<pre>function requestor(<var>callback</var> <var>value</var>)</pre>
 <p>When the requestor function is finished, it calls the <a href="#callback"><var>callback</var></a> function with the result.</p>
 <p>The optional <var>value</var> is some value that is used to determine the result.</p>
 <p>A common usage is to send a message to some actor. When the reply eventually arrives, extract a result from the reply and pass it to the <var><a href="#callback">callback</a></var>.</p>
@@ -312,6 +322,6 @@ assign sloppy: '='(first, second, true)    # sloppy is true</pre>
 <p>A requestor function may optionally return a <a href="#cancel">cancel</a> function. When the cancel function is called, it attempts to stop the work of the requestor. A cancel function try to send a message to some actor informing it that the result is no longer needed. The purpose of cancel is to stop work that is no longer required. It is advisory. It is not an undo. It is not guaranteed, particularly in the case where cancel is called after some actor has completed its work.</p>
 <p>Cancel is most effective with the <a href="#requestor_factory">requestor factories</a> that are organizing the work.</p>
 <p>A cancel function has this signature:</p>
-<pre>function cancel(<var>reason</var>, <var>abandon</var> | true)</pre>
+<pre>function cancel(<var>reason</var> <var>abandon</var> | true)</pre>
 <p>The <var>reason</var> is optional, but if included might be logged or propagated. If <var>abandon</var> is <code>true</code>, then simply stop the requested work. If abandon is <code>false</code>, then if possible, complete the assignment, perhaps by calling the <a href="#callback">callback</a> with the <var>reason</var>.</p>
 </body></html>

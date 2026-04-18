@@ -58,7 +58,7 @@
     <td>The number of seconds since the epoch.</td>
   </tr>
   <tr>
-    <td nowrap><code>(</code><var>text</var><code>,</code> <var>format</var><code>,</code>
+    <td nowrap><code>(</code><var>text</var><code></code> <var>format</var><code></code>
       <var>zone</var><code>)</code></td>
     <td>A date text in one of several formats.</td>
   </tr>
@@ -84,14 +84,14 @@
 <h3>Records</h3>
 <p>A record can be used to specify a time. Each of the fields will be relative
   to zero (even month and day which are conventionally shown relative to 1). So <code>time.number({year:
-2001, month: 8, day: 10})</code> has the same result as <code>time.number(&quot;2001-09-11&quot;)</code>.</p>
+2001 month: 8 day: 10})</code> has the same result as <code>time.number(&quot;2001-09-11&quot;)</code>.</p>
 <h3>The functions</h3>
 <p>The name of the function indicates the type of the result.</p>
-<h4>time.number(</code><var>text</var><code>,</code> <var>format</var><code>,</code> <var>zone</var><code>)</code><br>
+<h4>time.number(</code><var>text</var><code></code> <var>format</var><code></code> <var>zone</var><code>)</code><br>
 time.number(</code><var>record</var><code>)</code></h4>
 <p>The result is the number of seconds since the epoch.</p>
-<h4><code>time.text(</code><var>number</var><code>, </code><var>format</var><code>, </code><var>zone</var><code>)</code><br>
-time.text(</code><var>record</var><code>, </code><var>format</var><code>, </code><var>zone</var><code>)</code></h4>
+<h4><code>time.text(</code><var>number</var><code> </code><var>format</var><code> </code><var>zone</var><code>)</code><br>
+time.text(</code><var>record</var><code> </code><var>format</var><code> </code><var>zone</var><code>)</code></h4>
 <p>The result is a display text of the date. The <var>value</var> cannot be
   a text.</p>
 <p>The <var>format</var> is either a format text or a format record. A format
@@ -259,7 +259,7 @@ time.text(</code><var>record</var><code>, </code><var>format</var><code>, </code
   </tr>
 </table>
 <h4><code>time.record(</code><var>number</var><code>)</code><br>
-<code>time.record(</code><var>text</var><code>,</code> <var>format</var><code>,</code> <var>zone</var><code>)</code></h4>
+<code>time.record(</code><var>text</var><code></code> <var>format</var><code></code> <var>zone</var><code>)</code></h4>
 <p>The result is a record containing all of these fields: <code>year</code>,
   <code>month</code>, <code>week</code>, <code>day_of_year</code>, <code>day</code>
   (of month), <code>day_of_week</code>, <code>hour</code>, <code>minute</code>,

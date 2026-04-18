@@ -12,7 +12,7 @@
 <p align="left">Public Domain 2026 Douglas Crockford</p>
 <p>The Misty Programming Language is a dynamic, general-purpose, transitional, secure, distributed actor
   language. It has a gentle syntax that is intended to benefit students, as well
-  as advanced features such as capability security and lambdas with lexical scoping. </p>
+  as advanced features such as capability security and lambdas with lexical scoping.</p>
 <p>The grammar of the language is expressed in <a href="http://www.crockford.com/mckeeman.html">McKeeman Form</a>.</p>
 <h2>Overview</h2>
 <p>The Misty System supports the Actor model of distributed computation. It is a transitional language because it also supports a more conventional model with features of a functional language with mutation, similar in some ways to JavaScript. The intention is that a transitional language will be easier for industry to accept than a pure actor language, even if a pure actor language is more deserving of adoption.</p>
@@ -39,7 +39,7 @@ increase_indentation
 decrease_indentation
     <i>Remove four spaces from the </i>indentation<i>.</i>
 </p>
-<p>The <dfn>indentation</dfn> is the number of spaces required at the beginning of a line as determined by its nesting level. </p>
+<p>The <dfn>indentation</dfn> is the number of spaces required at the beginning of a line as determined by its nesting level.</p>
 <p class="rule">
 indent
     increase_indentation linebreak
@@ -81,8 +81,10 @@ linefeed
     ],
     &quot;text&quot;: &quot;hello&quot;
 }</pre>
-<p>Misty <a href="types.html#record">record literals</a> take this further by eliminating the comma  at the end of a line, and eliminating quotes on field names in most cases.</p>
-<pre>{
+<p>Misty <a href="types.html#record">record literals</a> take this further by eliminating the comma, and eliminating quotes on field names in most cases.</p>
+<pre>{one: 1 array: [1 2 3] text: &quot;hello&quot;}
+
+{
     one: 1
     array: [
         1
@@ -91,7 +93,7 @@ linefeed
     ]
     text: &quot;hello&quot;
 }</pre>
-<p>Misty uses the same convention with <code>(</code><small>left paren</small> and <code>)</code><small>right paren</small> in input lists and expressions. In an open input value list, each input value goes on its own line and the commas between the input values are eliminated.</p>
+<p>Misty uses the same convention with <code>(</code><small>left paren</small> and <code>)</code><small>right paren</small> in argument lists and expressions. In an open argument list, each argumente goes on its own line.</p>
 <pre>my_button.on(
     "click"
     function (event) {
@@ -109,8 +111,7 @@ linefeed
 )
 
 assign progress: (
-    result
-    + (radicand / result)
+    result + (radicand / result)
 ) / 2
 </pre>
 <h2 id="comments">Comments</h2>
@@ -168,10 +169,10 @@ letter_or_digit
     letter
     digit
 </p>
-<p>There are no reserved words. </p>
+<p>There are no reserved words.</p>
 <h2 id="purity">Purity</h2>
 <p>The Misty language strives for, but does not achieve, purity. It is a transitional language, so mutation and side-effects are tolerated, but not encouraged. Mutation is only allowed by the <code>assign</code> statement.
-The word <code><a href="statements.html#assign">assign</a></code> is required in the statement. This allows for using <code>=</code> <small>equal sign</small> correctly as the equality operator. </p>
+The word <code><a href="statements.html#assign">assign</a></code> is required in the statement. This allows for using <code>=</code> <small>equal sign</small> correctly as the equality operator.</p>
 <p>When calling a function only for its side-effects, the <code><a href="statements.html#call">call</a></code> statement must be used.</p>
 <p> This is quite different than conventional languages whose syntax is optimized for mutation and side-effects. For example, JavaScript has 20 assignment operators if you count <code>++</code> and <code>--</code> twice, which you should, and it allows them all to be used in expression position as well as statement position.</p>
 </body></html>
