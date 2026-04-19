@@ -37,7 +37,7 @@ much as <code>function</code><small></small> introduces a function. Patterns may
 def url: pattern (lib) {
     - {&quot;scheme&quot;: name &quot;:&quot;}
     &quot;slash&quot;: 0-3 &quot;/&quot;
-    &quot;host&quot;:  {ip4, 1- {name / &quot;.&quot;}}
+    &quot;host&quot;:  {ip4; 1- {name / &quot;.&quot;}}
     - {&quot;:&quot; &quot;port&quot;: 1-5 digit}
     - {&quot;/&quot; &quot;path&quot;: 0- [/ &quot;?#&quot; Cc]}
     - {&quot;?&quot; &quot;query&quot;: 0- [/ &quot;#&quot; Cc]}
@@ -117,7 +117,7 @@ filename: lib.name.extract{&quot;doom.dust&quot;}
     we attempt to match using the <code>ip</code> pattern we defined earlier.
     If that does not match, then we'll match a dotted domain name (one or
     more names separated by dots).
-    <pre>&quot;host&quot;: {ip4, 1- {name / &quot;.&quot;}}</pre>
+    <pre>&quot;host&quot;: {ip4; 1- {name / &quot;.&quot;}}</pre>
   </li>
   <li>
     It optionally matches a port number. If it is found, it is saved under
@@ -242,7 +242,7 @@ closed_pattern_group
 <p class="rule">
 optional_closed_pattern_group
     <code>""</code>
-    <code>','</code> space closed_pattern_group
+    <code>';'</code> space closed_pattern_group
     space <code>'/'</code> space pattern_item
 </p>
 <p class="rule">
