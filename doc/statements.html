@@ -68,6 +68,7 @@ created by <a href="#var">the <code>var</code> statement</a>.</p>
     <li>Remove (or pop) an element from the end of an array: <code>assign <var>variable</var>: <var>array</var>[]</code></li>
 </ul>
 <p>Attempting any of those changes on a <a href="intrinsic.html#stone">stone</a> object will <a href="#disrupt">disrupt</a>.</p>
+
 <h3 id="break">The <code>break</code> statement</h3>
 <p class="rule">
 break_statement
@@ -75,6 +76,7 @@ break_statement
 </p>
 <p>The <code>break</code> statement is used to break out of <a href="#do"><code>do</code> loops</a>.
     Execution continues with the statement after <code>od</code>.</p>
+
 <h3 id="call">The <code>call</code> statement</h3>
 <p class="rule">
 call_statement
@@ -93,6 +95,7 @@ activate
 </p>
 <p>The <code>call</code> statement invokes a function and ignores the return value.
 </p>
+
 <h3 id="def">The <code>def</code> statement</h3>
 <p class="rule">
 def_statement
@@ -108,7 +111,7 @@ def_value
     may be mutable. Names that are defined with the <code>def</code> statement
     can not be changed with the <code>assign</code> statement. If the value is mutable,
   then the value's members or elements may be changed with the <code>assign</code> statement.
-  The <code>def</code> statement can not appear in an <code>if</code> or <code>do</code>.</p>
+  The <code>def</code> statement can not appear in a <code>do</code> loop.</p>
 <p>If the <code>def</code> is followed by a <a href="funct6ions.html">function literal</a>, then a read only variable having the same name as the function is created and given the value of the function object. So these two statements do the same thing:</p>
 <pre>def double: function double (number) {
     return number + number
@@ -120,6 +123,7 @@ def double(number) {
 <h6>Example:</h6>
 <pre>def sqrt_2: 1.4142135623730950
 </pre>
+
 <h3 id="disrupt">The <code>disrupt</code> statement</h3>
 <p class="rule">
 disrupt_statement
@@ -129,7 +133,8 @@ disrupt_statement
     to the function's <a href="functions.html#disruption"><code>disruption</code> clause</a>.
     If control was already in the <code>disruption</code> clause, or if there is no <code>disruption</code> clause,
     then control goes to the most recent function in the calling chain that has a <code>disruption</code> part.
-    If there is none, then the program halts.</p>
+    If there is none, then the program halts. The distrupt statement does not communicate the cause of the disruption. This can be communicated with the <a href="@log"><code>log</code> satement</a>.</p>
+
 <h3 id="do">The <code>do</code> statement</h3>
 <p class="rule">
 do_statement
@@ -159,6 +164,7 @@ do
     assign divisor: divisor + 1
 od
 </pre>
+
 <h3 id="jump">The <code>jump</code> statement</h3>
 <p class="rule">
 jump_statement
@@ -221,32 +227,45 @@ assign at: at + 1</pre>
   The name ia visible to the rest of the function.
 </p>
 <h6>Example:</h6>
-<pre>if allowed1
+<pre>if allowed!
     use retricted: "hard to get stuff"()
 else
     def restricted: null
 fi</pre>
+
 <h3 id="log">The <code>log</code> statement</h3>
 <p class="rule">
 log_statement
-    <code>&quot;log&quot;</code> name <code>':'</code> space expression
+    <code>&quot;log&quot;</code> channel <code>':'</code> space expression
 </p>
-<p>The <code>log</code> statement may send an expression to the named log. It is used to record information about the execution of the program for later analysis.</p>
-<p>If logging to the named log  has not been enabled, then the <code>log</code> statement does nothing. <a href="system.html#policy">Policies</a> can be configured to only enable certain logs. A policy may block the execution of programs that  attempt to use restricted logs.</p>
-<h6>The <dfn>name</dfn> of a log can be any name. For example:</h6>
+<p class="rule">
+channel
+    name
+</p>
+<p>The <code>log</code> statement sends the value of an expression to a log channel.
+    It is used to capture information about the execution of the program for analysis.
+Each log channel has an actor that receives the data. Logs can be ephemeral or durable. Logs can be local or remote. Logs can provide insight into the operation of a system.</p>
+<p>A channel   has a status for each program or subprogram according to policy:</p>
+<ul>
+    <li><code>forbidden</code>: The program or subprogram will not  build as long as the source mentions this channel.</li>
+    <li><code>allowed</code>. Log messages will be sent immediately to the channel actor. Log messages do not wait for the end of turn. Log messages are sent even if the actior fails,</li>
+    <li><code>ignored</code>: The <code>log</code> statement is ignored. It is treated as a comment. It might be allowed on a later build.</li>
+    <li><code>conditional</code>. The <code>log</code> statement is ignored at first, but can be allowed at any tine. The <code>debug</code> channel is an example. If the debugger is running, the <code>debug</code> channel is enabled.</li>
+</ul>
+<h6>A log channel can have<dfn> </dfn>any name. For example:</h6>
 <blockquote>
-    <code>abort alert authorization breech compliance console crash data dayfile debug
-        demo development disaster emergency epic error event evidence example experimental
+    <code>abort abuse alert anomaly authorization billing breech checklist compliance console crash dashboard data dayfile debug
+        delay demo development disaster emergency epic error event evidence example experimental
         failure fatal feature format fraud hygiene inconsistent info kyc local
-        maintenance memory mishap network normal offline page panic permission policy portal
-        practice privacy probe protocol prototype recover range risk security
-        serious spam storage store suspicious syntax system test time trace training
-        trivial type unneeded usage verbose violation warning world</code>
+        maintenance memory mishap network normal offline operations page panic permission policy portal
+        practice privacy probe protocol prototype recover range reject risk security
+        serious situation spam statistics storage store summary suspicious syntax system test time trace training
+        trial trivial type unneeded usage verbose violation warning world</code>
 </blockquote>
 <p>It is usually good to <code>log</code> before <code>disrupt</code>. Logging does not change the behavior of a program.</p>
-<p>Logs can be ephemeral or durable. Logs can be local or remote. See <a href="programs.html#logging">logging</a>.</p>
 <h6>Example:</h6>
 <pre>log debug: &quot;index&quot; &amp;&amp; index</pre>
+
 <h3 id="return">The <code>return</code> statement</h3>
 <p class="rule">
 return_statement
@@ -285,6 +304,7 @@ The left <dfn>expression</dfn> must resolve to an actor address object or a mess
 <p>If a <dfn>callback</dfn> function is included, then the <dfn>callback</dfn> function will receive the reply, not the <a href="programs.html#receiver">receiver</a> function. See <a href="functions.html#callback">callback</a>.</p>
 <h6>Example:</h6>
 <pre>send server: message: reply_callback</pre>
+
 <h3 id="use">The <code>use</code> statement</h3>
 <p class="rule">
 use
@@ -304,21 +324,22 @@ locator
 <p>The subprograms are stored in the program shop, which contains the standard subprograms that are located with the <dfn>name</dfn> form, and the extra subprograms that are located with the <dfn>text_literal</dfn> form.
     In the <dfn>text_literal</dfn> form, it is recommended that the text contain a prefix to indicate the source or usage of the subprogram. Guest code (programs from third parties that are not fully trusted) may be restricted from use of the <code>use</code> statement, or may have restrictions on which subprograms they can employ.</p>
 <p id="power">A <a href="system.html#policy">system</a> may provide
-    <strong>power subprograms</strong> that act as interfaces to powerful
-    affordances such as communication devices, data storage devices, input
+    powerful subprograms that act as interfaces to powerful
+    endowments such as communication devices, data storage devices, input
     devices (like keyboards, camera, and microphones),  output devices (like
     printers, displays, and speakers), and operating system services.
     Typically, access to powerful subprograms is limited to subprograms that will attenuate the power, presenting limited capabilities to other subprograms and programs.</p>
 <p> The <code>use</code> statement can not appear in a function or <code>do</code> loop.</p>
 <h6>Example:</h6>
 <pre>use lang: language_library(&quot;en&quot;)</pre>
+
 <h3 id="var">The <code>var</code> statement</h3>
 <p class="rule">
 var_statement
     <code>&quot;var&quot;</code> space name <code>':'</code> space expression
 </p>
 <p>The <code>var</code> statement creates a variable in the current function scope.
-The value of a variable can be replaced by <a href="#assign">the <code>assign</code> statement</a>. The <code>var</code> statement can not appear in an <code>if</code> or <code>do</code>. The <dfn>name</dfn> is the name of a new variable in this scope. The expression on the right side of the <code>:</code><small>colon</small> gives the initial value of the variable.  The <dfn>name</dfn> may not be  used on the right side of the <code>:</code><small>colon</small>.</p>
+The value of a variable can be replaced by <a href="#assign">the <code>assign</code> statement</a>. The <code>var</code> statement can not appear in an <code>if</code> or <code>do</code> loop. The <dfn>name</dfn> is the name of a new variable in this scope. The expression on the right side of the <code>:</code><small>colon</small> gives the initial value of the variable.  The <dfn>name</dfn> may not be used on the right side of the <code>:</code><small>colon</small>.</p>
 <p>Variables must be declared before they are used or assigned values. Note that <code>:</code> <dfn>expression</dfn> is not optional.</p>
 <h6>Examples:</h6>
 <pre>var first_name: &quot;&quot;
