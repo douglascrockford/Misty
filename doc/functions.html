@@ -90,7 +90,8 @@ If the function is invoked with too many arguments, it disrupts. </p>
     An optional arity can be provided that sets the maximum number of arguments and provide a value to the <a href="intrinsics.html#length">length</a> function.
     The default arity is <code>null</code>, meaning unlimited.</p>
 <h3>Body</h3>
-<p>And then, the body, a string of statements wrapped in <code>{}</code><small>braces</small>.</p>
+<p>And then, the body, a string of statements wrapped in <code>{}</code><small>braces</small>.
+A function body may not contain a <code>use</code> statement.</p>
 <p class="rule">
 body
     <code>'{'</code> statements disruption <code>'}'</code>
