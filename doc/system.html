@@ -121,7 +121,7 @@
     <li>Allowing programs to access actor functions such as <code><a href="programs.html#contact">contact!</a></code>, <code><a href="programs.html#coujple">couple!</a></code>, <code><a href="programs.html#portal">portal!</a></code>, <code><a href="programs.html">start!</a></code>, <code><a href="programs.html#stop">stop!</a></code>, <code><a href="programs.html#unneeded">unneeded</a></code><a href="programs.html#unneeded">!</a>.</li>
     <li>Allowing programs and subprograms to use actor addresses such as <code><a href="programs.html#me">me!</a></code> and <code><a href="program.html#overling">overling!</a></code>.</li>
     <li>Setting maximum mutable memory limits and time limits on programs.</li>
-    <li>Enabling access to specific <a href="statements.html#log">logs</a>.</li>
+    <li>Enabling access to specific <a href="statements.html#log">log channels</a>.</li>
 </ul>
 <p>A source program that violates policy will not produce an executable.</p>
 <p>Policies are expressed as misty programs. When a program is built, the builder sends a message to the Policy Machine identifying the program and its purpose. The Policy Machine sends back a policy actor. The build system will call the policy actor for each endowed name, use statement, and log files. The policy actor will reply with values or functions or failure. At the end, the build system will request a program store address from the policy actor for the new executable.</p>
