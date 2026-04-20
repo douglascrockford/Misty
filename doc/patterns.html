@@ -46,22 +46,22 @@ def url: pattern (lib) {
 </pre>
 <p>We can use the <code>extract</code> function to match a pattern against a text.</p>
 <pre>var result: extract(&quot;http://www.mistysystem.com/index.html#top&quot; url)</pre>
-<p><code>json.encode(result true)</code> is</p>
+<h6>The <code>result</code> is a record containing</h6>
 <pre>{
-    hash: &quot;top&quot;,
-    host: &quot;www.mistysystem.com&quot;,
-    path: &quot;index.html&quot;,
-    scheme: &quot;http&quot;,
+    hash: &quot;top&quot;
+    host: &quot;www.mistysystem.com&quot;
+    path: &quot;index.html&quot;
+    scheme: &quot;http&quot;
     slash: &quot;//&quot;
 }</pre>
 <p>We can call <code>match</code> again with a different text:</p>
 <pre>assign result: extract(&quot;216.168.224.111:9997?clearance=top&quot; url)</pre>
-<p><code>json.encode(result true)</code> is</p>
+<h6>The <code>result</code> is a record containing</h6>
 <pre>{
-    host: &quot;216.168.224.111&quot;,
-    octet: [&quot;216&quot; &quot;168&quot; &quot;224&quot; &quot;111&quot;],
-    port: &quot;9997&quot;,
-    query: &quot;clearance=top&quot;,
+    host: &quot;216.168.224.111&quot;
+    octet: [&quot;216&quot; &quot;168&quot; &quot;224&quot; &quot;111&quot;]
+    port: &quot;9997&quot;
+    query: &quot;clearance=top&quot;
     slash: &quot;&quot;
 }</pre>
 <p>To contrast, this is a JavaScript regular expression that does a similar thing:</p>
@@ -99,15 +99,14 @@ filename: lib.name.extract{&quot;doom.dust&quot;}
 </pre>
 <p>The <code>url</code> pattern matches urls. It matches in seven steps.</p>
 <ol>
-  <li>
-    <p>It optionally matches a <code>name</code> followed by a <code>:</code><small>colon</small>.
+  <li>It optionally matches a <code>name</code> followed by a <code>:</code><small>colon</small>.
       If they match, the <code>name</code> is saved in the result record in the <code>scheme</code> field. A prefix
       of <code>-</code><small>minus sign</small> means the same as <code>0-1</code>.
-      The item can occur once or not at all; it is optional.</p>
-    <pre>- {&quot;scheme&quot;: name &quot;:&quot;} </pre>
-    <p>If it had been written as</p>
-    <pre>- &quot;scheme&quot;: {name &quot;:&quot;} </pre>
-<p>then the <code>:</code><small>colon</small> would be saved as well as the <code>name</code>.</p>
+      The item can occur once or not at all; it is optional.
+      <pre>- {&quot;scheme&quot;: name &quot;:&quot;}</pre>
+      If it had been written as
+      <pre>- &quot;scheme&quot;: {name &quot;:&quot;}</pre>
+      then the <code>:</code><small>colon</small> would be saved as well as the <code>name</code>.
   </li>
   <li>It matches between 0 and 3 slash characters and saves them under the name <code>slash</code>.
       <pre>&quot;slash&quot;: 0-3 &quot;/&quot;</pre>
@@ -492,13 +491,13 @@ pattern_depot
 <h2>Pattern Functions</h2>
 <p>Patterns can be used with some of the intrinsic functions.</p>
 <blockquote>
-    <pre><a href="intrinsic.html#array"><code>array</a>(text pattern)</code> </pre>
-    <pre><code><a href="intrinsic.html#extract">extract</a>(text pattern from to)</code></pre>
-    <pre><code><a href="intrinsic.html#replace">replace</a>(text pattern replacement limit)</code></pre>
-    <pre><code><a href="intrinsic.html#search">search</a>(text pattern from)</code></pre>
+    <pre><a href="intrinsic.html#array">array(<var>text</var> <var>pattern</var>)</a></pre>
+    <pre><a href="intrinsic.html#extract">extract(<var>text</var> <var>pattern</var> <var>from</var> <var>to</var>)</a></pre>
+    <pre><a href="intrinsic.html#replace">replace(<var>text</var> <var>pattern</var> <var>replacement</var> <var>limit</var>)</a></pre>
+    <pre><a href="intrinsic.html#search">search(<var>text</var> <var>pattern</var> <var>from</var>)</a></pre>
 </blockquote>
 <p>For example, the <code>array()</code> method can be used
-    to break the contents of a file into an array of lines. If the <var>separator</var> pattern is found in the <var>text</var>, then the subtext before the match
+    to break the contents of a file into an array of texts. If the <var>separator</var> pattern is found in the <var>text</var>, then the subtext before the match
     is stored in the new array, and the match is repeated on the remainder
     until no more matches are possible. The remainder of the text is stored
     in the array and the array is result.</p>
