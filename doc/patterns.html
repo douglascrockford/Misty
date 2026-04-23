@@ -80,8 +80,7 @@ def url: pattern (lib) {
   The pattern could be written without the <code>/</code><small>slash</small>
   operator but the pattern would be longer.</p>
 <pre>ip4: pattern {&quot;octet&quot;: 1-3 digit 3 {&quot;.&quot; octet: 1-3 digit}}</pre>
-<p>If we attached the name <code>octet</code>: on an outer
-  level</p>
+<p>If we attached the name <code>octet</code>: on an outer level</p>
 <pre>ip4: pattern {&quot;octet&quot;: 4 {1-3 digit / &quot;.&quot;}}</pre>
 <p>then the result would have been</p>
 <pre>    # {octet: &quot;198.137.240.92&quot;}</pre>
@@ -151,39 +150,9 @@ record?(url)        # false</pre>
 <h2 id="library">Pattern Library</h2>
 <p>A pattern library is a record containing patterns that can be used by
   other patterns. The <code>lib</code> record in the <a href="#first example">first example</a> is a pattern library.</p>
-<p>A pattern library can contain patterns, texts, and functions.</p>
-<h3>Texts</h3>
-<p>When an ordinary text is used as a pattern, it will match identical text.</p>
-<h3>Functions</h3>
-<p>A function in a pattern library should have this signature:</p>
-<pre>(text from)</pre>
-<p> A function
-  will be passed the complete <code>text</code> being matched and the
-  index of the character that is currently being considered. If the function
-  does not match, then it must return <code>0</code> or <code>false</code>. If the function
-  does find a match, it must return the number of characters that are
-  matched. It may also return <code>true</code> if it matched exactly one character.</p>
-<p>When a function is called by a character class, then <code>text</code> will
-  be the character under consideration, and <code>from</code> will be <code>0</code>.
-  It should return <code>1</code> or <code>true</code> if the character is in the class or
-  <code>null</code> or <code>false</code> if the character is not in the class.</p>
-<p>Functions make it possible to efficiently express a much larger class of patterns.</p>
-<h6>Example:</h6>
-<pre>function end(text from) {
-
-# Match a carriage return and/or linefeed.
-
-    if text[from] = "\n"
-        return 1
-    fi
-    if text[from] = "\r"
-        if text[from + 1] = "\n"
-            return 2
-        fi
-        return 1
-    fi
-    return 0
-}</pre>
+<p>A pattern library can contain patterns, texts, and arrays..</p>
+<p>When an ordinary text is used as a pattern, it  matches identical text.</p>
+<p>When an ordinary array of texts is used as a pattern, it is used as a group, trying the texts in order  until there is a match.</p>
 <h2>Pattern expressions</h2>
 <p class="rule">
 pattern_literal
