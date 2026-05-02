@@ -1,5 +1,5 @@
 // tokenize.js  # Misty tokenizer
-// 2026-04-14
+// 2026-04-27
 
 // Tokenize takes a text and converts it into an array of tokens.
 // The input is a source text. The output is an array of token records.
@@ -175,8 +175,9 @@ function space() {
     repeatable(" ");
     token.kind = "space";
     token.text = snip();
+    token.length = token.text.length
     if (fresh) {
-        indentation = token.text.length;
+        indentation = token.length;
     }
 }
 
@@ -362,6 +363,7 @@ function long() {
     );
     token.kind = "text";
     token.text = value;
+    token.indentation = indentation;
 }
 
 function double_quote() {
