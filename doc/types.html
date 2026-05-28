@@ -62,11 +62,10 @@ open_elements
     linebreak expression open_elements
 </p>
 
-<p>An array can be made from zero or more expressions, separated by commas,
+<p>An array can be made from zero or more expressions, separated by whitespace,
   enclosed in brackets. Each expression produces a value of any type that
   is stored in the next element of the new array. The length of the array is the
-  number of expressions. The length of an array is fixed at its creation. In closed form, the expressions are separated by commas
-  and spaces. In open form, the expressions are separated by end of line and
+  number of expressions. The length of an array is fixed at its creation. In closed form, the expressions are separated by  spaces. In open form, the expressions are separated by end of line and
 indentation.</p>
 <h6>Example:</h6>
 <pre>var stooges: [&quot;Curly&quot; &quot;Larry&quot; &quot;Moe&quot;]
@@ -219,7 +218,7 @@ more_open_fields
 <p>In the record literal notation, the specification of a record begins
     with <code>{</code><small>left long</small> and ends with
     <code>}</code><small>right long</small>. Between them are zero or more
-    name/value fields, separated by <code>,</code><small>comma</small>.
+    name/value fields, separated by whitespace.
     A name/value field is an identifier or text, followed by
     <code>:</code><small>colon</small> followed by an expression. (See
     <a href="json.html">JSON</a>.) Each <dfn>field</dfn> contributes a field to
@@ -402,7 +401,7 @@ more_hex
     </tr>
     <tr>
         <td><code>\u{</code><var>HHHHHHHH</var><code>}</code></td>
-        <td><code>&nbsp;</code><small>unicode</small></td>
+        <td><code>&nbsp;</code><small>unicode codepoint</small></td>
     </tr>
 </table>
 <p>A short text literal is jacketed by a pair of
@@ -424,13 +423,14 @@ more_hex
 
 &quot;\u{43}\u{061}\u{0074}&quot;  # &quot;Cat&quot;
 
-&quot;This text contains \qquotes\q.&quot;
+&quot;                        # This is not a comment.&quot;
 
-&quot;  # This is not a comment.&quot;</pre>
+&quot;This text contains \qquotes\q.&quot;
+</pre>
 <p>A short text literal must begin and end on the same line. </p>
 <pre>
 &quot;This is
-an error.&quot;                    # must begin and end on the same line</pre>
+an error.&quot;               # must begin and end on the same line</pre>
 <p>A short text literal can not contain a literal control character, but control characters
     can be embedded in texts with escape sequences.</p>
 <pre>&quot;This is not\nan error.&quot;
