@@ -75,7 +75,7 @@ break_statement
     <code>"break"</code> do_label
 </p>
 <p>The <code>break</code> statement is used to break out of <a href="#do"><code>do</code> loops</a>.
-    Execution continues with the statement after <code>od</code>.</p>
+    Execution continues with the statement after <code>od</code>. A break statement includes the label ofthe loop it is breaking. The label is optional if the loop being broken is the innermost loop and the innermost loop is not labelled.</p>
 
 <h3 id="call">The <code>call</code> statement</h3>
 <p class="rule">
@@ -111,7 +111,7 @@ def_value
     may be mutable. Names that are defined with the <code>def</code> statement
     can not be changed with the <code>assign</code> statement. If the value is mutable,
   then the value's members or elements may be changed with the <code>assign</code> statement.
-  The <code>def</code> statement can not appear in a <code>do</code> loop.</p>
+  The <code>def</code> statement can not appear in an <code>if</code> or a <code>do</code> statement.</p>
 <p>If the <code>def</code> is followed by a <a href="funct6ions.html">function literal</a>, then a read only variable having the same name as the function is created and given the value of the function object. So these two statements do the same thing:</p>
 <pre>def double: function double (number) {
     return number + number
@@ -320,7 +320,7 @@ locator
     text_literal
     name
 </p>
-<p>The <code>use</code> statement makes a subprogram available to a program or another subprogram. The return value of the subprogram is bound to the <dfn>name</dfn>. An optional <dfn>locator</dfn> can be provided for finding the subprogram file in the <a href="system.html#shop">program shop</a>. Standard subprograms do not require a locator. </p>
+<p>The <code>use</code> statement makes a subprogram available to a program or another subprogram. The return value of the subprogram is bound to the <dfn>name</dfn>. An optional <dfn>locator</dfn> can be provided for finding the subprogram file in the <a href="system.html#shop">program shop</a>. Standard subprograms do not require a locator. The <dfn>name</dfn> may not be used as an argument on the right side of the <code>:</code><small>colon</small>.</p>
 <p>The subprograms are stored in the program shop, which contains the standard subprograms that are located with the <dfn>name</dfn> form, and the extra subprograms that are located with the <dfn>text_literal</dfn> form.
     In the <dfn>text_literal</dfn> form, it is recommended that the text contain a prefix to indicate the source or usage of the subprogram. Guest code (programs from third parties that are not fully trusted) may be restricted from use of the <code>use</code> statement, or may have restrictions on which subprograms they can employ.</p>
 <p id="power">A <a href="system.html#policy">system</a> may provide
@@ -329,7 +329,7 @@ locator
     devices (like keyboards, camera, and microphones),  output devices (like
     printers, displays, and speakers), and operating system services.
     Typically, access to powerful subprograms is limited to subprograms that will attenuate the power, presenting limited capabilities to other subprograms and programs.</p>
-<p> The <code>use</code> statement can not appear in a function or <code>do</code> loop.</p>
+<p> The <code>use</code> statement can not appear in a function or in an <code>if</code> or a <code>do</code> statement.</p>
 <h6>Example:</h6>
 <pre>use lang: language_library(&quot;en&quot;)</pre>
 
@@ -339,7 +339,7 @@ var_statement
     <code>&quot;var&quot;</code> space name <code>':'</code> space expression
 </p>
 <p>The <code>var</code> statement creates a variable in the current function scope.
-The value of a variable can be replaced by <a href="#assign">the <code>assign</code> statement</a>. The <code>var</code> statement can not appear in an <code>if</code> or <code>do</code> loop. The <dfn>name</dfn> is the name of a new variable in this scope. The expression on the right side of the <code>:</code><small>colon</small> gives the initial value of the variable.  The <dfn>name</dfn> may not be used on the right side of the <code>:</code><small>colon</small>.</p>
+The value of a variable can be replaced by <a href="#assign">the <code>assign</code> statement</a>. The <code>var</code> statement can not appear in an <code>if</code> or <code>do</code> statement. The <dfn>name</dfn> is the name of a new variable in this scope. The expression on the right side of the <code>:</code><small>colon</small> gives the initial value of the variable.  The <dfn>name</dfn> may not be used on the right side of the <code>:</code><small>colon</small>.</p>
 <p>Variables must be declared before they are used or assigned values. Note that <code>:</code> <dfn>expression</dfn> is not optional.</p>
 <h6>Examples:</h6>
 <pre>var first_name: &quot;&quot;
