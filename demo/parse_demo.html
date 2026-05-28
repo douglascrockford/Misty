@@ -29,26 +29,214 @@ textarea {
 <p>Put misty source text in the box and push a button.</p>
 <fieldset style="clear: both;">
 <legend>Source text</legend>
-<textarea id="inputation" rows=24 autocomplete=off autocorrect=off spellcheck=false>
+<textarea
+    autocomplete=off
+    autocorrect=off
+    autofocus=on
+    id="inputation"
+    placeholder="misty program..."
+    rows=24
+    spellcheck=false
+    wrap=off
+>
 </textarea>
 </fieldset>
 <p style="text-align: center;">
 
 <input id=clear type=button value="clear">
 <input id=tokens type=button value="tokens">
-<input id=neat type=button value="neat">
+<input id=compile type=button value="compile">
 <input id=complete type=button value="complete">
 <input id=scope type=button value="scope">
 <input id=intrin type=button value="intrinsics">
+<input id=debugger type=button value="debugger">
 
 </p>
 <fieldset><legend id=outputlegend>Watch this space</legend>
-<pre id=outputation stle="clear: both;"></pre></fieldset>
+<pre id=outputation style="clear: both;"></pre></fieldset>
 
 <script type="module">
 import tokenize from "../js/tokenize.js";
 import parse from "../js/parse.js";
 import slot from "../js/slot.js";
+
+// "kind", "name", "make", "value", "parameter_nr", "level",
+// "function_nr", "outer", "left", "right", "expression",
+// "then", "list", "else", "statements", "disruption",
+// "functions", "emit_endowment", "logs", "uses"
+
+const end_of_line = "\n";
+
+function compiler(tree) {
+    if (Array.isArray(tree)) {
+        return tree.join(end_of_line);
+    }
+    var indentation = 0;
+    var output = [];
+
+    function emit(token) {
+        if (token === undefined) {
+            emit(end_of_line);
+            emit(" ".repeat(indentation));
+        } else if (typeof token === "string") {
+            output.push(token);
+        } else if (Array.isArray(token)) {
+            token.forEach(function (arg, arg_nr) {
+                if (arg_nr !== 0) {
+                    emit(" ");
+                }
+                return emit(arg);
+            });
+        } else if (token.kind === "text") {
+            emit("\"" + token.text.replace(/\\/g, "\\b").replace(/"/g, "\\q")  + "\"");
+        } else if (token.kind === "number" || token.kind === "functino") {
+            emit(token.text);
+        } else {
+            if (token.kind === "name") {
+                emit(token.text);
+                if (token.make === "endowment") {
+                    emit("!");
+                } else if (typeof token.function_nr === "number") {
+                    emit("ƒ" + token.function_nr);
+                }
+            } else if (token.kind === "function") {
+                emit("ƒ" + token.function_nr);
+            } else if (token.kind === "array") {
+                emit("[");
+                emit(token.first);
+                emit("]");
+            } else if (token.kind === "record") {
+                emit("{");
+                token.first.forEach(function (field, field_nr) {
+                    if (field_nr !== 0) {
+                        emit(" ");
+                    }
+                    emit(field);
+                });
+                emit("}");
+            } else if (token.text === "[") {
+                emit("(.");
+                emit(" ");
+                emit(token.first);
+                emit(" ");
+                emit(token.second);
+                emit(")");
+            } else if (token.text === "(") {
+                emit("(");
+                emit(token.first);
+                if (token.second && token.second.length > 0) {
+                    emit(" ");
+                    emit(token.second)
+                }
+                emit(")");
+            } else if (token.text === "then") {
+                emit("(then ");
+                emit(token.first);
+                emit(" ");
+                emit(token.second);
+                emit(" ");
+                emit(token.third);
+                emit(")");
+            } else if (token.kind === "operator") {
+                emit("(");
+                emit(token.text);
+                emit(" ");
+                emit(token.first);
+                emit(" ");
+                emit(token.second);
+                emit(")");
+            } else {
+                emit(token.text);
+                emit("????");;
+            }
+        }
+    }
+
+    function emit_statement(token) {
+        emit();
+        emit(token.text);
+        if (token.text === "if") {
+            emit(" ");
+            emit(token.first);
+            emit_statements(token.then)
+            if (Array.isArray(token.elseif) && token.elseif.length > 0) {
+                token.elseif.forEach(function elseif(clause) {
+                    emit();
+                    emit("else if ");
+                    emit(clause.first);
+                    emit_statements(clause.then)
+                })
+            }
+            if (Array.isArray(token.else) && token.else.length > 0) {
+                emit();
+                emit("else");
+                emit_statements(token.else)
+            }
+            return;
+        } else if (token.text === "do") {
+            if (token.label) {
+                emit(" ");
+                emit(token.label);
+            }
+            emit_statements(token.statements);
+        } else if (token.text === "break") {
+            if (token.label) {
+                emit(" ");
+                emit(token.label);
+            }
+        } else if (token.text === "assign") {
+            emit(" ");
+            if (token.push) {
+                emit("[]");
+            }
+            emit(token.first);
+            emit(" ");
+            if (token.pop) {
+                emit("[]");
+            }
+            emit(token.second);
+        } else {
+            if (token.first) {
+                emit(" ");
+                emit(token.first);
+                if (token.second) {
+                    emit(" ");
+                    emit(token.second);
+                    if (token.third) {
+                        emit(" ");
+                        emit(token.third);
+                    }
+                }
+            }
+        }
+    }
+
+    function emit_statements(array) {
+        indentation += 4;
+        array.forEach(emit_statement);
+        indentation -= 4;
+    }
+
+    emit(tree.misty);
+    emit(" ");
+    emit(tree.name);
+    emit();
+    tree.functions.forEach(function (func, function_nr) {
+        emit("ƒ" + function_nr);
+        emit(" ");
+        if (func.name) {
+            emit(func.name);
+        }
+        emit("(");
+        emit(func.parameters);
+        emit(")");
+        emit_statements(func.statements);
+        emit();
+    });
+    emit();
+
+    return output.join("");
+}
 
 (function initialize() {
     const inputation = document.getElementById("inputation");
@@ -56,10 +244,15 @@ import slot from "../js/slot.js";
     const outputlegend = document.getElementById("outputlegend");
     const clear = document.getElementById("clear");
     const tokens = document.getElementById("tokens");
-    const neat = document.getElementById("neat");
+    const compile = document.getElementById("compile");
     const complete = document.getElementById("complete");
     const scope = document.getElementById("scope");
     const intrin = document.getElementById("intrin");
+    const debug = document.getElementById("debugger");
+    inputation.value = localStorage.getItem("source") || "misty program test() {\n}";
+    inputation.addEventListener("input", function () {
+        localStorage.setItem("source", inputation.value);
+    });
     clear.addEventListener("click", function (event) {
         outputlegend.replaceChildren("Watch this space");
         outputation.innerHTML = "";
@@ -69,24 +262,15 @@ import slot from "../js/slot.js";
     tokens.addEventListener("click", function (event) {
         outputation.innerHTML = "";
         outputation.append(JSON.stringify(tokenize(inputation.value), [
-            "kind", "text", "quote", "at", "column_nr", "line_nr"
+            "kind", "text", "at", "column_nr", "line_nr", "indentation", "error"
         ], 4));
         outputlegend.replaceChildren("Tokens");
         inputation.focus();
     }, false);
-    neat.addEventListener("click", function (event) {
+    compile.addEventListener("click", function (event) {
+        outputlegend.replaceChildren("compile");
         outputation.innerHTML = "";
-        outputation.append(JSON.stringify(
-            slot(parse(tokenize(inputation.value))),
-            [
-                "kind", "name", "make", "value", "parameter_nr", "level",
-                "function_nr", "outer", "left", "right", "expression",
-                "then", "list", "else", "statements", "disruption",
-                "functions", "endowment", "logs", "uses"
-            ],
-            4
-        ));
-        outputlegend.replaceChildren("Neat parse tree");
+        outputation.append(compiler(slot(parse(tokenize(inputation.value)))));
         inputation.focus();
     }, false);
     complete.addEventListener("click", function (event) {
@@ -123,7 +307,11 @@ import slot from "../js/slot.js";
         ), null, 4));
         inputation.focus();
     }, false);
+    debug.addEventListener("click", function (event) {
+        debugger;
+    }, false);
     inputation.focus();
+    inputation.select();
 }());
 </script>
 </body>
