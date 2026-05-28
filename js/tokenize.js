@@ -1,5 +1,5 @@
 // tokenize.js  # Misty tokenizer
-// 2026-04-27
+// 2026-05-24
 
 // Tokenize takes a text and converts it into an array of tokens.
 // The input is a source text. The output is an array of token records.
@@ -13,7 +13,7 @@
 //      from_row
 //      to_column
 //      to_row
-//      indentation (only on long text)
+//      indentation (only on long text and space)
 // Only when a token contains an error
 //      error
 //      error_at
@@ -46,7 +46,7 @@
 const error_message = {
     bad: "Bad ",
     missing: "Missing ",
-    unclosed: "Unclosed"
+    unclosed: "Unclosed "
 };
 
 const backslash = "\\";
@@ -84,7 +84,6 @@ const hex = {
 
 let at;
 let column_nr;
-let fresh;
 let indentation = 0;
 let row_nr;
 let source;
@@ -115,7 +114,7 @@ function snip(trim_front = 0, trim_back = 0) {
 
 function seal() {
     token.text = snip();
-    token.kind = token.text;
+    token.kind = "operator";
 }
 
 function repeatable(character) {
@@ -176,8 +175,9 @@ function space() {
     token.kind = "space";
     token.text = snip();
     token.length = token.text.length
-    if (fresh) {
+    if (token.from_column === 0) {
         indentation = token.length;
+        token.indentation = indentation;
     }
 }
 
@@ -307,7 +307,8 @@ function single_quote() {
         single = false;
     }
     advance();
-    seal();
+    token.kind = "functino";
+    token.text = snip();
 }
 
 function long() {
@@ -553,12 +554,6 @@ export default Object.freeze(function tokenize(source_text) {
         }
         token.to_column = column_nr;
         token.to_row = row_nr;
-        if (token.kind === "linebreak") {
-            indentation = 0;
-            fresh = true;
-        } else {
-            fresh = false;
-        }
         tokens.push(token);
     }
 });
