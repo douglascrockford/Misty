@@ -269,6 +269,9 @@ function_operator
 </pre>
 <p>Three  are short circuiting in their operator form, but not in their functino form:
     <code>'/\'</code><small>and</small>&nbsp;&nbsp; <code>'\/'</code><small>or</small>&nbsp;&nbsp; <code>'|'</code><small>default</small>.</p>
+<h6>Examples:</h6>
+<pre>'+'(3, 4) = 3 + 4          # true
+reduce([1 2 3 4 5] '+')    # 15</pre>
 <h4>'='<small>equal</small></h4>
 <p>The equal function can take two or three arguments. The first two arguments are values to be compared.
     If all of the parameters are numbers, an optional <var>tolerance</var> argument may be included which must be a non-negative number.
