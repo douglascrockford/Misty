@@ -21,7 +21,7 @@
 <p>The third word is the <var>title</var> of the source text. This might be the same as its filename in systems that use filenames. The name is used for documentation.</p>
 <p class="rule">
 misty
-    <code>"misty"</code> space misty_type space title parameter_list more_statements linebreak <code>"end"</code> space title
+    <code>"misty"</code> space misty_type space title parameter_list space body
 </p>
 <p class="rule">
 misty_type
@@ -33,9 +33,9 @@ title
     name
 </p>
 <h6>Hello world: </h6>
-<pre id="hello">misty program hello_world()
-log console: &quot;Hello, World!&quot;
-end hello_world</pre>
+<pre id="hello">misty program hello_world() {
+    log console: &quot;Hello, World!&quot;
+}</pre>
 <p>A misty program gives the entry point for an executable.</p>
 <p>When an actor is started, the statements in the <code>program</code> file are executed. The statements should start the execution of the actor, which usually involves the setting of a <a href="#receiver">receiver</a> so that the actor can receive messages. Other sorts of initialization may take place as well. </p>
 <p>The program can pull in code from the subprogram library with the <a href="statements.html#use"><code>use</code></a> statement.</p>
@@ -51,12 +51,12 @@ end hello_world</pre>
     Subprogram <code>a</code> can not use subprogram <code>b</code> if subprogram <code>b</code> uses subprogram <code>a</code>.</p>
 <p>In this example, the <code>example</code> program uses the <code>app_master_2000</code> subprogram,
     and designates its <code>handler</code> function as the receiver of messages for the actor.</p>
-<pre>misty program example()
+<pre>misty program example() {
 
-use app: &quot;app_master_2000&quot;()
-call receiver!(app.handler)
+    use app: &quot;app_master_2000&quot;()
+    call receiver!(app.handler)
 
-end example</pre>
+}</pre>
 <p>Actors are started with the <code><a href="#start">start!(<var>program</var>)</a></code> function. An actor that starts another actor is called an <b id="master">overling</b>. An actor started by an overling is called an <b id="underling">underling</b>. An actor can be a underling to one actor and an overling to many others.</p>
 <p>Communication between actors happens exclusively with messages with the <a href="statements.html#send"><code>send</code></a> statement. Messages are usually transmitted over some sort of connection. </p>
 <p>A subprogram can have arguments passed to it from a <a href="statements.html#use"><code>use</code> statement</a>. A program can have arguments passed to it from a command line or <code><a href="#start">start!</a></code>.</p>
@@ -199,13 +199,13 @@ Any messages sent in this final turn will not be put into the outgoing queue.</p
 <h3>Constants</h3>
 <p>An endowment can provide compile-time constants. </p>
 <h6>Example:</h6>
-<pre>misty program example
-if test!
-    # stuff that executes if test! is true
-else
-    # stuff that executes if test! is false
-fi
-end example</pre>
+<pre>misty subprogram example() {
+    if test!
+        # stuff that executes if test! is true
+    else
+        # stuff that executes if test! is false
+    fi
+}</pre>
 <h2 id="failure">Failure</h2>
 <p>Fail to a known condition. </p>
 <p>In distributed systems, we can not be certain of failure. Failure may be  presumed.</p>
