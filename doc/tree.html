@@ -32,7 +32,7 @@ This is descriptive of one particular implementation.
 <p><code>&quot;name&quot;</code>, <code>&quot;text&quot;</code>, <code>&quot;number&quot;</code>,
 <code>&quot;comment&quot;</code>, <code>&quot;newline&quot;</code>, <code>&quot;space&quot;</code>,
 and all of the <a href="intrinsic.html">intrinsics</a>, functinos, and punctuators, including:</p>
-<pre>.  ,  :  (  )  [  ]  {  }  +  -  *  /  //  &amp;  &amp;&amp;  =   &lt;&gt;  &lt;  &gt;  &lt;=   &gt;=  /\  \/  |  '</pre>
+<pre>.  :  (  )  [  ]  {  }  +  -  *  /  //  &amp;  &amp;&amp;  =   &lt;&gt;  &lt;  &gt;  &lt;=   &gt;=  /\  \/  |</pre>
 <h4>text</h4>
 <p>The characters making up the token. </p>
 <p>The <code>kind: &quot;text&quot;</code> tokens have already had escape sequences decoded and outer quotes removed. </p>
@@ -49,6 +49,8 @@ and all of the <a href="intrinsic.html">intrinsics</a>, functinos, and punctuato
 <p>The line number if the last character of the token.</p>
 <h4>to_column</h4>
 <p>The column number of the character past the token.</p>
+<h4>indentation</h4>
+<p>The number of spaces as an integer. This is in space tokens with a from_column of 0, and long texts.</p>
 <p>&nbsp;</p>
 <p>If the token contains an error, then it will also contain these fields:</p>
 <h4>error</h4>
@@ -63,46 +65,29 @@ and all of the <a href="intrinsic.html">intrinsics</a>, functinos, and punctuato
 <p>The subprogram <code>parse.mst</code> turns a list of tokens into an abstract parse tree by adding new fields. The source notations are retained for error reporting and debugging.</p>
 <h2 id="root">Root</h2>
 <p>The root of the tree is a record. Its fields are</p>
+<h4>endowments</h4>
+<p>An array of endowment names.</p>
+<h4>functions</h4>
+<p>An array of functions. For each <a href="#function">function</a> there is a record in this array, plus function <code>0</code>, the program or subprogram.</p>
+<h4>intrinsics</h4>
+<p>An array of intrinsics that are used. This information might be used by a linker.</p>
 <h4>kind</h4>
 <p><code>&quot;misty&quot;</code></p>
-<h4>name</h4>
-<p>The name of the file. </p>
-<h4>functions</h4>
-<p>An array of functions. For each<code> function </code>there is a record in this array, plus function <code>0</code>, the program or subprogram body.</p>
-<h4>endowment</h4>
-<p>An array of endowment names.</p>
 <h4>logs</h4>
 <p>An array of log names.</p>
+<h4>misty</h4>
+<p><code>&quot;program&quot;</code> or <code>&quot;subprogram&quot;</code></p>
+<h4>name</h4>
+<p>The name of the file. </p>
 <h4>patterns</h4>
 <p>An array of pattern definitions.</p>
 <h4>scopes</h4>
 <p>An array of scopes. This array is parallel with the <code>functions</code> array. It contains records containing the names that are used in each function. The names can be the function name and inputs, and additional names created with <code>def</code>, <code>use</code>, <code>var</code>. The scope also contains names that are found in outer functions and intrinsics.</p>
 <p>A scope is used to determine what a name in a function refers to.</p>
-<h4>intrinsics</h4>
-<p>An array of intrinsics that are used. This information might be used by a linker.</p>
 <h4>uses</h4>
 <p>An array of subprograms that are mentioned in <code>use</code> statements. This information might be used by a linker.</p>
-<h3 id="program">Program</h3>
-<h4>kind</h4>
-<p><code>&quot;program&quot;</code></p>
-<h4>function_nr</h4>
-<p><code>0</code></p>
-<h4>list</h4>
-<p>A list of name nodes, the inputs. Each has a <code>input_nr</code> field, between 0 and 3. If an input has a default value, it will be in the name token's <code>expression</code> field.</p>
-<h4>statements</h4>
-<p>An array of statements.</p>
-<h3 id="subprogram">Subprogram</h3>
-<p>A subprogram is like an actor except that it does not have access to <code>@</code><small>at</small> (the source of an actor's capabilies) and it has a <code>return</code> statement that the actor does not have.</p>
-<h4>kind</h4>
-<p><code>&quot;subprogram&quot;</code></p>
-<h4>function_nr</h4>
-<p><code>0</code></p>
-<h4>list</h4>
-<p>A list of name nodes, the inputs. Each has a <code>input_nr</code> field, between 0 and 3. If an input has a default value, it will be in the name token's <code>expression</code> field.</p>
-<h4>statements</h4>
-<p>An array of statement nodes.</p>
 <h2 id="name">Names</h2>
-<p>Names are use to represent functions, variables, and constants.</p>
+<p>Names are use to represent functions, parameters, variables, and constants.</p>
 <h4>kind</h4>
 <p><code>&quot;name&quot;</code></p>
 <h4>function_nr</h4>
@@ -111,185 +96,191 @@ and all of the <a href="intrinsic.html">intrinsics</a>, functinos, and punctuato
 <p><code>0</code> if a variable is declared in the current function<br>
 <code>1</code> if a variable is declared in the outer function<br>
 <code>2</code> or after and so on</p>
-<h4>name</h4>
+<h4>make</h4>
+<p><code>&quot;def&quot; &quot;endowment&quot; &quot;function&quot; &quot;intrinsic&quot; &quot;parameter&quot; &quot;use&quot; &quot;var&quot;</code></p>
+<h4>text</h4>
 <p>The name, as a simple text.</p>
 <p>More information about the name token can be found in the scope.</p>
 <h3>Functinos</h3>
 <p>A functino is an operator function. It looks like an operator, but it behaves as an intrinsic function. It has a name token, with the operator as the name.</p>
 <h2 id="literal">Literals</h2>
-<h3>Numbers</h3>
+<h3 id="number">Number</h3>
 <p>Number tokens have their values in text form so that the interpretation of the number can be delayed as long as possible. This is to minimize rounding and other representation errors.</p>
 <h4>kind</h4>
 <p><code>&quot;number&quot;</code></p>
-<h4>value</h4>
-<p>A text.</p>
+<h4>text</h4>
+<p>A number in text form. This is important during bootstrapping because JavaScript is not able to exactly represent Misty numbers. </p>
 <h4>number</h4>
 <p>A number.</p>
-<h3>Texts</h3>
+<h3 id="text">Text</h3>
 <h4>kind</h4>
 <p><code>&quot;text&quot;</code></p>
-<h4>value</h4>
+<h4>text</h4>
 <p>A text.</p>
-<h3>Array</h3>
+<h4>indentation</h4>
+<p>On long text literals, this is the numeric indentation of the close quote.</p>
+<h3 id="array">Array</h3>
 <h4>kind</h4>
 <p><code>&quot;array&quot;</code></p>
-<h4>list</h4>
+<h4>first</h4>
 <p>An array (possibly empty) of expression nodes.</p>
-<h3>Record</h3>
+<h3 id="record">Record</h3>
 <h4>kind</h4>
 <p><code>&quot;record&quot;</code></p>
-<h4>list</h4>
+<h4>first</h4>
 <p>An array (possibly empty) of pair records. A pair record is</p>
 <blockquote>
-    <h4>left</h4>
+    <h4>first</h4>
     <p>A simple text.</p>
-    <h4>right</h4>
+    <h4>second</h4>
     <p>An expression node.</p>
 </blockquote>
+<h3 id="space">Space </h3>
+<h4>kind</h4>
+<p><code>&quot;space&quot;</code></p>
+<h4>text</h4>
+<p>The spaces.</p>
+<h4>length</h4>
+<p>The number of spaces.</p>
 <h2 id="operator">Operators</h2>
-<h3>Infix operators</h3>
-<h4>kind</h4>
-<pre>|  *  /  //  +  -  &amp;  &amp;&amp;  =  &lt;&gt;  &lt;  &lt;=  &gt;  &gt;=  /\  \/</pre>
-<h4>left</h4>
+<h3 id="infix">Infix operators</h3>
+<h4>first</h4>
 <p>The left operand node.</p>
-<h4>right</h4>
+<h4>second</h4>
 <p>The right operand node.</p>
+<h4>text</h4>
+<pre>|  *  /  //  +  -  &amp;  &amp;&amp;  =  &lt;&gt;  &lt;  &lt;=  &gt;  &gt;=  /\  \/</pre>
 <h3>The <code>.</code> operator</h3>
-<h4>kind</h4>
+<h4>text</h4>
 <p><code>&quot;.&quot;</code></p>
-<h4>left</h4>
+<h4>first</h4>
 <p>The left operand node.</p>
-<h4>right</h4>
-<p>A simple text.</p>
+<h4>second</h4>
+<p>A text token.</p>
 <h3>Subscript</h3>
 <h4>kind</h4>
 <p><code>&quot;[&quot;</code></p>
-<h4>left</h4>
+<h4>first</h4>
 <p>The left operand node.</p>
-<h4>right</h4>
+<h4>second</h4>
 <p>The right operand node. If <code>right</code> is missing, then <code>[]</code> are representing the push/pop operator.</p>
-<h3>The ( operator</h3>
-<h4>kind</h4>
+<h3 id="invoke">The (<small>invoke</small> operator</h3>
+<h4>text</h4>
 <p><code>&quot;(&quot;</code></p>
-<h4>expression</h4>
+<h4>first</h4>
 <p>The left operand node, which should resolve to a function.</p>
-<h4>list</h4>
-<p>An array of expression nodes, an input value list.</p>
+<h4>second</h4>
+<p>An array of expression nodes, an argument list.</p>
 <h3>The <code>then</code> operator</h3>
 <p>This is the ternary operator.</p>
-<h4>kind</h4>
+<h4>text</h4>
 <p><code>&quot;then&quot;</code></p>
-<h4>expression</h4>
+<h4>first</h4>
 <p>A condition node.</p>
-<h4>then</h4>
+<h4>second</h4>
 <p>The expression node if true.</p>
-<h4>else</h4>
+<h4>third</h4>
 <p>The expression node if false.</p>
 <h2 id="statement">Statements</h2>
 <h3 id="assign">The assign statement</h3>
-<h4>kind</h4>
+<p>The <code>first</code> and <code>second</code> may also have a <code>box</code> field, which if <code>true</code>, indicates that the <code>first</code> result receives  the last element of the destination array, removing it from the destination array, reducing its length by <code>1</code>, or that the <code>second</code> result is appended to the destination array.</p>
+<h4>text</h4>
 <p><code>&quot;assign&quot;</code></p>
-<h4>left</h4>
+<h4>first</h4>
 <p>The destination expression node.</p>
-<h4>right</h4>
+<h4>second</h4>
 <p>The value expression node.</p>
 <h4>push</h4>
-<p><code>true</code> if the <code>right</code> result is appended to the destination array.</p>
+<p><code>true</code> if <code>first</code> ended with <code>[]</code>.</p>
 <h4>pop</h4>
-<p><code>true</code> if the <code>left</code> result receives that the last element of the destination array, removing it from the destination array, reducing its length by one.</p>
+<p><code>true</code> if <code>second</code> ended with <code>[]</code>.</p>
 <h3 id="break">The break statement</h3>
-<h4>kind</h4>
+<h4>text</h4>
 <p><code>&quot;break&quot;</code></p>
-<h4>name</h4>
+<h4>label</h4>
 <p>If the statement is labelled, this is a simple text.</p>
 <h3 id="call">The call statement</h3>
-<h4>kind</h4>
+<h4>text</h4>
 <p><code>&quot;call&quot;</code></p>
-<h4>left</h4>
-<p>The expression to be called.</p>
-<h4>list</h4>
-<p>The array of arguments.</p>
+<h4>first</h4>
+<p>An <a href="#invoke">invocation</a> expression.</p>
 <h3 id="def">The def statement</h3>
-<h4>kind</h4>
+<h4>text</h4>
 <p><code>&quot;def&quot;</code></p>
-<h4>left</h4>
+<h4>first</h4>
 <p>A name token.</p>
-<h4>right</h4>
+<h4>second</h4>
 <p>An expression node.</p>
 <h3 id="disrupt">The disrupt statement</h3>
 <h4>kind</h4>
 <p><code>&quot;disrupt&quot;</code></p>
 <h3>The do statement</h3>
-<h4>kind</h4>
+<h4>text</h4>
 <p><code>&quot;do&quot;</code></p>
 <h4>statements</h4>
 <p>An array of statement nodes.</p>
-<h4>name</h4>
+<h4>label</h4>
 <p>If the <code>do</code> statement is labelled, this is a simple text.</p>
-<h3 id="go">The go statement</h3>
-<h4>kind</h4>
-<p><code>&quot;go&quot;</code></p>
-<h4>left</h4>
-<p>The expression to be called.</p>
-<h4>list</h4>
-<p>The array of arguments.</p>
 <h3 id="if">The if statement</h3>
-<h4>kind</h4>
+<h4>text</h4>
 <p><code>&quot;if&quot;</code></p>
-<h4>expression</h4>
+<h4>first</h4>
 <p>A conditional expression node.</p>
 <h4>then</h4>
 <p>An array of statement nodes.</p>
-<h4>list</h4>
-<p>An array of <code>if</code> statement nodes (without <code>list</code> or <code>else</code>) that are from <code>else if</code>.</p>
+<h4>else_if</h4>
+<p>An array of <code>if</code> statement nodes (without <code>else_if</code> or <code>else</code>) that are from <code>else if</code>.</p>
 <h4>else</h4>
 <p>an array of statement nodes (optional).</p>
+<h3 id="jump">The jump statement</h3>
+<h4>text</h4>
+<p><code>&quot;jump&quot;</code></p>
+<h4>first</h4>
+<p>An <a href="#invoke">invocation</a> expression.</p>
 <h3 id="return">The return statement</h3>
-<h4>kind</h4>
+<h4>text</h4>
 <p><code>&quot;return&quot;</code></p>
-<h4>expression</h4>
+<h4>first</h4>
 <p>An optional expression node.</p>
 <h3 id="send">The send statement</h3>
 <h4>kind</h4>
 <p><code>&quot;send&quot;</code></p>
-<h4>left</h4>
+<h4>first</h4>
 <p>The address expression node.</p>
-<h4>right</h4>
+<h4>second</h4>
 <p>The message expression node.</p>
-<h4>expression</h4>
+<h4>third</h4>
 <p>The optional reply function expression node.</p>
 <h3 id="use">The use statement</h3>
-<h4>kind</h4>
+<h4>text</h4>
 <p><code>&quot;use&quot;</code></p>
-<h4>left</h4>
+<h4>first</h4>
 <p>A name token.</p>
-<h4>right</h4>
-<p>An optional name or text token.</p>
-<h4>list</h4>
-<p>The array of arguments.</p>
+<h4>second</h4>
+<p>An <a href="#invoke">invocation</a> expression.</p>
 <h3 id="var">The var statement</h3>
-<h4>kind</h4>
+<h4>text</h4>
 <p><code>&quot;var&quot;</code></p>
-<h4>left</h4>
+<h4>first</h4>
 <p>A name token.</p>
-<h4>right</h4>
+<h4>second</h4>
 <p>An optional expression node. The default is <code>null</code>.</p>
 <h2 id="function">Function</h2>
 <p>The <code>function</code> operator does two things: It makes a function definition that it appends to the functions array, and it makes a reference to that function definition.</p>
 <h3>Function reference</h3>
 <h4>kind</h4>
-<p><code>&quot;function&quot;</code></p>
+<p><code>&quot;function&quot;</code> <code>"program"</code> <code>"subprogram"</code></p>
 <h4>function_nr</h4>
 <p>The location of the function definition in the <code>functions</code> array.</p>
 <h4>name</h4>
-<p>If it is an operator function, then <code>name</code> will be name of the operator, such as <code>&quot;+&quot;</code>. The name will also be noted in the intrinsics.</p>
+<p>If it is an operator function, then <code>name</code> will be name of the operator (functino), such as <code>&quot;'+'&quot;</code>. The name will also be noted in the intrinsics.</p>
 <h3>Function definition</h3>
 <h4>disruption</h4>
 <p>An array of statement nodes, the function's disruption handler. (Optional.)</p>
 <h4>kind</h4>
 <p><code>&quot;function&quot;</code></p>
-<h4>list</h4>
-<p>A list of name nodes, the inputs. Each has a <code>input_nr</code> field,  0 or greater. If an input has a default value, it will be in the name token's <code>expression</code> field.</p>
+<h4>parameters</h4>
+<p>A list of name nodes, the parameters. Each has a <code>parameter_nr</code> field,  <code>0</code> or greater. If a parameter has a default value, it will be in the name token's <code>first</code> field.</p>
 <h4>name</h4>
 <p>If the function is named, this is a simple text.</p>
 <h4>outer</h4>
@@ -313,7 +304,7 @@ and all of the <a href="intrinsic.html">intrinsics</a>, functinos, and punctuato
 <p>The distance to the outer scope.</p>
 <h4>make</h4>
 <p>The maker of the name:</p>
-<pre> def  endowment  function  input<small>parameter</small>  intrinsic  use  var</pre>
+<pre> def  endowment  function  parameter<small></small>  intrinsic  use  var</pre>
 <p>Only names that were made by the <code>var</code> statement can have their values replaced by the <code>assign</code> statement.</p>
 <h4>name</h4>
 <p>The name of the variable.</p>
