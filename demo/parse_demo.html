@@ -60,11 +60,6 @@ import tokenize from "../js/tokenize.js";
 import parse from "../js/parse.js";
 import slot from "../js/slot.js";
 
-// "kind", "name", "make", "value", "parameter_nr", "level",
-// "function_nr", "outer", "left", "right", "expression",
-// "then", "list", "else", "statements", "disruption",
-// "functions", "emit_endowment", "logs", "uses"
-
 const end_of_line = "\n";
 
 function compiler(tree) {
@@ -155,9 +150,31 @@ function compiler(tree) {
     function emit_statement(token) {
         emit();
         emit(token.text);
-        if (token.text === "if") {
+        if (token.label) {
             emit(" ");
+            emit(token.label);
+        }
+        if (token.first) {
+            emit(" ");
+            if (token.push) {
+                emit("[]");
+            }
             emit(token.first);
+            if (token.second) {
+                emit(" ");
+                if (token.pop) {
+                    emit("[]");
+                }
+                emit(token.second);
+                if (token.third) {
+                    emit(" ");
+                    emit(token.third);
+                }
+            }
+        }
+        if (token.statements) {
+            emit_statements(token.statements);
+        } else if (token.then) {
             emit_statements(token.then)
             if (Array.isArray(token.elseif) && token.elseif.length > 0) {
                 token.elseif.forEach(function elseif(clause) {
@@ -171,42 +188,6 @@ function compiler(tree) {
                 emit();
                 emit("else");
                 emit_statements(token.else)
-            }
-            return;
-        } else if (token.text === "do") {
-            if (token.label) {
-                emit(" ");
-                emit(token.label);
-            }
-            emit_statements(token.statements);
-        } else if (token.text === "break") {
-            if (token.label) {
-                emit(" ");
-                emit(token.label);
-            }
-        } else if (token.text === "assign") {
-            emit(" ");
-            if (token.push) {
-                emit("[]");
-            }
-            emit(token.first);
-            emit(" ");
-            if (token.pop) {
-                emit("[]");
-            }
-            emit(token.second);
-        } else {
-            if (token.first) {
-                emit(" ");
-                emit(token.first);
-                if (token.second) {
-                    emit(" ");
-                    emit(token.second);
-                    if (token.third) {
-                        emit(" ");
-                        emit(token.third);
-                    }
-                }
             }
         }
     }
@@ -234,7 +215,6 @@ function compiler(tree) {
         emit();
     });
     emit();
-
     return output.join("");
 }
 
@@ -262,7 +242,9 @@ function compiler(tree) {
     tokens.addEventListener("click", function (event) {
         outputation.innerHTML = "";
         outputation.append(JSON.stringify(tokenize(inputation.value), [
-            "kind", "text", "at", "column_nr", "line_nr", "indentation", "error"
+            "error", "error_column", "error_row", "kind", "text",
+            "at", "from_column", "from_row", "to_column", "to_row",
+            "length", "indentation"
         ], 4));
         outputlegend.replaceChildren("Tokens");
         inputation.focus();
@@ -270,7 +252,7 @@ function compiler(tree) {
     compile.addEventListener("click", function (event) {
         outputlegend.replaceChildren("compile");
         outputation.innerHTML = "";
-        outputation.append(compiler(slot(parse(tokenize(inputation.value)))));
+        outputation.append(compiler(parse(tokenize(inputation.value))));
         inputation.focus();
     }, false);
     complete.addEventListener("click", function (event) {
