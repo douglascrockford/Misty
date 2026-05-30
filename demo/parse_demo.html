@@ -174,14 +174,12 @@ function compiler(tree) {
         }
         if (token.statements) {
             emit_statements(token.statements);
-        } else if (token.then) {
-            emit_statements(token.then)
             if (Array.isArray(token.elseif) && token.elseif.length > 0) {
                 token.elseif.forEach(function elseif(clause) {
                     emit();
                     emit("else if ");
                     emit(clause.first);
-                    emit_statements(clause.then)
+                    emit_statements(clause.statements)
                 })
             }
             if (Array.isArray(token.else) && token.else.length > 0) {

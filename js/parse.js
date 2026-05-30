@@ -1,9 +1,8 @@
 // parse.js
-// 2026-05-28
+// 2026-05-30
 
 // Missing feature:
 //      patterns
-// 'function' 'pattern' 'then' and functinos are intrinsics.
 
 import format from "./format.js";
 
@@ -1038,7 +1037,7 @@ statement.if = function if_statement() {
     advance("if");
     advance(" ");
     result.first = expression();
-    result.then = block();
+    result.statements = block();
     if (token.text === "else") {
         result.else_if = [];
         while (token.text === "else") {
@@ -1053,7 +1052,7 @@ statement.if = function if_statement() {
             advance(" ");
             elif.kind = "if";
             elif.first = expression();
-            elif.then = block();
+            elif.statements = block();
             result.else_if.push(elif);
         }
     }
