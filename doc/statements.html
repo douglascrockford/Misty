@@ -244,7 +244,7 @@ channel
 </p>
 <p>The <code>log</code> statement sends the value of an expression to a log channel.
     It is used to capture information about the execution of the program for analysis.
-Each log channel has an actor that receives the data. Logs can be ephemeral or durable. Logs can be local or remote. Logs can provide insight into the operation of a system.</p>
+ Logs can provide insight into the operation of a system. </p>
 <p>A channel   has a status for each program or subprogram according to policy:</p>
 <ul>
     <li><code>forbidden</code>: The program or subprogram will not  build as long as the source mentions this channel.</li>
@@ -254,15 +254,16 @@ Each log channel has an actor that receives the data. Logs can be ephemeral or d
 </ul>
 <h6>A log channel can have<dfn> </dfn>any name. For example:</h6>
 <blockquote>
-    <code>abort abuse alert anomaly authorization billing breech checklist compliance console crash dashboard data dayfile debug
+    <code>abort abuse alert anomaly authorization billing breech bug catastrophic checklist compliance console crash dashboard data dayfile debug
         delay demo development disaster emergency epic error event evidence example experimental
-        failure fatal feature format fraud hygiene inconsistent info kyc local
-        maintenance memory mishap network normal offline operations page panic permission policy portal
-        practice privacy probe protocol prototype recover range reject risk security
-        serious situation spam statistics storage store summary suspicious syntax system test time trace training
-        trial trivial type unneeded usage verbose violation warning world</code>
+        failure fatal feature format fraud guest halt hello host hygiene idle inconsistent info kyc local
+        maintenance memory migration mishap monitor network normal null offline online operations page panic partner permission policy portal
+        practice privacy probe protocol prototype quality recover range regulation reject remote risk sample security
+        serious service situation spam statistics storage store summary support suspicious syntax system test time trace training
+        transition trial trivial type unneeded usage verbose violation warning world</code>
 </blockquote>
-<p>It is usually good to <code>log</code> before <code>disrupt</code>. Logging does not change the behavior of a program.</p>
+<p>It is usually good to <code>log</code> before <code>disrupt</code>. Logging does not change the behavior of a program.  It should not expect a response.</p>
+<p>If the log channel is allowed, then a message will be set to an actor that is monitoring that channel. It might tabulate, summarize, record, or pass on the event.</p>
 <h6>Example:</h6>
 <pre>log debug: &quot;index&quot; &amp;&amp; index</pre>
 
