@@ -10,9 +10,10 @@
 <img src="../misty.gif" width="204" height="79">
 <h1><a href="https://mistysystem.com/">Misty Programming Language:</a>Intrinsic Constants and Functions</h1>
 <p>The intrinsics are constants and functions that are built into the language.
-The <a href="statements.html#use"><code>use</code> statement</a> is not needed to access them.</p>
+The <a href="statements.html#use"><code>use</code> statement</a> is not needed to access them. The Policy Machine does not restrict them.</p>
+<p>The names of the intrinsics are not reserved, so:</p>
 <ul>
-    <li>A programmer is not obliged to consult the list of intrinsics before naming a new variable or input.</li>
+    <li>A programmer is not obliged to consult the list of intrinsics before naming a new variable or parameter.</li>
     <li>New intrinsics may be added to Misty without breaking existing programs.</li>
 </ul>
 <p>These are the classes of intrinsics:</p>
@@ -29,13 +30,13 @@ The <a href="statements.html#use"><code>use</code> statement</a> is not needed t
 <h4 id=null>null</h4>
 <p>This is the value of <code>1 / 0</code>. The <code>null</code> value is an empty immutable object. All attempts to obtain a value from <code>null</code> by <a href="operators.html#refinement">refinement</a> will produce <code>null</code>.</p>
 <p>Any attempt to modify <code>null</code> will disrupt. Any attempt to call <code>null</code> as a function will disrupt.</p>
-<p><code>null</code> is the value of  missing input values,  missing fields in records, and invalid numbers. The <a href="operators.html#default"><code>|</code><small>default</small></a> operator can detect the presence of <code>null</code> and substitute another value.</p>
+<p><code>null</code> is the value of  missing arguments,  missing fields in records, and invalid numbers. The <a href="operators.html#default"><code>|</code><small>default</small></a> operator can detect the presence of <code>null</code> and substitute another value.</p>
 <h4 id=pi>pi</h4>
 <p>This is an approximation of the circle expression <var>circumference</var><code> / </code><var>diameter</var>, or to be precisely approximate, <code>3.1415926535897932</code>.</p>
 <h4 id=e>e</h4>
 <p>This is Euler's Number, or to be precisely approximate, <code>2.7182818284590452</code>.</p>
 <h2 id="creator">Creator Functions</h2>
-<p>The creator functions are used to make new objects. Some of them can take various types. All of these functions can return <code>null</code> if their inputs are not suitable.</p>
+<p>The creator functions are used to make new objects. Some of them can take various types. All of these functions can return <code>null</code> if their arguments are not suitable.</p>
 <h3 id="array">Array</h3>
 <h4>array(<var>number</var>)</h4>
 <p>Make an array. All of the elements are initialized to <code>null</code>.</p>
@@ -50,7 +51,7 @@ The <a href="statements.html#use"><code>use</code> statement</a> is not needed t
 <p>Map. Call the <var>function</var> with each element of  the <var>array</var>, collecting the return values in a new array. The <var>function</var> is passed each  element and its element number.</p>
 <pre>function (element element_nr)</pre>
 <p>If <var>reverse</var> is <code>true</code>, then it starts with the last element and works backwards.</p>
-<p>If <var>exit</var> is not <code>null</code>, then when the <var>function</var> returns the <var>exit</var> value, then the <code>array</code> function returns early. The <var>exit</var> value will not be stored into the new array. If the <var>array</var> was processed normally, then the returned array will be shorter than the input <var>array</var>. If the <var>array</var> was processed in <var>reverse</var>, then the returned array will have the same length as the input <var>array</var>. The elements in the new array that were not set due to an early exit will be set to <code>null</code>.</p>
+<p>If <var>exit</var> is not <code>null</code>, then when the <var>function</var> returns the <var>exit</var> value, then the <code>array</code> function returns early. The <var>exit</var> value will not be stored into the new array. If the <var>array</var> was processed normally, then the returned array will be shorter than the  <var>array</var> argument. If the <var>array</var> was processed in <var>reverse</var>, then the returned array will have the same length as the  <var>array</var> argument. The elements in the new array that were not set due to an early exit will be set to <code>null</code>.</p>
 <p>This is like the <code><a href="#for">for</a></code><a href="#for"> function</a> except that the return values are collected into a new array.</p>
 <h4>array(<var>array</var> <var>another_array</var>)</h4>
 <p>Concat. Produce a new array that concatenates the <var>array</var> and <var>another_array</var>.</p>
@@ -72,13 +73,8 @@ text keys in the <var>record</var>. The keys are not guaranteed
 <p>Dice the text into an array of subtexts of a given <var>length</var>.</p>
 <h3 id="logical">Logical</h3>
 <h4>logical(<var>value</var>)</h4>
-<pre>if <var>value</var> = 0 \/ <var>value</var> = false \/ <var>value</var> = "false" \/ <var>value</var> = null
-    return false
-fi
-if <var>value</var> = 1 \/ <var>value</var> = true \/ <var>value</var> = "true"
-    return true
-fi
-disrupt
+<p>The logical function takes any value of any type, and returns either <code>true</code> or <code>false</code>.</p>
+<pre><var>value</var> &lt;&gt; 0 /\ <var>value</var> &lt;&gt; &quot;&quot; /\ <var>value</var> &lt;&gt; null /\ <var>value</var> &lt;&gt; false
 </pre>
 <h3 id="number">Number</h3>
 <h4>number(<var>logical</var>)</h4>
@@ -233,11 +229,11 @@ format_places
 </p>
 </blockquote>
 <p> Convert a number to formatted text. The <code>text</code> function converts a <var>number</var> to a text.
-    It takes a <var>format</var> text input.</p>
+    It takes a <var>format</var> text argument.</p>
 <p>A <var>format</var> text contains a style letter that controls how a text is
     produced from the number.   It is optionally preceded by a separation digit
     and optionally followed by a places digit. There are real styles and integer
-    styles. If the <var>format</var> input is not a proper format text,
+    styles. If the <var>format</var> argument is not a proper format text,
     then <code>null</code> is returned.</p>
 <p><strong>Separation</strong> is a character that is placed between digits to improve readability.
     If separation is 0, then there is no separation. If separation is 3, then
@@ -601,12 +597,12 @@ whitespace?(&quot; L&quot;)       # false
 whitespace?(&quot;&quot;)         # false</pre>
 <h2 id="standard">Standard Functions</h2>
 <h4 id="abs">abs(<var>number</var>)</h4>
-<p>Absolute value. Return the positive form of the number. If the input value is not a number, the result is <code>null</code>.</p>
+<p>Absolute value. Return the positive form of the number. If the argument is not a number, the result is <code>null</code>.</p>
 <h4 id="apply">apply(<var>function</var> <var>array</var>)</h4>
-<p>Apply. Execute the <var>function</var> and return its return value. Pass the elements of the <var>array</var> as input values. See <a href="functions.html#proxy">proxy</a>.</p>
-<p>If the first input value is not a function, <code>apply</code> returns its first input value.</p>
+<p>Apply. Execute the <var>function</var> and return its return value. Pass the elements of the <var>array</var> as arguments. See <a href="functions.html#proxy">proxy</a>.</p>
+<p>If the first argument is not a function, <code>apply</code> returns its first argument.</p>
 <p>If  <code>length(<var>array</var>)</code> is greater than  <code>length(<var>function</var>)</code>, it disrupts.</p>
-<p>If the second argument is not an array, it is used as a single input value.</p>
+<p>If the second argument is not an array, it is used as a single argument.</p>
 <h4 id="ceiling">ceiling(<var>number</var> <var>place</var>)</h4>
 <p>If <var>place</var> is <code>0</code> or <code>null</code>, the <var>number</var> is rounded up to the smallest integer that is greater than or equal to the
     <var>number</var>. If <var>place</var> is a small positive integer, then the <var>number</var> is rounded up to that  decimal place.</p>
@@ -620,7 +616,7 @@ assign result: ceiling(-12.3775)        # result is -12</pre>
 <h4 id="character">character(<var>value</var>)</h4>
 <p>If the <var>value</var> is a text, it returns the first character. If the <var>value</var> is a non-negative 32-bit integer, it returns the character from that codepoint. Otherwise, it returns the empty string.</p>
 <h4 id="codepoint">codepoint(<var>text</var>)</h4>
-<p>The <code>codepoint</code> function returns the codepoint number of the first character of the <var>text.</var> If the input value is not a text, or if it is the empty text, then it returns <code>null</code>.</p>
+<p>The <code>codepoint</code> function returns the codepoint number of the first character of the <var>text.</var> If the argument is not a text, or if it is the empty text, then it returns <code>null</code>.</p>
 <h4 id="extract">extract(<var>text</var> <var>pattern</var> <var>from</var> <var>to</var>)</h4>
 <p>The <var>text</var> is matched to the <var>pattern</var>. If it does not match, the result is <code>null</code>. If the <var>pattern</var> does match, then the result is a record containing the saved fields.</p>
 <h4 id="collect">fallback(<var>requestor_array</var>)</h4>
@@ -633,7 +629,7 @@ assign result: ceiling(-12.3775)        # result is -12</pre>
 <p>When the <var>function</var>'s return value is <code>true</code>, then the element
     is copied into a new array. If the <var>function</var>'s return value is <code>false</code>, then the element is not copied into the new array. If the return value is not a logical, then the filter returns <code>null</code>.</p>
 <p>It returns a new array. The <code>length</code> of the new array is between
-    <code>0</code> thru  <code>length(<var>array</var>)</code>. It returns <code>null</code> if the <var>function</var> input is not a function.</p>
+    <code>0</code> thru  <code>length(<var>array</var>)</code>. It returns <code>null</code> if the <var>function</var> argument is not a function.</p>
 <h6>Example:</h6>
 <pre>def data: [0 1.25 2 3.5 4 5.75]
 def integers: filter(data integer?)    # integers is [0 2 4]</pre>
@@ -641,9 +637,9 @@ def integers: filter(data integer?)    # integers is [0 2 4]</pre>
 <p>Call the <var>function</var> for each element of the <var>array</var>, passing each element and its element number.</p>
 <pre>(element element_nr)</pre>
 <p>If the <var>function</var> returns <code>true</code>, then <code>find</code> returns the element number of the current element.</p>
-<p>If the second input value is not a function, then it is compared exactly to the elements.</p>
-<p>If the <var>reverse</var> input value is <code>true</code>, then search begins at the end of the array and works backward.</p>
-<p>The <var>from</var> input value gives the element number to search first. The default is <code>0</code> unless <var>reverse</var> is <code>true</code>, when the default is <code>length(<var>array</var>) - 1</code>.</p>
+<p>If the second argument is not a function, then it is compared exactly to the elements.</p>
+<p>If the <var>reverse</var> argument is <code>true</code>, then search begins at the end of the array and works backward.</p>
+<p>The <var>from</var> argument gives the element number to search first. The default is <code>0</code> unless <var>reverse</var> is <code>true</code>, when the default is <code>length(<var>array</var>) - 1</code>.</p>
 <p><code>find</code> returns the element number of the found value. If nothing is found, <code>find</code> returns <code>null</code>.</p>
 <h4 id="floor">floor(<var>number</var> <var>place</var>)</h4>
 <p>If <var>place</var> is <code>0</code> or <code>null</code>, the <var>number</var> is rounded down to the greatest integer that is less than or equal to
@@ -679,10 +675,10 @@ texts or a record of texts.</p>
     the <code>:</code><small>colon</small> character. The left_text will
     be used as a number or name to select a value from the <var>collection</var>.
     (The value need not be a text.)</p>
-<p>If a <var>transformer</var> input is a function, then it is
-    called with the <var>collection</var><code>[</code><var>left_text</var><code>]</code> and right_text as inputs. If it returns a text, then the substitution
+<p>If a <var>transformer</var> argument is a function, then it is
+    called with the <var>collection</var><code>[</code><var>left_text</var><code>]</code> and right_text as argumentss. If it returns a text, then the substitution
     is made.</p>
-<p>If a <var>transformer</var> input is a record, then the right_text
+<p>If a <var>transformer</var> argument is a record, then the right_text
     is used to select a function from the <var>transformer</var>. That
     function is passed the value from the <var>collection</var>. If the
     return value is a text, that text will substitute. If there is no
@@ -694,7 +690,7 @@ text<code>])</code> produces a text, then the substitution is
     made.</p>
 <p>If the substitution is not made, and if <var>collection</var><code>[</code>left
 text<code>]</code> is a number, then the right_text is used as a format
-    input in calling <var>collection</var><code>[</code>left_text<code>].text(</code>right
+    argument in calling <var>collection</var><code>[</code>left_text<code>].text(</code>right
 text<code>)</code>. If it returns a text, then the substitution is made.</p>
 <h6>Example:</h6>
 <pre>var result: format(&quot;{0} in {1}!&quot; [&quot;Malmborg&quot; &quot;Plano&quot;])
@@ -740,7 +736,7 @@ text<code>)</code>. If it returns a text, then the substitution is made.</p>
         <td>number of codepoints</td>
     </tr>
 </table>
-<p>Length. Find the length of an array in elements, a <a href="blob.html">blob</a> in bits, or a text in codepoints. For functions, it is the arity (or  number of inputs).</p>
+<p>Length. Find the length of an array in elements, a <a href="blob.html">blob</a> in bits, or a text in codepoints. For functions, it is the arity (or  number of parameters).</p>
 <p>If the <var>value</var> is a record containing a <code>length</code> field</p>
 <blockquote>
     <p> If the <code>length</code> field contains a function, then <code>length(</code><var>my_record</var><code>)</code> has the same effect as <var>my_record</var><code>.length()</code>.</p>
@@ -753,7 +749,7 @@ text<code>)</code>. If it returns a text, then the substitution is made.</p>
 <h6>Example:</h6>
 <pre>assign result: lower(&quot;Carl Hollywood&quot;)    # result is &quot;carl hollywood&quot;</pre>
 <h4 id="max">max(<var>number</var> <var>number</var>)</h4>
-<p>Maximum of two. The result is the greater of the two numbers. If either input value is
+<p>Maximum of two. The result is the greater of the two numbers. If either argument is
     not a number, the result is <code>null</code>.</p>
 <pre>max(3 4)             # 4
 max(1 null)          # null
@@ -767,7 +763,7 @@ min(max(8 3) 7)     # 7</pre>
 <p>Maximum. The result is the largest number in the <var>array</var>. If the array is empty or contains a non-number, the result is <code>null</code>.</p>
 <pre>max(12 48 24)      # 48</pre>
 <h4 id="min">min(<var>number</var> <var>number</var>)</h4>
-<p>Minimum. The result is the least of the two numbers. If either input value is
+<p>Minimum. The result is the least of the two numbers. If either argument is
     not a number, the result is <code>null</code>.</p>
 <pre>min(3 4)            # 3</pre>
 <h4>min(<var>array</var>) </h4>
@@ -780,14 +776,14 @@ The result has the sign of the divisor.</p>
 <p> If <var>dividend</var>  is <code>0</code>, then the result is <code>0</code>. If <var>divisor</var> is <code>0</code>,
 or if either operand is not a number,
 then the result is <code>null</code>. <var><var>dividend</var></var> and <var>divisor</var> are not required to be  integers.</p>
-<p>If both input values are integers, and if the <var>divisor</var> is a positive power of two, then it is the same as
+<p>If both arguments are integers, and if the <var>divisor</var> is a positive power of two, then it is the same as
 <code>and(<var>dividend</var> <var>divisor</var> - 1)</code>.</p>
 <h4>neg(<var>number</var>)</h4>
-<p>Negate. Reverse the sign of a number. If the input value is not a number, the result is <code>null</code>. Note that the <code>-</code><small>minus sign</small> is not used as a prefix negation operator.</p>
+<p>Negate. Reverse the sign of a number. If the argument is not a number, the result is <code>null</code>. Note that the <code>-</code><small>minus sign</small> is not used as a prefix negation operator.</p>
 <h4 id=normalize>normalize(<var>text</var>)</h4>
 <p>Unicode normalize. Return a text whose textual value is the same as <var>text</var>, but whose binary representation is in Normalization Form C. The two texts should display the same, but might not be equal.</p>
 <h4 id="not">not(<var>logical</var>)</h4>
-<p>Not. Return the opposite logical. If the input value is not a logical, it returns <code>null</code>. Also see <a href="#false?"><code>false?</code></a>.</p>
+<p>Not. Return the opposite logical. If the argument is not a logical, it returns <code>null</code>. Also see <a href="#false?"><code>false?</code></a>.</p>
 <h4 id="parallel">parallel(<var>requestor_array</var> <var>throttle</var> <var>need</var>)</h4>
 <p>Parallel. The <code>parallel</code> <a href="programs.html#requestor_factory">requestor factory</a> returns a <a href="functions.html#requestor">resquestor function</a>. When the <a href="functions.html#requestor">requestor function</a> is called with a <a href="functions.html#callback">callback</a> function and a value, every requestor in the <var>requestor_array</var> is called with the value, and the results are placed in corresponding elements of the results array. This all happens in parallel. The value produced by the first element of the <var>requestor_array</var> provides the first element of the result. The completed results array is passed to the <a href="functions.html#callback">callback</a> function.</p>
 <p>By default, it starts all of the requestors in the <var>requestor_array</var> at once, each in its own turn so that they do not interfere with each other. This can shock some systems by unleashing a lot of demand all at once. To mitigate the shock, the optional <var>throttle</var> argument sets the maximum number of requestors running at a time. As requestors succeed or fail, waiting requestors can be started. The <var>throttle</var> is optional. If provided, the <var>throttle</var> is a number: the maximum number of requestors to have
@@ -802,7 +798,7 @@ starts all of the <a href="functions.html#requestor">requestors</a> in the <var>
 <p>The returned requestor function returns a <a href="functions.html#cancel">cancel</a> function that cancels all of the pending requestors from the <var>requestor_array</var>.</p>
 <h4 id="reduce">reduce(<var>array</var> <var>function</var> <var>initial</var> <var>reverse</var>)</h4>
 <p>Reduce. The <code>reduce</code> function takes a <var>function</var> that takes
-    two input values and returns a value.</p>
+    two arguments and returns a value.</p>
 <pre>function (first second) {
     return ...
 }</pre>
@@ -867,7 +863,7 @@ round(-12.3775 -2)     # -12.38</pre>
 <p>Sequence. The <code>sequence</code> <a href="programs.html#requestor_factory">requestor factory</a>
 that takes a <var>requestor_array</var> and returns a <a href="functions.html#requestor">requestor</a> function that
     starts all of the <a href="functions.html#requestor">requestors</a> in the <var>requestor_array</var> one at a time.
-    The result of each becomes the input to the next. The last result is the result of the sequence. </p>
+    The result of each becomes the argument to the next. The last result is the result of the sequence. </p>
 <p><code>sequence</code> returns a <a href="functions.html#requestor">requestor</a> that returns a <a href="functions.html#cancel">cancel function</a> and processes each <a href="functions.html#requestor">requestor</a> in <code>requestor_array</code> one at a time. Each of those requestors is passed the result of the previous <a href="functions.html#requestor">requestor</a> as its <code>value</code> argument. If all succeed, then the sequence succeeds, giving the result of the last of the requestors. If any fail, then the sequence fails.The sequence succeeds if every requestor in the <var>requestor_array</var> succeeds</p>
 <h4 id="sign">sign(<var>number</var>)</h4>
 <p>The <code>sign</code> function returns <code>-1</code> if the <var>number</var> is negative, <code>0</code> if the <var>number</var> is exactly <code>0</code>, <code>1</code> if the <var>number</var> is positive, and <code>null</code> if it is not a number.</p>
@@ -876,7 +872,7 @@ that takes a <var>requestor_array</var> and returns a <a href="functions.html#re
     are sorted. Sort keys must be either all numbers or all texts. Any other type
     of key or any error in the key calculation will cause the sort to fail, returning <code>null</code>. The sort is ascending. The sort is stable, so the relative order of equal
     keys is preserved.</p>
-<p>The optional <var>select</var> input determines how the sort key for each element is selected.</p>
+<p>The optional <var>select</var> parameter determines how the sort key for each element is selected.</p>
 <table class=center cellpadding="2">
     <tr>
         <th> <var>select</var> type </th>
