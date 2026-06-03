@@ -62,6 +62,10 @@ import slot from "../js/slot.js";
 
 const end_of_line = "\n";
 
+function escapify(text) {
+    return "\"" + text.replace(/\\/g, "\\b").replace(/"/g, "\\q")  + "\"";
+}
+
 function compiler(tree) {
     if (Array.isArray(tree)) {
         return tree.join(end_of_line);
@@ -83,7 +87,7 @@ function compiler(tree) {
                 return emit(arg);
             });
         } else if (token.kind === "text") {
-            emit("\"" + token.text.replace(/\\/g, "\\b").replace(/"/g, "\\q")  + "\"");
+            emit(escapify(token.text));
         } else if (token.kind === "number" || token.kind === "functino") {
             emit(token.text);
         } else {
@@ -106,7 +110,9 @@ function compiler(tree) {
                     if (field_nr !== 0) {
                         emit(" ");
                     }
-                    emit(field);
+                    emit(escapify(field.first));
+                    emit(": ");
+                    emit(field.second);
                 });
                 emit("}");
             } else if (token.text === "[") {
@@ -174,7 +180,7 @@ function compiler(tree) {
         }
         if (token.statements) {
             emit_statements(token.statements);
-            if (Array.isArray(token.elseif) && token.elseif.length > 0) {
+            if (Array.isArray(token.elseif)) {
                 token.elseif.forEach(function elseif(clause) {
                     emit();
                     emit("else if ");
