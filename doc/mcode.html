@@ -53,7 +53,7 @@
 <p><em>A statement label:</em></p>
 <pre>        "entry",</pre>
 <p><em>go to beyond:</em></p>
-<pre>        [&quot;jump&quot;, &quot;beyond&quot;],</pre>
+<pre>        [&quot;branch&quot;, &quot;beyond&quot;],</pre>
 <p><em>assign slot 8: pi / 2</em></p>
 <pre>
         [&quot;access&quot;, 13, {&quot;kind&quot;: &quot;name&quot;, &quot;name&quot;: &quot;pi&quot;, &quot;make&quot;: &quot;intrinsic&quot;, &#x2E33;&#x2E33;&#x2E33;}],
@@ -115,17 +115,21 @@
 <h4>&quot;return&quot;, value</h4>
 <h4>&quot;return_value&quot;, dest</h4>
 <h3>Branching</h3>
-<h4>&quot;jump&quot;, label</h4>
-<h4>&quot;jump_true&quot;, slot, label</h4>
-<p>If the value in the slot is true, jump to the label. Otherwise, continue with the next instruction.</p>
-<h4>&quot;jump_false&quot;: slot, label</h4>
-<p>If the value in the slot is false, jump to the label. Otherwise, continue with the next instruction.</p>
-<h4>&quot;jump_null&quot;: slot, label</h4>
-<h4>&quot;jump_empty&quot;: slot, label</h4>
-<h4>&quot;wary_true&quot;, slot, label</h4>
-<p>If the value in the slot is true, jump to the label. If the value is false, continue with the next instruction. Otherwise disrupt because of a type error.</p>
-<h4>&quot;wary_false&quot;: slot, label</h4>
-<p>If the value in the slot is false, jump to the label. If the value is true, continue with the next instruction. Otherwise disrupt because of a type error.</p>
+<h4>&quot;branch&quot;, label</h4>
+<h4>&quot;branch_true&quot;,label, slot</h4>
+<p>If the value in the slot is true, branch to the label. Otherwise, continue with the next instruction.</p>
+<h4>&quot;branch_false&quot;:label, slot</h4>
+<p>If the value in the slot is false, branch to the label. Otherwise, continue with the next instruction.</p>
+<h4>&quot;branch_null&quot;:label, slot</h4>
+<h4>&quot;branch_not_null&quot;:label, slot</h4>
+<h4>&quot;branch_empty&quot;:label, slot</h4>
+<h4>&quot;branch_not_empty&quot;:label, slot</h4>
+<h4>&quot;branch_not_zero&quot;:label, slot</h4>
+<h4>&quot;branch_not_zero&quot;:label, slot</h4>
+<h4>&quot;wary_true&quot;,label, slot</h4>
+<p>If the value in the slot is true, branch to the label. If the value is false, continue with the next instruction. Otherwise disrupt because of a type error.</p>
+<h4>&quot;wary_false&quot;:label, slot</h4>
+<p>If the value in the slot is false, branch to the label. If the value is true, continue with the next instruction. Otherwise disrupt because of a type error.</p>
 <h3>Sensory</h3>
 <p>Does the right slot contain a value of the indicated type?</p>
 <h4>&quot;actor?&quot;, dest, right</h4>
@@ -209,25 +213,7 @@
     padding-right: 3pt;
     text-align: justify;
     text-align-last: justify;
-">6</td>
-  <td style="
-    background-color: inherit;
-    border: 0;
-    font-weight: lighter;
-    padding-left: 3pt;
-    padding-right: 3pt;
-    text-align: justify;
-    text-align-last: justify;
-">5</td>
-  <td style="
-    background-color: inherit;
-    border: 0;
-    font-weight: lighter;
-    padding-left: 3pt;
-    padding-right: 3pt;
-    text-align: justify;
-    text-align-last: justify;
-">4</td>
+">6 5</td>
   <td style="
     background-color: inherit;
     border: 0;
@@ -235,7 +221,7 @@
     padding-left: 3pt;
     padding-right: 3pt;
     text-align: center;
-">3</td>
+">4</td>
   <td style="
     background-color: inherit;
     border: 0;
@@ -244,16 +230,14 @@
     padding-right: 3pt;
     text-align: justify;
     text-align-last: justify;
-">2 0</td>
+">3 0</td>
 </tr>
   <tr>
     <td width=56% align="center">capacity</td>
     <td width=1% align="center" style="padding: 0;">r</td>
-    <td width=3% align="center" style="padding: 0;"><code>0</code></td>
-    <td width=3% align="center" style="padding: 0;">a</td>
-    <td width=3% align="center" style="padding: 0;">p</td>
+    <td width=2% align="center" style="padding: 0;"><code>00</code></td>
     <td width=1% align="center" style="padding: 0;">s</td>
-    <td width=3% align="center" style="padding: 0;">type</td>
+    <td width=4% align="center" style="padding: 0;">type</td>
   </tr></tbody>
 </table>
 <table>
@@ -265,35 +249,43 @@
         <th scope="col">type</th>
     </tr>
     <tr>
-        <td align="center"><code>0</code></td>
+        <td align="center"><code>1</code></td>
         <td>array</td>
     </tr>
     <tr>
-        <td align="center"><code>1</code></td>
-        <td>blob</td>
-    </tr>
-    <tr>
         <td align="center"><code>2</code></td>
-        <td>text</td>
-    </tr>
-    <tr>
-        <td align="center"><code>3</code></td>
         <td>record</td>
     </tr>
     <tr>
+        <td align="center"><code>3</code></td>
+        <td>blob</td>
+    </tr>
+    <tr>
         <td align="center"><code>4</code></td>
-        <td>function</td>
+        <td>text</td>
     </tr>
     <tr>
         <td align="center"><code>5</code></td>
-        <td>code</td>
+        <td>function</td>
     </tr>
     <tr>
         <td align="center"><code>6</code></td>
-        <td>frame</td>
+        <td>pattern</td>
     </tr>
     <tr>
         <td align="center"><code>7</code></td>
+        <td>actor address</td>
+    </tr>
+    <tr>
+        <td align="center"><code>12</code></td>
+        <td>frame</td>
+    </tr>
+    <tr>
+        <td align="center">13</td>
+        <td>code</td>
+    </tr>
+    <tr>
+        <td align="center">14</td>
         <td>forward</td>
     </tr>
 </table>
@@ -302,22 +294,17 @@
 <li>a 56 bit capacity</li>
     <p>The units of the capacity depend on the type.</p>
     <li>a 1 bit memory reclamation flag: r</li>
-    <p>This is used by the memory reclaimer to note that this object has already been assigned a new address. </p>
-    <li>a 1 bit actor address flag: a</li>
-    <p>The stone bit indicates that the object is an actor address object. </p>
-    <li>a 1 bit pattern flag: p</li>
-    <p>The stone bit indicates that the object is a pattern. </p>
+    <p>This is used by the memory reclaimer to note that this object has already been assigned an address in newspace. </p>
     <li>a 1 bit stone flag: s</li>
     <p>The stone bit indicates that the object is immutable. </p>
-    <li>a 3 bit type</li>
-    <p>Every object has an object type. </p>
-</ul>
-<br style="clear: both">
+    <li>a 4 bit type</li>
+    <p>Every object has an object type. The types function, pattern, actor address, frame, code, and forward always have the s bit set.</p>
+<p>The text type also has the s bit set, but there is an internal pretext type that does not.</p></ul>
 <h3>Forward</h3>
-<p>The forward type indicates that the object (an array, blob, pretext, or record) has grown beyond its capacity and is now residing at a new address. The remaining 56 bits contain the address of the enlarged object. Forward linkages are cleaned up by the memory reclaimer.</p>
+<p>The forward type indicates that the object (an array, blob, pretext, or record) has grown beyond its capacity and is now residing at a new address. The  56 capacity bits contain the address of the enlarged object. Forward linkages are ultimately cleaned up by the memory reclaimer.</p>
 <h3>Array</h3>
 <ol start=0>
-    <li>Header (type 0)</li>
+    <li>Header (type <code>1</code>)</li>
     <li>Length</li>
     <li>Element[0]</li>
 </ol>
@@ -327,7 +314,7 @@
 <p>The number of words used by an array is capacity + 2.</p>
 <h3>Blob</h3>
 <ol start=0>
-    <li>Header (type 1)</li>
+    <li>Header (type <code>3</code>)</li>
     <li>Length</li>
     <li>Bit[0] thru Bit[63]</li>
 </ol>
@@ -340,7 +327,7 @@
 <p>Pretext is not a feature of the Misty language. It is a low level feature to support optimization of text operations.
 </p>
 <ol start=0>
-    <li>Header (type 2)</li>
+    <li>Header (type <code>4</code>)</li>
     <li>Length (pretext) <i>or</i> Hash (text)</li>
     <li>Character[0] and Character[1]</li>
 </ol>
@@ -353,7 +340,7 @@
 <h3>Record</h3>
 <p>A record is an array of fields represented as key/value pairs. Fields are located by hashes of texts, using open addressing with linear probing and lazy deletion. The load factor is less than 0.5. </p>
 <ol start=0>
-    <li>Header (type 3)</li>
+    <li>Header (type <code>2</code>)</li>
     <li>Length</li>
     <li>Key[1]</li>
     <li>Value[1]</li>
@@ -364,7 +351,7 @@
 <p>The number of words used by a record is (capacity + 1) * 2.</p>
 <h3>Function</h3>
 <ol start=0>
-    <li>Header (type 4)</li>
+    <li>Header (type <code>5</code>)</li>
     <li>Code</li>
     <li>Outer</li>
 </ol>
@@ -374,7 +361,7 @@
 <p>The number of words used by a function object is 3.</p>
 <h3>Frame</h3>
 <ol start=0>
-    <li>Header (type 5)</li>
+    <li>Header (type <code>12</code>)</li>
     <li>Function</li>
     <li>Caller</li>
     <li>Return address.</li>
@@ -390,7 +377,7 @@
 <p>When a function returns, the caller is set to zero. This is a signal to the memory reclaimer that the frame can be reduced.</p>
 <h3>Code</h3>
 <ol start=0>
-    <li>Header (type 6)</li>
+    <li>Header (type <code>13</code>)</li>
     <li>Arity</li>
     <li>Size</li>
     <li>Closure size</li>
