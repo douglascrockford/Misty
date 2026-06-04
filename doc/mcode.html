@@ -76,24 +76,24 @@
 <h4>&quot;remainder&quot;, dest, left, right</h4>
 <h4>&quot;max&quot;, dest, left, right</h4>
 <h4>&quot;min&quot;, dest, left, right</h4>
-<h4>&quot;abs&quot;, dest, right</h4>
-<h4>&quot;neg&quot;, dest, right</h4>
-<h4>&quot;sign&quot;, dest, right</h4>
-<h4>&quot;fraction&quot;, dest, right</h4>
-<h4>&quot;integer&quot;, dest, right</h4>
-<h4>&quot;neg&quot;, dest, right</h4>
-<h4>&quot;ceiling&quot;, dest, right, place</h4>
-<h4>&quot;floor&quot;, dest, right, place</h4>
-<h4>&quot;round&quot;, dest, right, place</h4>
-<h4>&quot;trunc&quot;, dest, right, place</h4>
+<h4>&quot;abs&quot;, dest, slot</h4>
+<h4>&quot;neg&quot;, dest, slot</h4>
+<h4>&quot;sign&quot;, dest, slot</h4>
+<h4>&quot;fraction&quot;, dest, slot</h4>
+<h4>&quot;integer&quot;, dest, slot</h4>
+<h4>&quot;neg&quot;, dest, slot</h4>
+<h4>&quot;ceiling&quot;, dest, slot, place</h4>
+<h4>&quot;floor&quot;, dest, slot, place</h4>
+<h4>&quot;round&quot;, dest, slot, place</h4>
+<h4>&quot;trunc&quot;, dest, slot, place</h4>
 <h3>Text</h3>
 <h4>&quot;concat&quot;, dest, left, right</h4>
 <h4>&quot;concat_space&quot;, dest, left, right</h4>
-<h4>&quot;character&quot;, dest, right</h4>
-<h4>&quot;codepoint&quot;, dest, right</h4>
-<h4>&quot;length&quot;, dest, right</h4>
-<h4>&quot;lower&quot;, dest, right</h4>
-<h4>&quot;upper&quot;, dest, right</h4>
+<h4>&quot;character&quot;, dest, slot</h4>
+<h4>&quot;codepoint&quot;, dest, slot</h4>
+<h4>&quot;length&quot;, dest, slot</h4>
+<h4>&quot;lower&quot;, dest, slot</h4>
+<h4>&quot;upper&quot;, dest, slot</h4>
 <h4>&quot;append&quot;, pretext, right</h4>
 <p>Append the right text to the pretext, forwarding and growing its capacity if necessary.</p>
 <h3>Comparison</h3>
@@ -116,48 +116,52 @@
 <h4>&quot;return_value&quot;, dest</h4>
 <h3>Branching</h3>
 <h4>&quot;branch&quot;, label</h4>
-<h4>&quot;branch_true&quot;,label, slot</h4>
+<h4>&quot;branch_true&quot;, label, slot</h4>
 <p>If the value in the slot is true, branch to the label. Otherwise, continue with the next instruction.</p>
-<h4>&quot;branch_false&quot;:label, slot</h4>
-<p>If the value in the slot is false, branch to the label. Otherwise, continue with the next instruction.</p>
-<h4>&quot;branch_null&quot;:label, slot</h4>
-<h4>&quot;branch_not_null&quot;:label, slot</h4>
-<h4>&quot;branch_empty&quot;:label, slot</h4>
-<h4>&quot;branch_not_empty&quot;:label, slot</h4>
-<h4>&quot;branch_not_zero&quot;:label, slot</h4>
-<h4>&quot;branch_not_zero&quot;:label, slot</h4>
-<h4>&quot;wary_true&quot;,label, slot</h4>
+<h4>&quot;branch_not_true&quot;, label, slot</h4>
+<p>If the value in the slot is anything but true, branch to the label. Otherwise, continue with the next instruction.</p>
+<h4>&quot;branch_false&quot;, label, slot</h4>
+<p>If the value in the slot is false, branch to the label. Otherwise, continue with the next instruction. This is different than <code>branch_not_true</code> because of the treatment of expressions that are neither true nor false.</p>
+<h4>&quot;branch_not_false&quot;, label, slot</h4>
+<p>If the value in the slot is anything but false, branch to the label. Otherwise, continue with the next instruction.</p>
+<h4>&quot;branch_null&quot;, label, slot</h4>
+<h4>&quot;branch_not_null&quot;, label, slot</h4>
+<h4>&quot;branch_empty&quot;, label, slot</h4>
+<h4>&quot;branch_not_empty&quot;, label, slot</h4>
+<h4>&quot;branch_zero&quot;, label, slot</h4>
+<h4>&quot;branch_not_zero&quot;, label, slot</h4>
+<h4>&quot;wary_true&quot;, label, slot</h4>
 <p>If the value in the slot is true, branch to the label. If the value is false, continue with the next instruction. Otherwise disrupt because of a type error.</p>
-<h4>&quot;wary_false&quot;:label, slot</h4>
+<h4>&quot;wary_false&quot;, label, slot</h4>
 <p>If the value in the slot is false, branch to the label. If the value is true, continue with the next instruction. Otherwise disrupt because of a type error.</p>
 <h3>Sensory</h3>
-<p>Does the right slot contain a value of the indicated type?</p>
-<h4>&quot;actor?&quot;, dest, right</h4>
-<h4>&quot;array?&quot;, dest, right</h4>
-<h4>&quot;blob?&quot;, dest, right</h4>
-<h4>&quot;character?&quot;, dest, right</h4>
-<h4>&quot;data?&quot;, dest, right</h4>
-<h4>&quot;digit?&quot;, dest, right</h4>
-<h4>&quot;false?&quot;, dest, right</h4>
-<h4>&quot;fit?&quot;, dest, right</h4>
-<h4>&quot;function?&quot;, dest, right</h4>
-<h4>&quot;integer?&quot;, dest, right</h4>
-<h4>&quot;letter?&quot;, dest, right</h4>
-<h4>&quot;logical?&quot;, dest, right</h4>
-<h4>&quot;null?&quot;, dest, right</h4>
-<h4>&quot;pattern?&quot;, dest, right</h4>
-<h4>&quot;record?&quot;, dest, right</h4>
-<h4>&quot;stone?&quot;, dest, right</h4>
-<h4>&quot;text?&quot;, dest, right</h4>
-<h4>&quot;true?&quot;, dest, right</h4>
-<h4>&quot;upper?&quot;, dest, right</h4>
-<h4>&quot;whitespace?&quot;, dest, right</h4>
+<p>Does the  slot contain a value of the indicated type?</p>
+<h4>&quot;actor?&quot;, dest, slot</h4>
+<h4>&quot;array?&quot;, dest, slot</h4>
+<h4>&quot;blob?&quot;, dest, slot</h4>
+<h4>&quot;character?&quot;, dest, slot</h4>
+<h4>&quot;data?&quot;, dest, slot</h4>
+<h4>&quot;digit?&quot;, dest, slot</h4>
+<h4>&quot;false?&quot;, dest, slot</h4>
+<h4>&quot;fit?&quot;, dest, slot</h4>
+<h4>&quot;function?&quot;, dest, slot</h4>
+<h4>&quot;integer?&quot;, dest, slot</h4>
+<h4>&quot;letter?&quot;, dest, slot</h4>
+<h4>&quot;logical?&quot;, dest, slot</h4>
+<h4>&quot;null?&quot;, dest, slot</h4>
+<h4>&quot;pattern?&quot;, dest, slot</h4>
+<h4>&quot;record?&quot;, dest, slot</h4>
+<h4>&quot;stone?&quot;, dest, slot</h4>
+<h4>&quot;text?&quot;, dest, slot</h4>
+<h4>&quot;true?&quot;, dest, slot</h4>
+<h4>&quot;upper?&quot;, dest, slot</h4>
+<h4>&quot;whitespace?&quot;, dest, slot</h4>
 <h3>Potpourri </h3>
-<h4>&quot;stone&quot;, dest, right</h4>
+<h4>&quot;stone&quot;, dest, slot</h4>
 <h4>&quot;true&quot;, dest</h4>
 <h4>&quot;false&quot;, dest</h4>
 <h4>&quot;null&quot;, dest</h4>
-<h4>&quot;move&quot;, dest, right</h4>
+<h4>&quot;move&quot;, dest, slot</h4>
 <h4>&quot;int&quot;, dest, small_int</h4>
 <h4>&quot;access&quot;, dest, literal</h4>
 <p>This is used to access values (numbers, texts) from the program's immutable memory. The literal is a number or text.</p>
@@ -178,6 +182,7 @@
 <h4>"array", dest, nr_elements</h4>
 <h4>"blob", dest, nr_bits</h4>
 <h4>"function", dest, code_name_text</h4>
+<h4>&quot;logical&quot;, dest, slot</h4>
 <h4>"pretext", dest, nr_characters</h4>
 <p>A pretext must be converted to text by <code>stone</code> before it can leave the function scope.</p>
 <h4>"record", dest, nr_elements</h4>
