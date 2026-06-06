@@ -21,6 +21,9 @@ input[type=button]:hover {
 textarea {
     width:100%;
 }
+pre > h4 {
+    margin-left: -2em;
+}
 </style>
 </head>
 <body>
@@ -274,23 +277,61 @@ function compiler(tree) {
     scope.addEventListener("click", function (event) {
         outputation.innerHTML = "";
         let tree = slot(parse(tokenize(inputation.value)));
-        outputation.append(JSON.stringify((
-            typeof tree === "object" && !Array.isArray(tree) && tree !== null
-            ? tree.scopes
-            : tree
-        ), null, 4));
+        let fragment;
+        let element;
+        let line;
+        if (Array.isArray(tree)) {
+            outputation.append(tree.join(end_of_line));
+        } else {
+            fragment = new DocumentFragment();
+            tree.scopes.forEach(function (func, func_nr) {
+                element = document.createElement("h4");
+                element.append(
+                    (
+                        func.name
+                        ? func.name
+                        : ""
+                    ) + "ƒ" + func_nr
+                );
+                fragment.append(element);
+                Object.keys(func).sort().forEach(function (name) {
+                    if (typeof func[name].slot === "number") {
+                        element = document.createElement("div");
+                        line = name + "ƒ" + func[name].function_nr +
+                            " [" + func[name].slot + (
+                                func[name].level === 0
+                                ? ""
+                                : "@" + func[name].level
+                            ) + "] " + func[name].make;
+                        element.append(line);
+                        fragment.append(element);
+                    }
+                });
+            });
+            outputation.append(fragment);
+        }
         outputlegend.replaceChildren("Scope");
         inputation.focus();
     }, false);
     intrin.addEventListener("click", function (event) {
         outputation.innerHTML = "";
-        let tree = slot(parse(tokenize(inputation.value)));
-        outputlegend.replaceChildren("Intrinsics");
-        outputation.append(JSON.stringify((
-            typeof tree === "object" && !Array.isArray(tree) && tree !== null
-            ? tree.intrinsics
-            : tree
-        ), null, 4));
+        let tree = parse(tokenize(inputation.value));
+        if (Array.isArray(tree)) {
+            outputation.append(tree.join(end_of_line));
+        } else {
+            outputation.append(
+                "Intrinsics: " + tree.intrinsics.join(" ") + end_of_line +
+                "Endowments: " + tree.endowments.join(" ") + end_of_line +
+                tree.uses.reduce(function (accumulator, value) {
+                    if (typeof value === "string") {
+                        return accumulator + " " + value;
+                    } else {
+                        return accumulator + " " + escapify(value.text);
+                    }
+                }, "Uses:") + end_of_line
+            );
+        }
+        outputlegend.replaceChildren("Intrinsics Endowments Use");
         inputation.focus();
     }, false);
     debug.addEventListener("click", function (event) {
