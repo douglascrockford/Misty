@@ -1143,6 +1143,7 @@ statement.use = function use_statement() {
     advance("use");
     advance(" ");
     let name = token;
+    result.first = name;
     advance("name");
     declare(name, "use");
     let second = name;
@@ -1150,19 +1151,17 @@ statement.use = function use_statement() {
         advance(":");
         advance(" ");
         if (token.kind === "name") {
-            main.uses.push(token.text);
             second = token.text;
         } else if (token.kind === "text") {
-            main.uses.push(token);
             second = token;
         } else {
             error("expected", token, "text");
         }
         advance();
     } else {
-        main.uses.push(name.text);
-        result.second = result.first;
+        second = result.first.text;
     }
+    main.uses.push(second);
     result.second = invoke(second);
     unstifle(result);
     return result;
