@@ -1,11 +1,18 @@
 // slot.js # Misty Mcode Generator
-// 2025-03-19
+// 2025-06-08
 
-// Slot takes a parse tree and assigns slots to the variables in the scopes.
-// It takes three passes thru each scope:
-//      slot the inputs and the outer variables this function closes over
-//      slot the closure variables that are not inputs
+// Slot takes a parse tree and assigns frame slots to the variables in the
+// scopes. It takes three passes thru each scope:
+//      slot the parameters and the outer variables this function closes over
+//      slot the closure variables that are not parameters
 //      slot the local variables
+
+// Added to each variable:
+//      .slot
+
+// Added to each function
+//      .nr_slots
+//      .nr_close_slots
 
 export default Object.freeze(function slot(tree) {
     if (Array.isArray(tree)) {
@@ -18,8 +25,8 @@ export default Object.freeze(function slot(tree) {
         names.forEach(function (name) {
             const variable = scope[name];
             if (variable.level === 0) {
-                if (variable.make === "input") {
-                    variable.slot = variable.input_nr;
+                if (variable.make === "parameter") {
+                    variable.slot = variable.parameter_nr;
                     if (slot_nr <= variable.slot) {
                         slot_nr = variable.slot + 1;
                     }
