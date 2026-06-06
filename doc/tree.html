@@ -25,20 +25,21 @@ A conforming implementation does not have to conform to this.
 This is descriptive of one particular implementation.
 </p>
 <p>The tree can be fully realized as a JSON object.</p>
-<h2 id="token">Tokens</h2>
+<h1 id="token">Tokens</h1>
 <p>The subprogram <code>tokenize.mst</code> takes a source text and produces an array of tokens. The tokens are made up of these fields:</p>
 <p>The <code>kind</code> and <code>text</code> fields will be meaningful to the parser that consumes the token list. The other fields are intended for error reporting.These token records are treated as nodes that are woven into a parse tree.</p>
 <h4>kind</h4>
 <p><code>&quot;name&quot;</code>, <code>&quot;text&quot;</code>, <code>&quot;number&quot;</code>,
 <code>&quot;comment&quot;</code>, <code>&quot;newline&quot;</code>, <code>&quot;space&quot;</code>,
-and all of the <a href="intrinsic.html">intrinsics</a>, functinos, and punctuators, including:</p>
-<pre>.  :  (  )  [  ]  {  }  +  -  *  /  //  &amp;  &amp;&amp;  =   &lt;&gt;  &lt;  &gt;  &lt;=   &gt;=  /\  \/  |</pre>
+and <code>&quot;operator&quot;</code>.</p>
 <h4>text</h4>
 <p>The characters making up the token. </p>
 <p>The <code>kind: &quot;text&quot;</code> tokens have already had escape sequences decoded and outer quotes removed. </p>
 <p>A contigous run of spaces is made into a single <code>kind: &quot;space&quot;</code> token with a <code>text</code> field containing the entire run of spaces.</p>
+<p>The <code>kind: &quot;operator&quot;</code> includes</p>
+<pre>.  :  (  )  [  ]  {  }  +  -  *  /  //  &amp;  &amp;&amp;  =   &lt;&gt;  &lt;  &gt;  &lt;=   &gt;=  /\  \/  |</pre>
 <h4>number</h4>
-<p>The numeric value of  <code>kind: &quot;number&quot;</code> tokens.</p>
+<p>The numeric value of  <code>kind: &quot;number&quot;</code> tokens. The <code>text</code> field  also holds the number in its source form.</p>
 <h4>at</h4>
 <p>The character position in the source text where the token begins, starting at <code>0</code>.</p>
 <h4>from_row</h4>
@@ -51,7 +52,7 @@ and all of the <a href="intrinsic.html">intrinsics</a>, functinos, and punctuato
 <p>The column number of the character past the token.</p>
 <h4>indentation</h4>
 <p>The number of spaces as an integer. This is in space tokens with a from_column of 0, and long texts.</p>
-<p>&nbsp;</p>
+<h2>Token Errors</h2>
 <p>If the token contains an error, then it will also contain these fields:</p>
 <h4>error</h4>
 <p>A brief description of the error. Numbers, texts, and functinos can contain errors.</p>
