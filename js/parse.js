@@ -354,13 +354,13 @@ let expression = function (right_binding_power = 0, open = false) {
 
 // A name followed by '!' is an endowment.
 
-    if (next_token.kind === "!" && token.kind === "name") {
-        left = endowment[token.text];
+    if (next_token.text === "!" && token.kind === "name") {
+        left = endowments[token.text];
         if (left === undefined) {
             left = token;
             left.make = "endowment";
             left.nr_uses = 1;
-            endowment[token.text] = token;
+            endowments[token.text] = token;
         } else {
             left.nr_uses += 1;
         }
@@ -1146,7 +1146,7 @@ statement.use = function use_statement() {
     advance("name");
     declare(name, "use");
     let second = name;
-    if (token.kind === ":") {
+    if (token.text === ":") {
         advance(":");
         advance(" ");
         if (token.kind === "name") {
@@ -1160,7 +1160,7 @@ statement.use = function use_statement() {
         }
         advance();
     } else {
-        main.uses.push(name.name);
+        main.uses.push(name.text);
         result.second = result.first;
     }
     result.second = invoke(second);
@@ -1202,8 +1202,6 @@ function misty() {
         advance("name");
         main = {
             functions,
-            endowments,
-            intrinsics: Object.keys(intrinsic_used),
             logs,
             misty: kind,
             name: name.text,
@@ -1216,6 +1214,8 @@ function misty() {
             linebreak();
         }
         advance("end of file");
+        main.intrinsics = Object.keys(intrinsic_used).sort();
+        main.endowments = Object.keys(endowments);
     } catch (ignore) {
         debugger;
     }
