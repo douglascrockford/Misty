@@ -1,5 +1,5 @@
 // parse.js
-// 2026-05-30
+// 2026-06-06
 
 // Missing feature:
 //      patterns
@@ -674,7 +674,7 @@ function function_stuff(kind, name) {
 
 // 'ifs' manages 'def' and 'use' in if statements.
 
-    ifs[function_nr] = [];
+    ifs[function_nr] = 0;
 
     if (name) {
         the_function.name = name.text;
@@ -966,7 +966,7 @@ statement.call = function call_statement() {
 
 statement.def = function def_statement() {
     const result = token;
-    if (dos[function_nr] > 0 || ifs[function_nr] > 0) {
+    if (dos[function_nr].length > 0 || ifs[function_nr] > 0) {
         error("misplaced", result);
     }
     advance("def");
@@ -1032,8 +1032,7 @@ statement.fi = function fi_statement() {
 statement.if = function if_statement() {
     const result = token;
     let elif;
-    let defs = empty();
-    ifs[function_nr].push(defs);
+    ifs[function_nr] += 1;
     advance("if");
     advance(" ");
     result.first = expression();
@@ -1057,6 +1056,7 @@ statement.if = function if_statement() {
         }
     }
     advance("fi");
+    ifs[function_nr] -= 1;
     return result;
 };
 
@@ -1171,7 +1171,7 @@ statement.use = function use_statement() {
 statement.var = function var_statement() {
     const result = token;
     let name;
-    if (ifs[function_nr].length > 0 || dos[function_nr].length > 0) {
+    if (ifs[function_nr] > 0 || dos[function_nr].length > 0) {
         error("misplaced", result);
     }
     advance("var");
