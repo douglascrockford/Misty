@@ -183,8 +183,9 @@ function compiler(tree) {
         }
         if (token.statements) {
             emit_statements(token.statements);
-            if (Array.isArray(token.elseif)) {
-                token.elseif.forEach(function elseif(clause) {
+            if (Array.isArray(token.else_if) && token.else_if.length > 0) {
+                debugger;
+                token.else_if.forEach(function else_if(clause) {
                     emit();
                     emit("else if ");
                     emit(clause.first);
