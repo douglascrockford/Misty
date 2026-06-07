@@ -97,6 +97,7 @@
 <h4>&quot;append&quot;, pretext, right</h4>
 <p>Append the right text to the pretext, forwarding and growing its capacity if necessary.</p>
 <h3>Comparison</h3>
+<p>These instructions compare the values in the left and right slots, and put a logical in the dest slot.</p>
 <h4>"eq", dest, left, right</h4>
 <h4>"ne", dest, left, right</h4>
 <h4>"lt", dest, left, right</h4>
@@ -114,8 +115,15 @@
 <h4>&quot;apply&quot;, func, array</h4>
 <h4>&quot;return&quot;, value</h4>
 <h4>&quot;return_value&quot;, dest</h4>
-<h3>Branching</h3>
+<h3>Unconditional Branch</h3>
+<p>Ordinarily, control flows sequentially, from one instruction to the next. An unconditional branch alters the flow to another instruction. This is used to implement <code>od</code>, <code>else</code>, and <code>disrupt</code>.</p>
 <h4>&quot;branch&quot;, label</h4>
+<h4>&quot;disrupt&quot;</h4>
+<p>This is used in a disruption clause. It branches to the disruption clause of the caller. If there is no caller, it halts the actor.</p>
+<p>In the body of a function, a disrupt to encoded as a branch to the disruption clause.</p>
+<h3 id="conditional">Conditional Branch</h3>
+<p>A conditional branch bifurcates the control flow. Control can flow to the labaelled instruction or to rhe next instruction, depending on the value in the slot.</p>
+<p>Each of these instruction has a dual that flips the condition..</p>
 <h4>&quot;branch_true&quot;, label, slot</h4>
 <p>If the value in the slot is true, branch to the label. Otherwise, continue with the next instruction.</p>
 <h4>&quot;branch_not_true&quot;, label, slot</h4>
@@ -130,12 +138,15 @@
 <h4>&quot;branch_not_empty&quot;, label, slot</h4>
 <h4>&quot;branch_zero&quot;, label, slot</h4>
 <h4>&quot;branch_not_zero&quot;, label, slot</h4>
-<h4>&quot;wary_true&quot;, label, slot</h4>
+<h3 id="tranch">Tranch</h3>
+<p>A tranch is a branch that can trifurcate the control flow.. The third alternative is a <code>disrupt</code>.</p>
+<p>A tranch is used in place of a branch when it is not known for certain that the value in the slot is logical.</p>
+<h4>&quot;tranch_true&quot;, label, slot</h4>
 <p>If the value in the slot is true, branch to the label. If the value is false, continue with the next instruction. Otherwise disrupt because of a type error.</p>
-<h4>&quot;wary_false&quot;, label, slot</h4>
+<h4>&quot;tranch_false&quot;, label, slot</h4>
 <p>If the value in the slot is false, branch to the label. If the value is true, continue with the next instruction. Otherwise disrupt because of a type error.</p>
 <h3>Sensory</h3>
-<p>Does the  slot contain a value of the indicated type?</p>
+<p>Does the  slot contain a value of the indicated type? These instructions put a logical in the dest slot.</p>
 <h4>&quot;actor?&quot;, dest, slot</h4>
 <h4>&quot;array?&quot;, dest, slot</h4>
 <h4>&quot;blob?&quot;, dest, slot</h4>
@@ -156,28 +167,29 @@
 <h4>&quot;true?&quot;, dest, slot</h4>
 <h4>&quot;upper?&quot;, dest, slot</h4>
 <h4>&quot;whitespace?&quot;, dest, slot</h4>
-<h3>Potpourri </h3>
-<h4>&quot;stone&quot;, dest, slot</h4>
+<h3 id="constants">Constants </h3>
 <h4>&quot;true&quot;, dest</h4>
 <h4>&quot;false&quot;, dest</h4>
 <h4>&quot;null&quot;, dest</h4>
-<h4>&quot;move&quot;, dest, slot</h4>
 <h4>&quot;int&quot;, dest, small_int</h4>
+<h3 id="fetch">Fetch</h3>
 <h4>&quot;access&quot;, dest, literal</h4>
 <p>This is used to access values (numbers, texts) from the program's immutable memory. The literal is a number or text.</p>
 <h4>&quot;load&quot;, dest, object, subscript</h4>
 <p>This is used to load values from records and arrays.</p>
-<h4>&quot;store&quot;, dest, object, subscript</h4>
-<p>This is used to store values into records and arrays.</p>
 <h4>&quot;get&quot;, dest, slot, level</h4>
 <p>This is used to get values from slots in outer frames.</p>
+<h3>Mutate</h3>
+<h4>&quot;move&quot;, dest, slot</h4>
+<p>Move the value in the slot to a destination slot.</p>
+<h4>&quot;store&quot;, dest, object, subscript</h4>
+<p>This is used to store values into records and arrays.</p>
 <h4>&quot;put&quot;, value, slot, level</h4>
 <p>This is used to store values into slots in outer frames.</p>
 <h4>&quot;push&quot;, array, slot</h4>
 <p>Append to a mutable array.</p>
 <h4>&quot;pop&quot;, dest, array</h4>
 <p>Remove the last element of a mutable array, putting the element into dest.</p>
-<h4>&quot;disrupt&quot;</h4>
 <h3>Make</h3>
 <h4>"array", dest, nr_elements</h4>
 <h4>"blob", dest, nr_bits</h4>
@@ -186,6 +198,7 @@
 <h4>"pretext", dest, nr_characters</h4>
 <p>A pretext must be converted to text by <code>stone</code> before it can leave the function scope.</p>
 <h4>"record", dest, nr_elements</h4>
+<h4>&quot;stone&quot;, dest, slot</h4>
 <h2 id="objects">Objects</h2>
 <p>An object is a data structure that sits at some address in the actor's memory. </p>
 <table class=center><tbody>
