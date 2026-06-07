@@ -328,10 +328,11 @@ function compiler(tree) {
                     } else {
                         return accumulator + " " + escapify(value.text);
                     }
-                }, "Uses:") + end_of_line
+                }, "Uses:") + end_of_line +
+                "Logs: " + tree.logs.join(" ") + end_of_line
             );
         }
-        outputlegend.replaceChildren("Intrinsics Endowments Use");
+        outputlegend.replaceChildren("Intrinsics Endowments Uses Logs");
         inputation.focus();
     }, false);
     debug.addEventListener("click", function (event) {

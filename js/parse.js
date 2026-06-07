@@ -1,5 +1,5 @@
 // parse.js
-// 2026-06-06
+// 2026-06-07
 
 // Missing feature:
 //      patterns
@@ -1201,7 +1201,6 @@ function misty() {
         advance("name");
         main = {
             functions,
-            logs,
             misty: kind,
             name: name.text,
             patterns,
@@ -1213,8 +1212,9 @@ function misty() {
             linebreak();
         }
         advance("end of file");
-        main.intrinsics = Object.keys(intrinsic_used).sort();
         main.endowments = Object.keys(endowments);
+        main.intrinsics = Object.keys(intrinsic_used).sort();
+        main.logs = Object.keys(logs);
     } catch (ignore) {
         debugger;
     }
