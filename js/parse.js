@@ -975,7 +975,7 @@ statement.def = function def_statement() {
     advance("name");
     declare(name, "def");
     result.first = name;
-    if (token.kind === "(") {
+    if (token.text === "(") {
         result.second = function_stuff(
             "function",
             Object.assign(empty(), {
@@ -1191,7 +1191,7 @@ function misty() {
         advance("misty");
         advance(" ");
         let kind = token.text;
-        if (kind !== "program" && kind.text !== "subprogram") {
+        if (kind !== "program" && kind !== "subprogram") {
             return error("expected", the_body, "program' 'subprogram");
         }
 
