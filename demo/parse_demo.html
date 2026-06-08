@@ -248,11 +248,13 @@ function compiler(tree) {
     });
     tokens.addEventListener("click", function (event) {
         outputation.innerHTML = "";
-        outputation.append(JSON.stringify(tokenize(inputation.value), [
-            "error", "error_column", "error_row", "kind", "text",
-            "at", "from_column", "from_row", "to_column", "to_row",
-            "length", "indentation"
-        ], 4));
+        outputation.append(tokenize(inputation.value).reduce(function (accumulator, token) {
+            return accumulator + JSON.stringify(token, [
+                "error", "error_column", "error_row", "kind", "text",
+                "at", "from_column", "from_row", "to_column", "to_row",
+                "length", "indentation"
+            ]) + "\n";
+        }, "[\n") + "]");
         outputlegend.replaceChildren("Tokens");
         inputation.focus();
     }, false);
