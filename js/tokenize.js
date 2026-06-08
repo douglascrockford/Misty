@@ -1,5 +1,5 @@
 // tokenize.js  # Misty tokenizer
-// 2026-05-24
+// 2026-06-08
 
 // Tokenize takes a text and converts it into an array of tokens.
 // The input is a source text. The output is an array of token records.
@@ -35,6 +35,9 @@
 
 // Characters outside of Misty's character set that are not enclosed in text
 // literals are encoded as single character punctuators.
+
+// A comment token includes '#', all of the characters following it up to
+// but not including the end of line, and all the spaces that proceeded it.
 
 // Tokenize does not directly report errors. It always completes the file.
 // If there is an error in a name or number, it makes a token containing an
@@ -172,6 +175,9 @@ function comment() {
 
 function space() {
     repeatable(" ");
+    if (peek() === "#") {
+        return comment();
+    }
     token.kind = "space";
     token.text = snip();
     token.length = token.text.length
