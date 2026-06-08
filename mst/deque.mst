@@ -1,5 +1,6 @@
-misty module deque()
-# 2025-05-18
+misty subprogram deque() {
+
+# 2026-06-07
 
 # deque: Double ended queue (pronounced /dek/)
 
@@ -24,111 +25,112 @@ misty module deque()
 # The deque is implemented with an underlying array that is grown as needed,
 # and 'bottom' and 'top' indexes that indicate the current ends.
 
-return function deque(capacity) {
+    return function deque(capacity) {
 
-    var underlying: array(capacity)
-    if length(underlying) < 2
-        assign underlying: array(16)
-    fi
-    var bottom: 0
-    var top: 0
-    var the_length: 0
-
-    def grow(value) {
-
-# If the underlying array is full, make a new one with double its capacity.
-
-        if the_length = length(underlying)
-            assign top: the_length
-            if bottom = 0
-                assign underlying: array(
-                    underlying
-                    array(the_length)
-                )
-            else
-                assign underlying: array(
-                    array(
-                        array(underlying, bottom)
-                        array(underlying, 0, bottom)
-                    )
-                    array(the_length)
-                )
-            fi
-            assign bottom: 0
+        var underlying: array(capacity)
+        if length(underlying) < 2
+            assign underlying: array(16)
         fi
-    }
+        var bottom: 0
+        var top: 0
+        var the_length: 0
 
-    return {
+        def grow() {
 
-# This record is filled with the deque's methods.
+    # If the underlying array is full, make a new one with double its capacity.
 
-        length() {return the_length}
-
-        array() {
-            if the_length <= 0
-                return []
-            else if bottom < top
-                return array(underlying, bottom, top)
-            else
-                return array(
-                    array(underlying, bottom)
-                    array(underlying, 0, top)
-                )
-            fi
-        }
-
-        push(value) {
-            call grow()
-            if top >= length(underlying)
-                assign top: 0
-            fi
-            assign underlying[top]: value
-            assign top: top + 1
-            assign the_length: the_length + 1
-        }
-
-        place(value) {
-            call grow()
-            if bottom <= 0
-                assign bottom: length(underlying)
-            fi
-            assign bottom: bottom - 1
-            assign underlying[bottom]: value
-            assign the_length: the_length + 1
-        }
-
-        pop() {
-            if the_length <= 0
-                assign top: 0
-                assign bottom: 0
-                return null
-            fi
-            if top = 0
-                assign top: length(underlying)
-            fi
-            assign top: top - 1
-            def value: underlying[top]
-            assign underlying[top]: null
-            assign the_length: the_length - 1
-            return value
-        }
-
-        pull() {
-            if the_length <= 0
-                assign top: 0
-                assign bottom: 0
-                return null
-            fi
-            def value: underlying[bottom]
-            assign underlying[bottom]: null
-            assign bottom: bottom + 1
-            if bottom >= length(underlying)
+            if the_length = length(underlying)
+                assign top: the_length
+                if bottom = 0
+                    assign underlying: array(
+                        underlying
+                        array(the_length)
+                    )
+                else
+                    assign underlying: array(
+                        array(
+                            array(underlying bottom)
+                            array(underlying 0 bottom)
+                        )
+                        array(the_length)
+                    )
+                fi
                 assign bottom: 0
             fi
-            assign the_length: the_length - 1
-            return value
+        }
+
+        return {
+
+    # This record is filled with the deque's methods.
+
+            length() {
+                return the_length
+            }
+
+            array() {
+                if the_length <= 0
+                    return []
+                else if bottom < top
+                    return array(underlying bottom top)
+                else
+                    return array(
+                        array(underlying bottom)
+                        array(underlying 0 top)
+                    )
+                fi
+            }
+
+            push(value) {
+                call grow()
+                if top >= length(underlying)
+                    assign top: 0
+                fi
+                assign underlying[top]: value
+                assign top: top + 1
+                assign the_length: the_length + 1
+            }
+
+            place(value) {
+                call grow()
+                if bottom <= 0
+                    assign bottom: length(underlying)
+                fi
+                assign bottom: bottom - 1
+                assign underlying[bottom]: value
+                assign the_length: the_length + 1
+            }
+
+            pop() {
+                if the_length <= 0
+                    assign top: 0
+                    assign bottom: 0
+                    return null
+                fi
+                if top = 0
+                    assign top: length(underlying)
+                fi
+                assign top: top - 1
+                def value: underlying[top]
+                assign underlying[top]: null
+                assign the_length: the_length - 1
+                return value
+            }
+
+            pull() {
+                if the_length <= 0
+                    assign top: 0
+                    assign bottom: 0
+                    return null
+                fi
+                def value: underlying[bottom]
+                assign underlying[bottom]: null
+                assign bottom: bottom + 1
+                if bottom >= length(underlying)
+                    assign bottom: 0
+                fi
+                assign the_length: the_length - 1
+                return value
+            }
         }
     }
 }
-
-end deque
