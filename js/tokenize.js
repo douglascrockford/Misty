@@ -219,7 +219,6 @@ function digit() {
     }
     token.kind = "number";
     token.text = snip();
-    token.number = Number(token.text.replace(/_/, ""));
 }
 
 function minus() {
