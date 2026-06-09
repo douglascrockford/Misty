@@ -340,7 +340,7 @@ var_statement
     <code>&quot;var&quot;</code> space name <code>':'</code> space expression
 </p>
 <p>The <code>var</code> statement creates a variable in the current function scope.
-The value of a variable can be replaced by <a href="#assign">the <code>assign</code> statement</a>. The <code>var</code> statement can not appear in an <code>if</code> or <code>do</code> statement. The <dfn>name</dfn> is the name of a new variable in this scope. The expression on the right side of the <code>:</code><small>colon</small> gives the initial value of the variable.  The <dfn>name</dfn> may not be used on the right side of the <code>:</code><small>colon</small>.</p>
+The value of a variable can be replaced by <a href="#assign">the <code>assign</code> statement</a>. The <code>var</code> statement can not appear in an <code>if</code> or <code>do</code> statement. The <dfn>name</dfn> is the name of a new variable in this scope. The expression on the right side of the <code>:</code><small>colon</small> gives the initial value of the variable.  The <dfn>name</dfn> may not be used in the <dfn>expression</dfn> on the right side of the <code>:</code><small>colon</small>.</p>
 <p>Variables must be declared before they are used or assigned values. Note that <code>:</code> <dfn>expression</dfn> is not optional.</p>
 <h6>Examples:</h6>
 <pre>var first_name: &quot;&quot;
