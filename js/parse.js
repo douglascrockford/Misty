@@ -1,5 +1,5 @@
 // parse.js
-// 2026-06-07
+// 2026-06-09
 
 // Missing feature:
 //      patterns
@@ -43,10 +43,10 @@ const intrinsics = [
     "length", "letter?", "logical", "logical?", "lower", "lower?", "max",
     "min", "modulo", "neg", "normalize", "not", "null", "null?", "number",
     "number?", "parallel", "pattern", "pattern?", "pi", "race", "record",
-    "record?", "reduce", "remainder", "replace", "reverse", "round", "search",
-    "sequence", "sign", "sort", "stone", "stone?", "text", "text?", "trim",
-    "true", "true?", "trunc", "turkish_lower", "turkish_upper", "upper",
-    "upper?", "whitespace?", "whole"
+    "record?", "reduce", "remainder", "repeat", "replace", "reverse", "round",
+    "search", "sequence", "sign", "sort", "stone", "stone?", "text", "text?",
+    "trim", "true", "true?", "trunc", "turkish_lower", "turkish_upper",
+    "upper", "upper?", "whitespace?", "whole"
 ];
 
 intrinsics.forEach(function (name) {
