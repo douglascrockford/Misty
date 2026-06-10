@@ -250,7 +250,7 @@ function compiler(tree) {
         outputation.innerHTML = "";
         outputation.append(tokenize(inputation.value).reduce(function (accumulator, token) {
             return accumulator + JSON.stringify(token, [
-                "error", "error_column", "error_row", "kind", "text",
+                "error", "error_column", "error_row", "text", "kind",
                 "at", "from_column", "from_row", "to_column", "to_row",
                 "length", "indentation"
             ]) + "\n";
