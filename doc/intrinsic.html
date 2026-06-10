@@ -636,7 +636,7 @@ def integers: filter(data integer?)    # integers is [0 2 4]</pre>
 <h4 id="find">find(<var>array</var> <var>function</var> <var>reverse</var> <var>from</var>)</h4>
 <p>Call the <var>function</var> for each element of the <var>array</var>, passing each element and its element number.</p>
 <pre>(element element_nr)</pre>
-<p>If the <var>function</var> returns <code>true</code>, then <code>find</code> returns the element number of the current element.</p>
+<p>If the <var>function</var> returns <code>true</code>, then <code>find</code> returns the element number of the current element. If the <var>function</var> returns <code>false</code>, then the search continues with the next element. Otherwise, the search ends and <code>find</code> returns <code>null</code>.</p>
 <p>If the second argument is not a function, then it is compared exactly to the elements.</p>
 <p>If the <var>reverse</var> argument is <code>true</code>, then search begins at the end of the array and works backward.</p>
 <p>The <var>from</var> argument gives the element number to search first. The default is <code>0</code> unless <var>reverse</var> is <code>true</code>, when the default is <code>length(<var>array</var>) - 1</code>.</p>
@@ -830,7 +830,9 @@ def product: reduce(data '*')    # product is 362880</pre>
 <h4 id="remainder">remainder(<var>dividend</var> <var>divisor</var>)</h4>
 <p>Remainder. For <a href="fit.html">fit</a> integers, the remainder is <var>dividend</var><code> - ((</code><var>dividend</var><code> // </code><var>divisor</var><code>) * </code><var>divisor</var><code>)</code>.</p>
 <h4 id="repeat">repeat(<var>text</var> <var>number</var> <var>separator</var>)</h4>
-<p>Make a new text containing <var>number</var> copies of the <var>text</var>. Optionally, a separator text can be inserted between the repetitions.</p>
+<p>Make a new text containing <var>number</var> copies of the <var>text</var>. Optionally, a <var>separator</var> text can be inserted between the repetitions.</p>
+<p>IF the separator is a non-empty text, then</p>
+<pre>repeat(my_text count tween) = text(repeat(my_text &amp; tween count) 0 neg(length(tween)))</pre>
 <h4 id="replace">replace(<var>text</var> <var>target</var> <var>replacement</var><code> <var>limit</var></code>)</h4>
 <p>Return a new text in which the <var>target</var> is replaced by the <var>replacement</var>.</p>
 <p><var>text</var>: the source text.</p>
