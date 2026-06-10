@@ -1,5 +1,5 @@
 // tokenize.js  # Misty tokenizer
-// 2026-06-08
+// 2026-06-09
 
 // Tokenize takes a text and converts it into an array of tokens.
 // The input is a source text. The output is an array of token records.
@@ -27,7 +27,8 @@
 //      space
 //      newline
 //      comment
-// Punctuators are their own kinds.
+//      operator
+//      functino
 
 // Tokenize can recognize many punctuators that are not legal Misty tokens.
 // In particular, some special characters can be repeated and followed by
@@ -40,7 +41,7 @@
 // but not including the end of line, and all the spaces that proceeded it.
 
 // Tokenize does not directly report errors. It always completes the file.
-// If there is an error in a name or number, it makes a token containing an
+// If there is an error in a name or number, it makes a token containing
 // 'error', 'error_at', 'error_row', and 'error_column' fields.
 //      Bad
 //      Missing
