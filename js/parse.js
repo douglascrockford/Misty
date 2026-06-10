@@ -577,7 +577,7 @@ function parameter(list) {
     const result = token;
     advance("name");
     declare(result, "parameter");
-    if (token.kind === "space" && next_token.kind === "|") {
+    if (token.kind === "space" && next_token.text === "|") {
         advance(" ");
         advance("|");
         advance(" ");
@@ -889,13 +889,6 @@ statement.assign = function assign_statement() {
         ) {
             while (true) {
                 left = operable[token.text](left);
-                if (token.text === "[]") {
-                    result.push = true;
-                    advance("[]");
-                    if (token.text !== ":") {
-                        error("expected", token, ":");
-                    }
-                }
                 if (token.text === ":") {
                     if (left.text === "(") {
                         error("unexpected", left);
@@ -912,6 +905,14 @@ statement.assign = function assign_statement() {
                 }
             }
         }
+        if (token.text === "[]") {
+            result.push = true;
+            advance("[]");
+            if (token.text !== ":") {
+                error("expected", token, ":");
+            }
+        }
+
     }
     result.first = left;
     advance(":");
