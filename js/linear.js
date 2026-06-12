@@ -1,7 +1,7 @@
 // linear.js # Misty Mcode Generator
 // 2025/03/29
 
-// Mgen takes a parse tree and produces an mcode object.
+// linear takes a parse tree and produces an mcode object.
 
 export default Object.freeze(function mgen(tree) {
     var next_slot;
@@ -27,7 +27,11 @@ export default Object.freeze(function mgen(tree) {
         return dest;
     }
 
-    function gen_jump() {
+    function gen_branch(label, expression) {
+
+    }
+
+    function gen_and(node) {
 
     }
 
@@ -44,10 +48,18 @@ export default Object.freeze(function mgen(tree) {
 
         },
         if: function (statement) {
-            gen_jump();
-            gen_statements(statement.then);
-            gen_jump()
-            gen_statements(statement.else);
+            then_label = make_label();
+            else_label = make_label();
+            fi_label = make_label();
+            gen_conditional_jump(statement, then_label, else_label), ;
+            gen_label(then_label);
+            gen_statements(statement.statements);
+            gen_jump(fi_label)
+            gen_label(then_label);
+            if (statement.else) {
+                gen_statements(statement.else);
+            }
+            gen_label(fi_label);
         }
     };
 

@@ -1,5 +1,5 @@
 // parse.js
-// 2026-06-10
+// 2026-06-12
 
 // Missing feature:
 //      patterns
@@ -219,19 +219,22 @@ function advance(value) {
         token_nr += 1;
         if (next_next_token.kind === "newline") {
             if (
-                next_token.kind === "newline"
-                || next_token.kind === "space"
+                next_token.kind === "newline" || next_token.kind === "space"
             ) {
                 next_token = next_next_token;
             } else {
                 break;
             }
+        } else if (next_next_token.kind === "operator" && (
+            next_next_token.text === "," || next_next_token.text === ";"
+        )) {
+            error("unexpected", next_next_token);
         } else if (next_next_token.kind !== "comment") {
             break;
         }
     }
     if (token.error !== undefined) {
-        error(token, token.error);
+        error(token);
     }
     return token;
 }

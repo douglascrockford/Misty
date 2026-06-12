@@ -1,6 +1,6 @@
 misty subprogram tokenize() {
 
-# 2026-06-09
+# 2026-06-12
 
 # This subprogram returns a function that takes a text and converts it into an
 # array of tokens. The argument is a source text. The return value is an array
