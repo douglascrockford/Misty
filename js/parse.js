@@ -1,5 +1,5 @@
 // parse.js
-// 2026-06-09
+// 2026-06-10
 
 // Missing feature:
 //      patterns
@@ -121,6 +121,9 @@ function error_term(the_token) {
     if (the_token === "newline" || the_token.kind === "newline") {
         return error_message["end of line"];
     }
+    if (typeof the_token === "number") {
+        return the_token + " spaces";
+    }
     if (typeof the_token === "string") {
         if (the_token[0] === " ") {
             if (the_token === " ") {
@@ -148,16 +151,26 @@ function error_term(the_token) {
 }
 
 function error(message, the_token, term_b) {
-    errors.push(format(
-        error_preamble + error_message[message],
-        {
-            from_column: the_token.from_column,
-            from_row: the_token.from_row,
-            term_a: error_term(the_token),
-            term_b: error_term(term_b)
-        }
-    ));
-    if (errors.length > 1) {
+    if (typeof message === "string") {
+        errors.push(format(
+            error_preamble + error_message[message],
+            {
+                from_column: the_token.from_column,
+                from_row: the_token.from_row,
+                term_a: error_term(the_token),
+                term_b: error_term(term_b)
+            }
+        ));
+    } else {
+        errors.push(format(
+            error_preamble + message.error,
+            {
+                from_column: message.error_column,
+                from_row: message.error_row
+            }
+        ));
+    }
+    if (errors.length > 10) {
         throw "disrupt";
     }
 }
@@ -174,7 +187,9 @@ function advance(value) {
 // If a 'value' was supplied, assure that the current token matches the
 // 'value'.
 
-    if (value !== undefined && token.kind !== value && (token.text !== value || token.kind === "text")) {
+    if (value !== undefined && token.kind !== value && (
+        token.text !== value || token.kind === "text"
+    )) {
         fatal("expected", token, value);
     }
 
@@ -215,8 +230,8 @@ function advance(value) {
             break;
         }
     }
-    if (token.kind === "text" && token.error !== undefined) {
-        fatal("text", token, token.error);
+    if (token.error !== undefined) {
+        error(token, token.error);
     }
     return token;
 }
@@ -458,14 +473,12 @@ prefix("name", function () {
 });
 prefix("text", function () {
 
-    //// Look for an error
     //// If a long text, check the indentation
     const result = token;
     advance();
     return result;
 });
 prefix("number", function number() {
-    //// Look for an error
     const result = token;
     advance();
     return result;
@@ -495,22 +508,6 @@ function paren_expression() {
         result = expression(0, false);
     }
     advance(")");
-    return result;
-}
-
-function conditions() {
-
-    //// is this used?
-    const result = [];
-    indent();
-    while (true) {
-        result.push(expression());
-        if (!indentation_q()) {
-            break;
-        }
-        linebreak();
-    }
-    outdent();
     return result;
 }
 

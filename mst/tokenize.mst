@@ -29,7 +29,12 @@ misty subprogram tokenize() {
 #       newline
 #       comment
 #       operator
-#       functino
+#       apostrophic
+
+# An apostrophic token has a text of three of more characters, and the first
+# and last are ''' (apostrophe). These are used for Misty functinos and
+#  McKeeman singletons.
+
 
 # Tokenize can recognize many punctuators that are not legal Misty tokens.
 # In particular, some special characters can be repeated and followed by
@@ -44,15 +49,6 @@ misty subprogram tokenize() {
 # Tokenize does not directly report errors. It always completes the file.
 # If there is an error in a name or number, it makes a token containing
 # 'error', 'error_at', 'error_row', and 'error_column' fields.
-#      Bad
-#      Missing
-#      Unclosed
-
-    def error_message: {
-        bad: "Bad"
-        missing: "Missing"
-        unclosed: "Unclosed"
-    }
 
     def backslash: "\b"
     def end_of_line: "\n"
@@ -96,9 +92,9 @@ misty subprogram tokenize() {
     var token: null
     var tokenators: null
 
-    def error(reason evidence | "") {
-        if not(token.error)
-            assign token.error: error_message[reason] && evidence
+    def error(reason) {
+        if null?(token.error)
+            assign token.error: reason
             assign token.error_at: at
             assign token.error_row: row_nr
             assign token.error_column: column_nr
@@ -202,7 +198,7 @@ misty subprogram tokenize() {
                 return int()
             fi
             if must
-                call error("bad" "number")
+                call error("Expected a digit after '" & peek(-1) & "'.")
             fi
             if peek() = "_"
                 call advance()
@@ -221,7 +217,7 @@ misty subprogram tokenize() {
                 call advance()
             else if peek() = "+"
                 call advance()
-                call error("bad" "number")
+                call error("Unexpected '+'.")
             fi
             call int(true)
         fi
@@ -307,20 +303,22 @@ misty subprogram tokenize() {
     }
 
     def single_quote() {
-        var single: true
-        do
-            if ender(peek())
-                call error("unclosed")
-                break
-            fi
-            if peek() = "'" /\ single = false
-                break
-            fi
+        if ender(peek())
+            call error("Missing '''.")
+        else
+            do
+                if ender(peek())
+                    call error("Missing '''.")
+                    break
+                fi
+                if peek() = "'"
+                    break
+                fi
+                call advance()
+            od
             call advance()
-            assign single: false
-        od
-        call advance()
-        assign token.kind: "functino"
+        fi
+        assign token.kind: "apostrophic"
         assign token.text: snip()
     }
 
@@ -358,12 +356,17 @@ misty subprogram tokenize() {
             assign contents[]: content
         od
         if indent <> indentation
-            call error("bad" "text")
+            call error(
+                "Expected" && indentation &&
+                "spaces and saw" && indent && "spaces."
+            )
         fi
         if peek() = quote
             call advance()
         else
-            call error("missing" "quote")
+            call error("
+                Missing '"'.
+            ")
         fi
         assign value: contents.reduce(
             function (accumulator current_value current_index) {
@@ -393,7 +396,9 @@ misty subprogram tokenize() {
                 break
             fi
             if ender(peek())
-                call error("unclosed")
+                call error("
+                    Missing '"'.
+                ")
                 break
             fi
             if peek() = backslash
@@ -405,19 +410,19 @@ misty subprogram tokenize() {
                 else if peek() = "u"
                     call advance()
                     if peek() <> "{"
-                        call error("missing" "'{'")
+                        call error("Missing '{'.")
                     else
                         call advance()
                         assign escapee: ""
                         do
                             if ender(peek()) \/ peek() = quote
-                                call error("missing" "'}'")
+                                call error("Missing '}'.")
                                 break
                             fi
                             if peek() = "}"
                                 call advance()
                                 if escapee = ""
-                                    call error("missing" "codepoint")
+                                    call error("Missing codepoint.")
                                 else
                                     assign codepoint: number(escapee 16)
                                     if (
@@ -427,7 +432,7 @@ misty subprogram tokenize() {
                                     )
                                         assign value: character(codepoint)
                                     else
-                                        call error("bad" escapee)
+                                        call error("Bad codepoint" && escapee)
                                     fi
                                 fi
                                 break
@@ -435,15 +440,17 @@ misty subprogram tokenize() {
                             if hex[peek()] = true
                                 assign escapee: escape & peek()
                             else
-                                call error("bad" peek())
+                                call error("Expected a HEX DIGIT and instead saw'" && peek() & "'.")
                             fi
                             call advance()
                         od
                     fi
                 else if ender(peek())
-                    call error("unclosed")
+                    call error("
+                        Missing '"'.
+                    ")
                 else
-                    call error("bad" backslash & peek())
+                    call error("Bad escapement '" & backslash & peek() & "'.")
                     assign value: value & peek()
                     call advance()
                 fi

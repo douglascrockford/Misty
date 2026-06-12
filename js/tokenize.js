@@ -28,7 +28,7 @@
 //      newline
 //      comment
 //      operator
-//      functino
+//      apostrophic
 
 // Tokenize can recognize many punctuators that are not legal Misty tokens.
 // In particular, some special characters can be repeated and followed by
@@ -40,18 +40,13 @@
 // A comment token includes '#', all of the characters following it up to
 // but not including the end of line, and all the spaces that proceeded it.
 
+// An apostrophic token has a text of three of more characters, and the first
+// and last are ''' (apostrophe). These are used for Misty functinos and
+//  McKeeman singletons.
+
 // Tokenize does not directly report errors. It always completes the file.
 // If there is an error in a name or number, it makes a token containing
 // 'error', 'error_at', 'error_row', and 'error_column' fields.
-//      Bad
-//      Missing
-//      Unclosed
-
-const error_message = {
-    bad: "Bad ",
-    missing: "Missing ",
-    unclosed: "Unclosed "
-};
 
 const backslash = "\\";
 const quote = "\"";
@@ -94,9 +89,9 @@ let source;
 let token;
 let tokenators;
 
-function error(reason, evidence = "") {
+function error(reason) {
     if (!token.error) {
-        token.error = error_message[reason] + evidence;
+        token.error = reason;
         token.error_at = at;
         token.error_row = row_nr;
         token.error_column = column_nr;
@@ -194,7 +189,7 @@ function int(must) {
         return int();
     }
     if (must) {
-        error("bad", "number");
+        error("Expected a digit after '" + peek(-1) + "'.");
     }
     if (peek() === "_") {
         advance();
@@ -214,7 +209,7 @@ function digit() {
             advance();
         } else if (peek() === "+") {
             advance();
-            error("bad", "number");
+            error("Unexpected '+'.");
         }
         int(true);
     }
@@ -300,20 +295,23 @@ function letter() {
 }
 
 function single_quote() {
-    let single = true;
-    while (true) {
-        if (ender(peek())) {
-            error("unclosed");
-            break;
-        }
-        if (peek() === "'" && !single) {
-            break;
+    if (ender(peek())) {
+        error("Missing '''.");
+    } else {
+        advance();
+        while (true) {
+            if (ender(peek())) {
+                error("Missing '''.");
+                break;
+            }
+            if (peek() === "'") {
+                break;
+            }
+            advance();
         }
         advance();
-        single = false;
     }
-    advance();
-    token.kind = "functino";
+    token.kind = "apostrophic";
     token.text = snip();
 }
 
@@ -351,12 +349,12 @@ function long() {
         contents.push(content);
     }
     if (indent !== indentation) {
-        error("bad", "text");
+        error("Expected " + indentation + " spaces and saw " + indent + " spaces.");
     }
     if (peek() === quote) {
         advance();
     } else {
-        error("missing", "quote");
+        error("Missing '\"'.");
     }
     value = contents.reduce(
         function (accumulator, current_value, current_index) {
@@ -386,7 +384,7 @@ function double_quote() {
             break;
         }
         if (ender(peek())) {
-            error("unclosed");
+        error("Missing '\"'.");
             break;
         }
         if (peek() === backslash) {
@@ -398,29 +396,29 @@ function double_quote() {
             } else if (peek() === "u") {
                 advance();
                 if (peek() !== "{") {
-                    error("missing", "'{'");
+                    error("Missing '{'.");
                 } else {
                     advance();
                     escapee = "";
                     while (true) {
                         if (ender(peek()) || peek() === quote) {
-                            error("missing", "'}'");
+                            error("Missing '}'.");
                             break;
                         }
                         if (peek() === "}") {
                             advance();
                             if (escapee === "") {
-                                error("missing", "codepoint");
+                                error("Missing codepoint.");
                             } else {
                                 codepoint = Number.parseInt(escapee, 16);
                                 if (
                                     Number.isFinite(codepoint) &&
-                                    codepoint <= 4294967295 &&
+                                    codepoint <= 1114112 &&
                                     codepoint >= 0
                                 ) {
                                     value += String.fromCodePoint(codepoint);
                                 } else {
-                                    error("bad", escapee);
+                                    error("Bad copepoint " + escapee);
                                 }
                             }
                             break;
@@ -428,15 +426,15 @@ function double_quote() {
                         if (hex[peek()] === true) {
                             escapee += peek();
                         } else {
-                            error("bad", peek());
+                            error("Expected a HEX DIGIT and instead saw '" + peek() + "'.");
                         }
                         advance();
                     }
                 }
             } else if (ender(peek())) {
-                error("unclosed");
+                error("Missing '\"'.");
             } else {
-                error("bad", backslash + peek());
+                error("Bad escapement '" + backslash + peek() + "'.");
                 value += peek();
                 advance();
             }
