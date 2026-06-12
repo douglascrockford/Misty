@@ -31,7 +31,11 @@ This is descriptive of one particular implementation.
 <h4>kind</h4>
 <p><code>&quot;name&quot;</code>, <code>&quot;text&quot;</code>, <code>&quot;number&quot;</code>,
 <code>&quot;comment&quot;</code>, <code>&quot;newline&quot;</code>, <code>&quot;space&quot;</code>,
+<code>&quot;apostrophic&quot;</code>,
 and <code>&quot;operator&quot;</code>.</p>
+<p>An <code>apostrophic</code> has a text of three of more characters, and the first and last are
+<code>'</code><small>apostrophe</small>. These are used for Misty functinos and
+<a href="https://www.crockford.com/mckeeman.html">McKeeman singletons</a>.</p>
 <h4>text</h4>
 <p>The characters making up the token. </p>
 <p>The <code>kind: &quot;text&quot;</code> tokens have already had escape sequences decoded and outer quotes removed. </p>
@@ -55,7 +59,7 @@ and <code>&quot;operator&quot;</code>.</p>
 <h2>Token Errors</h2>
 <p>If the token contains an error, then it will also contain these fields:</p>
 <h4>error</h4>
-<p>A brief description of the error. Numbers, texts, and functinos can contain errors.</p>
+<p>A brief description of the error. Numbers, texts, and apostrophics can contain errors.</p>
 <h4>error_at</h4>
 <p>The character position in the source text where the error was identified<code></code>.</p>
 <h4>error_column</h4>
