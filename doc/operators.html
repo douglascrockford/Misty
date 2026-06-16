@@ -61,6 +61,14 @@ ternary
 <p>Expressions can be wrapped in parentheses to clarify or alter the order of evaluation. </p>
 <p>A parenthesized expression can also contain a short-circuiting ternary operation. If the first operand is <code>true</code>, then the second operand is evaluated. If the first operand is <code>false</code>, then the third operand is evaluated.
     If the first operand is neither <code>true</code> nor <code>false</code>, then it disrupts. Expressions that are indented within parens may contain line breaks before an infix operator. Ternary operation is not allowed if a variable is in scope named <code>then</code> or <code>else</code>.</p>
+<p>Example:</p>
+<pre>function (accumulator current_value current_index) {
+    return accumulator & (
+        current_index = 0
+        then ""
+        else end_of_line
+    ) & current_value
+}</pre>
 
 <h2>Suffix Operators</h2>
 <p class="rule">
