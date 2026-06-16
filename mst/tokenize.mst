@@ -223,7 +223,7 @@ misty subprogram tokenize() {
         fi
         assign token.kind: "number"
         assign token.text: snip()
-        assign token.number = number(token.text)
+        assign token.number: number(token.text)
         if null?(token.number)
             call error("Bad number '" + token.text + "'.")
         fi
