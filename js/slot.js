@@ -1,5 +1,5 @@
 // slot.js # Misty Mcode Generator
-// 2025-06-08
+// 2026-06-16
 
 // Slot takes a parse tree and assigns frame slots to the variables in the
 // scopes. It takes three passes thru each scope:
@@ -20,13 +20,13 @@ export default Object.freeze(function slot(tree) {
     }
     tree.scopes.forEach(function (scope, function_nr) {
         const names = Object.keys(scope);
-        var slot_nr = 0;
+        var slot_nr = 4;
 
         names.forEach(function (name) {
             const variable = scope[name];
             if (variable.level === 0) {
                 if (variable.make === "parameter") {
-                    variable.slot = variable.parameter_nr;
+                    variable.slot = variable.parameter_nr + 4;
                     if (slot_nr <= variable.slot) {
                         slot_nr = variable.slot + 1;
                     }
