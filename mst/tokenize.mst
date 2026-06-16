@@ -1,6 +1,6 @@
 misty subprogram tokenize() {
 
-# 2026-06-12
+# 2026-06-16
 
 # This subprogram returns a function that takes a text and converts it into an
 # array of tokens. The argument is a source text. The return value is an array
@@ -223,6 +223,10 @@ misty subprogram tokenize() {
         fi
         assign token.kind: "number"
         assign token.text: snip()
+        assign token.number = number(token.text)
+        if null?(token.number)
+            call error("Bad number '" + token.text + "'.")
+        fi
     }
 
     def minus() {

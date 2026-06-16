@@ -1,5 +1,5 @@
 // tokenize.js  # Misty tokenizer
-// 2026-06-09
+// 2026-06-16
 
 // Tokenize takes a text and converts it into an array of tokens.
 // The input is a source text. The output is an array of token records.
@@ -215,6 +215,10 @@ function digit() {
     }
     token.kind = "number";
     token.text = snip();
+    token.number = Number(token.text);
+    if (!Number.isFinite(token.number)) {
+        error("Bad number '" + token.text + "'.");
+    }
 }
 
 function minus() {
