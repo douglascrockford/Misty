@@ -428,6 +428,7 @@ function block() {
                 error("expected", token, "a statement");
                 break;
             }
+            token.kind = "statement";
             statements.push(action());
             if (
                 !indentation_q() ||

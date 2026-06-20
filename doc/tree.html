@@ -29,13 +29,12 @@ This is descriptive of one particular implementation.
 <p>The subprogram <code>tokenize.mst</code> takes a source text and produces an array of tokens. The tokens are made up of these fields:</p>
 <p>The <code>kind</code> and <code>text</code> fields will be meaningful to the parser that consumes the token list. The other fields are intended for error reporting.These token records are treated as nodes that are woven into a parse tree.</p>
 <h4>kind</h4>
-<p><code>&quot;name&quot;</code>, <code>&quot;text&quot;</code>, <code>&quot;number&quot;</code>,
-<code>&quot;comment&quot;</code>, <code>&quot;newline&quot;</code>, <code>&quot;space&quot;</code>,
-<code>&quot;apostrophic&quot;</code>,
-and <code>&quot;operator&quot;</code>.</p>
+<h6>These are the kinds that are produced by the tokenizer:</h6>
+<pre>"name"  "text"  "number"  "comment"  "newline"  "space"  "apostrophic"  "operator"</pre>
 <p>An <code>apostrophic</code> has a text of three of more characters, and the first and last are
 <code>'</code><small>apostrophe</small>. These are used for Misty functinos and
 <a href="https://www.crockford.com/mckeeman.html">McKeeman singletons</a>.</p>
+<p>During the compilation process, the kind can change to <code>&quot;statement&quot;</code> or <code>&quot;logical&quot;</code>.</p>
 <h4>text</h4>
 <p>The characters making up the token. </p>
 <p>The <code>kind: &quot;text&quot;</code> tokens have already had escape sequences decoded and outer quotes removed. </p>
