@@ -40,10 +40,10 @@ The <a href="statements.html#use"><code>use</code> statement</a> is not needed t
 <h3 id="array">Array</h3>
 <h4>array(<var>number</var>)</h4>
 <p>Make an array. All of the elements are initialized to <code>null</code>.</p>
-<p><var>number</var> is a non-negative integer, the intended length of the new array.</p>
+<p><var>number</var> is a non-negative int, the intended length of the new array.</p>
 <h4>array(<var>number</var> <var>initial_value</var>)</h4>
 <p>Make an array. All of the elements are initialized to <var>initial_value</var>.</p>
-<p><var>number</var> is a non-negative integer, the intended length of the new array.</p>
+<p><var>number</var> is a non-negative int, the intended length of the new array.</p>
 <p> If <var>initial_value</var> is a function, then the function is called for each element to produce initialization values. If the function has an arity of 1 or more, it is passed the element number.</p>
 <h4>array(<var>array</var>)</h4>
 <p>Copy. Make a mutable copy of the array.</p>
@@ -60,7 +60,7 @@ The <a href="statements.html#use"><code>use</code> statement</a> is not needed t
 <p><var>array</var>: the array to copy</p>
 <p><var>from</var>: the position at which to start copying. Default: <code>0</code>, the beginning. If negative, add <code>length(<var>array</var>)</code>.</p>
 <p><var>to</var>: the position at which to stop copying. Default: <code>length(<var>array</var>)</code>, the end. If negative, add <code>length(<var>array</var>)</code>.</p>
-<p>If, after adjustment,  <var>from</var> and <var>to</var> are not valid integers in the proper range, then it returns <code>null</code>. <var>from</var> must be positive and less than or equal to <var>to</var>. <var>to</var> must be less than or equal to <code>length(<var>array</var>)</code>.</p>
+<p>If, after adjustment,  <var>from</var> and <var>to</var> are not valid ints in the proper range, then it returns <code>null</code>. <var>from</var> must be positive and less than or equal to <var>to</var>. <var>to</var> must be less than or equal to <code>length(<var>array</var>)</code>.</p>
 <h4>array(<var>record</var>)</h4>
 <p>Keys. Make an array containing all of the
 text keys in the <var>record</var>. The keys are not guaranteed
@@ -82,7 +82,7 @@ text keys in the <var>record</var>. The keys are not guaranteed
 <h4><code>number(<var>number</var>)</code></h4>
 <p>The <var>number</var> is returned.</p>
 <h4>number(<var>text</var> <var>radix</var>)</h4>
-<p>Convert a <var>text</var> to a number. The optional <var>radix</var> is an integer from <code>2</code> thru <code>37</code>. (<a href="https://www.crockford.com/base32.html">See Base 32.</a>) The default <var>radix</var> is <code>10</code>.</p>
+<p>Convert a <var>text</var> to a number. The optional <var>radix</var> is an int from <code>2</code> thru <code>37</code>. (<a href="https://www.crockford.com/base32.html">See Base 32.</a>) The default <var>radix</var> is <code>10</code>.</p>
 <h4><code>number</code>(<var>text</var> <var>format</var>)</h4>
 <table class=center>
     <caption>number format</caption>
@@ -195,7 +195,7 @@ assign result: number(null)                     # disrupt
 <h4>text(<var>array</var> <var>separator</var>)</h4>
 <p>Convert an array to text. The <var>array</var> can contain text and unicode codepoints. All are concatenated together to make a single text. The <var>separator</var> text is inserted between each piece. The default <var>separator</var> is the empty text.</p>
 <h4>text(<var>number</var> <var>radix</var>)</h4>
-<p>Convert a number to text.  The optional <var>radix</var> is an integer from <code>2</code> thru <code>37</code>. (<a href="https://www.crockford.com/base32.html">See Base 32.</a>) The default <var>radix</var> is 10.</p>
+<p>Convert a number to text.  The optional <var>radix</var> is an int from <code>2</code> thru <code>37</code>. (<a href="https://www.crockford.com/base32.html">See Base 32.</a>) The default <var>radix</var> is 10.</p>
 <h4><code>text(<var>number</var> </code><var>format</var><code>) </code></h4>
 <blockquote style="background-color: white; border: 2pt solid black; float: right; margin-right: 0; padding-right: 2em;">
 <p>The format of the <var>format</var> text is</p>
@@ -402,7 +402,7 @@ assign result: text(12 &quot;t2&quot;)         # result is &quot;0C&quot;
 <p><var>text</var>: the text to copy.</p>
 <p><var>from</var>: the position at which to start copying. Default: <code>0</code>, the beginning. If negative, add <code>length(<var>text</var>)</code>.</p>
 <p><var>to</var>: the position at which to stop copying. Default: <code>length(<var>text</var>)</code>, the end. If negative, add <code>length(<var>text</var>)</code>.</p>
-<p>If, after adjustment, <var>from</var> and <var>to</var> are not valid integers in the proper range, then it returns <code>null</code>. <var>from</var> must be positive and less than or equal to <var>to</var>. <var>to</var> must be less than or equal to <code>length(<var>text</var>)</code>.</p>
+<p>If, after adjustment, <var>from</var> and <var>to</var> are not valid ints in the proper range, then it returns <code>null</code>. <var>from</var> must be positive and less than or equal to <var>to</var>. <var>to</var> must be less than or equal to <code>length(<var>text</var>)</code>.</p>
 <pre>assign my_text: &quot;miskatonic&quot;
 text(my_text 0 3)         # &quot;mis&quot;        # the first 3
 text(my_text 3 6)         # &quot;kat&quot;        # from 3 to 6
@@ -476,8 +476,6 @@ digit?(&quot;Z&quot;)         # false</pre>
 false?(true)       # false
 false?(&quot;false&quot;)    # false
 false?(null)       # false</pre>
-<h4><span id="fit?">fit?</span>(<var>number</var>)</h4>
-<p>Is the <var>number</var> a fit number? A number is a fit number if it is an integer that fits in 56 bits.  All fit numbers are integers in the range <code>-36028797018963968</code> thru <code>36028797018963967</code>. Only <a href="fit.html">fit</a> numbers can be given to <a href="fit.html">the <dfn>fit</dfn> functions</a>. Misty has additional integers that are too big to  fit.</p>
 <h4><span id="function?">function?</span>(<var>value</var>)</h4>
 <p>Is the <var>value</var> a function? If the <var>value</var> is a function, then the result is <code>true</code>. Otherwise, the result is <code>false</code>.</p>
 <pre>function?(0)              # false
@@ -487,6 +485,8 @@ function?(function () {
 function?(&quot;function&quot;)     # false
 function?(null)           # false
 function?(function?)      # true</pre>
+<h4><span id="int?">int?</span>(<var>number</var>)</h4>
+<p>Is the <var>number</var> an int? An int is  an integer that fits in 56 bits.  All ints  in the range <code>-36028797018963968</code> thru <code>36028797018963967</code>. Misty has many more integers that are not ints. Every int is an integer, but not every integer is an int.</p>
 <h4 id="integer?">integer?(<var>value</var>)</h4>
 <p>Is the <var>value</var> an integer? If the <var>value</var> is a number and if its fraction part
 is zero, then the result is <code>true</code>. Otherwise, the result is <code>false</code>.</p>
@@ -598,6 +598,17 @@ whitespace?(&quot;&quot;)         # false</pre>
 <h2 id="standard">Standard Functions</h2>
 <h4 id="abs">abs(<var>number</var>)</h4>
 <p>Absolute value. Return the positive form of the number. If the argument is not a number, the result is <code>null</code>.</p>
+<h4 id="and">and(<var>first</var> <var>second</var>)</h4>
+<p>And. If <var>first</var> and <var>second</var> are ints, then the result is the bitwise <code>and</code> of the two ints.</p>
+<p>If <var>first</var> and <var>second</var> are logical, the result is logical. For logicals, the result is similar to <code>/\</code> except that it is not short-circuiting.</p>
+<p> Otherwise, the result is <code>null</code>.</p>
+<h6>Examples:</h6>
+<pre>assign result: and(12 10)         # result is 8
+assign result: and(16 2)          # result is 0
+assign result: and(15 3)          # result is 3
+assign result: and(13 3)          # result is 1
+assign result: and(&quot;10&quot; 3)        # result is null
+assign result: and(true false)    # result is false</pre>
 <h4 id="apply">apply(<var>function</var> <var>array</var>)</h4>
 <p>Apply. Execute the <var>function</var> and return its return value. Pass the elements of the <var>array</var> as arguments. See <a href="functions.html#proxy">proxy</a>.</p>
 <p>If the first argument is not a function, <code>apply</code> returns its first argument.</p>
@@ -611,8 +622,9 @@ in radians, between <code>0</code> and <code>2</code> <code>*</code> <code>pi</c
 <p>Compute the arc sine.  The <var>number</var> should be
     between <code>-1</code> and <code>1</code>. The result is the inverse sine,
     in randians, between <code>neg(</code>pi<code>)</code> and <code>pi</code>.</p>
-<h4 id=arctan>arctan(</code><var>number</var><code> </code><var>denominator</var><code>)</h4>
-<p>Compute the arc tangent.  If the optional <var>denominator</var> is supplied, then the value is obtained from <var>number</var> <code>/</code> <var>denominator</var>, using the signs of both to determine the quadrant. The <var>denominator</var> is allowed to be <code>0</code>. The result is the inverse
+<h4 id=arctan>arctan(<var>number</var> <var>x</var>)</h4>
+<p>Compute the arc tangent. If the optional <var>x</var> is supplied, then the value is obtained from <var>number</var> <code>/</code> <var>x</var> (assuming that the <var>number</var> is <var>y</var>), using the signs of both to determine the quadrant. The <var>x</var> is allowed to be <code>0</code>. </p>
+<p>The result is the inverse
     tangent, in radians, between <code>neg(</code>pi<code>)</code> and <code>pi</code>.</p>
 <h4 id=arc_cosine>arc_cosine(<var>number</var>)</h4>
 <p>Compute the arc cosine.  The <var>number</var> should
@@ -771,6 +783,12 @@ text<code>)</code>. If it returns a text, then the substitution is made.</p>
     <p>If the <code>length</code> field contains a number, return the number.</p>
 </blockquote>
 <p>All other values produce <code>null</code>.</p>
+<h4 id="left">left(<var>first</var> <var>second</var>)</h4>
+<p>Left shift. It is similar to multiplying by a power of two. Bits that fall off of the left edge are lost.</p>
+<h6>Examples:</h6>
+<pre>assign result: left(12 10)    # result is 12288
+assign result: left(16 2)     # result is 64
+assign result: left(15 53)    # result is -9007199254740992</pre>
 <h4 id=log>log(<var>number</var>)</h4>
 <p>Compute the natural logarithm of the <var>number</var>. This has nothing to do with the <code><a href="statements.html#log">log</a></code><a href="statements.html#log"> statement</a>.</p>
 <h4 id=log_ten>log_ten(<var>number</var>)</h4>
@@ -782,6 +800,29 @@ text<code>)</code>. If it returns a text, then the substitution is made.</p>
     characters are converted to lowercase.</p>
 <h6>Example:</h6>
 <pre>assign result: lower(&quot;Carl Hollywood&quot;)    # result is &quot;carl hollywood&quot;</pre>
+<h4 id="mask">mask(<var>number</var>)</h4>
+<p>Mask. The <code>mask</code> function is used to generate bit fields that can be used
+    with the other functions. If the <var>number</var> is <code>0</code>, then the result is <code>0</code>. If the <var>number</var> is
+    not an int, or if it is greater than <code>56</code> or less than <code>-56</code>, then the result is <code>null</code>. If the <var>number</var> is positive, then a number containing that many <code>1</code> bits is
+    generated. If the <var>number</var> is negative, then a number with that many (absolute)
+    <code>0</code> bits is generated.</p>
+<h6>Examples:</h6>
+<pre>mask(0)     #  0                            (00000000000000)
+mask(1)     #  1                            (00000000000001)
+mask(3)     #  7                            (00000000000007)
+mask(8)     #  255                          (000000000000FF)
+mask(16)    #  65_535                       (0000000000FFFF)
+mask(32)    #  4_294_967_295                (000000FFFFFFFF)
+mask(55)    #  36_028_797_018_963_967       (7FFFFFFFFFFFFF)
+mask(56)    #  -1                           (FFFFFFFFFFFFFF)
+mask(57)    #  null
+mask(-1)    #  -2                           (FFFFFFFFFFFFFE)
+mask(-3)    #  -8                           (FFFFFFFFFFFFF8)
+mask(-8)    #  -256                         (FFFFFFFFFFFF00)
+mask(-16)   #  -65_536                      (FFFFFFFFFF0000)
+mask(-32)   #  -4_294_967_296               (FFFFFF00000000)
+mask(-55)   #  -36_028_797_018_963_968      (80000000000000)
+mask(-56)   #  0                            (00000000000000) </pre>
 <h4 id="max">max(<var>number</var> <var>number</var>)</h4>
 <p>Maximum of two. The result is the greater of the two numbers. If either argument is
     not a number, the result is <code>null</code>.</p>
@@ -816,8 +857,26 @@ then the result is <code>null</code>. <var><var>dividend</var></var> and <var>di
 <p>Negate. Reverse the sign of a number. If the argument is not a number, the result is <code>null</code>. Note that the <code>-</code><small>minus sign</small> is not used as a prefix negation operator.</p>
 <h4 id=normalize>normalize(<var>text</var>)</h4>
 <p>Unicode normalize. Return a text whose textual value is the same as <var>text</var>, but whose binary representation is in Normalization Form C. The two texts should display the same, but might not be equal.</p>
-<h4 id="not">not(<var>logical</var>)</h4>
-<p>Not. Return the opposite logical. If the argument is not a logical, it returns <code>null</code>. Also see <a href="#false?"><code>false?</code></a>.</p>
+<h4 id="not">not(<var>value</var>)</h4>
+<p>Not. If <var>value</var> is true, the result is <code>false</code>. If the <var>value</var> is <code>false</code>, the result is <code>true</code>. If the <var>value</var> is an int, the value is an int with every bit flipped. Otherwise, the result is <code>null</code>.  Also see <a href="#false?"><code>false?</code></a>.</p>
+<h4 id="ones">ones(<var>int</var>)</h4>
+<p>Count the total number of <code>1</code> bits.</p>
+<h6>Examples:</h6>
+<pre>assign result: ones(-1)    # result is 56
+assign result: ones(0)     # result is 0
+assign result: ones(8)     # result is 1
+assign result: ones(18)    # result is 2
+assign result: ones(98.6)  # result is null</pre>
+<h4 id="or">or(<var>first</var> <var>second</var>)</h4>
+<p>Or.  If <var>first</var> and <var>second</var> are ints, then the result is the bitwise <code>or</code> of the two ints.</p>
+<p>If <var>first</var> and <var>second</var> are logical, the result is logical. For logicals, the result is similar to <code>\/</code> except that it is not short-circuiting.</p>
+<p> Otherwise, the result is <code>null</code>.</p>
+<h6>Examples:</h6>
+<pre>assign result: or(12 10)         # result is 14
+assign result: or(16 2)          # result is 18
+assign result: or(15 3)          # result is 15
+assign result: or(13 3)          # result is 15
+assign result: or(true false)    # result is true</pre>
 <h4 id="parallel">parallel(<var>requestor_array</var> <var>throttle</var> <var>need</var>)</h4>
 <p>Parallel. The <code>parallel</code> <a href="programs.html#requestor_factory">requestor factory</a> returns a <a href="functions.html#requestor">resquestor function</a>. When the <a href="functions.html#requestor">requestor function</a> is called with a <a href="functions.html#callback">callback</a> function and a value, every requestor in the <var>requestor_array</var> is called with the value, and the results are placed in corresponding elements of the results array. This all happens in parallel. The value produced by the first element of the <var>requestor_array</var> provides the first element of the result. The completed results array is passed to the <a href="functions.html#callback">callback</a> function.</p>
 <p>By default, it starts all of the requestors in the <var>requestor_array</var> at once, each in its own turn so that they do not interfere with each other. This can shock some systems by unleashing a lot of demand all at once. To mitigate the shock, the optional <var>throttle</var> argument sets the maximum number of requestors running at a time. As requestors succeed or fail, waiting requestors can be started. The <var>throttle</var> is optional. If provided, the <var>throttle</var> is a number: the maximum number of requestors to have
@@ -864,7 +923,7 @@ starts all of the <a href="functions.html#requestor">requestors</a> in the <var>
 def total: reduce(data '+')      # total is 45
 def product: reduce(data '*')    # product is 362880</pre>
 <h4 id="remainder">remainder(<var>dividend</var> <var>divisor</var>)</h4>
-<p>Remainder. For <a href="fit.html">fit</a> integers, the remainder is <var>dividend</var><code> - ((</code><var>dividend</var><code> // </code><var>divisor</var><code>) * </code><var>divisor</var><code>)</code>.</p>
+<p>Remainder. For ints, the remainder is <var>dividend</var><code> - ((</code><var>dividend</var><code> // </code><var>divisor</var><code>) * </code><var>divisor</var><code>)</code>.</p>
 <h4 id="repeat">repeat(<var>text</var> <var>number</var> <var>separator</var>)</h4>
 <p>Make a new text containing <var>number</var> copies of the <var>text</var>. Optionally, a <var>separator</var> text can be inserted between the repetitions.</p>
 <p>IF the separator is a non-empty text, then</p>
@@ -875,17 +934,33 @@ def product: reduce(data '*')    # product is 362880</pre>
 <p> <var>target</var>: a text or pattern that should be replaced in the source.</p>
 <p> <var>replacement</var>: text to replace the matched text, or a function that takes the matched text and the starting position, and returns the replacement text or <code>null</code> if it should be left alone.</p>
 <p> <var>limit</var>: The maximum number of replacements. The default is all possible replacements. The <var>limit</var> includes <code>null</code> matches.</p>
-<h4 id="reverse"><code>reverse(<var>array</var>)</code></h4>
-<p>The <code>reverse</code> function makes a new array or blob with the elements or bits in the
-    opposite order.</p>
-<p>It returns a new, reversed array or blob.</p>
+<h4 id="reverse"><code>reverse(<var>value</var>)</code></h4>
+<p>Reverse. If the <var>value</var> is an array, the result is a new array with the elements in the opposite order. If the <var>value</var> is a blob, the result is a new mutable blob with the bits in the opposite order. If the <var>value</var> is an int, the result is a new int with the bits in the opposite order.</p>
 <h6>Example:</h6>
 <pre>def data: [&quot;I&quot; &quot;am&quot; &quot;Sam&quot;]
-def result: reverse(data)    # the result is [&quot;Sam&quot; &quot;am&quot; &quot;I&quot;]</pre>
+var result: reverse(data)                     # the result is [&quot;Sam&quot; &quot;am&quot; &quot;I&quot;]
+assign result: reverse(-36028797018963968)    # result is 1
+assign result: reverse(3141592653589793)      # result is 2334719610726733</pre>
+<h4 id=right>right(<var>first</var> <var>second</var>)</h4>
+<p>Right shift with zero fill.</p>
+<h6>Examples:</h6>
+<pre>assign result: right(12 10)                    # result is 0
+assign result: right(19 2)                     # result is 4
+assign result: right(-9007199254740992 53)     # result is 7
+assign result: right(-2)                       # result is 36028797018963967</pre>
+<h4 id="right_signed">right_signed(<var>first</var> <var>second</var>)</h4>
+<p>Right shift with sign fill.</p>
+<h6>Examples:</h6>
+<pre>assign result: <code>right</code>(-2 1)                     # result is -1</pre>
+<h4 id=rotate>rotate(<var>first</var> <var>second</var>)</h4>
+<p>Left shift with carry  fill.</p>
+<h6>Examples:</h6>
+<pre>assign result: rotate(1 1)                     # result is 2
+assign result: rotate(-2 1)                    # result is -3</pre>
 <h4 id=root>root(<var>radicand</var> <var>degree</var>)</h4>
 <p>Take the root.</p>
 <h4 id="round">round(<var>number</var> <var>place</var>)</h4>
-<p>If <var>place</var> is <code>0</code> or <code>null</code> the <var>number</var> is rounded to the nearest integer. If <var>place</var> is a small integer,
+<p>If <var>place</var> is <code>0</code> or <code>null</code> the <var>number</var> is rounded to the nearest integer. If <var>place</var> is an int,
     then the <var>number</var> is rounded to that many decimal places.</p>
 <h6>Examples:</h6>
 <pre>
@@ -1016,7 +1091,7 @@ assign result: sqrt(-1)     # result is null </pre>
 <h4 id="trunc">trunc(<var>number</var> <var>place</var>)</h4>
 <p>The <var>number</var> is truncated toward zero. If the <var>number</var> is positive, the result is the same as <code>floor(</code><var>place</var><code>)</code>.
     If the <var>number</var> is negative, the result is the same as <code>ceiling(</code><var>place</var><code>)</code>.</p>
-<p>If <var>place</var> is a small integer, then the <var>number</var> is rounded
+<p>If <var>place</var> is int, then the <var>number</var> is rounded
     down to that many decimal places. This is like discarding decimal places.</p>
 <h6>Examples:</h6>
 <pre>assign result: trunc(12.3775 0)      # result is 12
@@ -1034,7 +1109,20 @@ assign result: trunc(-12.3775 2)     # result is -12.37</pre>
 <pre>assign result: upper(&quot;Carl Hollywood&quot;)    # result is &quot;CARL HOLLYWOOD&quot;</pre>
 <h4 id="whole">whole(<var>number</var>)</h4>
 <p>The <code>whole</code> function returns the whole part of a <var>number</var>. It returns <code>null</code> for non-numbers. Also see <code><a href="#fraction">fraction</a></code>.</p>
-<h2 id="structurals">Structurals</h2>
+<h4 id="xor">xor(<var>first</var> <var>second</var>)</h4>
+<p>Exclusive or. The result is the bitwise exclusive-or of the two ints.</p>
+<h6>Examples:</h6>
+<pre>assign result: xor(12 10)    # result is 6
+assign result: xor(16 2)     # result is 18
+assign result: xor(15 3)     # result is 12
+assign result: xor(13 3)     # result is 14
+assign result: xor(13.01 3)  # result is null</pre>
+<h4 id="zeros">zeros(<var>int</var>)</h4>
+<p>Leading zeros. Count the number of leading zeros.</p>
+<h6>Examples:</h6>
+<pre>assign result: zeros(-1)    # result is 0
+assign result: zeros(0)     # result is 56
+assign result: zeros(1)     # result is 55</pre><h2 id="structurals">Structurals</h2>
 <p>The structurals are words that are used to create syntactic structures in the language, If you do not need those structures, you can reuse those words. Currently, the structural words are:</p>
 <ul>
     <li><code><a href="functions.html">function</a></code></li>
