@@ -601,8 +601,30 @@ whitespace?(&quot;&quot;)         # false</pre>
 <h4 id="apply">apply(<var>function</var> <var>array</var>)</h4>
 <p>Apply. Execute the <var>function</var> and return its return value. Pass the elements of the <var>array</var> as arguments. See <a href="functions.html#proxy">proxy</a>.</p>
 <p>If the first argument is not a function, <code>apply</code> returns its first argument.</p>
-<p>If  <code>length(<var>array</var>)</code> is greater than  <code>length(<var>function</var>)</code>, it disrupts.</p>
+<p>If <code>length(<var>array</var>)</code> is greater than  <code>length(<var>function</var>)</code>, it disrupts.</p>
 <p>If the second argument is not an array, it is used as a single argument.</p>
+<h4 id=arccos>arccos(<var>number</var>)</h4>
+<p>Compute the arc cosine.  The <var>number</var> should
+    be between <code>-1</code> and <code>1</code>. The result is the inverse cosine,
+in radians, between <code>0</code> and <code>2</code> <code>*</code> <code>pi</code>.</p>
+<h4 id=arcsin>arcsin(<var>number</var>)</h4>
+<p>Compute the arc sine.  The <var>number</var> should be
+    between <code>-1</code> and <code>1</code>. The result is the inverse sine,
+    in randians, between <code>neg(</code>pi<code>)</code> and <code>pi</code>.</p>
+<h4 id=arctan>arctan(</code><var>number</var><code> </code><var>denominator</var><code>)</h4>
+<p>Compute the arc tangent.  If the optional <var>denominator</var> is supplied, then the value is obtained from <var>number</var> <code>/</code> <var>denominator</var>, using the signs of both to determine the quadrant. The <var>denominator</var> is allowed to be <code>0</code>. The result is the inverse
+    tangent, in radians, between <code>neg(</code>pi<code>)</code> and <code>pi</code>.</p>
+<h4 id=arc_cosine>arc_cosine(<var>number</var>)</h4>
+<p>Compute the arc cosine.  The <var>number</var> should
+    be between <code>-1</code> and <code>1</code>. The result is the inverse cosine,
+    in cycles, between <code>0</code> and <code>1</code>.</p>
+<h4 id=arc_sine>arc_sine(<var>number</var>)</h4>
+<p>Compute the arc sine.  The <var>number</var> should be
+    between <code>-1</code> and <code>1</code>. The result is the inverse sine,
+    in cycles, between <code>-0.5</code> and <code>0.5</code>.</p>
+<h4 id=arc_tangent>arc_tangent(<var>number</var> <var>x</var>)</h4>
+<p>Compute the arc tangent. If the optional <var>x</var> is supplied, then the value is obtained from <var>number</var> <code>/</code> <var>x</var> (assuming that the <var>number</var> is <var>y</var>), using the signs of both to determine the quadrant. The <var>x</var> is allowed to be <code>0</code>. The result is the inverse
+    tangent, in cycles, between <code>-1</code> and 1.</p>
 <h4 id="ceiling">ceiling(<var>number</var> <var>place</var>)</h4>
 <p>If <var>place</var> is <code>0</code> or <code>null</code>, the <var>number</var> is rounded up to the smallest integer that is greater than or equal to the
     <var>number</var>. If <var>place</var> is a small positive integer, then the <var>number</var> is rounded up to that  decimal place.</p>
@@ -617,6 +639,12 @@ assign result: ceiling(-12.3775)        # result is -12</pre>
 <p>If the <var>value</var> is a text, it returns the first character. If the <var>value</var> is a non-negative 32-bit integer, it returns the character from that codepoint. Otherwise, it returns the empty string.</p>
 <h4 id="codepoint">codepoint(<var>text</var>)</h4>
 <p>The <code>codepoint</code> function returns the codepoint number of the first character of the <var>text.</var> If the argument is not a text, or if it is the empty text, then it returns <code>null</code>.</p>
+<h4 id=cos>cos(<var>number</var>)</h4>
+<p>Compute the cosine.  The <var>number</var> should be
+    in radians. The result is between <code>-1</code> and <code>1</code>.</p>
+<h4 id=cosine>cosine(<var>number</var>)</h4>
+<p>Compute the cosine.  The <var>number</var> should be
+    in cycles. The result is between <code>-1</code> and <code>1</code>.</p>
 <h4 id="extract">extract(<var>text</var> <var>pattern</var> <var>from</var> <var>to</var>)</h4>
 <p>The <var>text</var> is matched to the <var>pattern</var>. If it does not match, the result is <code>null</code>. If the <var>pattern</var> does match, then the result is a record containing the saved fields.</p>
 <h4 id="collect">fallback(<var>requestor_array</var>)</h4>
@@ -743,6 +771,12 @@ text<code>)</code>. If it returns a text, then the substitution is made.</p>
     <p>If the <code>length</code> field contains a number, return the number.</p>
 </blockquote>
 <p>All other values produce <code>null</code>.</p>
+<h4 id=log>log(<var>number</var>)</h4>
+<p>Compute the natural logarithm of the <var>number</var>. This has nothing to do with the <code><a href="statements.html#log">log</a></code><a href="statements.html#log"> statement</a>.</p>
+<h4 id=log_ten>log_ten(<var>number</var>)</h4>
+<p>Compute the base-10 logarithm of the <var>number</var>.</p>
+<h4 id=log_two>log_two(<var>number</var>)</h4>
+<p>Compute the base-2 logarithm of the <var>number</var>.</p>
 <h4 id="lower">lower(<var>text</var>)</h4>
 <p>The <code>lower</code> function returns a text in which all uppercase
     characters are converted to lowercase.</p>
@@ -790,6 +824,8 @@ then the result is <code>null</code>. <var><var>dividend</var></var> and <var>di
     running at any time. </p>
 <p>Ordinarily, the number of successes must be the same as the number of requestors in the <var>requestor_array</var>. If you need few successes, specify your need with the <var>need</var> argument. The <var>need</var> could be <code>1</code>, meaning that 1 or more successes are needed. The <code>need</code> could be <code>0</code>, meaning that no successes are needed. If the number of successes is greater than or equal to <code><var>need</var></code>, then the whole operation succeeds. The <var>need</var>  must be between <code>0</code> and <var>requestor_array</var><code>.length</code>.</p>
 <p>The  requestor function itself returns a <a href="functions.html#cancel">cancel</a> function that cancels all of the pending requestors from the <var>requestor_array</var>.</p>
+<h4 id=power>power(<var>first</var> <var>second</var>)</h4>
+<p>Raise to a power.</p>
 <h4 id="race">race(<var>requestor_array</var> <var>throttle</var> <var>need</var>)</h4>
 <p>Race. The <code>race</code> function is a <a href="programs.html#requestor_factory">requestor factory</a> that takes an array of <a href="functions.html#requestor">requestor</a> functions and returns a <a href="functions.html#requestor">requestor</a> function that
 starts all of the <a href="functions.html#requestor">requestors</a> in the <var>requestor_array</var> at once.</p>
@@ -839,13 +875,15 @@ def product: reduce(data '*')    # product is 362880</pre>
 <p> <var>target</var>: a text or pattern that should be replaced in the source.</p>
 <p> <var>replacement</var>: text to replace the matched text, or a function that takes the matched text and the starting position, and returns the replacement text or <code>null</code> if it should be left alone.</p>
 <p> <var>limit</var>: The maximum number of replacements. The default is all possible replacements. The <var>limit</var> includes <code>null</code> matches.</p>
-<h4 id="reverse"><code>reverse(</code><code><var>array</var>)</code></h4>
+<h4 id="reverse"><code>reverse(<var>array</var>)</code></h4>
 <p>The <code>reverse</code> function makes a new array or blob with the elements or bits in the
     opposite order.</p>
 <p>It returns a new, reversed array or blob.</p>
 <h6>Example:</h6>
 <pre>def data: [&quot;I&quot; &quot;am&quot; &quot;Sam&quot;]
 def result: reverse(data)    # the result is [&quot;Sam&quot; &quot;am&quot; &quot;I&quot;]</pre>
+<h4 id=root>root(<var>radicand</var> <var>degree</var>)</h4>
+<p>Take the root.</p>
 <h4 id="round">round(<var>number</var> <var>place</var>)</h4>
 <p>If <var>place</var> is <code>0</code> or <code>null</code> the <var>number</var> is rounded to the nearest integer. If <var>place</var> is a small integer,
     then the <var>number</var> is rounded to that many decimal places.</p>
@@ -869,6 +907,12 @@ that takes a <var>requestor_array</var> and returns a <a href="functions.html#re
     starts all of the <a href="functions.html#requestor">requestors</a> in the <var>requestor_array</var> one at a time.
     The result of each becomes the argument to the next. The last result is the result of the sequence. </p>
 <p><code>sequence</code> returns a <a href="functions.html#requestor">requestor</a> that returns a <a href="functions.html#cancel">cancel function</a> and processes each <a href="functions.html#requestor">requestor</a> in <code>requestor_array</code> one at a time. Each of those requestors is passed the result of the previous <a href="functions.html#requestor">requestor</a> as its <code>value</code> argument. If all succeed, then the sequence succeeds, giving the result of the last of the requestors. If any fail, then the sequence fails.The sequence succeeds if every requestor in the <var>requestor_array</var> succeeds</p>
+<h4 id=sin>sin(<var>number</var>)</h4>
+<p>Compute the sine.  The <var>number</var> should be in
+    radians. The result is the sine, between <code>-1</code> and <code>1</code>.</p>
+<h4 id=sine>sine(<var>number</var>)</h4>
+<p>Compute the sine.  The <var>number</var> should be in
+    cycles. The result is the sine, between <code>-1</code> and <code>1</code>.</p>
 <h4 id="sign">sign(<var>number</var>)</h4>
 <p>The <code>sign</code> function returns <code>-1</code> if the <var>number</var> is negative, <code>0</code> if the <var>number</var> is exactly <code>0</code>, <code>1</code> if the <var>number</var> is positive, and <code>null</code> if it is not a number.</p>
 <h4 id="sort">sort(<var>array</var> <var>select</var>)</h4>
@@ -891,13 +935,13 @@ that takes a <var>requestor_array</var> and returns a <a href="functions.html#re
     </tr>
     <tr>
         <td>text</td>
-        <td><var>array</var><code>[</code><var>index</var><code>]</code><code>[</code><var>select</var><code>]</code></td>
+        <td><var>array</var><code>[</code><var>index</var><code>][</code><var>select</var><code>]</code></td>
         <td>The sort key is the <var>select</var> field of each record element.
             This is useful for sorting arrays of records.</td>
     </tr>
     <tr>
         <td>number</td>
-        <td><var>array</var><code>[</code><var>index</var><code>]</code><code>[</code><var>select</var><code>]</code></td>
+        <td><var>array</var><code>[</code><var>index</var><code>][</code><var>select</var><code>]</code></td>
         <td>The sort key is the <var>select</var> element of each array element. This is useful
             for sorting arrays of arrays.</td>
     </tr>
@@ -937,12 +981,35 @@ assign stooges: sort(stooges [50 60 20 40 10 30])
     #     {first: &quot;Curly&quot; last: &quot;Howard&quot;}
     #     {first: &quot;Joe&quot; last: &quot;Besser&quot;}
     #     {first: &quot;Joe&quot; last: &quot;DeRita&quot;}
-    # ]</pre>
+    # ]
+assign stooges: sort(stooges map(stooges function (stooge) {
+    return upper(stooge.last && stooges.first)
+}))
+    # stooges is now [
+    #     {first: &quot;Joe&quot; last: &quot;Besser&quot;}
+    #     {first: &quot;Joe&quot; last: &quot;DeRita&quot;}
+    #     {first: &quot;Larry&quot; last: &quot;Fine&quot;}
+    #     {first: &quot;Curly&quot; last: &quot;Howard&quot;}
+    #     {first: &quot;Moe&quot; last: &quot;Howard&quot;}
+    #     {first: &quot;Shemp&quot; last: &quot;Howard&quot;}
+    # ]
+</pre>
+<h4 id=sqrt>sqrt(<var>number</var>)</h4>
+<p>The square root of the <var>number</var> is computed.</p>
+<h6>Examples:</h6>
+<pre>assign result: sqrt(256)    # result is 16
+assign result: sqrt(-1)     # result is null </pre>
 <h4 id="stone">stone(<var id="stone">value</var>) </h4>
 <p>Petrify the <var>value</var>, turning it into stone. Its contents are preserved, but it can no longer be modified by the <a href="statements.html#assign"><code>assign</code> statement</a> or the <a href="blobs.htmnl#write">blob.write</a> functions. This is usually performed on arrays, records, and blobs. All other types are already stone. Attempting to turn a value that is stone to stone will have no effect.</p>
 <p>The stone operation is deep. Any mutable objects in the value will also be turned to stone.</p>
 <p>This can not be reversed. Immutable objects can never become mutable. A mutable copy can be made of an immutable object, but the original object remains immutable.</p>
 <p>The <code>stone</code> function returns the <var>value</var>.</p>
+<h4 id=tan>tan(<var>number</var>)</h4>
+<p>Compute the tangent. The <var>number</var> should be
+    in radians.</p>
+<h4 id=tangent>tangent(<var>number</var>)</h4>
+<p>Compute the tangent. The <var>number</var> should be
+    in cycles.</p>
 <h4 id="trim">trim(<var>text</var> <var>reject</var>)</h4>
 <p>The <code>trim</code> function removes selected characters from the ends of a <var>text</var>. The default is to remove control characters and spaces.</p>
 <pre>assign result: &quot;  Hello   there   &quot;.trim()    # result is &quot;Hello   there&quot;</pre>
