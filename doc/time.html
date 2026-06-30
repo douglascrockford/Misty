@@ -81,10 +81,10 @@
   the <var>text</var>. If <var>format</var> is the empty text, the default ISO format is used.</p>
 <p>A <var>zone</var> is a numeric indication of the local time zone which is indicated
   by the date text. For example, if the time in the text is local to California
-  (Pacific Standard Time), then <var>zone</var> will be -8.</p>
+  (Pacific Standard Time), then <var>zone</var> is -8.</p>
   
 <h3>Records</h3>
-<p>A record can be used to specify a time. Each of the fields will be relative
+<p>A record can be used to specify a time. Each of the fields is relative
   to zero (even month and day which are conventionally shown relative to 1). So <code>time.number({year:
 2001 month: 8 day: 10})</code> has the same result as <code>time.number(&quot;2001-09-11&quot;)</code>.</p>
 <h3>The functions</h3>
@@ -106,30 +106,30 @@ time.text(</code><var>record</var><code> </code><var>format</var><code> </code><
   <tr>
     <td rowspan="4">year</td>
     <td><code>yyyyy</code></td>
-    <td>The year will be displayed in a 5 digit field with zero fill. If
+    <td>The year is displayed in a 5 digit field with zero fill. If
       the year is negative and if there is no <code>c</code> or <code>b</code>
-      in the format, then a leading minus sign will be included.</td>
+      in the format, then a leading minus sign is included.</td>
     <td>Up to 5 digits and an optional leading minus sign.</td>
   </tr>
   <tr>
     <td><code>yyyy</code></td>
-    <td>The year will be displayed in a 4 digit field with zero fill. If
+    <td>The year is displayed in a 4 digit field with zero fill. If
       the year is negative and if there is no <code>c</code> or <code>b</code>
-      in the format, then a leading minus sign will be included.</td>
+      in the format, then a leading minus sign is included.</td>
     <td>Up to 4 digits and an optional leading minus sign.</td>
   </tr>
   <tr>
     <td><code>yy</code></td>
-    <td>modulo(year, <code>100)</code> will be displayed in a 2 digit field
+    <td>modulo(year, <code>100)</code> is displayed in a 2 digit field
       with zero fill. Not recommended.</td>
     <td>Up to 2 digits and an optional leading minus sign. The current century
-      will be added. Not recommended.</td>
+      is added. Not recommended.</td>
   </tr>
   <tr>
     <td><code>y</code></td>
-    <td>The year will be displayed with as many digits as necessary with no fill. If the year is negative and if there
+    <td>The year is displayed with as many digits as necessary with no fill. If the year is negative and if there
       is no <code>c</code> or <code>b</code> in the format, then a leading
-      minus sign will be included.</td>
+      minus sign is included.</td>
     <td>Same as <code>yyyyy</code>.</td>
   </tr>
   <tr>
