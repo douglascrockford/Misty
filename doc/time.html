@@ -68,6 +68,7 @@
       <code>minute</code>, <code>second</code>, <code>zone</code>. A missing property is assumed to be zero.</td>
   </tr>
 </table>
+<p>If the inputs are invalid, <code>null</code> is returned.</p>
 <h3>Numbers</h3>
 <p>Numbers can be convenient representations of times. <code>my_date + time.day</code>
   is the same time tomorrow. Subtraction can be used to determine the difference
@@ -77,10 +78,11 @@
   <code>&quot;2001-09-11&quot;</code> or <code>&quot;09/11/01&quot;</code> or
   <code>&quot;13:30:00&quot;</code>.</p>
 <p>A <var>format</var> is a text or record that determines how to interpret
-  the <var>text</var>.</p>
+  the <var>text</var>. If <var>format</var> is the empty text, the default ISO format is used.</p>
 <p>A <var>zone</var> is a numeric indication of the local time zone which is indicated
   by the date text. For example, if the time in the text is local to California
   (Pacific Standard Time), then <var>zone</var> will be -8.</p>
+  
 <h3>Records</h3>
 <p>A record can be used to specify a time. Each of the fields will be relative
   to zero (even month and day which are conventionally shown relative to 1). So <code>time.number({year:
@@ -92,10 +94,8 @@ time.number(</code><var>record</var><code>)</code></h4>
 <p>The result is the number of seconds since the epoch.</p>
 <h4><code>time.text(</code><var>number</var><code> </code><var>format</var><code> </code><var>zone</var><code>)</code><br>
 time.text(</code><var>record</var><code> </code><var>format</var><code> </code><var>zone</var><code>)</code></h4>
-<p>The result is a display text of the date. The <var>value</var> cannot be
-  a text.</p>
-<p>The <var>format</var> is either a format text or a format record. A format
-  text contains instructions for formatting the date text. </p>
+<p>The result is a display text of the date.</p>
+<p>The <var>format</var> is either a format text or a format record. A <var>format</var> text contains instructions for formatting the date text. If the <var>format</var> is the empty text, then default ISO format is used.</p>
 <table>
   <tr>
     <th>&nbsp; </th>
