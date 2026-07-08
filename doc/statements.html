@@ -132,8 +132,9 @@ disrupt_statement
 <p>The <code>disrupt</code> statement causes the function to abruptly stop, sending control
     to the function's <a href="functions.html#disruption"><code>disruption</code> clause</a>.
     If control was already in the <code>disruption</code> clause, or if there is no <code>disruption</code> clause,
-    then control goes to the most recent function in the calling chain that has a <code>disruption</code> part.
-    If there is none, then the program halts. The distrupt statement does not communicate the cause of the disruption. This can be communicated with the <a href="@log"><code>log</code> satement</a>.</p>
+    then control goes to the most recent function in the calling chain that has a <code>disruption</code> clause.
+    If there is none, then the program halts. The <code>distrupt</code> statement does not communicate the cause of the disruption. The cause or reason can be communicated with the <a href="@log"><code>log</code> satement</a>.</p>
+<p>Disrupt is only for unexpected situations. Outcomes that are unusual but not unexpected should not be communicated by <code>disrupt</code>.</p>
 
 <h3 id="do">The <code>do</code> statement</h3>
 <p class="rule">
@@ -171,7 +172,7 @@ jump_statement
     <code>"jump"</code> space callee
 </p>
 <p>The <code>jump</code> statement is parameterized jump to a function.
-    It is similar to <a href="#return"><code>return</code></a> except that control will ultimately go to the caller's caller, not the caller.
+    It is similar to <a href="#return"><code>return</code></a> except that control  ultimately goes to the caller's caller, not the caller.
     In some languages, this is called tail call optimization.
     It can significantly reduce the rate at which memory is consumed, making looping by recusion and continuation passintg style feasible.</p>
 <p>The <code>jump</code> statement is not allowed in functions that have a <a href="functions.html#disruption"><code>disruption</code></a> clause.</p>
@@ -242,28 +243,28 @@ log_statement
 channel
     name
 </p>
-<p>The <code>log</code> statement sends the value of an expression to a log channel.
-    It is used to capture information about the execution of the program for analysis.
+<p>The <code>log</code> statement sends the value of an expression to a channel (or log actor).
+    It is used to capture information about the execution of the program for analysis and administration.
  Logs can provide insight into the operation of a system. </p>
-<p>A channel   has a status for each program or subprogram according to policy:</p>
+<p>A channel   has a status for each program or subprogram according to <a href="system.html#policy">policy</a>:</p>
 <ul>
     <li><code>forbidden</code>: The program or subprogram will not  build as long as the source mentions this channel.</li>
-    <li><code>allowed</code>. Log messages will be sent immediately to the channel actor. Log messages do not wait for the end of turn. Log messages are sent even if the actior fails,</li>
-    <li><code>ignored</code>: The <code>log</code> statement is ignored. It is treated as a comment. It might be allowed on a later build.</li>
+    <li><code>allowed</code>. Log messages are sent immediately to the channel actor.</li>
+    <li><code>ignored</code>: The <code>log</code> statement is ignored. It is treated as a comment. It might be <code>allowed</code> on a later build.</li>
     <li><code>conditional</code>. The <code>log</code> statement is ignored at first, but can be allowed at any tine. The <code>debug</code> channel is an example. If the debugger is running, the <code>debug</code> channel is enabled.</li>
 </ul>
 <h6>A log channel can have<dfn> </dfn>any name. For example:</h6>
 <blockquote>
-    <code>abort abuse alert anomaly authorization billing breech bug catastrophic checklist compliance console crash dashboard data dayfile debug
-        delay demo development disaster emergency epic error event evidence example experimental
-        failure fatal feature format fraud guest halt hello host hygiene idle inconsistent info kyc local
-        maintenance memory migration mishap monitor network normal null offline online operations page panic partner permission policy portal
-        practice privacy probe protocol prototype quality recover range regulation reject remote risk sample security
-        serious service situation spam statistics storage store summary support suspicious syntax system test time trace training
-        transition trial trivial type unneeded usage verbose violation warning world</code>
+    <code>abort abuse alert alpha anomaly authorization beta billing breech bug catastrophic cause checklist compliance console contract crash dashboard data dayfile debug
+        delay demo development disaster disconnect emergency epic error event evidence example exception exhausted experimental
+        expired failure fatal feature finished format fraud guest hallucination halt hello  host hygiene idle illegal inconsistent info intervention key kyc legal local
+        major maintenance memory migration minor mishap monitor network normal null offline online operations page panic partition partner permission policy portal
+        practice privacy probe protocol prototype public quality quantum  range recover region regulation reject remote risk sample security
+        serious service situation spam start state statistics stop storage store stress summary super support suspicious syntax system test time trace training
+        transition trial trivial type unknown unneeded usage verbose violation warning world</code>
 </blockquote>
 <p>It is usually good to <code>log</code> before <code>disrupt</code>. Logging does not change the behavior of a program.  It should not expect a response.</p>
-<p>If the log channel is allowed, then a message will be set to an actor that is monitoring that channel. It might tabulate, summarize, record, or pass on the event.</p>
+<p>If a log channel is allowed, then  messages are sent to a log actor that is monitoring that channel. It might tabulate, summarize, record, or pass on the event. Unlike <a href="#send"><code>send</code></a> messages, log messages are sent immediately, not waiting for the successful completion of the turn. However, if <code>log</code> is abused, the actor stops.</p>
 <h6>Example:</h6>
 <pre>log debug: &quot;index&quot; &amp;&amp; index</pre>
 
@@ -302,7 +303,7 @@ callback
 </p>
 <p>The <code>send</code> statement sends a message to another <a href="system.html#actors">actor</a>.
 The left <dfn>expression</dfn> must resolve to an actor address object or a message object that is expecting a reply because it was sent with a callback. The right <dfn>expression</dfn> is a record containing the outgoing message. The outgoing message record must not  contain functions or patterns or cyclic structures.</p>
-<p>If a <dfn>callback</dfn> function is included, then the <dfn>callback</dfn> function will receive the reply, not the <a href="programs.html#receiver">receiver</a> function. See <a href="functions.html#callback">callback</a>.</p>
+<p>If a <dfn>callback</dfn> function is included, then the <dfn>callback</dfn> function  receives the reply, not the <a href="programs.html#receiver">receiver</a> function. See <a href="functions.html#callback">callback</a>.</p>
 <h6>Example:</h6>
 <pre>send server: message: reply_callback</pre>
 
@@ -329,7 +330,7 @@ locator
     endowments such as communication devices, data storage devices, input
     devices (like keyboards, camera, and microphones),  output devices (like
     printers, displays, and speakers), and operating system services.
-    Typically, access to powerful subprograms is limited to subprograms that will attenuate the power, presenting limited capabilities to other subprograms and programs.</p>
+    Typically, access to powerful subprograms is limited to subprograms that  attenuate the power, presenting limited capabilities to other subprograms and programs.</p>
 <p> The <code>use</code> statement can not appear in a function or in an <code>if</code> or a <code>do</code> statement.</p>
 <h6>Example:</h6>
 <pre>use lang: language_library(&quot;en&quot;)</pre>
