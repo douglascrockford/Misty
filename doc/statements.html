@@ -16,7 +16,6 @@ statement
     break_statement
     call_statement
     def_statement
-    disrupt_statement
     do_statement
     if_statement
     jump_statement
@@ -67,7 +66,7 @@ created by <a href="#var">the <code>var</code> statement</a>.</p>
     <li>Append (or push) an element to an array: <code>assign <var>array</var>[]: <var>value</var></code></li>
     <li>Remove (or pop) an element from the end of an array: <code>assign <var>variable</var>: <var>array</var>[]</code></li>
 </ul>
-<p>Attempting any of those changes on a <a href="intrinsic.html#stone">stone</a> object will <a href="#disrupt">disrupt</a>.</p>
+<p>Attempting any of those changes on a <a href="intrinsic.html#stone">stone</a> object <a href="programs.html#failure">fails</a>.</p>
 
 <h3 id="break">The <code>break</code> statement</h3>
 <p class="rule">
@@ -123,19 +122,6 @@ def double(number) {
 <h6>Example:</h6>
 <pre>def sqrt_2: 1.4142135623730950
 </pre>
-
-<h3 id="disrupt">The <code>disrupt</code> statement</h3>
-<p class="rule">
-disrupt_statement
-    <code>"disrupt"</code>
-</p>
-<p>The <code>disrupt</code> statement causes the function to abruptly stop, sending control
-    to the function's <a href="functions.html#disruption"><code>disruption</code> clause</a>.
-    If control was already in the <code>disruption</code> clause, or if there is no <code>disruption</code> clause,
-    then control goes to the most recent function in the calling chain that has a <code>disruption</code> clause.
-    If there is none, then the program halts. The <code>distrupt</code> statement does not communicate the cause of the disruption. The cause or reason can be communicated with the <a href="@log"><code>log</code> satement</a>.</p>
-<p>Disrupt is only for unexpected situations. Outcomes that are unusual but not unexpected should not be communicated by <code>disrupt</code>.</p>
-
 <h3 id="do">The <code>do</code> statement</h3>
 <p class="rule">
 do_statement
@@ -147,7 +133,7 @@ do_label
     space name
 </p>
 <p>The <code>do</code> statement executes a list of statements until the loop
-    is broken by <code>break</code>, <code>jump</code>, <code>return</code>, or <code>disrupt</code>.
+    is broken by <code>break</code>, <code>jump</code>, or <code>return</code>.
 </p>
 <p>
 Loop labels are in their own name space. A function may contain two or more loops with the same label as long
@@ -175,7 +161,6 @@ jump_statement
     It is similar to <a href="#return"><code>return</code></a> except that control  ultimately goes to the caller's caller, not the caller.
     In some languages, this is called tail call optimization.
     It can significantly reduce the rate at which memory is consumed, making looping by recusion and continuation passintg style feasible.</p>
-<p>The <code>jump</code> statement is not allowed in functions that have a <a href="functions.html#disruption"><code>disruption</code></a> clause.</p>
 <p>The <code>jump</code> statement is not allowed in functions that make inner functions.</p>
 
 <h3 id="if">The <code>if</code> statement</h3>
@@ -255,16 +240,16 @@ channel
 </ul>
 <h6>A log channel can have<dfn> </dfn>any name. For example:</h6>
 <blockquote>
-    <code>abort abuse alert alpha anomaly authorization beta billing breech bug catastrophic cause checklist compliance console contract crash dashboard data dayfile debug
-        delay demo development disaster disconnect emergency epic error event evidence example exception exhausted experimental
+    <code>abort abuse account alert alpha analysis anomaly authorization beta billing breech budget bug catastrophic cause checklist compliance console contract crash dashboard data dayfile debug
+        delay demo development disaster disconnect disruption down emergency epic error event evidence example exception exhausted experimental
         expired failure fatal feature finished format fraud guest hallucination halt hello  host hygiene idle illegal inconsistent info intervention key kyc legal local
-        major maintenance memory migration minor mishap monitor network normal null offline online operations page panic partition partner permission policy portal
+        major maintenance memory migration minor mishap money monitor motivation network normal null offline online operations page panic partition partner permission policy portal
         practice privacy probe protocol prototype public quality quantum  range recover region regulation reject remote risk sample security
-        serious service situation spam start state statistics stop storage store stress summary super support suspicious syntax system test time trace training
-        transition trial trivial type unknown unneeded usage verbose violation warning world</code>
+        serious service situation spam sponsor start state statistics stop storage store stress summary super support suspicious syntax system test time trace training
+        transition trend trial trivial type unknown unneeded up usage verbose violation warning world</code>
 </blockquote>
-<p>It is usually good to <code>log</code> before <code>disrupt</code>. Logging does not change the behavior of a program.  It should not expect a response.</p>
-<p>If a log channel is allowed, then  messages are sent to a log actor that is monitoring that channel. It might tabulate, summarize, record, or pass on the event. Unlike <a href="#send"><code>send</code></a> messages, log messages are sent immediately, not waiting for the successful completion of the turn. However, if <code>log</code> is abused, the actor stops.</p>
+<p>Logging does not change the behavior of a program.  There will be no response.</p>
+<p>If a log channel is allowed, then  messages are sent to a log actor that is monitoring that channel. It might tabulate, summarize, record, or pass on the event. Unlike <a href="#send"><code>send</code></a> messages, log messages are sent immediately, not waiting for the successful completion of the turn. However, if <code>log</code> is abused, the actor <a href="programs.html#failure">fails</a>.</p>
 <h6>Example:</h6>
 <pre>log debug: &quot;index&quot; &amp;&amp; index</pre>
 

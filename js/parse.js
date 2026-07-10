@@ -1,5 +1,5 @@
 // parse.js
-// 2026-06-12
+// 2026-07-10
 
 // Missing feature:
 //      patterns
@@ -433,7 +433,6 @@ function block() {
             if (
                 !indentation_q() ||
                 verb === "break" ||
-                verb === "disrupt" ||
                 verb === "jump" ||
                 verb === "return"
             ) {
@@ -619,10 +618,6 @@ function parameter_list() {
 function body(the_function) {
     advance("{");
     the_function.statements = block();
-    if (token.text === "disruption") {
-        advance("name");
-        the_function.disruption = block();
-    }
     advance("}");
 }
 
@@ -993,12 +988,6 @@ statement.def = function def_statement() {
     return result;
 };
 
-statement.disrupt = function disrupt_statement() {
-    const result = token;
-    advance();
-    return result;
-};
-
 statement.do = function do_statement() {
     const result = token;
     let label = "";
@@ -1064,7 +1053,7 @@ statement.if = function if_statement() {
 
 statement.jump = function jump_statement() {
 
-// To do: Give a warning if there is closure or disruption.
+// To do: Give a warning if there is closure.
 
     const result = token;
     advance("jump");

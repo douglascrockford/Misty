@@ -33,7 +33,7 @@ The <var>random</var> argument is a random generator function that returns <a hr
 <h4>blob.make(<var>blob</var> <var>from</var> <var>to</var>)</h4>
 <p>Make a copy of all or part of a blob. The default of <var>from</var> is <code>0</code>. The default of <var>to</var> is the <code>length(<var>blob</var>).</code></p>
 <h2 id="write">Write functions</h2>
-<p>The <code>write</code> functions append bits to the end of a blob. The <var>blob</var> must be <a href="types.html#immutable">mutable</a>. If the <var>blob</var> is <a href="intrinsic.html#stone">stone</a>, then a disrupt occurs.</p>
+<p>The <code>write</code> functions append bits to the end of a blob. The <var>blob</var> must be <a href="types.html#immutable">mutable</a>. If the <var>blob</var> is <a href="intrinsic.html#stone">stone</a>, then a <a href="programs.html#failure">failure</a> occurs.</p>
 <h4 id="write_bit">blob.write_bit(<var>blob</var> <var>logical</var>)</h4>
 <p>Append a bit to the end of the <var>blob</var>. The <var>logical</var> value can be <code>true</code>, <code>false</code>, <code>1</code>, or <code>0</code>.
 Any other value will disrupt. </p>

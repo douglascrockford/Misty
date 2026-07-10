@@ -106,7 +106,7 @@
 <h4>"ge", dest, left, right</h4>
 <h3>Function</h3>
 <h4>&quot;frame&quot;, dest, func, nr_args</h4>
-<p>Prepare to invoke the func object. If the nr_args is too large, disrupt. Allocate the new activation frame. Put the current frame pointer into it.</p>
+<p>Prepare to invoke the func object. If the nr_args is too large, failure. Allocate the new activation frame. Put the current frame pointer into it.</p>
 <h4>&quot;goframe&quot;, dest, func, nr_args</h4>
 <p>Same as frame, except  that the current frame is reused if it is large enough.</p>
 <h4>&quot;invoke&quot;, frame</h4>
@@ -116,11 +116,8 @@
 <h4>&quot;return&quot;, value</h4>
 <h4>&quot;return_value&quot;, dest</h4>
 <h3>Unconditional Branch</h3>
-<p>Ordinarily, control flows sequentially, from one instruction to the next. An unconditional branch alters the flow to another instruction. This is used to implement <code>od</code>, <code>else</code>, and <code>disrupt</code>.</p>
+<p>Ordinarily, control flows sequentially, from one instruction to the next. An unconditional branch alters the flow to another instruction. This is used to implement <code>od</code>, and <code>else</code>.</p>
 <h4>&quot;branch&quot;, label</h4>
-<h4>&quot;disrupt&quot;</h4>
-<p>This is used in a disruption clause. It branches to the disruption clause of the caller. If there is no caller, it halts the actor.</p>
-<p>In the body of a function, a disrupt is encoded as a branch to the disruption clause.</p>
 <h3 id="conditional">Conditional Branch</h3>
 <p>A conditional branch bifurcates the control flow. Control can flow to the labaelled instruction or to rhe next instruction, depending on the value in the slot.</p>
 <p>Each of these instruction has a dual that flips the condition..</p>
@@ -139,12 +136,12 @@
 <h4>&quot;branch_zero&quot;, label, slot</h4>
 <h4>&quot;branch_not_zero&quot;, label, slot</h4>
 <h3 id="tranch">Tranch</h3>
-<p>A tranch is a branch that can trifurcate the control flow.. The third alternative is a <code>disrupt</code>.</p>
+<p>A tranch is a branch that can trifurcate the control flow.. The third alternative is a failure.</p>
 <p>A tranch is used in place of a branch when it is not known for certain that the value in the slot is logical.</p>
 <h4>&quot;tranch_true&quot;, label, slot</h4>
-<p>If the value in the slot is true, branch to the label. If the value is false, continue with the next instruction. Otherwise disrupt because of a type error.</p>
+<p>If the value in the slot is true, branch to the label. If the value is false, continue with the next instruction. Otherwise fail because of a type error.</p>
 <h4>&quot;tranch_false&quot;, label, slot</h4>
-<p>If the value in the slot is false, branch to the label. If the value is true, continue with the next instruction. Otherwise disrupt because of a type error.</p>
+<p>If the value in the slot is false, branch to the label. If the value is true, continue with the next instruction. Otherwise fail because of a type error.</p>
 <h3>Sensory</h3>
 <p>Does the  slot contain a value of the indicated type? These instructions put a logical in the dest slot.</p>
 <h4>&quot;actor?&quot;, dest, slot</h4>
@@ -400,7 +397,6 @@
     <li>Size</li>
     <li>Closure size</li>
     <li>Entry point</li>
-    <li>Disruption point</li>
 </ol>
 <p>A code object exists in the actor's immutable memory. A code object  never exists in mutable memory.</p>
 <p>A code object has a zero capacity and is always stone.</p>
@@ -408,7 +404,6 @@
 <p>The size is the capacity of an activation frame that will execute this code.</p>
 <p>The closure size is a reduced capacity for returned frames that survive memory reclamation.</p>
 <p>The entry point is the address at which to begin execution.</p>
-<p>The disruption point is the address of the disruption clause.</p>
 <h3 id="forward">Forward</h3>
 <ol start=0>
     <li>Header (type <code>14</code>)</li>

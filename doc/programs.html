@@ -85,9 +85,8 @@ my_actor = your_actor             # false (probably)</pre>
 <h3>Stop</h3>
 <p>An overling actor may stop a underling by calling <code><a href="#stop">stop!(<var>underling</var>)</a></code>.  If the underling actor is in the middle of executing a turn when it is stopped, any messages sent in that final turn will not be put into the outgoing queue.</p>
 <p>An actor can also stop itself by calling <a href="#stop"><code>stop!()</code></a>. It might do this as a result of being told to do so by its overling or another trusted actor, or because it has fulfilled its purpose or become <a href="#unneeded">unneeded</a>. Any messages sent in this final turn are put into the outgoing queue. </p>
-<h3>Disrupt</h3>
-<p>If an explicit or implicit <code>disrupt</code> occurs that is not handled, then the actor stops.
-Any messages sent in this final turn will not be put into the outgoing queue.</p>
+<h3>Failure</h3>
+<p>A bug can cause an actor to fail. See <a href="#failure">failure</a>.</p>
 <h3>Coupling</h3>
 <p>If an actor is coupled to an actor that stops, then it also stops. An actor can couple itself to another actor by calling <a href="#couple"><code>couple!(<var>actor</var>)</code></a>. Every actor is automatically coupled to its overling.</p>
 <h3>Disaster</h3>
@@ -174,6 +173,8 @@ Any messages sent in this final turn will not be put into the outgoing queue.</p
 <h4 id="cpuple">couple</span>!(<var>actor</var>)</h4>
 <p>The <code>couple!</code> function causes this actor to stop when another <var>actor</var> stops. The <code>couple</code> function returns <code>null</code>.</p>
 <pre>call couple!(patron)</pre>
+<h4 id="fail">fail!()</h4>
+<p>Stop this actor. Outgoing messages are not delivered. See <a href="#failure">failure</a>.</p>
 <h4 id="portal">portal!(<var>callback</var> <var>port</var>) </h4>
 <p>A <dfn>portal</dfn> is a special actor with a public address that performs introduction services. The <code>portal!</code> function binds a <var>callback</var> function that listens on a specific network <var>port</var> for <a href="#contact">contacts</a> by external actors that need to acquire private actor address objects.
     The <var>callback</var> function will receive the record containing the request. The record can have a reply <a href="statements.html#send">sent</a> through it.
@@ -188,7 +189,7 @@ Any messages sent in this final turn will not be put into the outgoing queue.</p
 <h6>Example:</h6>
 <pre>call start!(callback, &quot;example.mst&quot;)</pre>
 <h4 id="stop">stop!(<var>actor</var>) </h4>
-<p>The <code>stop!</code> function stops an underling. The <code>stop!</code> function returns <code>null</code>.</p>
+<p>The <code>stop!</code> function stops an underling. The <code>stop!</code> function returns <code>null</code>. An actor can stop itself by calling <code>stop!(me!)</code>. If an actor is stopping because it is confused or failing, it should call <a href="#fail"><code>fail!</code></a>.</p>
 <h4 id="unneeded">unneeded!(<var>function</var> <var>seconds</var>)</h4>
 <p>The <code>unneeded</code>! function registers a <var>function</var> that is called when the actor  has not received a message in the recent <var>seconds</var>.  The default for <var>seconds</var> is the <a href="system.html#ar">ar timer</a>. This likely means that the actor is no longer needed. The actor should finish its work and then <code><a href="#stop">stop!()</a></code>. </p>
 <p>If the <code>unneeded</code> timer is not used, then the <a href="system.html#ar">ar timer</a> is used by default. The <code>unneeded!</code> function allows for setting a longer or shorter time than the ar timer.</p>
@@ -207,6 +208,8 @@ Any messages sent in this final turn will not be put into the outgoing queue.</p
     fi
 }</pre>
 <h2 id="failure">Failure</h2>
+<p>When a failure occurs, the actor immediately halts. Outgoing messages are ordinarily not sent. Instead, notification of the failure is sent to the overling and other interested actors.</p>
+<p>The causes of failures are usually bugs, such as trying to assign to a stone or calling a value that is not a function. A failure can be caused intentionally with the <a href="#fail"><code>fail!</code></a> function.</p>
 <p>Fail to a known condition. </p>
 <p>In distributed systems, we can not be certain of failure. Failure may be  presumed.</p>
 <p>Failure is always an option.</p>
