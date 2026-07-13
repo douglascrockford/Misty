@@ -87,9 +87,9 @@ length(empty)      # 0
 <p>The <var>ordinal</var> is an expression that produces a non-negative integer. When getting from an array, if the <var>ordinal</var>
   is not an integer, or if it is less than <code>0</code> or greater than or equal to
   the <var>array</var>'s <code>length</code> then it produces <code>null</code>.
-  When storing into an array, if the <var>ordinal</var> is not an integer, or
+  When assigning into an array, if the <var>ordinal</var> is not an integer, or
   if it is less than <code>0</code> or greater than or equal to the <var>array</var>'s
-  <code>length</code> then the operation <a href="programs.html#failure">fails</a>.
+  <code>length</code> then the <a href="programs.html#halt">actor halts</a>.
   The number of elements in an array can be obtained by the <code>length</code>
   function.</p>
 <p>If the array has multiple dimensions, additional subscripts can be used
@@ -260,7 +260,7 @@ def object: {
     double(x) (x + x)
 }</pre>
 <h3>Keys</h3>
-<p>Keys are text. An invalid key type yields <code>null</code> on reading, and a <a href="programs.html#failure">failure</a> on writing.
+<p>Keys are text. An invalid key type yields <code>null</code> on reading, and a <a href="programs.html#halt">halts</a> on writing.
 </p>
 <p>Keys in a record are unique. Writing a duplicate key first erases the original.</p>
 <p>A key can not be a number, although a number converted to a text is allowed.</p>
@@ -287,8 +287,8 @@ assign last_name: new_stooge.last     # last_name is &quot;Howard&quot;</pre>
 assign first_name: stooge[&quot;first&quot;]           # first_name is &quot;Curly&quot;
 assign stooge.first: "Jerome"                # {first: &quot;Curly&quot; last: &quot;Howard&quot;}
 assign stooge.middle: "Lester"               # {first: &quot;Curly&quot; middle: &quot;Lester&quot; last: &quot;Howard&quot;}
-assign stooge[null]: &quot;Mogo on the Gogogo&quot;    # failure
-assign stooge: {}                            # failure
+assign stooge[null]: &quot;Mogo on the Gogogo&quot;    # halt
+assign stooge: {}                            # halt
 </pre>
 <h3 id="delete">Delete</h3>
 <p>A field can be deleted by replacing its value with <code>null</code>.</p>
@@ -299,7 +299,7 @@ assign stooge: {}                            # failure
     <p><var>record</var><code>.</code><var>method_name</var><code>(</code><var>parameter_list</var><code>)</code></p>
 </blockquote>
 <p>The <var>record</var> is searched for a field matching the <var>method_name</var>.
-If the result of that search is not a function, then it <a href="programs.html#failure">fails</a>.</p>
+If the result of that search is not a function, then it <a href="programs.html#halt">halts</a>.</p>
 
 <h2 id="text">Text</h2>
 <p>A <var>text</var> is a sequence of zero or more 32-bit characters. Texts
@@ -528,10 +528,10 @@ length(my_text)          # 3
 my_text[0]               # &quot;c&quot;
 my_text[2]               # &quot;t&quot;
 my_text[4]               # null
-assign my_text[0]: &quot;r&quot;   # failure
+assign my_text[0]: &quot;r&quot;   # halt
 </pre>
 <h2 id="immutability">Immutability</h2>
-<p>An immutable(stone) object can not be changed or mutated. An attempt to modify an immutable object <a href="programs.html#failure">fails</a>.</p>
+<p>An immutable(stone) object can not be changed or mutated. An attempt to modify an immutable object <a href="programs.html#halt">halts</a>.</p>
 <p>These values are always immutable: <code>true false null</code>.</p>
 <p>Values of these types are always immutable: <code>number text function pattern</code>. Note that addition does not change a number object; it makes a new number object.</p>
 <p>Values of these types are initially mutable, but can be transformed into immutable values by the intrinsic <a href="intrinsics.htnl#stone"><code>stone</code></a> function: <code>array record blob</code>.</p>

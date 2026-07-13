@@ -106,7 +106,7 @@
 <h4>"ge", dest, left, right</h4>
 <h3>Function</h3>
 <h4>&quot;frame&quot;, dest, func, nr_args</h4>
-<p>Prepare to invoke the func object. If the nr_args is too large, failure. Allocate the new activation frame. Put the current frame pointer into it.</p>
+<p>Prepare to invoke the func object. If the nr_args is too large, halt. Allocate the new activation frame. Put the current frame pointer into it.</p>
 <h4>&quot;goframe&quot;, dest, func, nr_args</h4>
 <p>Same as frame, except  that the current frame is reused if it is large enough.</p>
 <h4>&quot;invoke&quot;, frame</h4>
@@ -136,12 +136,12 @@
 <h4>&quot;branch_zero&quot;, label, slot</h4>
 <h4>&quot;branch_not_zero&quot;, label, slot</h4>
 <h3 id="tranch">Tranch</h3>
-<p>A tranch is a branch that can trifurcate the control flow.. The third alternative is a failure.</p>
+<p>A tranch is a branch that can trifurcate the control flow.. The third alternative halts.</p>
 <p>A tranch is used in place of a branch when it is not known for certain that the value in the slot is logical.</p>
 <h4>&quot;tranch_true&quot;, label, slot</h4>
-<p>If the value in the slot is true, branch to the label. If the value is false, continue with the next instruction. Otherwise fail because of a type error.</p>
+<p>If the value in the slot is true, branch to the label. If the value is false, continue with the next instruction. Otherwise halt because of a type error.</p>
 <h4>&quot;tranch_false&quot;, label, slot</h4>
-<p>If the value in the slot is false, branch to the label. If the value is true, continue with the next instruction. Otherwise fail because of a type error.</p>
+<p>If the value in the slot is false, branch to the label. If the value is true, continue with the next instruction. Otherwise halt because of a type error.</p>
 <h3>Sensory</h3>
 <p>Does the  slot contain a value of the indicated type? These instructions put a logical in the dest slot.</p>
 <h4>&quot;actor?&quot;, dest, slot</h4>

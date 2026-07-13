@@ -59,8 +59,8 @@ ternary
     linebreak <code>&quot;then&quot;</code> space expression linebreak <code>&quot;else&quot;</code> space expression
 </p>
 <p>Expressions can be wrapped in parentheses to clarify or alter the order of evaluation. </p>
-<p>A parenthesized expression can also contain a short-circuiting ternary operation. If the first operand is <code>true</code>, then the second operand is evaluated. If the first operand is <code>false</code>, then the third operand is evaluated.
-    If the first operand is neither <code>true</code> nor <code>false</code>, then it disrupts. Expressions that are indented within parens may contain line breaks before an infix operator. Ternary operation is not allowed if a variable is in scope named <code>then</code> or <code>else</code>.</p>
+<p id="then">A parenthesized expression can also contain a short-circuiting ternary operation. If the first operand is <code>true</code>, then the second operand is evaluated. If the first operand is <code>false</code>, then the third operand is evaluated.
+    If the first operand is neither <code>true</code> nor <code>false</code>, then the <a href="programs.html#halt">actor halts</a>. Expressions that are indented within parens may contain line breaks before an infix operator. Ternary operation is not allowed if a variable is in scope named <code>then</code> or <code>else</code>.</p>
 <p>Example:</p>
 <pre>function (accumulator current_value current_index) {
     return accumulator & (
@@ -192,7 +192,7 @@ open_input_values
 </blockquote>
 <p>If the value is not function, it disrupts.</p>
 <p>If a function is invoked with too few input values, the missing input values are <code>null</code>.
-If a function is invoked with excess input values, there is a <a href="programs.html#failure">failure</a>.</p>
+If a function is invoked with excess input values, the actor  <a href="programs.html#halt">halts</a>.</p>
 <p>A function invocation can pass at most 4 input values. If you need more, consider passing a single record literal instead. </p>
 <p>If a function is used only for its side effects, use the <code><a href="statements.htm l#call">call</a></code><a href="statements.htm l#call"> statement</a>.</p>
 <h2>Infix Operators</h2>
@@ -308,21 +308,18 @@ is greater than or equal to the right operand the result is <code>false</code>. 
 <h4>&gt;=</h4>
 <p>Greater than or equal. It is the same as <code>not(<var>left</var> &lt; <var>right</var>)</code>.</p>
 
-<h3>Logical Operators</h3><h4>/\</h4>
+<h3 id="logical">Logical Operators</h3><h4 id="and">/\</h4>
 <p>Short-circuit And. If the left operand is <code>false</code>, then the result is <code>false</code> and the right operand will not be evaluated.
   If the left operand is <code>true</code> and the <code>right</code> operand is <code>false</code>, then the result is <code>false</code>.
   If the left operand is <code>true</code> and the right operand is <code>true</code>, then the result is <code>true</code>.</p>
-  <p>If the left operand is <code>true</code> and the right operand is not <code>false</code> or <code>true</code>, then disrupt.
-      If the left operand is not <code>false</code> or <code>true</code>, then it disrupts.
-  </p>
+  <p> If the left operand is neither <code>true</code> nor <code>false</code>, then the <a href="programs.html#halt">actor halts</a>. If the left operand is <code>true</code> and the right operand is  neither <code>true</code> nor <code>false</code>, then  the <a href="programs.html#halt">actor halts</a>.</p>
 <pre>3 &lt; 4 /\ 5 &lt; 6    # true</pre>
 <p>It made by combining <code>/</code><small>slash</small> and <code>\</code><small>backslash</small>.</p>
-<h4>\/</h4>
+<h4 id="or">\/</h4>
 <p>Short-circuit Or. If the left operand is <code>true</code>, then the result is <code>true</code> and the right operand is not evaluated.
   If the left operand is <code>false</code> and the right operand is <code>false</code>, then the result is <code>false</code>.
 <code>false</code>and the right operand is <code>true</code>, then the result is <code>true</code>.</p>
-  <p>If the left operand is not a logical, then it disrupts. If the left operand is <code>false</code> and the right operand is not a logical, then it disrupts.
-  </p>
+  <p>If the left operand is neither <code>true</code> nor <code>false</code>, then the <a href="programs.html#halt">actor halts</a>. If the left operand is <code>false</code> and the right operand is  neither <code>true</code> nor <code>false</code>, then  the <a href="programs.html#halt">actor halts</a>.</p>
 <pre>3 &lt; 4 \/ 6 &lt; 5    # true</pre>
 <p>It made by combining <code>\</code><small>backslash</small> and <code>/</code><small>slash</small>.</p>
 <h3 id="default">Default Operator</h3>

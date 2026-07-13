@@ -66,7 +66,7 @@ created by <a href="#var">the <code>var</code> statement</a>.</p>
     <li>Append (or push) an element to an array: <code>assign <var>array</var>[]: <var>value</var></code></li>
     <li>Remove (or pop) an element from the end of an array: <code>assign <var>variable</var>: <var>array</var>[]</code></li>
 </ul>
-<p>Attempting any of those changes on a <a href="intrinsic.html#stone">stone</a> object <a href="programs.html#failure">fails</a>.</p>
+<p>Attempting any of those changes on a <a href="intrinsic.html#stone">stone</a> object <a href="programs.html#halt">halts the actor</a>.</p>
 
 <h3 id="break">The <code>break</code> statement</h3>
 <p class="rule">
@@ -249,7 +249,7 @@ channel
         transition trend trial trivial type unknown unneeded up usage verbose violation warning world</code>
 </blockquote>
 <p>Logging does not change the behavior of a program.  There will be no response.</p>
-<p>If a log channel is allowed, then  messages are sent to a log actor that is monitoring that channel. It might tabulate, summarize, record, or pass on the event. Unlike <a href="#send"><code>send</code></a> messages, log messages are sent immediately, not waiting for the successful completion of the turn. However, if <code>log</code> is abused, the actor <a href="programs.html#failure">fails</a>.</p>
+<p>If a log channel is allowed, then  messages are sent to a log actor that is monitoring that channel. It might tabulate, summarize, record, or pass on the event. Unlike <a href="#send"><code>send</code></a> messages, log messages are sent immediately, not waiting for the successful completion of the turn. However, if <code>log</code> is abused, the actor <a href="programs.html#halt">halts</a>.</p>
 <h6>Example:</h6>
 <pre>log debug: &quot;index&quot; &amp;&amp; index</pre>
 

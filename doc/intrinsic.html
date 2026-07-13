@@ -29,7 +29,7 @@ The <a href="statements.html#use"><code>use</code> statement</a> is not needed t
 <p>This is the value of <code>1 = 1</code>. The <code>true</code> value is one of the two logical values.</p>
 <h4 id=null>null</h4>
 <p>This is the value of <code>1 / 0</code>. The <code>null</code> value is an empty immutable object. All attempts to obtain a value from <code>null</code> by <a href="operators.html#refinement">refinement</a> will produce <code>null</code>.</p>
-<p>Any attempt to modify <code>null</code> <a href="programs.html#failure">fails</a>. Any attempt to call <code>null</code> as a function <a href="programs.html#failure">fails</a>.</p>
+<p>Any attempt to modify <code>null</code> <a href="programs.html#halt">halts</a>. Any attempt to call <code>null</code> as a function <a href="programs.html#halt">halts</a>.</p>
 <p><code>null</code> is the value of  missing arguments,  missing fields in records, and invalid numbers. The <a href="operators.html#default"><code>|</code><small>default</small></a> operator can detect the presence of <code>null</code> and substitute another value.</p>
 <h4 id=pi>pi</h4>
 <p>This is an approximation of the circle expression <var>circumference</var><code> / </code><var>diameter</var>, or to be precisely approximate, <code>3.1415926535897932</code>.</p>
@@ -156,7 +156,7 @@ text keys in the <var>record</var>. The keys are not guaranteed
     how the text is interpreted. If the format is not one of those listed,
     then <code>null</code> is returned.</p>
 <h4>number(<var>other</var>)</h4>
-<p>If <var>other</var> is <code>null</code>, or a function, or a pattern, or an actor adress object, then <a href="programs.html#failure">failure</a>.</p>
+<p>If <var>other</var> is <code>null</code>, or a function, or a pattern, or an actor adress object, then the result is <code>null</code>.</p>
 <h6>Examples:</h6>
 <pre>assign result: number(&quot;123,456,789.10&quot; &quot;d&quot;)     # result is 123456789.1
 assign result: number(&quot;123.456.789,10&quot; &quot;v&quot;)     # result is 123456789.1
@@ -174,7 +174,7 @@ assign result: number(&quot;0666&quot;)                   # result is 666
 assign result: number(true)                     # result is 1
 assign result: number(false)                    # result is 0
 assign result: number(42)                       # result is 42
-assign result: number(null)                     # failure
+assign result: number(null)                     # result is null
 </pre>
 <h3 id="record">Record</h3>
 <h4 id="copy record">record(<var>record</var>)</h4>
@@ -191,7 +191,7 @@ assign result: number(null)                     # failure
 <p>Functional Value Set. Make a record using the array as the source of the keys. The <var>function</var> is called for each key, yielding the field values.</p>
 <h3 id="text">Text</h3>
 <h4>text(<var>array</var>)</h4>
-<p>Convert an array to text. The array can contain text and unicode codepoints. All are concatenated together to make a single text. If other values are in the array, then it <a href="programs.html#failure">fails</a>.</p>
+<p>Convert an array to text. The array can contain text and unicode codepoints. All are concatenated together to make a single text. If other values are in the array, then the result is <code>null</code>.</p>
 <h4>text(<var>array</var> <var>separator</var>)</h4>
 <p>Convert an array to text. The <var>array</var> can contain text and unicode codepoints. All are concatenated together to make a single text. The <var>separator</var> text is inserted between each piece. The default <var>separator</var> is the empty text.</p>
 <h4>text(<var>number</var> <var>radix</var>)</h4>
@@ -612,7 +612,7 @@ assign result: and(true false)    # result is false</pre>
 <h4 id="apply">apply(<var>function</var> <var>array</var>)</h4>
 <p>Apply. Execute the <var>function</var> and return its return value. Pass the elements of the <var>array</var> as arguments. See <a href="functions.html#proxy">proxy</a>.</p>
 <p>If the first argument is not a function, <code>apply</code> returns its first argument.</p>
-<p>If <code>length(<var>array</var>)</code> is greater than  <code>length(<var>function</var>)</code>, it <a href="programs.html#fails">fails</a>.</p>
+<p>If <code>length(<var>array</var>)</code> is greater than <code>length(<var>function</var>)</code>, it <a href="programs.html#halts">halts</a>.</p>
 <p>If the second argument is not an array, it is used as a single argument.</p>
 <h4 id=arccos>arccos(<var>number</var>)</h4>
 <p>Compute the arc cosine.  The <var>number</var> should
