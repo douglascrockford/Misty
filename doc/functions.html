@@ -38,7 +38,6 @@ optional_function_name
     name
 </p>
 <p>A function may be given a name for recursion and documentation.</p>
-<p>A function literal may not be placed in a <code>do</code> loop.</p>
 <p>Function objects can also be made with the <a href="statements.html#def"><code>def</code> statement</a> and <a href="types.html#record literal">record literals</a>.</p>
 <h3 id="parameter">Parameter List</h3>
 <p>The parameter list can be open (each parameter name on its own line) or closed
@@ -83,7 +82,7 @@ optional_arity
   assigned to these names and made available to the body. The
   body can not modify the parameters, but can modify the values of the parameters if they are not stone. Parameters behave as <code>def</code>, not <code>var</code>. The number of
   names in the parameter list determines the function's arity.
-If the function is invoked with too many arguments, it disrupts.</p>
+If the function is invoked with too many arguments, the<a href="programs.html#halt"> actor halts</a>.</p>
 <p>If the function is invoked with too few parameters, the missing values will get <code>null</code>. The <code>|</code><small>default</small> operator is allowed in parameter lists, replacing a <code>null</code> argument with a value from an <dfn>expression</dfn>.</p>
 <p>There is an alternate form for functions that can receive all of their arguments as a single array.
     A single parameter is bound to an array of arguments. See <a href="intrinsics.html#apply">apply</a>.
@@ -94,15 +93,9 @@ If the function is invoked with too many arguments, it disrupts.</p>
 A function body may not contain a <code>use</code> statement.</p>
 <p class="rule">
 body
-    <code>'{'</code> statements disruption <code>'}'</code>
-</p>
-<p class="rule">
-disruption
-    <code>""</code>
-    <code>"disruption"</code> statements
+    <code>'{'</code> statements <code>'}'</code>
 </p>
 <p><a href="statements.html#return">The <code>return</code> statement</a> or <a href="statements.html#jump">the <code>jump</code> statement</a> gives the return value. Implicit return (falling through the bottom) returns <code>null</code>.</p>
-<p>The body can be followed by a <a href="#disruption">disruption clause</a>.</p>
 
 <h3>Context</h3>
 <p>The <var>context</var> of a function is the function in which it is made.
@@ -156,47 +149,6 @@ The names are declared by</p>
 <p>A function is not required to use any of the outer names.
 A function is free to reuse any of those outer names by declaration, but in doing so, it loses its right to use the outer version.</p>
 <p>An inner function can see the scope of an outer function, but an outer function may not see into the scope of an inner function. A function can be both an inner function (to the function it is nested inside) and an outer function (of the functions nested inside of itself).</p>
-
-<h2 id="disrupts">Disrupts</h2>
-<p>Disrupts are interruptions to the normal flow of a program. They can be viewed
-  in two parts: the disrupt, which interrupts the current operation,
-  and the handling of the disruption. Disrupts should not be used for ordinary outcomes.
-  Disrupts should only be used for emergencies or unexpected situations.</p>
-
-<h3 id="distrupt"><code>disrupt</code> Statement</h3>
-<p>The <code>disrupt</code> statement is like the <code>return</code> statement
-  in that it stops the processing of the current function. However, instead of
-  transferring control back to the calling function, control goes to a
-  <code>disruption</code> part. If there isn't ultimately a <code>disruption</code> part, then the actor halts.</p>
-<p>It is sometimes necessary to <code id="statements.html#log">log</code> an explanation before a <code>disrupt</code>.</p>
-
-<h3 id="disruptions"><code>disruption</code> </h3>
-<p>A function can have an optional <code>disruption</code> clause.</p>
-<pre>
-function (<var>parameter_list</var>) {
-    <var>statements</var>
-disruption
-    <var>statements</var>
-}
-</pre>
-<p>If a function does not have a <code>disruption</code> part, it is given one by
-  default that acts like</p>
-<pre>disruption
-    disrupt</pre>
-<p>When a <code>disrupt</code> statement is executed in the main part of the
-  function body, control goes to the statements of the <code>disruption</code> clause. The
-  <code>disruption</code> clause must end with either <code>return</code> or <code>disrupt</code>. If it returns,
-  then the disrupt situation is over and control returns to the calling
-  function. If the disruption disrupts, then execution of the current function
-  is abandoned and control passes to the disruption clause of the caller.
-  If there is no caller, then the actor halts.</p>
-<p>A <code>disruption</code> clause may not contain an inner function, but it may call another function that has an inner function.
-</p>
-<h6>Example:</h6>
-<pre>disruption
-    return plan_R()
-</pre>
-
 <h2>Proxy</h2>
 <p>A <var>function</var> can be used as a proxy for a record. If a <var>function</var> is called
   as</p>
