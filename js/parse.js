@@ -1,5 +1,5 @@
 // parse.js
-// 2026-07-10
+// 2026-07-17
 
 // Missing feature:
 //      patterns
@@ -16,7 +16,6 @@ const precedence = empty();
 const statement = empty();
 const intrinsic = empty();
 
-let dos;
 let endowments;
 let errors;
 let fields;
@@ -240,7 +239,6 @@ function advance(value) {
 }
 
 function initialize(array_of_tokens) {
-    dos = [];
     endowments = empty();
     errors = [];
     fields = empty();
@@ -432,7 +430,6 @@ function block() {
             statements.push(action());
             if (
                 !indentation_q() ||
-                verb === "break" ||
                 verb === "jump" ||
                 verb === "return"
             ) {
@@ -624,13 +621,6 @@ function body(the_function) {
 function function_stuff(kind, name) {
     let variable;
 
-// Don't make functions in a loop. It is inefficient,
-// and closure does not acquire the current values.
-
-    if (function_nr !== undefined && dos[function_nr].length > 0) {
-        error("misplaced", token);
-    }
-
 // 'token' is the "(" that starts the parameter list. It will be transformed into
 // the function definition. We do not build on the 'function' token because
 // 'def' and '{}' do not use the 'function' token. Everyone uses "(".
@@ -663,10 +653,6 @@ function function_stuff(kind, name) {
 // Let the function know its maker.
 
     the_function.outer = outer;
-
-// 'dos' manages loops and their labals.
-
-    dos[function_nr] = [];
 
 // 'ifs' manages 'def' and 'use' in if statements.
 
@@ -921,31 +907,6 @@ statement.assign = function assign_statement() {
     return result;
 };
 
-statement.break = function break_statement() {
-    const result = token;
-    let label = "";
-    const labels = dos[function_nr];
-    if (labels.length < 1) {
-        error("misplaced", token);
-    }
-    advance("break");
-    if (token.kind === "space") {
-        advance(" ");
-        label = token.text;
-        if (!labels.includes(token.text)) {
-            error("used before", token);
-        }
-        advance("name");
-    } else {
-        if (labels[labels.length - 1] !== "") {
-            label = labels[labels.length - 1]
-            error("expected", token, label);
-        }
-    }
-    result.label = label;
-    return result;
-};
-
 statement.call = function call_statement() {
     const result = token;
     advance("call");
@@ -985,31 +946,6 @@ statement.def = function def_statement() {
         result.second = expression();
     }
     unstifle(name);
-    return result;
-};
-
-statement.do = function do_statement() {
-    const result = token;
-    let label = "";
-    const labels = dos[function_nr];
-    advance("do");
-    if (token.text === " ") {
-        advance(" ");
-        label = token.text;
-        if (labels.includes(label)) {
-            error("already", token);
-        }
-        advance("name");
-    }
-    labels.push(label);
-    result.label = label;
-    result.statements = block();
-    advance("od");
-    if (result.label !== "") {
-        advance(" ");
-        advance(label);
-    }
-    labels.pop();
     return result;
 };
 
@@ -1069,13 +1005,6 @@ statement.jump = function jump_statement() {
     return result;
 };
 
-statement.od = function od_statement() {
-    const result = token;
-    advance();
-    error("misplaced", result);
-    return result;
-};
-
 statement.log = function log_statement() {
     const result = token;
     advance("log");
@@ -1087,13 +1016,6 @@ statement.log = function log_statement() {
     advance(":");
     advance(" ");
     result.second = expression();
-    return result;
-};
-
-statement.od = function od_statement() {
-    const result = token;
-    advance();
-    error("misplaced", result);
     return result;
 };
 
@@ -1128,7 +1050,7 @@ statement.send = function send_statement() {
 
 statement.use = function use_statement() {
     const result = token;
-    if (function_nr !== 0 || dos[function_nr].length > 0) {
+    if (function_nr !== 0) {
         error("misplaced", result);
     }
     advance("use");
@@ -1161,7 +1083,7 @@ statement.use = function use_statement() {
 statement.var = function var_statement() {
     const result = token;
     let name;
-    if (ifs[function_nr] > 0 || dos[function_nr].length > 0) {
+    if (ifs[function_nr] > 0) {
         error("misplaced", result);
     }
     advance("var");

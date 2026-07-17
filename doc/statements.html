@@ -13,10 +13,8 @@
 <p class="rule">
 statement
     assign_statement
-    break_statement
     call_statement
     def_statement
-    do_statement
     if_statement
     jump_statement
     log_statement
@@ -67,15 +65,6 @@ created by <a href="#var">the <code>var</code> statement</a>.</p>
     <li>Remove (or pop) an element from the end of an array: <code>assign <var>variable</var>: <var>array</var>[]</code></li>
 </ul>
 <p>Attempting any of those changes on a <a href="intrinsic.html#stone">stone</a> object <a href="programs.html#halt">halts the actor</a>.</p>
-
-<h3 id="break">The <code>break</code> statement</h3>
-<p class="rule">
-break_statement
-    <code>"break"</code> do_label
-</p>
-<p>The <code>break</code> statement is used to break out of <a href="#do"><code>do</code> loops</a>.
-    Execution continues with the statement after <code>od</code>. A break statement includes the label ofthe loop it is breaking. The label is optional if the loop being broken is the innermost loop and the innermost loop is not labelled.</p>
-
 <h3 id="call">The <code>call</code> statement</h3>
 <p class="rule">
 call_statement
@@ -122,36 +111,6 @@ def double(number) {
 <h6>Example:</h6>
 <pre>def sqrt_2: 1.4142135623730950
 </pre>
-<h3 id="do">The <code>do</code> statement</h3>
-<p class="rule">
-do_statement
-    <code>"do"</code> do_label indent statements outdent <code>"od"</code> do_label
-</p>
-<p class="rule">
-do_label
-    <code>""</code>
-    space name
-</p>
-<p>The <code>do</code> statement executes a list of statements until the loop
-    is broken by <code>break</code>, <code>jump</code>, or <code>return</code>.
-</p>
-<p>
-Loop labels are in their own name space. A function may contain two or more loops with the same label as long
-as they are not nested in each other.
-</p>
-<h6>Example:</h6>
-<pre>
-do
-    assign factor: factor * second
-    assign progress: (factor / divisor) + result
-    if result = progress \/ progress = null
-        break
-    fi
-    assign result: progress
-    assign divisor: divisor + 1
-od
-</pre>
-
 <h3 id="jump">The <code>jump</code> statement</h3>
 <p class="rule">
 jump_statement
@@ -316,7 +275,7 @@ locator
     devices (like keyboards, camera, and microphones),  output devices (like
     printers, displays, and speakers), and operating system services.
     Typically, access to powerful subprograms is limited to subprograms that  attenuate the power, presenting limited capabilities to other subprograms and programs.</p>
-<p> The <code>use</code> statement can not appear in a function or in an <code>if</code> or a <code>do</code> statement.</p>
+<p> The <code>use</code> statement can not appear in a function or in an <code>if</code> statement.</p>
 <h6>Example:</h6>
 <pre>use lang: language_library(&quot;en&quot;)</pre>
 
