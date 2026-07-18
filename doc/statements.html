@@ -121,6 +121,14 @@ jump_statement
     In some languages, this is called tail call optimization.
     It can significantly reduce the rate at which memory is consumed, making looping by recusion and continuation passintg style feasible.</p>
 <p>The <code>jump</code> statement is not allowed in functions that make inner functions.</p>
+<h5>Example:</h5>
+<pre>function factorial(n, progress | 1) {
+    if n > 1
+        jump factorial(n - 1, n * progress)
+    else
+        return progress
+    fi
+}</pre>
 
 <h3 id="if">The <code>if</code> statement</h3>
 <p class="rule">
