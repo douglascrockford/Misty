@@ -412,8 +412,8 @@ text(my_text -3)          # &quot;nic&quot;        # the last 3
 text(my_text 0 0)         # &quot;&quot;
 text(my_text 10)          # &quot;&quot;
 text(my_text 11)          # null
-text(my_text 2 1)         # null
-</pre>
+text(my_text 2 1)         # null</pre>
+
 <h2 id="sensory">Sensory Functions</h2>
 <p>The sensory functions end with <code>?</code><small>question mark</small>. They always return a <a href="types.html#logical">logical</a> value.</p>
 <h4 id="actor?">actor?(<var>value</var>)</h4>
@@ -691,7 +691,7 @@ assign result: floor(12.3775 -2)      # result is 12.37
 assign result: floor(-12.3775 0)      # result is -13
 assign result: floor(-12.3775 -2)     # result is -12.38</pre>
 <h4 id="for">for(<var>array</var> <var>function</var> <var>reverse</var> <var>exit</var>)</h4>
-<p>For each. Call the <var>function</var> with each element of the <var>array</var>.
+<p>For each element. Call the <var>function</var> with each element of the <var>array</var>.
 The <var>function</var> is passed each element and its element number.</p>
 <pre>(element element_nr)</pre>
 <p>If <var>reverse</var> is <code>true</code> then it starts with the last element and works backwards.</p>
@@ -737,6 +737,12 @@ text<code>)</code>. If it returns a text, then the substitution is made.</p>
     # result is &quot;Malmborg in Plano!&quot;</pre>
 <h4 id="fraction">fraction(<var>number</var>)</h4>
 <p>The <code>fraction</code> function returns the fractional part of a <var>number</var> The result has the same sign as the <var>number</var>, so that <code>fraction(<var>number</var>) + whole(<var>number</var>) = <var>number</var></code> is <code>true</code>. It returns <code>null</code> for non-numbers. Also see <code><a href="#whole">whole</a></code>.</p>
+<h4 id="left">left(<var>first</var> <var>second</var>)</h4>
+<p>Left shift. It is similar to multiplying by a power of two. Bits that fall off of the left edge are lost.</p>
+<h6>Examples:</h6>
+<pre>assign result: left(12 10)    # result is 12288
+assign result: left(16 2)     # result is 64
+assign result: left(15 53)    # result is -9007199254740992</pre>
 <h4 id="length">length(<var>value</var>)</h4>
 <table><caption>The <code>length</code> function</caption>
     <tr>
@@ -783,12 +789,6 @@ text<code>)</code>. If it returns a text, then the substitution is made.</p>
     <p>If the <code>length</code> field contains a number, return the number.</p>
 </blockquote>
 <p>All other values produce <code>null</code>.</p>
-<h4 id="left">left(<var>first</var> <var>second</var>)</h4>
-<p>Left shift. It is similar to multiplying by a power of two. Bits that fall off of the left edge are lost.</p>
-<h6>Examples:</h6>
-<pre>assign result: left(12 10)    # result is 12288
-assign result: left(16 2)     # result is 64
-assign result: left(15 53)    # result is -9007199254740992</pre>
 <h4 id=log>log(<var>number</var>)</h4>
 <p>Compute the natural logarithm of the <var>number</var>. This has nothing to do with the <code><a href="statements.html#log">log</a></code><a href="statements.html#log"> statement</a>.</p>
 <h4 id=log_ten>log_ten(<var>number</var>)</h4>
@@ -940,7 +940,8 @@ def product: reduce(data '*')    # product is 362880</pre>
 <pre>def data: [&quot;I&quot; &quot;am&quot; &quot;Sam&quot;]
 var result: reverse(data)                     # the result is [&quot;Sam&quot; &quot;am&quot; &quot;I&quot;]
 assign result: reverse(-36028797018963968)    # result is 1
-assign result: reverse(3141592653589793)      # result is 2334719610726733</pre>
+assign result: reverse(3141592653589793)      # result is 2334719610726733
+assign result: reverse(98.6)                  # null</pre>
 <h4 id=right>right(<var>first</var> <var>second</var>)</h4>
 <p>Right shift with zero fill.</p>
 <h6>Examples:</h6>
@@ -1057,7 +1058,7 @@ assign stooges: sort(stooges [50 60 20 40 10 30])
     #     {first: &quot;Joe&quot; last: &quot;Besser&quot;}
     #     {first: &quot;Joe&quot; last: &quot;DeRita&quot;}
     # ]
-assign stooges: sort(stooges map(stooges function (stooge) {
+assign stooges: sort(stooges array(stooges function (stooge) {
     return upper(stooge.last && stooges.first)
 }))
     # stooges is now [
