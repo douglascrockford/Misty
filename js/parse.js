@@ -1,5 +1,5 @@
 // parse.js
-// 2026-07-17
+// 2026-07-21
 
 // Missing feature:
 //      patterns
@@ -37,8 +37,8 @@ let token_nr;
 const intrinsics = [
     "abs", "actor?", "apply", "array", "array?", "blob?", "ceiling",
     "character", "character?", "codepoint", "data?", "digit?", "e", "extract",
-    "false", "false?", "filter", "find", "fit?", "floor", "for",
-    "format", "fraction", "function", "function?", "integer", "integer?",
+    "false", "false?", "filter", "find", "floor", "for",
+    "format", "fraction", "function", "function?", "int?", "integer", "integer?",
     "length", "letter?", "logical", "logical?", "lower", "lower?", "max",
     "min", "modulo", "neg", "normalize", "not", "null", "null?", "number",
     "number?", "parallel", "pattern", "pattern?", "pi", "race", "record",
@@ -924,7 +924,7 @@ statement.call = function call_statement() {
 
 statement.def = function def_statement() {
     const result = token;
-    if (dos[function_nr].length > 0 || ifs[function_nr] > 0) {
+    if (ifs[function_nr] > 0) {
         error("misplaced", result);
     }
     advance("def");
