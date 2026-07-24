@@ -1,6 +1,6 @@
 misty subprogram tokenize() {
 
-# 2026-06-16
+# 2026-07-21
 
 # This subprogram returns a function that takes a text and converts it into an
 # array of tokens. The argument is a source text. The return value is an array
@@ -31,11 +31,6 @@ misty subprogram tokenize() {
 #       operator
 #       apostrophic
 
-# An apostrophic token has a text of three of more characters, and the first
-# and last are ''' (apostrophe). These are used for Misty functinos and
-#  McKeeman singletons.
-
-
 # Tokenize can recognize many punctuators that are not legal Misty tokens.
 # In particular, some special characters can be repeated and followed by
 # equal signs. Misty does a little of this. The C family does this a lot.
@@ -46,11 +41,16 @@ misty subprogram tokenize() {
 # A comment token includes '#', all of the characters following it up to
 # but not including the end of line, and all the spaces that proceeded it.
 
+# An apostrophic token has a text of three of more characters, and the first
+# and last are ''' (apostrophe). These are used for Misty functinos and
+#  McKeeman singletons.
+
 # Tokenize does not directly report errors. It always completes the file.
 # If there is an error in a name or number, it makes a token containing
 # 'error', 'error_at', 'error_row', and 'error_column' fields.
 
     def backslash: "\b"
+    def car_reg: "\r"
     def end_of_line: "\n"
     def quote: "\q"
 
@@ -59,9 +59,9 @@ misty subprogram tokenize() {
         b: backslash
         g: ">"
         l: "<"
-        n: "\n"
+        n: end_of_line
         q: quote
-        r: "\r"
+        r: car_reg
         t: "\t"
     }
 
@@ -86,6 +86,7 @@ misty subprogram tokenize() {
 
     var at: 0
     var column_nr: 0
+    var indent: 0
     var indentation: 0
     var row_nr: 0
     var source: ""
@@ -110,7 +111,10 @@ misty subprogram tokenize() {
         assign column_nr: column_nr + 1
     }
 
-    def snip(trim_front | 0 trim_back | 0) {
+    def snip(
+        trim_front | 0
+        trim_back | 0
+    ) {
         return text(
             source
             token.at + trim_front
@@ -124,12 +128,10 @@ misty subprogram tokenize() {
     }
 
     def repeatable(character) {
-        do
-            if peek() <> character
-                break
-            fi
+        if peek() = character
             call advance()
-        od
+            jump repeatable(character)
+        fi
     }
 
     def cish() {
@@ -143,35 +145,33 @@ misty subprogram tokenize() {
     }
 
     def ender(character) {
-        return character = "\n" \/ character = "\r" \/ character = ""
+        return character = end_of_line \/ character = car_reg \/ character = ""
     }
 
     def newline() {
         assign token.kind: "newline"
-        assign token.text: "\n"
+        assign token.text: end_of_line
         assign column_nr: 0
         assign row_nr: row_nr + 1
     }
 
     def carriage_return() {
         assign token.kind: "newline"
-        if peek() = "\n"
+        if peek() = end_of_line
             call advance()
-            assign token.text: "\r\n"
+            assign token.text: car_reg + end_of_line
         else
-            assign token.text: "\r"
+            assign token.text: car_reg
         fi
         assign column_nr: 0
         assign row_nr: row_nr + 1
     }
 
     def comment() {
-        do
-            if ender(peek())
-                break
-            fi
+        if not(ender(peek()))
             call advance()
-        od
+            jump comment()
+        fi
         assign token.kind: "comment"
         assign token.text: snip()
     }
@@ -310,55 +310,48 @@ misty subprogram tokenize() {
         if ender(peek())
             call error("Missing '''.")
         else
-            do
-                if ender(peek())
-                    call error("Missing '''.")
-                    break
-                fi
-                if peek() = "'"
-                    break
-                fi
-                call advance()
-            od
             call advance()
+            if peek(-1) <> "'"
+                jump single_quote()
+            fi
         fi
         assign token.kind: "apostrophic"
         assign token.text: snip()
     }
 
+    def count_spaces(total | 0) {
+        if peek() <> " "
+            return total
+        fi
+        call advance()
+        jump count_spaces(total + 1)
+    }
+
+    def line(content) {
+        if ender(peek())
+            return content
+        fi
+        call advance()
+        jump line(content & peek(-1))
+    }
+
+    def next_line(lines | []) {
+        if peek() = car_reg /\ peek(1) = end_of_line
+            assign at: at + 1
+        fi
+        call advance()
+        assign column_nr: 0
+        assign row_nr: row_nr + 1
+        assign indent: count_spaces()
+        if indent >= indentation + 4
+            assign lines[]: line(repeat(" " indent - (indentation + 4)))
+            jump next_line()
+        fi
+        return lines
+    }
+
     def long() {
-        var value: ""
-        var indent: 0
-        var content: ""
-        var contents: []
-        do
-            if peek() = "\r" /\ peek(1) = "\n"
-                assign at: at + 1
-            fi
-            call advance()
-            assign column_nr: 0
-            assign row_nr: row_nr + 1
-            assign indent: 0
-            do
-                if peek() <> " "
-                    break
-                fi
-                assign indent: indent + 1
-                call advance()
-            od
-            if indent < indentation + 4
-                break
-            fi
-            assign content: repeat(" " indent - (indentation + 4))
-            do
-                if ender(peek())
-                    break
-                fi
-                assign content: content & peek()
-                call advance()
-            od
-            assign contents[]: content
-        od
+        assign token.text: text(next_line() end_of_line)
         if indent <> indentation
             call error(
                 "Expected" && indentation &&
@@ -372,99 +365,102 @@ misty subprogram tokenize() {
                 Missing '"'.
             ")
         fi
-        assign value: contents.reduce(
-            function (accumulator current_value current_index) {
-                return accumulator & (
-                    current_index = 0
-                    then ""
-                    else end_of_line
-                ) & current_value
-            }
-            ""
-        )
         assign token.kind: "text"
-        assign token.text: value
         assign token.indentation: indentation
     }
 
-    def double_quote() {
-        var value: ""
+    def hex_text(accumulation) {
+        if hex[peek()] <> true
+            return accumulation
+        fi
+        call advance()
+        jump hex_text(accumulation & peek(-1))
+    }
+
+    def text_guts(accumulation) {
         var escapee: ""
         var codepoint: 0
-        if ender(peek())
-            return long()
+
+# End of text
+
+        if peek() = quote
+            call advance()
+            return accumulation
         fi
-        do
-            if peek() = quote
-                call advance()
-                break
-            fi
-            if ender(peek())
-                call error("
-                    Missing '"'.
-                ")
-                break
-            fi
-            if peek() = backslash
-                call advance()
-                assign escapee: escape[peek()]
-                if text?(escapee)
-                    call advance()
-                    assign value: value & escapee
-                else if peek() = "u"
-                    call advance()
-                    if peek() <> "{"
-                        call error("Missing '{'.")
-                    else
-                        call advance()
-                        assign escapee: ""
-                        do
-                            if ender(peek()) \/ peek() = quote
-                                call error("Missing '}'.")
-                                break
-                            fi
-                            if peek() = "}"
-                                call advance()
-                                if escapee = ""
-                                    call error("Missing codepoint.")
-                                else
-                                    assign codepoint: number(escapee 16)
-                                    if (
-                                        fit?(codepoint) /\
-                                        codepoint <= 4294967295 /\
-                                        codepoint >= 0
-                                    )
-                                        assign value: character(codepoint)
-                                    else
-                                        call error("Bad codepoint" && escapee)
-                                    fi
-                                fi
-                                break
-                            fi
-                            if hex[peek()] = true
-                                assign escapee: escape & peek()
-                            else
-                                call error("Expected a HEX DIGIT and instead saw'" && peek() & "'.")
-                            fi
-                            call advance()
-                        od
-                    fi
-                else if ender(peek())
-                    call error("
-                        Missing '"'.
-                    ")
-                else
-                    call error("Bad escapement '" & backslash & peek() & "'.")
-                    assign value: value & peek()
-                    call advance()
-                fi
-            else
-                assign value: value & peek()
-                call advance()
-            fi
-        od
+
+# End of line
+
+        if ender(peek())
+            call error("
+                Missing '"'.
+            ")
+            return accumulation
+        fi
+
+# Accumulate a character
+
+        if peek() <> backslash
+            call advance()
+            jump text_guts(accumulation & peek(-1))
+        fi
+
+# Escapement
+
+        call advance()
+        assign escapee: escape[peek()]
+
+# Simple escapement
+
+        if text?(escapee)
+            call advance()
+            jump text_guts(accumulation & escapee)
+        fi
+
+# Bad escapement
+
+        if peek() <> "u"
+            call error("Bad escapement '" & backslash & peek() & "'.")
+            call advance()
+            jump text_guts(accumulation)
+        fi
+
+# Unicode hex codepoint escapement
+
+        call advance()
+        if peek() = "{"
+            call advance()
+        else
+            call error("Missing '{'.")
+        fi
+        assign escapee: hex_text("")
+        if escapee = ""
+            call error("Missing codepoint.")
+        fi
+        assign codepoint: number(escapee 16)
+        if (
+            int?(codepoint) /\
+            codepoint <= 4294967295 /\
+            codepoint >= 0
+        )
+            assign escapee: character(codepoint)
+        else
+            call error("Bad codepoint" && escapee)
+            assign escapee: ""
+        fi
+        if peek() = "}"
+            call advance()
+        else
+            call error("Missing '}'.")
+        fi
+        jump text_guts(accumulation & escapee)
+    }
+
+    def double_quote() {
+        if ender(peek())
+            jump long()
+        fi
         assign token.kind: "text"
-        assign token.text: value
+        assign token.text: text_guts("")
     }
 
     assign tokenators: {
@@ -553,32 +549,33 @@ misty subprogram tokenize() {
         "z": letter
     }
 
+    def next_token(tokens | []) {
+        if peek() = ""
+            return tokens
+        fi
+        assign token: {
+            at
+            from_column: column_nr
+            from_row: row_nr
+        }
+        var tokenator: tokenators[peek()]
+        call advance()
+        if function?(tokenator)
+            call tokenator()
+        else
+            call seal()
+        fi
+        assign token.to_column: column_nr
+        assign token.to_row: row_nr
+        assign tokens[]: token
+        jump next_token(tokens)
+    }
+
     return function tokenize(source_text) {
-        var tokenator: null
         assign source: source_text
         assign at: 0
         assign row_nr: 0
         assign column_nr: 0
-        def tokens: []
-        do
-            assign token: {
-                at
-                from_column: column_nr
-                from_row: row_nr
-            }
-            if peek() = null
-                return tokens
-            fi
-            assign tokenator: tokenators[peek()]
-            call advance()
-            if function?(tokenator)
-                call tokenator()
-            else
-                call seal()
-            fi
-            assign token.to_column: column_nr
-            assign token.to_row: row_nr
-            assign tokens[]: token
-        od
+        jump next_token()
     }
 }
