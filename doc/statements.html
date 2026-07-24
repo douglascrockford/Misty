@@ -98,8 +98,7 @@ def_value
     the current function. The variable is read-only, but the value it contains
     may be mutable. Names that are defined with the <code>def</code> statement
     can not be changed with the <code>assign</code> statement. If the value is mutable,
-  then the value's members or elements may be changed with the <code>assign</code> statement.
-  The <code>def</code> statement can not appear in an <code>if</code> or a <code>do</code> statement.</p>
+  then the value's members or elements may be changed with the <code>assign</code> statement.  </p>
 <p>If the <code>def</code> is followed by a <a href="funct6ions.html">function literal</a>, then a read only variable having the same name as the function is created and given the value of the function object. So these two statements do the same thing:</p>
 <pre>def double: function double (number) {
     return number + number
@@ -283,8 +282,7 @@ locator
     devices (like keyboards, camera, and microphones),  output devices (like
     printers, displays, and speakers), and operating system services.
     Typically, access to powerful subprograms is limited to subprograms that  attenuate the power, presenting limited capabilities to other subprograms and programs.</p>
-<p> The <code>use</code> statement can not appear in a function or in an <code>if</code> statement.</p>
-<h6>Example:</h6>
+<p>Example:</p>
 <pre>use lang: language_library(&quot;en&quot;)</pre>
 
 <h3 id="var">The <code>var</code> statement</h3>
@@ -293,7 +291,7 @@ var_statement
     <code>&quot;var&quot;</code> space name <code>':'</code> space expression
 </p>
 <p>The <code>var</code> statement creates a variable in the current function scope.
-The value of a variable can be replaced by <a href="#assign">the <code>assign</code> statement</a>. The <code>var</code> statement can not appear in an <code>if</code> or <code>do</code> statement. The <dfn>name</dfn> is the name of a new variable in this scope. The expression on the right side of the <code>:</code><small>colon</small> gives the initial value of the variable.  The <dfn>name</dfn> may not be used in the <dfn>expression</dfn> on the right side of the <code>:</code><small>colon</small>.</p>
+The value of a variable can be replaced by <a href="#assign">the <code>assign</code> statement</a>. The <dfn>name</dfn> is the name of a new variable in this scope. The expression on the right side of the <code>:</code><small>colon</small> gives the initial value of the variable.  The <dfn>name</dfn> may not be used in the <dfn>expression</dfn> on the right side of the <code>:</code><small>colon</small>.</p>
 <p>Variables must be declared before they are used or assigned values. Note that <code>:</code> <dfn>expression</dfn> is not optional.</p>
 <h6>Examples:</h6>
 <pre>var first_name: &quot;&quot;
