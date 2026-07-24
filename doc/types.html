@@ -92,7 +92,7 @@ length(empty)      # 0
   <code>length</code> then the <a href="programs.html#halt">actor halts</a>.
   The number of elements in an array can be obtained by the <code>length</code>
   function.</p>
-<p>If the array has multiple dimensions, additional subscripts can be used
+<p>If the array has multiple dimensions (array of arrays or array of arrays of arrays), additional subscripts can be used
   to specify a particular element.</p>
 <blockquote>
   <p><var>array</var><code>[</code><var>ordinal<sub>0</sub></var><code>][</code><var>ordinal<sub>1</sub></var><code>][</code><var>ordinal<sub>2</sub></var><code>]</code></p>
@@ -104,7 +104,11 @@ assign stooges[0]: &quot;Shemp&quot;      # stooges is [&quot;Shemp&quot; &quot;
 assign stooges[]: &quot;Joe&quot;         # stooges is [&quot;Shemp&quot; &quot;Larry&quot; &quot;Moe&quot; &quot;Joe&quot;]
 assign popped: stooges[]        # stooges is [&quot;Shemp&quot; &quot;Larry&quot; &quot;Moe&quot;]
                                 # popped is &quot;Joe&quot;
-</pre>
+
+assign matrix: [
+    [0 1] [2 3]
+]
+assign: result: matrix[1][0]    # result is 2</pre>
 <h2 id="blob">Blob</h2>
 <p>A blob is a container of bits. Blobs are usually used to represent things external to the Misty system,
 such as keys, network packets, sounds, and images.</p>
