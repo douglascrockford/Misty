@@ -1,5 +1,5 @@
 // tokenize.js  # Misty tokenizer
-// 2026-06-16
+// 2026-07-21
 
 // Tokenize takes a text and converts it into an array of tokens.
 // The input is a source text. The output is an array of token records.
@@ -49,6 +49,8 @@
 // 'error', 'error_at', 'error_row', and 'error_column' fields.
 
 const backslash = "\\";
+const car_reg = "\r";
+const end_of_line = "\n";
 const quote = "\"";
 
 const escape = {
@@ -56,9 +58,9 @@ const escape = {
     b: backslash,
     g: ">",
     l: "<",
-    n: "\n",
+    n: end_of_line,
     q: quote,
-    r: "\r",
+    r: car_reg,
     t: "\t"
 };
 
@@ -83,6 +85,7 @@ const hex = {
 
 let at;
 let column_nr;
+let indent = 0;
 let indentation = 0;
 let row_nr;
 let source;
@@ -136,34 +139,32 @@ function cish() {
 }
 
 function ender(character) {
-    return character === "\n" || character === "\r" || !character;
+    return character === end_of_line || character === car_reg || !character;
 }
 
 function newline() {
     token.kind = "newline";
-    token.text = "\n";
+    token.text = end_of_line;
     column_nr = 0;
     row_nr += 1;
 }
 
 function carriage_return() {
     token.kind = "newline";
-    if (peek() === "\n") {
+    if (peek() === end_of_line) {
         advance();
-        token.text = "\r\n";
+        token.text = car_reg + end_of_line;
     } else {
-        token.text = "\r";
+        token.text = car_reg;
     }
     column_nr = 0;
     row_nr += 1;
 }
 
 function comment() {
-    while (true) {
-        if (ender(peek())) {
-            break;
-        }
+    if (!ender(peek())) {
         advance();
+        return comment();
     }
     token.kind = "comment";
     token.text = snip();
@@ -176,7 +177,7 @@ function space() {
     }
     token.kind = "space";
     token.text = snip();
-    token.length = token.text.length
+    token.length = token.text.length;
     if (token.from_column === 0) {
         indentation = token.length;
         token.indentation = indentation;
@@ -303,152 +304,152 @@ function single_quote() {
         error("Missing '''.");
     } else {
         advance();
-        while (true) {
-            if (ender(peek())) {
-                error("Missing '''.");
-                break;
-            }
-            if (peek() === "'") {
-                break;
-            }
-            advance();
+        if (peek(-1) !== "'") {
+            return single_quote();
         }
-        advance();
     }
     token.kind = "apostrophic";
     token.text = snip();
 }
 
-function long() {
-    let value = "";
-    let indent;
-    let content;
-    let contents = [];
-    while (true) {
-        if (peek() === "\r" && peek(1) === "\n") {
-            at += 1;
-        }
-        advance();
-        column_nr = 0;
-        row_nr += 1;
-        indent = 0;
-        while (true) {
-            if (peek() !== " ") {
-                break;
-            }
-            indent += 1;
-            advance();
-        }
-        if (indent < indentation + 4) {
-            break;
-        }
-        content = " ".repeat(indent - (indentation + 4));
-        while (true) {
-            if (ender(peek())) {
-                break;
-            }
-            content += peek();
-            advance();
-        }
-        contents.push(content);
+function count_spaces(total = 0) {
+    if (peek() !== " ") {
+        return total;
     }
+    advance();
+    return count_spaces(total + 1);
+}
+
+function line(content) {
+    if (ender(peek())) {
+        return content;
+    }
+    advance();
+    return line(content + peek(-1));
+}
+
+function next_line(lines = []) {
+    if (peek() === car_reg && peek(1) === end_of_line) {
+        at = at + 1;
+    }
+    advance();
+    column_nr = 0;
+    row_nr = row_nr + 1;
+    indent = count_spaces();
+    if (indent >= indentation + 4) {
+        lines.push(line(" ".repeat(indent - (indentation + 4))));
+        return next_line(lines);
+    }
+    return lines;
+}
+
+function long() {
+    token.text = next_line().join(end_of_line);
     if (indent !== indentation) {
-        error("Expected " + indentation + " spaces and saw " + indent + " spaces.");
+        error(
+            "Expected " + indentation +
+            " spaces and saw " + indent + " spaces."
+        );
     }
     if (peek() === quote) {
         advance();
     } else {
         error("Missing '\"'.");
     }
-    value = contents.reduce(
-        function (accumulator, current_value, current_index) {
-            return accumulator + (
-                current_index === 0
-                ? ""
-                : "\n"
-            ) + current_value;
-        },
-        ""
-    );
     token.kind = "text";
-    token.text = value;
     token.indentation = indentation;
 }
 
-function double_quote() {
-    let value = "";
-    let escapee;
+function hex_text(accumulation) {
+    if (hex[peek()] !== true) {
+        return accumulation;
+    }
+    advance();
+    return hex_text(accumulation + peek(-1));
+}
+
+function text_guts(accumulation) {
+    let escapee = "";
     let codepoint = 0;
+
+// End of text
+
+    if (peek() === quote) {
+        advance();
+        return accumulation;
+    }
+
+// End of line
+
+    if (ender(peek())) {
+        error("Missing '\"'.");
+        return accumulation;
+    }
+
+// Accumulate a character
+
+    if (peek() !== backslash) {
+        advance();
+        return text_guts(accumulation + peek(-1));
+    }
+
+// Escapement
+
+    advance();
+    escapee = escape[peek()];
+
+// Simple escapement
+
+    if (typeof escapee === "string") {
+        advance();
+        return text_guts(accumulation + escapee);
+    }
+
+// Bad escapement
+
+    if (peek() !== "u") {
+        error("Bad escapement '" + backslash + peek() + "'.");
+        advance();
+        return text_guts(accumulation);
+    }
+
+// Unicode hex codepoint escapement
+
+    advance();
+    if (peek() === "{") {
+        advance();
+    } else {
+        error("Missing '{'.");
+    }
+    escapee = hex_text("");
+    if (escapee === "") {
+        error("Missing codepoint.");
+    }
+    codepoint = parseInt(escapee, 16);
+    if (
+        Number.isSafeInteger(codepoint) &&
+        codepoint <= 1114111 &&
+        codepoint >= 0
+    ) {
+        escapee = String.fromCodePoint(codepoint);
+    } else {
+        error("Bad codepoint " + escapee);
+        escapee = "";
+    }
+    if (peek() === "}") {
+        advance();
+    } else {
+        error("Missing '}'.");
+    }
+    return text_guts(accumulation + escapee);
+}
+
+function double_quote() {
     if (ender(peek())) {
         return long();
     }
-    while (true) {
-        if (peek() === quote) {
-            advance();
-            break;
-        }
-        if (ender(peek())) {
-        error("Missing '\"'.");
-            break;
-        }
-        if (peek() === backslash) {
-            advance();
-            escapee = escape[peek()];
-            if (typeof escapee === "string") {
-                advance();
-                value += escapee;
-            } else if (peek() === "u") {
-                advance();
-                if (peek() !== "{") {
-                    error("Missing '{'.");
-                } else {
-                    advance();
-                    escapee = "";
-                    while (true) {
-                        if (ender(peek()) || peek() === quote) {
-                            error("Missing '}'.");
-                            break;
-                        }
-                        if (peek() === "}") {
-                            advance();
-                            if (escapee === "") {
-                                error("Missing codepoint.");
-                            } else {
-                                codepoint = Number.parseInt(escapee, 16);
-                                if (
-                                    Number.isFinite(codepoint) &&
-                                    codepoint <= 1114112 &&
-                                    codepoint >= 0
-                                ) {
-                                    value += String.fromCodePoint(codepoint);
-                                } else {
-                                    error("Bad copepoint " + escapee);
-                                }
-                            }
-                            break;
-                        }
-                        if (hex[peek()] === true) {
-                            escapee += peek();
-                        } else {
-                            error("Expected a HEX DIGIT and instead saw '" + peek() + "'.");
-                        }
-                        advance();
-                    }
-                }
-            } else if (ender(peek())) {
-                error("Missing '\"'.");
-            } else {
-                error("Bad escapement '" + backslash + peek() + "'.");
-                value += peek();
-                advance();
-            }
-        } else {
-            value += peek();
-            advance();
-        }
-    }
     token.kind = "text";
-    token.text = value;
+    token.text = text_guts("");
 }
 
 tokenators = {
@@ -537,31 +538,32 @@ tokenators = {
     "z": letter
 };
 
+function next_token(tokens = []) {
+    if (peek() === undefined) {
+        return tokens;
+    }
+    token = {
+        at,
+        from_column: column_nr,
+        from_row: row_nr
+    };
+    let tokenator = tokenators[peek()];
+    advance();
+    if (typeof tokenator === "function") {
+        tokenator();
+    } else {
+        seal();
+    }
+    token.to_column = column_nr;
+    token.to_row = row_nr;
+    tokens.push(token);
+    return next_token(tokens);
+}
+
 export default Object.freeze(function tokenize(source_text) {
-    let tokenator;
     source = source_text;
     at = 0;
     row_nr = 0;
     column_nr = 0;
-    const tokens = [];
-    while (true) {
-        token = {
-            at,
-            from_column: column_nr,
-            from_row: row_nr
-        };
-        if (!peek()) {
-            return tokens;
-        }
-        tokenator = tokenators[peek()];
-        advance();
-        if (typeof tokenator === "function") {
-            tokenator();
-        } else {
-            seal();
-        }
-        token.to_column = column_nr;
-        token.to_row = row_nr;
-        tokens.push(token);
-    }
+    return next_token();
 });
