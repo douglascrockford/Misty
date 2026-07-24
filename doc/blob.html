@@ -18,33 +18,33 @@ td {
 <pre>use blob()</pre>
 <p>A blob is a binary large object, a linear container of bits. Blobs can be used to encode data, messages, sounds, images, public keys, network addresses, and encrypted payloads. </p>
 <p>Blobs are created with <a href="#make"><code>blob.make</code></a>. Bits are appended to a blob with the <a href="#write"><code>blob.write</code></a> functions. Information can be retrieved from a blob with the <a href="#read"><code>blob.read</code></a> functions. Blogs produce <code>true</code> with the <a href="intrinsic.html#blob?"><code>blob?</code></a> and <a href="intrinsic.html#data?"><code>data?</code></a> intrinsic functions. The <a href="intrinsic.html#length"><code>length</code></a> intrinsic function determines the number of bits in a blob.</p>
-<p>A blob can be in one of two states, either <em>antestone</em> or <em>stone</em>. In the mutable antestone state, the <code>write</code> functions may be used to append bits to the blob. In the immutable stone state, bits can be harvested from the blob. Bits can be written to blobs as fixed size bit fields, that is a sequence of bits with a specified length, or as a <a href="#kim">kim</a>. </p>
+<p>A blob can be in one of two states, either <em>writeable</em> or <em>stone</em>. In the mutable writeable state, the <code>write</code> functions may be used to append bits to the blob. In the immutable stone state, bits can be harvested from the blob. Bits can be written to blobs as fixed size bit fields, that is a sequence of bits with a specified length, or as a <a href="#kim">kim</a>. </p>
 <h2 id="make">Make function</h2>
 <p>The <code>make</code> function makes mutable blobs.</p>
 <h4>blob.make()</h4>
 <p>Make a new empty blob.</p>
 <h4>blob.make(<var>capacity</var>)</h4>
 <p>Make a new empty blob with an initial capacity in bits. When turned to stone, the excess bits are discarded. If the initial capacity is too small, the <code>write</code> functions will extended it. A good initial guess can improve performance.</p>
-<h4>blob.make(<var>length</var> <var>logical</var>)</h4>
-<p>Make a new blob containing all zeros (<code>false</code>) or all ones (<code>true</code>).</p>
+<h4>blob.make(<var>length</var> <var>value</var>)</h4>
+<p>Make a new blob containing all zeros (<code>0</code> or <code>false</code>) or all ones (<code>1</code> or <code>true</code>). Any other value will halt.</p>
 <h4>blob.make(<var>length</var> <var>random</var>)</h4>
 <p>Make a new blob of a given <var>length</var> whose content is random.
-The <var>random</var> argument is a random generator function that returns <a href="fit.html">fit numbers</a>, like <code><a href="random.thml#random_fit">random.random_fit()</a></code>.</p>
+The <var>random</var> argument is a random generator function that returns <a href="types.html#int">ints</a>, like <code><a href="random.thml#random_int">random.random_int()</a></code>.</p>
 <h4>blob.make(<var>blob</var> <var>from</var> <var>to</var>)</h4>
 <p>Make a copy of all or part of a blob. The default of <var>from</var> is <code>0</code>. The default of <var>to</var> is the <code>length(<var>blob</var>).</code></p>
 <h2 id="write">Write functions</h2>
 <p>The <code>write</code> functions append bits to the end of a blob. The <var>blob</var> must be <a href="types.html#immutable">mutable</a>. If the <var>blob</var> is <a href="intrinsic.html#stone">stone</a>, then the <a href="programs.html#halt">actor halts</a>.</p>
 <h4 id="write_bit">blob.write_bit(<var>blob</var> <var>logical</var>)</h4>
 <p>Append a bit to the end of the <var>blob</var>. The <var>logical</var> value can be <code>true</code>, <code>false</code>, <code>1</code>, or <code>0</code>.
-Any other value will disrupt. </p>
+Any other value  halts. </p>
 <h4 id="write_blob">blob.write_blob(<var>blob</var> <var>second_blob</var>)</h4>
 <p>Append <var>second_blob</var> to the end of <var>blob</var>.</p>
 <h4 id="write_dec64">blob.write_dec64(<var>blob</var> <var>number</var>)</h4>
 <p>Append  a 64 bit <a href="https://www.crockford.com/dec64.html">DEC64</a> encoded number to a stone <var>blob</var>.</p>
-<h4 id="write_fit">blob.write_fit(<var>blob</var> <var>fit</var> <var>length</var>)</h4>
-<p>Append a bit field to the <var>blob</var>. If the <a href="fit.html">fit</a> requires more bits than allowed by <var>length</var>, it disrupts. </p>
-<h4 id="write_kim">blob.write_kim(<var>blob</var> <var>fit</var>)</h4>
-<p>Append a <a href="fit.html">fit</a> number or a single character as a <a href="#kim">kim</a> value.</p>
+<h4 id="write_int">blob.write_int(<var>blob</var> <var>int</var> <var>length</var>)</h4>
+<p>Append a bit field to the <var>blob</var>. If the <a href="types.html#int">int</a> requires more bits than allowed by <var>length</var>, it halts. </p>
+<h4 id="write_kim">blob.write_kim(<var>blob</var> <var>int</var>)</h4>
+<p>Append an <a href="types.html#int">int</a>  as a <a href="#kim">kim</a> value.</p>
 <h4 id="write_pad">blob.write_pad(<var>blob</var> <var>block_size</var>)</h4>
 <p>Append a <code>1</code> bit to the  <var>blob</var> followed by enough <code>0</code> bits to round up the <var>blob</var>'s length to a multiple of the <var>block_size</var>.</p>
 <h4 id="write_text">blob.write_text(<var>blob</var> <var>text</var>)</h4>
@@ -54,11 +54,11 @@ Any other value will disrupt. </p>
 <h4 id="read_blob">blob.read_blob(<var>blob</var> <var>from</var> <var>to</var>)</h4>
 <p>Make a copy of all or part of a blob. The default of <var>from</var> is <code>0</code>. The default of <var>to</var> is the <code>length(<var>blob</var>).</code></p>
 <h4 id="read_dec64">blob.read_dec64(<var>blob</var> <var>from</var>)</h4>
-<p>Retrieve a 64 bit <a href="https://www.crockford.com/dec64.html">DEC64</a> encoded number from a stone <var>blob</var>.</p>
-<h4 id="read_fit">blob.read_fit(<var>blob</var> <var>from</var> <var>length</var>)</h4>
-<p>Retrieve a <a href="fit.html">fit</a> number from a bit field from a stone <var>blob</var>.</p>
+<p>Retrieve a 64 bit <a href="https://www.crockford.com/dec64.html">DEC64</a> encoded number from a stone <var>blob</var>. If the number is invalid, it returns <code>null</code>.</p>
+<h4 id="read_int">blob.read_int(<var>blob</var> <var>from</var> <var>length</var>)</h4>
+<p>Retrieve <var>length</var> bits and return them as an <a href="types.html#int">int</a>.</p>
 <h4 id="read_kim">blob.read_kim(<var>blob</var> <var>from</var>)</h4>
-<p>Retrieve a <a href="#kim">kim</a> encoded <a href="fit.html">fit</a> number from a stone <var>blob</var>.</p>
+<p>Retrieve a <a href="#kim">kim</a> encoded <a href="types.html#int">int</a>  from a stone <var>blob</var>.</p>
 <h4 id="read_logical">blob.read_logical(<var>blob</var> <var>from</var>)</h4>
 <p>Retrieve a bit from the <var>blob</var>. If <var>blob</var> is not a stone blob, or if <var>from</var> is out of range, it returns <code>null</code>.</p>
 <h4 id="read_text">blob.read_text(<var>blob</var> <var>from</var>)</h4>
@@ -67,7 +67,7 @@ Any other value will disrupt. </p>
 <p>Return <code>true</code> if the stone <var>blob's</var> length is a multiple of the <var>block_size</var> (in bits), and if the difference between <code>length</code> and <var>from</var> is less than or equal to the <var>block_size</var>, and if  the bit at <var>from</var> is <code>1</code>, and that any remaining bits are <code>0</code>. See <a href="#write_pad"><code>write_pad</code></a>. </p>
 <h2 id="kim">Kim</h2>
 <table>
-    <caption>Kim lengths for <a href="fit.html">fit</a> values</caption>
+    <caption>Kim lengths for <a href="types.html#int">int</a> values</caption>
     <tr>
         <th rowspan="2" valign="middle" scope="col">from</th>
         <th rowspan="2" valign="middle" scope="col">thru</th>
@@ -180,8 +180,9 @@ Any other value will disrupt. </p>
         <td>64</td>
     </tr>
 </table>
-<p><a href="https://www.crockford.com/kim.html">Kim is an encoding</a> of <a href="fit.html">fit numbers.</a> Kim is a very simple encoding that delivers 7 bits per byte. The bottom 7  bits of each byte contain data, which can be accumulated to produce <a href="fit.html">fit</a> numbers. The top bit of each byte is <code>1</code> if the byte is not  the last and least byte of a number. The top bit of each byte is <code>0</code> if the byte  is  the last byte of a number. The last byte contains the 7 least significant bits. A first byte of <code>0x80</code> indicates negation.</p>
+<p><a href="https://www.crockford.com/kim.html">Kim is a variable byte encoding</a> of <a href="types.html#int">ints.</a> Kim is a very simple encoding that delivers 7 bits per byte. The bottom 7  bits of each byte contain data, which can be accumulated. The top bit of each byte is <code>1</code> if the byte is not  the last and least byte of a number. The top bit of each byte is <code>0</code> if the byte  is  the last byte of a number. The last byte contains the 7 least significant bits. A first byte of <code>0x80</code> indicates negation.</p>
+<p>Kim encoding of small integers can be space saving.</p>
 <h4 id="kim_length">blob.kim_length(<var>value</var>)</h4>
-<p>The <code>kim_length</code> function gives the length in bits of the kim encoding of a <var>value</var>. If the value is a <a href="fit.html">fit</a> number, it gives a result as shown in the table. If <var>value</var> is a logical, it gives <code>1</code>. If value is a text, it gives the length in bits
+<p>The <code>kim_length</code> function gives the length in bits of the kim encoding of a <var>value</var>. If the value is an <a href="types.html#int">int</a>, it gives a result as shown in the table. If <var>value</var> is a logical, it gives <code>1</code>. If <var>value</var> is a text, it gives the length in bits
  of the kim encoding of a <var>text</var>, giving the sum of the kim encodings of the length and each character. Otherwise, it gives <code>null</code>.</p>
 </body></html>
