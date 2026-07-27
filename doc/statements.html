@@ -95,7 +95,7 @@ def_value
     parameter_list space body
 </p>
 <p>The <code>def</code> statement defines a read-only variable within
-    the current function. The variable is read-only, but the value it contains
+    the current function. The <dfn>name</dfn> may not be used on the right side of the <code>:</code><small>colon</small>.The variable is read-only, but the value it contains
     may be mutable. Names that are defined with the <code>def</code> statement
     can not be changed with the <code>assign</code> statement. If the value is mutable,
   then the value's members or elements may be changed with the <code>assign</code> statement.  </p>
@@ -106,7 +106,8 @@ def_value
 def double(number) {
     return number + number
 }</pre>
-<p>Variables must be defined before they are used. The <dfn>name</dfn> may not be used on the right side of the <code>:</code><small>colon</small>.</p>
+<p>Within a function, variables must be declared before they are used. However, inner functions may use all of the variables of an outer function.</p>
+<p>If a variable is declared in an <code>if</code> statement, every branch must also declare that variable. The variable is visible to the rest of the function.</p>
 <h6>Example:</h6>
 <pre>def sqrt_2: 1.4142135623730950
 </pre>
@@ -209,9 +210,9 @@ channel
     <code>abort abuse account alert alpha analysis anomaly authorization beta billing breech budget bug catastrophic cause checklist compliance console contract crash dashboard data dayfile debug
         delay demo development disaster disconnect disruption down emergency epic error event evidence example exception exhausted experimental
         expired failure fatal feature finished format fraud guest hallucination halt hello  host hygiene idle illegal inconsistent info intervention key kyc legal local
-        major maintenance memory migration minor mishap money monitor motivation network normal null offline online operations page panic partition partner permission policy portal
-        practice privacy probe protocol prototype public quality quantum  range recover region regulation reject remote risk sample security
-        serious service situation spam sponsor start state statistics stop storage store stress summary super support suspicious syntax system test time trace training
+        major maintenance malfunction memory migration minor mishap money monitor motivation network normal null offline online operations page panic partition partner permission policy portal
+        practice privacy probe protocol prototype public quality quantum  range recover region regulation reject remote risk sample scope security
+        serious service situation spam sponsor start state statistics stop storage store stress summary super support suspicious syntax system test time tool trace training
         transition trend trial trivial type unknown unneeded up usage verbose violation warning world</code>
 </blockquote>
 <p>Logging does not change the behavior of a program.  There will be no response.</p>
@@ -273,7 +274,7 @@ locator
     text_literal
     name
 </p>
-<p>The <code>use</code> statement makes a subprogram available to a program or another subprogram. The return value of the subprogram is bound to the <dfn>name</dfn>. An optional <dfn>locator</dfn> can be provided for finding the subprogram file in the <a href="system.html#shop">program shop</a>. Standard subprograms do not require a locator. The <dfn>name</dfn> may not be used as an argument on the right side of the <code>:</code><small>colon</small>.</p>
+<p>The <code>use</code> statement makes a subprogram available to a program or another subprogram. The return value of the subprogram is bound to the <dfn>name</dfn>. An optional <dfn>locator</dfn> can be provided for finding the subprogram file in the <a href="system.html#shop">program shop</a>. Standard subprograms do not require a locator. The <dfn>name</dfn> may not be used as an argument on the right side of the <code>:</code><small>colon</small>. The <code>use</code> statement may not be used in functions.</p>
 <p>The subprograms are stored in the program shop, which contains the standard subprograms that are located with the <dfn>name</dfn> form, and the extra subprograms that are located with the <dfn>text_literal</dfn> form.
     In the <dfn>text_literal</dfn> form, it is recommended that the text contain a prefix to indicate the source or usage of the subprogram. Guest code (programs from third parties that are not fully trusted) may be restricted from use of the <code>use</code> statement, or may have restrictions on which subprograms they can employ.</p>
 <p id="power">A <a href="system.html#policy">system</a> may provide
@@ -282,6 +283,8 @@ locator
     devices (like keyboards, camera, and microphones),  output devices (like
     printers, displays, and speakers), and operating system services.
     Typically, access to powerful subprograms is limited to subprograms that  attenuate the power, presenting limited capabilities to other subprograms and programs.</p>
+<p>If a variable is declared in an <code>if</code> statement, every branch must also declare that variable. The variable is visible to the rest of the function.</p>
+<p>&nbsp;</p>
 <p>Example:</p>
 <pre>use lang: language_library(&quot;en&quot;)</pre>
 
@@ -291,8 +294,9 @@ var_statement
     <code>&quot;var&quot;</code> space name <code>':'</code> space expression
 </p>
 <p>The <code>var</code> statement creates a variable in the current function scope.
-The value of a variable can be replaced by <a href="#assign">the <code>assign</code> statement</a>. The <dfn>name</dfn> is the name of a new variable in this scope. The expression on the right side of the <code>:</code><small>colon</small> gives the initial value of the variable.  The <dfn>name</dfn> may not be used in the <dfn>expression</dfn> on the right side of the <code>:</code><small>colon</small>.</p>
-<p>Variables must be declared before they are used or assigned values. Note that <code>:</code> <dfn>expression</dfn> is not optional.</p>
+Note that <code>:</code> <dfn>expression</dfn> is not optional. The value of a variable can be replaced by <a href="#assign">the <code>assign</code> statement</a>. The <dfn>name</dfn> is the name of a new variable in this scope. The expression on the right side of the <code>:</code><small>colon</small> gives the initial value of the variable.  The <dfn>name</dfn> may not be used in the <dfn>expression</dfn> on the right side of the <code>:</code><small>colon</small>.</p>
+<p>Within a function, variables must be declared before they are used. However, inner functions may use all of the variables of an outer function.</p>
+<p>If a variable is declared in an <code>if</code> statement, every branch must also declare that variable. The variable is visible to the rest of the function.</p>
 <h6>Examples:</h6>
 <pre>var first_name: &quot;&quot;
 var last_name: &quot;&quot;
