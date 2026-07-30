@@ -141,8 +141,8 @@ a field  of a record or an element of an array, or a character of a text.  </p>
     </tr>
 </table>
 <p>On retrieval, if the record does not contain the key, then <code>null</code>
-  will be returned. On storage, it disrupts if the record is immutable. On storage to a mutable array, if the key
-  is not a number or if the key violates the bounds of the array, or if the key is not the correct type, then it disrupts.</p>
+  will be returned. On storage, it halts if the record is immutable. On storage to a mutable array, if the key
+  is not a number or if the key violates the bounds of the array, or if the key is not the correct type, then it halts.</p>
 <pre>stooge[&quot;first_name&quot;][4]    # &quot;y&quot;
 null[&quot;foo&quot;]                # null
 &quot;foo&quot;[0]                   # "f"
@@ -190,7 +190,7 @@ open_input_values
 <blockquote>
   <p><var>function_value</var><code>(</code><var>input_values</var><code>)</code></p>
 </blockquote>
-<p>If the value is not function, it disrupts.</p>
+<p>If the value is not a function, it halts.</p>
 <p>If a function is invoked with too few input values, the missing input values are <code>null</code>.
 If a function is invoked with excess input values, the actor  <a href="programs.html#halt">halts</a>.</p>
 <p>A function invocation can pass at most 4 input values. If you need more, consider passing a single record literal instead. </p>
@@ -263,14 +263,14 @@ null + 0    # null</pre>
 <h3>Concatenation Operators</h3>
 <h4 id="ampersand">&<small>ampersand</small></h4>
 <p>Concatenation.  Make a new text
-that combines the two texts.   If an operand is a number, convert it to text. If after this conversion either operand is not text, then it disrupts.</p>
+that combines the two texts.   If an operand is a number, convert it to text. If after this conversion either operand is not text, then it halts.</p>
 <pre>3 & 4                          # &quot;34&quot;
 &quot;beginning&quot; & &quot;and&quot; & &quot;end&quot;    # &quot;beginningandend&quot;
 &quot;&quot; & &quot;ok&quot;                      # &quot;ok&quot;
-null & &quot;ok&quot;                    # disrupt
-&quot;&quot; & null                      # disrupt</pre>
+null & &quot;ok&quot;                    # halt
+&quot;&quot; & null                      # halt</pre>
 <h4 id="doubleampersand">&&<small>double ampersand</small></h4>
-<p>Concatenation with a space. If the two operands are not texts after number conversion, then it disrupts. Make a new text
+<p>Concatenation with a space. If the two operands are not texts after number conversion, then it halts. Make a new text
     that combines the two texts with a space between. If the first operand
   is <code>&quot;&quot;</code>, then the result is the second
   operand. If the second operand is <code>&quot;&quot;</code>,
@@ -278,15 +278,15 @@ null & &quot;ok&quot;                    # disrupt
 <pre>3 && 4                            # &quot;3 4&quot;
 &quot;beginning&quot; && &quot;and&quot; && &quot;end&quot;     # &quot;beginning and end&quot;
 &quot;&quot; && &quot;ok&quot;                        # &quot;ok&quot;
-null && &quot;ok&quot;                      # disrupt
-&quot;&quot; && null                        # disrupt
+null && &quot;ok&quot;                      # halt
+&quot;&quot; && null                        # halt
 &quot;brillig&quot; && &quot;&quot;                   # &quot;brillig&quot;</pre>
 
 <h3>Relational Operators</h3>
 <p>The relational operators compare two values and return either <code>true</code> or <code>false</code>.</p>
 <p>The <code>=</code><small>equal</small> and <code>&lt;&gt;</code><small>not equal</small> operators can take values of all types. Objects are equal only if they are the same object. Texts containing the same characters in the same order are equal.</p>
 <p>The <code>&lt;</code><small>less than</small><code>&lt;=</code><small>less than or equal</small> <code>&gt;</code><small>greater than</small> <code>&gt;=</code><small>greater than or equal</small> operators only work on a pair of numbers or a pair of texts.
-    In all other cases they disrupt.</p>
+    In all other cases they halt.</p>
 <h4>=</h4>
 <p>Equal. If the operands are the same then the result is <code>true</code>.</p>
 <h6>Examples:</h6>
@@ -300,7 +300,7 @@ fi
 <p>Less than.</p>
 <p> If the operands both numbers or both texts, then if the left operand is less than
     the right operand, then the result is <code>true</code>. If the left operand
-is greater than or equal to the right operand the result is <code>false</code>. If the two operands are not both numbers     or both texts, then it disrupts.</p>
+is greater than or equal to the right operand the result is <code>false</code>. If the two operands are not both numbers     or both texts, then it halts.</p>
 <h4>&lt;=</h4>
 <p>Less than or equal. It is the same as <code>not(<var>right</var> &lt; <var>left</var>)</code>.</p>
 <h4>&gt;</h4>
@@ -372,10 +372,10 @@ foo | 0          # 0</pre>
 </table>
 <p>Infix perators group left to
   right. The selection, subscript, and invocation operators have the highest precedence (tightest).
-The ternary operator has the lowest precedence. Grouping can be made explicit with parens.</p>
+The ternary operator has the lowest (loosest) precedence. Grouping can be made explicit with parens.</p>
 <h6>Examples:</h6>
 <pre>&quot;$&quot; & 3 + 4                        # &quot;$7&quot;
-10 - 5 - 2                         # 3
+10 - 5 + 2                         # 7
 5 * 3 / 1 * 3                      # 5
 false \/ false /\ false \/ true    # false
 1 + 2 * 3 + 4                      # 21
