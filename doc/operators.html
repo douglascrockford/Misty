@@ -333,16 +333,19 @@ foo | 0          # 0</pre>
 <caption>Operator Precedence</caption>
   <tbody>
   <tr>
-      <td style="background-color: gainsboro;">highest</td>
+      <td style="background-color: gainsboro;">tightest</td>
     <td align="center"><code>.&nbsp; &nbsp;[ ]&nbsp; &nbsp;( )</code></td>
 </tr>
   <tr>
-      <td rowspan="6" style="background: linear-gradient(gainsboro, white);">&nbsp;</td>
+      <td rowspan="8" style="background: linear-gradient(gainsboro, white);">&nbsp;</td>
       <td align="center"><code>|</code></td>
 </tr>
   <tr>
-      <td align="center"><code>*&nbsp; &nbsp;/&nbsp; &nbsp;//</code></td>
+      <td align="center"><code>*</code></td>
 </tr>
+  <tr>
+      <td align="center"><code>/&nbsp; &nbsp;//</code></td>
+  </tr>
   <tr>
       <td align="center"><code>+&nbsp; &nbsp;-</code></td>
 </tr>
@@ -355,19 +358,28 @@ foo | 0          # 0</pre>
       </td>
 </tr>
   <tr>
-      <td align="center"><code>/\&nbsp; &nbsp;\/</code>
+      <td align="center"><code>\/</code>
       </td>
 </tr>
   <tr>
-      <td>lowest</td>
+      <td align="center"><code>/\</code></td>
+  </tr>
+  <tr>
+      <td>loosest</td>
       <td align="center"><code> then else</code></td>
   </tr>
   </tbody>
 </table>
-<p>Operators group left to
+<p>Infix perators group left to
   right. The selection, subscript, and invocation operators have the highest precedence (tightest).
 The ternary operator has the lowest precedence. Grouping can be made explicit with parens.</p>
-<pre>&quot;$&quot; & 3 + 4    # &quot;$7&quot;</pre>
+<h6>Examples:</h6>
+<pre>&quot;$&quot; & 3 + 4                        # &quot;$7&quot;
+10 - 5 - 2                         # 3
+5 * 3 / 1 * 3                      # 5
+false \/ false /\ false \/ true    # false
+1 + 2 * 3 + 4                      # 21
+</pre>
 <h5><a href="https://www.crockford.com/ascii.html">ASCII</a></h5>
 </body>
 </html>
