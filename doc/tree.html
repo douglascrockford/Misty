@@ -88,7 +88,7 @@ This is descriptive of one particular implementation.
 <h4>scopes</h4>
 <p>An array of scopes. This array is parallel with the <code>functions</code> array. It contains records containing the names that are used in each function. The names can be the function name and inputs, and additional names created with <code>def</code>, <code>use</code>, <code>var</code>. The scope also contains names that are found in outer functions and intrinsics.</p>
 <p>A scope is used to determine what a name in a function refers to.</p>
-<h4>uses</h4>
+<h4>subprograms</h4>
 <p>An array of subprograms that are mentioned in <code>use</code> statements. This information might be used by a linker.</p>
 <h2 id="name">Names</h2>
 <p>Names are use to represent functions, parameters, variables, and constants.</p>
@@ -258,9 +258,9 @@ This is descriptive of one particular implementation.
 <p>The <code>function</code> operator does two things: It makes a function definition that it appends to the functions array, and it makes a reference to that function definition.</p>
 <h3>Function reference</h3>
 <h4>kind</h4>
-<p><code>&quot;function&quot;</code> <code>"program"</code> <code>"subprogram"</code></p>
+<p><code>&quot;function&quot;</code></p>
 <h4>function_nr</h4>
-<p>The location of the function definition in the <code>functions</code> array.</p>
+<p>The location of the function definition in the <code>functions</code> array. Function 0 is the <code>program</code> or  <code>subprogram.</code></p>
 <h4>name</h4>
 <p>If it is an operator function, then <code>name</code> will be name of the operator (functino), such as <code>&quot;'+'&quot;</code>. The name will also be noted in the intrinsics.</p>
 <h3>Function definition</h3>
