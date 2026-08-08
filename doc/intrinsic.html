@@ -84,7 +84,7 @@ text keys in the <var>record</var>. The keys are not guaranteed
 <h4>number(<var>text</var> <var>radix</var>)</h4>
 <p>Convert a <var>text</var> to a number. The optional <var>radix</var> is an int from <code>2</code> thru <code>37</code>. (<a href="https://www.crockford.com/base32.html">See Base 32.</a>) The default <var>radix</var> is <code>10</code>.</p>
 <h4><code>number</code>(<var>text</var> <var>format</var>)</h4>
-<table class=center>
+<table>
     <caption>number format</caption>
     <tr>
         <th><var>format</var></th>
@@ -659,10 +659,10 @@ assign result: ceiling(-12.3775)        # result is -12</pre>
     in cycles. The result is between <code>-1</code> and <code>1</code>.</p>
 <h4 id="extract">extract(<var>text</var> <var>pattern</var> <var>from</var> <var>to</var>)</h4>
 <p>The <var>text</var> is matched to the <var>pattern</var>. If it does not match, the result is <code>null</code>. If the <var>pattern</var> does match, then the result is a record containing the saved fields.</p>
-<h4 id="collect">fallback(<var>requestor_array</var>)</h4>
+<h4 id="fallback">fallback(<var>requestor_array</var>)</h4>
 <p>The <code>fallback</code> <a href="program.html#factory">requestor factory</a> returns a <a href="function.html#requestor">requestor function</a> that tries each of the requestors in the <var>requstor_array</var> until it gets a success. When the requestor is called, it calls the first requestor in <code><var>requestor_array</var></code>. If that is eventually successful, its value is passed to the <a href="function.html#callback">callback</a>. But if that requestor fails, the next requestor is called, and so on. If none of the requestors is successful, then the fallback fails. If any one succeeds, then the fallback succeeds.</p>
 <p>The fallback requestor returns a <a href="programs.html#cancel">cancel</a> function that can be called when the result is no longer needed.</p>
-<h4>filter(<var>array</var> <var>function</var>)</h4>
+<h4 id=filter>filter(<var>array</var> <var>function</var>)</h4>
 <p> The <code>filter</code> function calls a <var>function</var> for every
     element in the <var>array</var>, passing each element and its element number.</p>
 <pre>(element element_nr)</pre>
@@ -700,7 +700,7 @@ then the <code>for</code> function returns early.
 The <var>exit</var> value is usually <code>true</code> or <code>false</code>, but it may be anything.
 If <var>exit</var> is <code>null</code>, then every element is processed.</p>
 <p>The <code>for</code> function returns <code>null</code> unless it did an early <var>exit</var>, when it returns the <var>exit</var> value.</p>
-<h4>format(<var>text</var> <var>collection</var> <var>transformer</var>)</h4>
+<h4 id=format>format(<var>text</var> <var>collection</var> <var>transformer</var>)</h4>
 <p>The <code>format</code> function makes a new text with substitutions in an original <var>text</var>. A <var>collection</var> is either an array of
 texts or a record of texts.</p>
 <p>A search is made for <code>{</code><small>left brace</small> and <code>}</code><small>right brace</small> in the <var>text</var>.
@@ -844,7 +844,7 @@ min(max(8 3) 7)     # 7</pre>
 <h4>min(<var>array</var>) </h4>
 <p>Minimum. The result is the least number in the <var>array</var>. If the array is empty or contains a non-number, the result is <code>null</code>.</p>
 <pre>max([12 48 24])    # 12</pre>
-<h4>modulo(<var>dividend</var> <var>divisor</var>)</h4>
+<h4 id=modulo>modulo(<var>dividend</var> <var>divisor</var>)</h4>
 <p>The result of <code>modulo(<var>dividend</var> <var>divisor</var>)</code> is
 <code><var>dividend</var> - (<var>divisor</var> * floor(<var>dividend</var> / <var>divisor</var>))</code>.
 The result has the sign of the divisor.</p>
@@ -853,7 +853,7 @@ or if either operand is not a number,
 then the result is <code>null</code>. <var><var>dividend</var></var> and <var>divisor</var> are not required to be  integers.</p>
 <p>If both arguments are integers, and if the <var>divisor</var> is a positive power of two, then it is the same as
 <code>and(<var>dividend</var> <var>divisor</var> - 1)</code>.</p>
-<h4>neg(<var>number</var>)</h4>
+<h4 id=neg>neg(<var>number</var>)</h4>
 <p>Negate. Reverse the sign of a number. If the argument is not a number, the result is <code>null</code>. Note that the <code>-</code><small>minus sign</small> is not used as a prefix negation operator.</p>
 <h4 id=normalize>normalize(<var>text</var>)</h4>
 <p>Unicode normalize. Return a text whose textual value is the same as <var>text</var>, but whose binary representation is in Normalization Form C. The two texts should display the same, but might not be equal.</p>
