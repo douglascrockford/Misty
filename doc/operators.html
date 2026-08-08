@@ -70,7 +70,7 @@ ternary
     ) & current_value
 }</pre>
 
-<h2>Suffix Operators</h2>
+<h2 id="suffix">Suffix Operators</h2>
 <p class="rule">
 suffix
     <code>&quot;&quot;</code>
@@ -149,7 +149,7 @@ null[&quot;foo&quot;]                # null
 &quot;foo&quot;[3]                   # null
 </pre>
 <h3 id="invocation">Function Invocation</h3>
-<h4>( )<small>parens</small></h4>
+<h4 id="invoke">( )<small>parens</small></h4>
 <p class="rule">
 invocation
     input_value_list
@@ -195,7 +195,7 @@ open_input_values
 If a function is invoked with excess input values, the actor  <a href="programs.html#halt">halts</a>.</p>
 <p>A function invocation can pass at most 4 input values. If you need more, consider passing a single record literal instead. </p>
 <p>If a function is used only for its side effects, use the <code><a href="statements.htm l#call">call</a></code><a href="statements.htm l#call"> statement</a>.</p>
-<h2>Infix Operators</h2>
+<h2 id="infix">Infix Operators</h2>
 <p class="rule">
 infix_operator
     <code>'*'</code>
@@ -216,17 +216,19 @@ infix_operator
     <code>'|'</code>
 </p>
 
-<h3>Multiplicative Operators</h3>
+<h3 id="multiplicative">Multiplicative Operators</h3>
 
 
-<h4>*<small>asterisk</small></h4>
+<p>Note that when <code>*</code><small>multiply</small> is used with <code>/</code><small>divide</small> and <code>//</code><small>integer divide</small> in an expression, parentheses muct be used to determine the relative precedence.</p>
+<p>S<code>o a * b / c </code>is an error, but<code> (a * b) / c </code>and<code> a * (b / c) </code>are allowed.</p>
+<h4><span id="*">*</span><small>asterisk</small></h4>
 <p>Multiplication.
   If it can be determined at compile time that either operand is zero, the other operand
   might not be evaluated.</p>
 <pre>3 * 4        # 12
 0.10 * 20    # 2
 0 * null     # 0</pre>
-<h4>/<small>solidus</small></h4>
+<h4 id="/">/<small>solidus</small></h4>
 <p>Division. </p>
 <pre>3 / 4       # 0.75
 5 / 4       # 1.25
@@ -236,7 +238,7 @@ infix_operator
 0 / null    # 0
 1 / null    # null
 null / 4    # null</pre>
-<h4><b>//</b><small>solidus solidus</small></h4>
+<h4 id="//"><b>//</b><small>solidus solidus</small></h4>
 <p>Integer division.</p>
 <pre>3 // 4     # 0
 5 // 4     # 1
@@ -260,8 +262,8 @@ null + 0    # null</pre>
 <p>Subtraction. If either operand is not a number, the result is <code>null</code>.</p>
 <pre>3 - 4       # -1
 3 - null    # null</pre>
-<h3>Concatenation Operators</h3>
-<h4 id="ampersand">&<small>ampersand</small></h4>
+<h3 id="concatenation">Concatenation Operators</h3>
+<h4 id="&amp;">&<small>ampersand</small></h4>
 <p>Concatenation.  Make a new text
 that combines the two texts.   If an operand is a number, convert it to text. If after this conversion either operand is not text, then it halts.</p>
 <pre>3 & 4                          # &quot;34&quot;
@@ -269,7 +271,7 @@ that combines the two texts.   If an operand is a number, convert it to text. If
 &quot;&quot; & &quot;ok&quot;                      # &quot;ok&quot;
 null & &quot;ok&quot;                    # halt
 &quot;&quot; & null                      # halt</pre>
-<h4 id="doubleampersand">&&<small>double ampersand</small></h4>
+<h4 id="&amp;&amp;">&&<small>double ampersand</small></h4>
 <p>Concatenation with a space. If the two operands are not texts after number conversion, then it halts. Make a new text
     that combines the two texts with a space between. If the first operand
   is <code>&quot;&quot;</code>, then the result is the second
@@ -282,33 +284,44 @@ null && &quot;ok&quot;                      # halt
 &quot;&quot; && null                        # halt
 &quot;brillig&quot; && &quot;&quot;                   # &quot;brillig&quot;</pre>
 
-<h3>Relational Operators</h3>
-<p>The relational operators compare two values and return either <code>true</code> or <code>false</code>.</p>
-<p>The <code>=</code><small>equal</small> and <code>&lt;&gt;</code><small>not equal</small> operators can take values of all types. Objects are equal only if they are the same object. Texts containing the same characters in the same order are equal.</p>
-<p>The <code>&lt;</code><small>less than</small><code>&lt;=</code><small>less than or equal</small> <code>&gt;</code><small>greater than</small> <code>&gt;=</code><small>greater than or equal</small> operators only work on a pair of numbers or a pair of texts.
+<h3 id="relational">Relational Operators</h3>
+<p>The six relational operators compare two values and return either <code>true</code> or <code>false</code>.</p>
+<p>The two equality operators (<code>=</code><small>equal</small> and <code>&lt;&gt;</code><small>not equal)</small> can take values of all types. Objects are equal only if they are the same object. Texts containing the same characters in the same order are equal.</p>
+<p>The four inequality operators (<code>&lt;</code><small>less than</small> <code>&lt;=</code><small>less than or equal</small> <code>&gt;</code><small>greater than</small> <code>&gt;=</code><small>greater than or equal)</small> only work on a pair of numbers or a pair of texts.
     In all other cases they halt.</p>
-<h4>=</h4>
+<p>Two or more relational operators can be strung together to make more complicated expressions. This can be useful in rnage check.</p>
+<p>So<code> a &lt; b &lt;= c </code>produces the same result as<code> a &lt; b /\ b &lt;= c</code>, except that <code>b</code> is evaluted once. In both cases, <code>c</code> is only evaluated if<code> a &lt; b </code>is <code>true</code>.</p>
+<p>Note that<code> (a &lt; b) &lt; c </code>halts because<code> (a &lt; b) </code>produces a logical value and <code>&lt;</code><small>less than</small> does not work with logical values.</p>
+<h4 id="=">=</h4>
 <p>Equal. If the operands are the same then the result is <code>true</code>.</p>
 <h6>Examples:</h6>
 <pre>if variable = &quot;cat&quot;               # compute result if the variable is &quot;cat&quot;
     assign result: 10 = &quot;10&quot;      # result is false
 fi
 </pre>
-<h4>&lt;&gt;</h4>
+<h4 id="&lt;&gt;">&lt;&gt;</h4>
 <p>Not equal. If the operands are not the same, then the result is <code>false</code>.  It is the same as <code>not(<var>left</var> = <var>right</var>)</code>.</p>
-<h4>&lt;</h4>
+<h4 id="&lt;">&lt;</h4>
 <p>Less than.</p>
 <p> If the operands both numbers or both texts, then if the left operand is less than
     the right operand, then the result is <code>true</code>. If the left operand
 is greater than or equal to the right operand the result is <code>false</code>. If the two operands are not both numbers     or both texts, then it halts.</p>
-<h4>&lt;=</h4>
+<h4 id="&lt;=">&lt;=</h4>
 <p>Less than or equal. It is the same as <code>not(<var>right</var> &lt; <var>left</var>)</code>.</p>
-<h4>&gt;</h4>
+<h4 id="&gt;">&gt;</h4>
 <p>Greater than.  It is the same as <code><var>right</var> &lt; <var>left</var></code>.</p>
-<h4>&gt;=</h4>
+<h4 id="'">&gt;=</h4>
 <p>Greater than or equal. It is the same as <code>not(<var>left</var> &lt; <var>right</var>)</code>.</p>
 
-<h3 id="logical">Logical Operators</h3><h4 id="and">/\</h4>
+<h3 id="logical">Logical Operators</h3>
+<p>The<code> /\</code><small>and</small> and <code>\/</code><small>or</small> operators take two logical values and produce a logical value. Mixing them requires the use of parentheses. </p>
+<h6>Examples:</h6>
+<pre>p /\ q /\ r      # ok
+p \/ q \/ r      # ok
+p /\ q \/ r      # error
+(p /\ q) \/ r    # ok
+p /\ (q \/ r)    # ok</pre>
+<h4 id="and">/\</h4>
 <p>Short-circuit And. If the left operand is <code>false</code>, then the result is <code>false</code> and the right operand will not be evaluated.
   If the left operand is <code>true</code> and the <code>right</code> operand is <code>false</code>, then the result is <code>false</code>.
   If the left operand is <code>true</code> and the right operand is <code>true</code>, then the result is <code>true</code>.</p>
@@ -323,12 +336,12 @@ is greater than or equal to the right operand the result is <code>false</code>. 
 <pre>3 &lt; 4 \/ 6 &lt; 5    # true</pre>
 <p>It made by combining <code>\</code><small>backslash</small> and <code>/</code><small>slash</small>.</p>
 <h3 id="default">Default Operator</h3>
-<h4>|</h4>
+<h4 id="|">|</h4>
 <p>Short-circuit Default. If the left operand is not <code>null</code>, then the result
   is the left operand. Otherwise, the result is the right operand.</p>
 <pre>var foo: null    # foo is null
 foo | 0          # 0</pre>
-<h2>Operator Precedence</h2>
+<h2 id="precedence">Operator Precedence</h2>
 <table>
 <caption>Operator Precedence</caption>
   <tbody>
@@ -337,15 +350,12 @@ foo | 0          # 0</pre>
     <td align="center"><code>.&nbsp; &nbsp;[ ]&nbsp; &nbsp;( )</code></td>
 </tr>
   <tr>
-      <td rowspan="8" style="background: linear-gradient(gainsboro, white);">&nbsp;</td>
+      <td rowspan="6" style="background: linear-gradient(gainsboro, white);">&nbsp;</td>
       <td align="center"><code>|</code></td>
 </tr>
   <tr>
-      <td align="center"><code>*</code></td>
+      <td align="center"><code>*&nbsp; &nbsp;/&nbsp; &nbsp;//</code></td>
 </tr>
-  <tr>
-      <td align="center"><code>/&nbsp; &nbsp;//</code></td>
-  </tr>
   <tr>
       <td align="center"><code>+&nbsp; &nbsp;-</code></td>
 </tr>
@@ -358,12 +368,8 @@ foo | 0          # 0</pre>
       </td>
 </tr>
   <tr>
-      <td align="center"><code>\/</code>
-      </td>
+      <td align="center"><code>\/&nbsp; &nbsp;/\</code></td>
 </tr>
-  <tr>
-      <td align="center"><code>/\</code></td>
-  </tr>
   <tr>
       <td>loosest</td>
       <td align="center"><code> then else</code></td>
