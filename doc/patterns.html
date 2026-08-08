@@ -180,7 +180,7 @@ pattern_library_list_closed
 </p>
 <p>A pattern literal is <code>pattern</code> optionally followed
   by one or more <a href="#library">pattern libraries</a> wrapped in <code>( )</code><small>parens</small>, followed by a pattern group wrapped in <code>{&nbsp;}</code><small>braces</small>.</p>
-<h3 style="clear: both;">Group</h3>
+<h3 id=group style="clear: both;">Group</h3>
 <p class="rule">
 pattern_group
     <code>'{'</code> pattern_group_filling <code>'}'</code>
@@ -236,7 +236,7 @@ pattern_element
     set of alternatives matches if any one of the alternatives matches.</p>
 <p>Optionally, an item after a <code>/</code><small>slash</small> indicates a separator
     that appears before all but the first repetition. This is allowed only if the maximum number of repetitions is at least <code>2</code>.</p>
-<h3>Text literal</h3>
+<h3 id=literal>Text literal</h3>
 <p class="rule">
 pattern_text
     text_literal
@@ -253,6 +253,7 @@ pattern_text
         <code>&quot;Vorpal&quot;</code> and <code>&quot;VorPal&quot;</code> and <code>&quot;VORPAL&quot;</code></p>
     <p><code>! &quot;Vorpal&quot;</code> matches<code> &quot;Vorpal&quot;</code> and <code>&quot;VorPal&quot;</code> and <code>&quot;VORPAL&quot;</code> but not <code>&quot;vorpal&quot;</code></p>
 </blockquote>
+<h3 id=name>Name</h3>
 <table>
   <tr>
     <th nowrap>Built-in class</th>
@@ -334,7 +335,6 @@ pattern_text
 <tr><td><code>Co</code></td><td>Other, private use</td></tr>
 <tr><td><code>Cn</code></td><td>Other, not assigned<br>
 (including noncharacters)</td></tr></table>
-<h3>Name</h3>
 <p>A name can refer to one of the system-supplied names. These include <code>ascii</code>,
   <code>char</code>,
   <code>digit</code>, <code>end</code>, <code>hex</code>, <code>letter</code>, <code>lower</code>, <code>space</code>, <code>upper</code> as well as the two character <a href="http://www.unicode.org/reports/tr44/tr44-4.html#General_Category_Values">Unicode General Categories</a>. The Unicode General Categories are only available in <a href="#class">character classes.</a></p>
