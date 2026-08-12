@@ -93,10 +93,13 @@ text keys in the <var>record</var>. The keys are not guaranteed
         <th>decimal point</th>
     </tr>
     <tr>
+        <td><code>null</code></td>
+        <td rowspan="9">10</td>
+        <td rowspan="3" valign="top">&nbsp;</td>
+        <td rowspan="6" valign="top"><code>.</code><small>period</small></td>
+    </tr>
+    <tr>
         <td><code>&quot;&quot;</code></td>
-        <td rowspan="8">10</td>
-        <td rowspan="2" valign="top">&nbsp;</td>
-        <td rowspan="5" valign="top"><code>.</code><small>period</small></td>
     </tr>
     <tr>
         <td><code>&quot;n&quot;</code></td>
@@ -234,7 +237,7 @@ format_places
     produced from the number.   It is optionally preceded by a separation digit
     and optionally followed by a places digit. There are real styles and integer
     styles. If the <var>format</var> argument is not a proper format text,
-    then <code>null</code> is returned.</p>
+    then <code>null</code> is returned. The default format is <code>&quot;n&quot;</code>.</p>
 <p><strong>Separation</strong> is a character that is placed between digits to improve readability.
     If separation is 0, then there is no separation. If separation is 3, then
     a character is inserted before the quadrillions, trillions, billions, millions,
