@@ -148,12 +148,14 @@ This is descriptive of one particular implementation.
 <p>The number of spaces.</p>
 <h2 id="operator">Operators</h2>
 <h3 id="infix">Infix operators</h3>
-<h4>first</h4>
-<p>The left operand node.</p>
-<h4>second</h4>
-<p>The right operand node.</p>
-<h4>text</h4>
+<p>Operators having the same precedence will be gathered into a single node. The infix operators are</p>
 <pre>|  *  /  //  +  -  &amp;  &amp;&amp;  =  &lt;&gt;  &lt;  &lt;=  &gt;  &gt;=  /\  \/</pre>
+<h4>kind</h4>
+<p><code>&quot;infix&quot;</code></p>
+<h4>operands</h4>
+<p>An array of operands. The array has a length that is one greater than the length of the operators array.</p>
+<h4>second</h4>
+<p>An array of operators. The array has a length of at least one.</p>
 <h3>The <code>.</code> operator</h3>
 <h4>text</h4>
 <p><code>&quot;.&quot;</code></p>
