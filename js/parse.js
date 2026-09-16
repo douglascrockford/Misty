@@ -1,116 +1,73 @@
 // parse.js
-// 2026-07-21
+// 2026-09-16
 
 // Missing feature:
 //      patterns
 
 import format from "./format.js";
+import dispenser from "./dispenser.js";
 
 function empty() {
     return Object.create(null);
 }
 
 const initial = empty();
-const operable = empty();
-const precedence = empty();
-const statement = empty();
-const intrinsic = empty();
-
-let endowments;
-let errors;
-let fields;
-let functions;
-let function_nr;
-let ifs;
-let intrinsic_used;
-let indentation;
-let logs;
-let main;
-let next_token;
-let next_next_token;
-let patterns;
-let scopes;
-let token;
-let tokens;
-let token_nr;
-
-const intrinsics = [
-    "abs", "actor?", "apply", "array", "array?", "blob?", "ceiling",
-    "character", "character?", "codepoint", "data?", "digit?", "e", "extract",
-    "false", "false?", "filter", "find", "floor", "for",
-    "format", "fraction", "function", "function?", "int?", "integer", "integer?",
-    "length", "letter?", "logical", "logical?", "lower", "lower?", "max",
-    "min", "modulo", "neg", "normalize", "not", "null", "null?", "number",
-    "number?", "parallel", "pattern", "pattern?", "pi", "race", "record",
-    "record?", "reduce", "remainder", "repeat", "replace", "reverse", "round",
-    "search", "sequence", "sign", "sort", "stone", "stone?", "text", "text?",
-    "trim", "true", "true?", "trunc", "turkish_lower", "turkish_upper",
-    "upper", "upper?", "whitespace?", "whole"
-];
-
-intrinsics.forEach(function (name) {
-    intrinsic[name] = Object.freeze({
-        make: "intrinsic",
-        name
-    });
-});
-
-const operators = {
-    "/\\": true,
-    "\\/": true,
-    "|": true,
-    "=": true,
-    "<>": true,
-    "<": true,
-    "<=": true,
-    ">": true,
-    ">=": true,
-    "&": true,
-    "&&": true,
-    "+": true,
-    "-": true,
-    "*": true,
-    "/": true,
-    "//": true,
-    "[]": false
+const intrinsic_structure_names = [];
+const name_action = empty();
+const precedence = {
+    "|": 5,
+    "*": 4,
+    "/": 4,
+    "//": 4,
+    "+": 3,
+    "-": 3,
+    "&": 2,
+    "&&": 2,
+    "=": 1,
+    "<>": 1,
+    "<": 1,
+    "<=": 1,
+    ">": 1,
+    ">=": 1,
+    "\\/": 0,
+    "/\\": 0
 };
 
-function functino() {
-    const the_functino = token;
-    intrinsic_used[the_functino.text] = true;
-    the_functino.make = "intrinsic";
-    advance();
-    return the_functino;
-}
+const nr_precedence_levels = 6;
+const statement = empty();
 
-[
-    "'/\\'", "'\\/'", "'|'", "'='", "'<>'", "'<'", "'<='", "'>'", "'>='",
-    "'&'", "'&&'", "'+'", "'-'", "'*'", "'/'", "'//'", "'[]'"
-].forEach(function (symbol) {
-    initial[symbol] = functino;
-});
+let consecration;
+let endowments;
+let errors;
+let functions;
+let function_nr;
+let halt;
+let indentation;
+let main;
+let patterns;
 
+// Token dispenser
 
-
+let abandon;
+let advance;
+let next_next_token;
+let next_token;
+let token;
 
 // Error reporting
 
 const error_message = {
-    "a space": "a space",
-    "already": "{term_a} was already declared.",
-    "end of file": "end of file",
-    "end of line": "end of line",
-    "expected": "Expected {term_b} and saw {term_a}.",
-    "misplaced": "Misplaced {term_a}.",
-    "n spaces": " spaces",
-    "not implemented": "Feature {term_a} not implemented.",
-    "not right": "{term_a} is not allowed on the right side of this statement.",
-    "not var": "{term_a} is a {term_b}, not a var.",
-    "text": "Text literal error: {term_b}.",
-    "too many": "Unexpected {term_a} (too many).",
-    "unexpected": "Unexpected {term_a}.",
-    "used before": "{term_a} was used before it was declared."
+    already: "{term_a} was already declared.",
+    end_of_file: "end of file",
+    end_of_line: "end of line",
+    expected: "Expected {term_b} and saw {term_a}.",
+    misplaced: "Misplaced {term_a}.",
+    not_implemented: "Feature {term_a} not implemented.",
+    space: "space",
+    spaces: "spaces",
+    unexpected: "Unexpected {term_a}."
 };
+
 let error_preamble = "[{from_row}.{from_column}] ";
 
 function error_term(the_token) {
@@ -118,159 +75,105 @@ function error_term(the_token) {
         return "";
     }
     if (the_token === "newline" || the_token.kind === "newline") {
-        return error_message["end of line"];
-    }
-    if (typeof the_token === "number") {
-        return the_token + " spaces";
+        return error_message.end_of_line;
     }
     if (typeof the_token === "string") {
         if (the_token[0] === " ") {
             if (the_token === " ") {
-                return error_message["a space"];
+                return error_message.space;
             } else {
-                return the_token.length + error_message["n spaces"];
+                return the_token.length + " " + error_message.spaces;
             }
         }
+        if (the_token === "space") {
+            return the_token;
+        }
+        if (the_token === "end_of_line" || the_token === "end_of_file") {
+            return error_message[the_token];
+        }
         return "'" + the_token + "'";
+    }
+    if (typeof the_token === "number") {
+        if (the_token === 1) {
+            return error_message.space;
+        } else {
+            return the_token + " " + error_message.spaces;
+        }
     }
     if (the_token.kind === "text") {
         return "\"" + the_token.text + "\"";
     }
     if (the_token.kind === "space") {
         if (the_token.text === " ") {
-            return error_message["a space"];
+            return error_message.space;
         } else {
-            return the_token.text.length + error_message["n spaces"];
+            return the_token.text.length + " " + error_message.spaces;
         }
     }
-    if (the_token.kind === "end of file") {
-        return error_message["end of file"];
+    if (the_token.kind === "end_of_file") {
+        return error_message.end_of_file;
     }
     return "'" + the_token.text + "'";
 }
 
 function error(message, the_token, term_b) {
-    if (typeof message === "string") {
-        errors.push(format(
-            error_preamble + error_message[message],
-            {
-                from_column: the_token.from_column,
-                from_row: the_token.from_row,
-                term_a: error_term(the_token),
-                term_b: error_term(term_b)
+    if (!halt) {
+        if (typeof message === "string") {
+            if (the_token.from_column === undefined) {
+                errors.push(format(
+                    error_message[message],
+                    {
+                        term_a: error_term(the_token),
+                        term_b: error_term(term_b)
+                    }
+                ));
+            } else {
+                errors.push(format(
+                    error_preamble + error_message[message],
+                    {
+                        from_column: the_token.from_column,
+                        from_row: the_token.from_row,
+                        term_a: error_term(the_token),
+                        term_b: error_term(term_b)
+                    }
+                ));
             }
-        ));
-    } else {
-        errors.push(format(
-            error_preamble + message.error,
-            {
-                from_column: message.error_column,
-                from_row: message.error_row
-            }
-        ));
-    }
-    if (errors.length > 10) {
-        throw "disrupt";
+        } else {
+            errors.push(format(
+                error_preamble + message.error,
+                {
+                    from_column: message.error_column,
+                    from_row: message.error_row
+                }
+            ));
+        }
+        if (errors.length > 27) {
+            halt = abandon();
+        }
     }
 }
 
 function fatal(message, the_token, term_b) {
     error(message, the_token, term_b);
-    throw "disrupt";
-}
-
-// Advance to the next token
-
-function advance(value) {
-
-// If a 'value' was supplied, assure that the current token matches the
-// 'value'.
-
-    if (value !== undefined && token.kind !== value && (
-        token.text !== value || token.kind === "text"
-    )) {
-        fatal("expected", token, value);
-    }
-
-// Get the next token. 'next_token' and 'next_next_token' make it possible to
-// look ahead to future tokens.
-
-    token = next_token;
-    next_token = next_next_token;
-    while (true) {
-
-// If there are no more tokens, synthesize an 'end of file' token.
-
-        if (token_nr >= tokens.length) {
-            next_next_token = {
-                kind: "end of file",
-                from_row: next_token.from_row,
-                from_column: next_token.to_column,
-                to_row: next_token.from_row + 1,
-                to_column: 0
-            };
-            break;
-        }
-
-// Skip over comments and spaces or newlines that are followed by a newline.
-
-        next_next_token = tokens[token_nr];
-        token_nr += 1;
-        if (next_next_token.kind === "newline") {
-            if (
-                next_token.kind === "newline" || next_token.kind === "space"
-            ) {
-                next_token = next_next_token;
-            } else {
-                break;
-            }
-        } else if (next_next_token.kind === "operator" && (
-            next_next_token.text === "," || next_next_token.text === ";"
-        )) {
-            error("unexpected", next_next_token);
-        } else if (next_next_token.kind !== "comment") {
-            break;
-        }
-    }
-    if (token.error !== undefined) {
-        error(token);
-    }
-    return token;
-}
-
-function initialize(array_of_tokens) {
-    endowments = empty();
-    errors = [];
-    fields = empty();
-    functions = [];
-    ifs = [];
-    intrinsic_used = empty();
-    logs = empty();
-    patterns = [];
-    scopes = [];
-
-    function_nr = undefined;
-    indentation = 0;
-    token_nr = 0;
-    tokens = array_of_tokens;
-    next_next_token = {};
-    next_token = {};
-    advance();
-    advance();
-    advance();
+    halt = abandon();
+    return;
 }
 
 function indentation_q() {
-    return token.kind === "newline" && ((
-            next_token.kind === "space" && next_token.indentation === indentation
-        ) || (indentation === 0 && next_token.kind !== "space"));
+    return token().kind === "newline" && (
+        (
+            next_token().kind === "space" &&
+            next_token().indentation === indentation
+        ) ||
+        (indentation === 0 && next_token().kind !== "space")
+    );
 }
 
 function linebreak() {
-    advance("newline");
+    const following = advance("newline");
     if (indentation > 0) {
-        if (token.indentation !== indentation) {
-            error("expected", token, indentation);
+        if (following.indentation !== indentation) {
+            error("expected", following, indentation);
         }
         advance("space");
     }
@@ -286,214 +189,278 @@ function outdent() {
     linebreak();
 }
 
-function declare(token, make) {
-    if (typeof scopes[function_nr][token.text] === "object") {
-        error(
-            (
-                scopes[function_nr][token.text].level !== 0
-                ? "already"
-                : "used before"
-            ),
-            token
-        );
+function suffix(left) {
+
+// There is no space between a value and a suffix operator.
+// If there is a suffix, weave it into a binary tree.
+
+    const operator = token();
+    if (operator.text === ".") {
+        const right = advance(".");
+        operator.text = "[";
+        operator.first = left;
+        operator.second = right;
+        advance("name");
+        operator.second.kind = "text";
+        return suffix(operator);
     }
-    token.closure = false;
-    token.function_nr = function_nr;
-    token.level = 0;
-    token.make = make;
-    token.nr_uses = 0;
-    token.stifled = true;
-    scopes[function_nr][token.text] = token;
-}
-
-function unstifle(token) {
-    delete token.stifled;
-}
-
-function lookup() {
-    const the_token = token;
-    const name = the_token.text;
-    advance("name");
-
-// Locate a name in the scope chain. We start in the current scope and then
-// work backwards thru the outer scopes.
-
-    let level = 0;
-    let outer = function_nr;
-    let variable;
-    while (true) {
-        variable = scopes[outer][name];
-        if (variable !== undefined) {
-            if (variable.make !== "intrinsic") {
-                the_token.level = variable.level + level;
-            }
-            break;
-        }
-        outer = functions[outer].outer;
-        if (outer === undefined) {
-            break;
-        }
-        level = level + 1;
-    }
-    if (variable === undefined) {
-        variable = intrinsic[name];
-    }
-    if (typeof variable !== "object") {
-        error("used before", the_token);
-    } else {
-        if (variable.make === "intrinsic") {
-            intrinsic_used[name] = true;
-            scopes[function_nr][name] = the_token;
+    if (operator.text === "[") {
+        operator.first = left;
+        if (advance("[").kind === "newline") {
+            indent();
+            operator.second = expression(0, true);
+            outdent();
         } else {
-            the_token.function_nr = variable.function_nr;
-            the_token.level = level;
-            if (level === 0) {
-                variable.nr_uses += 1;
-                if (variable.stifled === true) {
-                    error("not right", the_token);
-                }
-            } else {
-                scopes[variable.function_nr][name].closure = true;
-                scopes[variable.function_nr][name].nr_uses += 1;
-                scopes[function_nr][name] = the_token;
-            }
+            operator.second = expression(0, false);
         }
-        the_token.make = variable.make;
+        advance("]");
+        return suffix(operator);
     }
-    return the_token;
-}
-
-let expression = function (right_binding_power = 0, open = false) {
-    let action
-    let binding_power;
-    let left;
-
-// A name followed by '!' is an endowment.
-
-    if (next_token.text === "!" && token.kind === "name") {
-        left = endowments[token.text];
-        if (left === undefined) {
-            left = token;
-            left.make = "endowment";
-            left.nr_uses = 1;
-            endowments[token.text] = token;
-        } else {
-            left.nr_uses += 1;
-        }
-        advance();
-        advance("!");
-        return left;
-    } else {
-        action = undefined;
-        action = initial[token.kind] || initial[token.text];
-        if (typeof action !== "function") {
-            fatal("unexpected", token);
-        }
-        left = action();
-    }
-    while (true) {
-        action = undefined;
-        if (token.kind === "operator") {
-            action = operable[token.text];
-            binding_power = precedence[token.text];
-        } else if (token.kind === "space" && next_token.kind === "operator") {
-            action = operable[next_token.text];
-            binding_power = precedence[next_token.text];
-        }
-        if (
-            typeof action !== "function"
-            || right_binding_power >= binding_power
-        ) {
-            break;
-        }
-        left = action(left, open);
+    if (operator.text === "(") {
+        return suffix(invoke(left));
     }
     return left;
-};
+}
+
+function value() {
+
+// Produce a name or literal, optionally with suffixes.
+
+    const action = initial[token().kind];
+    if (typeof action !== "function") {
+        return fatal("unexpected", token());
+    }
+    return suffix(action(token()));
+}
+
+function expression(open = false) {
+
+    let precedent;
+    let left;
+    let right;
+
+    function advance_space_or_linebreak() {
+
+// In an open format, an infix operator may be followed by a linebreak.
+// An operator may always be followed by a space.
+
+        if (open && token().text !== " ") {
+            linebreak();
+        } else {
+            advance(" ");
+        }
+    }
+
+    function coalesce(right, from, thru) {
+
+// Resolve the unfinished higher precedence nodes.
+
+        if (from < thru) {
+            return right;
+        }
+        const node = precedent[from];
+        if (node === undefined) {
+            return coalesce(right, from - 1, thru);
+        }
+        node.operands.push(right);
+        precedent[from] = undefined;
+        return coalesce(node, from - 1, thru);
+    }
+
+// Here we go. Get a value. It could be a variable or a literal.
+// It might have a suffix. If there is an operator following, this
+// will be on the left side.
+
+    left = value();
+
+// Is there a space followed by an infix operator?
+// Every valid infix operator has a precedence level.
+
+    let operator = next_token();
+    let current_precedence = precedence[operator.text];
+    if (
+        current_precedence === undefined ||
+        token().kind !== "space"
+    ) {
+        return left;    // No infix operator.
+    }
+
+// Get the operand on the right of the operator.
+
+    advance(" ");
+    advance("operator");
+    advance_space_or_linebreak();
+    right = value();
+    precedent = new Array(nr_precedence_levels);
+
+// Make an infix node containing an array of 'operands' and an array of
+// 'operators'.
+
+    left = {
+        kind: "infix",
+        operands: [left],
+        operators: [operator]
+    };
+    let previous_precedence = current_precedence;
+
+// Are there additional infix operators follow?
+
+    while (true) {
+        operator = next_token();
+        current_precedence = precedence[operator.text];
+        if (
+            current_precedence === undefined ||
+            token().kind !== "space"
+        ) {
+
+// No more operators. Give the right operand to the current operator.
+// This subexpression might be the right of a previous operator, so
+// coalesce.
+
+            left.operands.push(right);
+            return coalesce(left, previous_precedence - 1, 0);
+        }
+
+// There is another operator.
+
+        advance(" ");
+        advance("operator");
+        advance_space_or_linebreak();
+
+// If this latest operator has the same precedence,
+// then append the operand and operator to the node.
+
+        if (previous_precedence === current_precedence) {
+            left.operands.push(right);
+            left.operators.push(operator);
+
+// The latest operator has greater precedence.
+// Save the unfinished node and construct a new node.
+
+        } else if (previous_precedence < current_precedence) {
+            precedent[previous_precedence] = left;
+            left = {
+                kind: "infix",
+                operands: [right],
+                operators: [operator]
+            };
+            previous_precedence = current_precedence;
+        } else {
+
+// The latest operator has lower precedence.
+
+            left.operands.push(right);
+            left = coalesce(
+                left,
+                previous_precedence - 1,
+                current_precedence + 1
+            );
+            if (precedent[current_precedence] === undefined) {
+                left = {
+                    kind: "infix",
+                    operands: [left],
+                    operators: [operator]
+                };
+            } else {
+                right = precedent[current_precedence];
+                precedent[current_precedence] = undefined;
+                right.operands.push(left);
+                right.operators.push(operator);
+                left = right;
+            }
+            previous_precedence = current_precedence;
+        }
+        right = value();
+    }
+}
+
+function more_statements(statements) {
+    const action = statement[token().text];
+    if (typeof action !== "function") {
+        return fatal("expected", token(), "a statement");
+    }
+    statements.push(action());
+    if (indentation_q()) {
+        linebreak();
+        return more_statements(statements);
+    }
+}
 
 function block() {
-    let verb;
-    let action;
     const statements = [];
     if (indentation_q()) {
         linebreak();
     } else {
         indent();
-        while (true) {
-            verb = token.text;
-            action = statement[verb];
-            if (token.kind !== "name" || typeof action !== "function") {
-                error("expected", token, "a statement");
-                break;
-            }
-            token.kind = "statement";
-            statements.push(action());
-            if (
-                !indentation_q() ||
-                verb === "jump" ||
-                verb === "return"
-            ) {
-                break;
-            }
-            linebreak();
-        }
+        more_statements(statements);
         outdent();
     }
     return statements;
+}
+
+function consecrate(name, type) {
+
+// This manages 'function' and 'pattern' as structure or variable.
+// They can be either, but not at the same time.
+
+    if (consecration[name.text]) {
+        let current = consecration[name.text][function_nr];
+        if (current !== "unused" && current !== type) {
+            error("already", name);
+        }
+        consecration[name.text][function_nr] = type;
+    }
+}
+
+function variable() {
+    let result = token();
+    if (advance("name").text === "!") {
+        advance("!");
+        result.make = "endowment";
+        result.text = result.text + "!";
+        endowments[result.text] = true;
+        return result;
+    }
+    let action = name_action[result.text];
+    if (
+        typeof action === "function" &&
+        consecration[result.text][function_nr] !== "variable"
+    ) {
+        consecrate(result, "structural");
+        return action();
+    }
+    return result;
 }
 
 let prefix = function (text, action) {
     initial[text] = action;
 };
 
-let infix = function (text, right_binding_power) {
-    precedence[text] = right_binding_power;
-    operable[text] = function binary(left, open = false) {
-        advance(" ");
-        const result = token;
-        advance();
-        if (!open || token.text === " ") {
-            advance(" ");
-        } else {
-            linebreak();
-        }
-        result.first = left;
-        result.second = expression(right_binding_power, open);
-        return result;
-    };
-};
-
-let refinement = function (kind, action) {
-    precedence[kind] = 999;
-    operable[kind] = action;
-};
-
-prefix("name", function () {
-    return (initial[token.text] || lookup)();
-});
-prefix("text", function () {
-
-    //// If a long text, check the indentation
-    const result = token;
+function literal() {
+    const result = token();
     advance();
     return result;
-});
-prefix("number", function number() {
-    const result = token;
+}
+
+prefix("name", variable);
+prefix("text", literal);
+prefix("number", literal);
+prefix("apostrophic", function functino() {
+    const the_functino = token();
+    the_functino.make = "intrinsic";
     advance();
-    return result;
+    return the_functino;
 });
 
 function paren_expression() {
     let result;
-    advance("(");
-    if (token.kind === "newline") {
+    if (advance("(").kind === "newline") {
         indent();
         result = expression(0, true);
         if (indentation_q()) {
             linebreak();
-            token.first = result;
-            result = token;
+            result = token();
+            result.first = result;
             advance("then");
             result.kind = "operator";
             advance(" ");
@@ -511,99 +478,101 @@ function paren_expression() {
     return result;
 }
 
-function record_literal() {
-    const result = token;
-    const list = [];
-    let key;
+function more_fields(store, open) {
     let colon;
-    result.first = list;
-    result.kind = "record";
-    advance("{");
-    if (token.kind === "}") {
-        advance("}");
-        return result;
+    let key = token();
+    if (key.kind !== "text" && key.kind !== "name") {
+        error("expected", key, "a key");
     }
-    const open = token.kind === "newline";
+    if (next_token().text === "(" && key.kind === "name") {
+        advance();
+        store.push({
+            kind: "operator",
+            text: ":",
+            first: key.text,
+            second: function_stuff(key)
+        });
+    } else {
+        if (key.kind !== "name" || (
+            next_token().kind !== "newline" && next_token().kind !== "space"
+        )) {
+            colon = advance();
+            advance(":");
+            advance(" ");
+            colon.first = key.text;
+            colon.second = expression(0);
+            store.push(colon);
+        } else {
+            store.push({
+                kind: "operator",
+                text: ":",
+                first: key.text,
+                second: expression(0)
+            });
+        }
+    }
+    if (token().kind === "space") {
+        advance(" ");
+        more_fields(store, open);
+    }
+    if (open && indentation_q()) {
+        linebreak();
+        more_fields(store, open);
+    }
+}
+
+function record_literal() {
+    const open_brace = token();
+    open_brace.first = [];
+    open_brace.kind = "record";
+    const following = advance("{");
+    if (following.kind === "}") {
+        advance("}");
+        return open_brace;
+    }
+    const open = following.kind === "newline";
     if (open) {
         indent();
     }
-    while (true) {
-        key = token;
-        if (key.kind !== "text" && key.kind !== "name") {
-            error("expected", key, "a key");
-        }
-        if (next_token.text === "(" && key.kind === "name") {
-            advance();
-            list.push({kind: "operator", text: ":", first: key.text, second: function_stuff("function", key)});
-        } else {
-            if (key.kind !== "name" || (
-                next_token.kind !== "newline" && next_token.kind !== "space"
-            )) {
-                advance();
-                colon = token;
-                advance(":");
-                advance(" ");
-                colon.first = key.text;
-                colon.second = expression(0);
-                list.push(colon);
-            } else {
-                list.push({kind: "operator", text: ":", first: key.text, second: expression(0)});
-            }
-        }
-        fields[key.text] = true;
-        if (open) {
-            if (indentation_q()) {
-                linebreak();
-            } else {
-                break;
-            }
-        } else if (token.kind === "space") {
-            advance(" ");
-        } else {
-            break;
-        }
-    }
+    more_fields(open_brace.first, open);
     if (open) {
         outdent();
     }
     advance("}");
-    return result;
+    return open_brace;
 }
 
-function parameter(list) {
-    const result = token;
-    advance("name");
-    declare(result, "parameter");
-    if (token.kind === "space" && next_token.text === "|") {
+function more_parameters(list, open) {
+    const parameter = token;
+    consecrate(parameter, "variable");
+    if (advance("name").kind === "space" && next_token().text === "|") {
         advance(" ");
         advance("|");
         advance(" ");
-        result.first = expression();
+        parameter.first = expression();
     }
-    unstifle(result);
-    result.parameter_nr = list.length;
-    list.push(result);
+    parameter.parameter_nr = list.length;
+    list.push(parameter);
+    if (open) {
+        if (indentation_q()) {
+            linebreak();
+            return more_parameters(list);
+        }
+    } else if (token().kind === "space") {
+        advance(" ");
+        return more_parameters(list);
+    }
 }
 
 function parameter_list() {
     const list = [];
-    let open = false;
-    advance("(");
-    if (token.kind !== "operator" && token.text !== ")") {
-        open = token.kind === "newline";
+    const following = advance("(");
+    if (following.kind !== "operator" && following.text !== ")") {
+        const open = following.kind === "newline";
         if (open) {
             indent();
         }
-        while (true) {
-            parameter(list);
-            if (!open && token.kind === "space") {
-                advance(" ");
-            } else if (open && indentation_q()) {
-                linebreak();
-            } else {
-                break;
-            }
-        }
+        more_parameters(list, open);
         if (open) {
             outdent();
         }
@@ -618,14 +587,14 @@ function body(the_function) {
     advance("}");
 }
 
-function function_stuff(kind, name) {
-    let variable;
+function function_stuff(name) {
 
-// 'token' is the "(" that starts the parameter list. It will be transformed into
-// the function definition. We do not build on the 'function' token because
-// 'def' and '{}' do not use the 'function' token. Everyone uses "(".
+// 'the_function' is the "(" that starts the parameter list. It is transformed
+// into the function definition. We do not build on the 'function' token
+// because 'def' and '{}' do not use the 'function' token. All variations
+// use "(".
 
-    const the_function = token;
+    const the_function = token();
 
 // Stash the current function number for later restoration.
 
@@ -638,269 +607,173 @@ function function_stuff(kind, name) {
 // Make the reference for the new function. This is returned at the end.
 
     const reference = {
-        kind,
+        kind: "function",
         function_nr
     };
 
 // Put this function in the function list.
 
     functions[function_nr] = the_function;
-
-// Make the function's scope.
-
-    scopes[function_nr] = empty();
+    if (typeof outer === "number") {
+        intrinsic_structure_names.forEach(function (name) {
+            consecration[name].push(
+                consecration[name][outer] === "variable"
+                ? "variable"
+                : "unused"
+            );
+        });
+    }
 
 // Let the function know its maker.
 
     the_function.outer = outer;
 
-// 'ifs' manages 'def' and 'use' in if statements.
-
-    ifs[function_nr] = 0;
-
     if (name) {
         the_function.name = name.text;
-        declare(name, kind);
-        unstifle(name);
+        consecrate(name, "variable");
     }
     the_function.parameters = parameter_list();
     advance(" ");
     body(the_function);
-    the_function.kind = kind;
+    the_function.kind = "function";
     function_nr = outer;
     return reference;
 }
 
-prefix("function", function () {
-    let name;
-    let the_function = lookup(token);
-    if (the_function.make !== "intrinsic") {
-        return the_function;
+function intrinsic_structure(text, action) {
+    intrinsic_structure_names.push(text);
+    name_action[text] = action;
+}
+
+intrinsic_structure("function", function () {
+    const name = advance(" ");
+    if (name.kind === "name") {
+        advance("name");
+        return function_stuff(name);
+    } else {
+        return function_stuff();
     }
-    scopes[function_nr].function = {
-        kind: "name",
-        text: "function",
-        make: "intrinsic"
-    };
-    advance(" ");
-    if (token.kind === "name") {
-        name = token;
-        advance();
-    }
-    return function_stuff("function", name);
 });
-prefix("pattern", function () {
-    let name;
-    let the_pattern = lookup(token);
-    if (the_pattern.make !== "intrinsic") {
-        return the_pattern;
-    }
-    scopes[function_nr].pattern = {
-        kind: "name",
-        text: "pattern",
-        make: "intrinsic"
-    };
+intrinsic_structure("pattern", function () {
+    let the_pattern = token();
     advance(" ");
-    if (token.kind === "name") {
-        name = token;
-        advance();
-    }
-    fatal("not implemented");
+    fatal("not implemented", the_pattern);
     return the_pattern;
 });
 prefix("(", paren_expression);
 prefix("{", record_literal);
-prefix("[", function array_literal() {
-    const result = token;
-    result.first = [];
-    result.kind = "array";
-    advance("[");
-    if (token.kind === "]") {
-        advance("]");
-        return result;
+
+function more_elements(store, open) {
+    store.push(expression());
+    if (token().kind === "space") {
+        advance(" ");
+        return more_elements(store, open);
     }
-    const open = token.kind === "newline";
+    if (open && indentation_q()) {
+        linebreak();
+        return more_elements(store, open);
+    }
+}
+
+prefix("[", function array_literal() {
+    const bracket = token();
+    bracket.first = [];
+    bracket.kind = "array";
+    const following = advance("[");
+    if (following.kind === "]") {
+        advance("]");
+        return bracket;
+    }
+    const open = following.kind === "newline";
     if (open) {
         indent();
     }
-    while (true) {
-        result.first.push(expression());
-        if (open && indentation_q()) {
-            linebreak();
-        } else if (token.kind === "space") {
-            advance(" ");
-        } else {
-            break;
-        }
-    }
+    more_elements(bracket.first, open);
     if (open) {
         outdent();
     }
     advance("]");
-    return result;
+    return bracket;
 });
 
 prefix("[]", function empty_array_literal() {
-    const result = token;
-    result.first = [];
+    const bracket = token();
+    bracket.first = [];
     advance("[]");
-    return result;
+    return bracket;
 });
 
-infix("|", 777);
-infix("*", 666);
-infix("/", 666);
-infix("//", 666);
-infix("+", 555);
-infix("-", 555);
-infix("&", 444);
-infix("&&", 444);
-infix("=", 333);
-infix("<>", 333);
-infix("<", 333);
-infix("<=", 333);
-infix(">", 333);
-infix(">=", 333);
-infix("/\\", 222);
-infix("\\/", 222);
+function more_arguments(store) {
+    store.push(expression());
+    if (indentation_q()) {
+        linebreak();
+        return more_arguments(store);
+    }
+}
 
 function invoke(left) {
-    let result = token;
-    result.first = left;
-    result.second = [];
-    advance("(");
-    if (token.text !== ")") {
-        if (token.kind === "newline") {
+    const paren = token();
+    const following = advance("(");
+    paren.first = left;
+    paren.second = [];
+    if (following.text !== ")") {
+        if (following.kind === "newline") {
             indent();
-            result.second[0] = expression(0, true);
+            paren.second[0] = expression(0, true);
             if (indentation_q()) {
                 linebreak();
+
+// 'then' is allowed in invocations. Some look ahead is needed to disambiguate
+// the operator from the variable.
+
+                const then = token();
+                const glimpse = next_next_token();
                 if (
-                    token.kind === "name" && token.text === "then" &&
-                    next_token.kind === "space" &&
-                    (
-                        next_next_token.kind !== "operator" ||
-                        next_next_token.text === "(" ||
-                        next_next_token.text === "{" ||
-                        next_next_token.text === "[" ||
-                        next_next_token.text === "[]"
+                    then.text === "then" && then.kind === "name" &&
+                    next_token().kind === "space" && (
+                        glimpse.kind !== "operator" ||
+                        glimpse.text === "(" ||
+                        glimpse.text === "{" ||
+                        glimpse.text === "[" ||
+                        glimpse.text === "[]"
                     )
                 ) {
-                    token.first = result.second[0];
-                    token.kind = "operator";
-                    result.second[0] = token;
+                    then.first = paren.second[0];
+                    then.kind = "operator";
+                    paren.second[0] = then;
                     advance("then");
                     advance(" ");
-                    result.second[0].second = expression(0, true);
+                    then.second = expression(0);
                     linebreak();
                     advance("else");
                     advance(" ");
-                    result.second[0].third = expression(0, true);
+                    then.third = expression(0);
                 } else {
-                    while (true) {
-                        result.second.push(expression());
-                        if (!indentation_q()) {
-                            break;
-                        }
-                        linebreak();
-                    }
+                    more_arguments(paren.second);
                 }
             }
             outdent();
         } else {
-            while (true) {
-                result.second.push(expression(0, false));
-                if (token.kind !== "space") {
-                    break;
-                }
-                advance(" ");
-            }
+            more_arguments(paren.second);
         }
     }
     advance(")");
-    return result;
+    return paren;
 }
 
-refinement("(", invoke);
-refinement("[", function (left) {
-    let result = token;
-    result.first = left;
-    advance("[");
-    if (token.kind === "newline") {
-        indent();
-        result.second = expression(0, true);
-        outdent();
-    } else {
-        result.second = expression(0, false);
-    }
-    if (result.second.kind === "null") {
-        error("unexpected", result.second);
-    }
-    advance("]");
-    return result;
-});
-refinement(".", function (left) {
-    let result = token;
-    advance(".");
-    result.first = left;
-    result.second = token;
-    advance("name");
-    result.second.kind = "text";
-    fields[result.second.text] = true;
-    return result;
-});
-
 statement.assign = function assign_statement() {
-    const result = token;
+    const result = token();
     advance("assign");
     advance(" ");
-    let left = lookup();
-    if (token.text === ":") {
-        if (scopes[function_nr][left.text].make !== "var") {
-            error(
-                "not var",
-                left,
-                scopes[function_nr][left.text].make
-            );
-        }
-    } else {
-        if (
-            token.text === "."
-            || token.text === "("
-            || token.text === "["
-        ) {
-            while (true) {
-                left = operable[token.text](left);
-                if (token.text === ":") {
-                    if (left.text === "(") {
-                        error("unexpected", left);
-                    }
-                    break;
-                }
-                if (
-                    token.text !== "."
-                    && token.text !== "("
-                    && token.text !== "["
-                ) {
-                    fatal("expected", result, "call");
-                    break;
-                }
-            }
-        }
-        if (token.text === "[]") {
-            result.push = true;
-            advance("[]");
-            if (token.text !== ":") {
-                error("expected", token, ":");
-            }
-        }
-
+    result.first = expression();
+    if (token().text === "[]") {
+        result.push = true;
+        advance("[]");
     }
-    result.first = left;
     advance(":");
     advance(" ");
     result.second = expression();
-    if (token.text === "[]") {
+    if (token().text === "[]") {
         result.pop = true;
         advance("[]");
     }
@@ -908,34 +781,21 @@ statement.assign = function assign_statement() {
 };
 
 statement.call = function call_statement() {
-    const result = token;
+    const result = token();
     advance("call");
     advance(" ");
-    let expression = lookup();
-    while (true) {
-        if (token.kind !== "." && token.kind !== "[") {
-            break;
-        }
-        expression = operable[token.kind](expression);
-    }
-    result.first = invoke(expression);
+    result.first = expression();
     return result;
 };
 
 statement.def = function def_statement() {
-    const result = token;
-    if (ifs[function_nr] > 0) {
-        error("misplaced", result);
-    }
+    const result = token();
     advance("def");
-    advance(" ");
-    const name = token;
-    advance("name");
-    declare(name, "def");
+    const name = advance(" ");
+    consecrate(name, "variable");
     result.first = name;
-    if (token.text === "(") {
+    if (advance("name").text === "(") {
         result.second = function_stuff(
-            "function",
             Object.assign(empty(), {
                 text: name.name
             })
@@ -945,74 +805,48 @@ statement.def = function def_statement() {
         advance(" ");
         result.second = expression();
     }
-    unstifle(name);
     return result;
 };
 
-statement.fi = function fi_statement() {
-    const result = token;
-    advance();
-    error("misplaced", result);
-    return result;
-};
+function more_else(result) {
+    if (token().text === "else") {
+        if (advance("else").text === " ") {
+            const elif = advance(" ");
+            advance("if");
+            advance(" ");
+            elif.first = expression();
+            elif.statements = block();
+            result.else_if.push(elif);
+            return more_else(result);
+        }
+        result.else = block();
+    }
+}
 
 statement.if = function if_statement() {
-    const result = token;
-    let elif;
-    ifs[function_nr] += 1;
+    const result = token();
     advance("if");
     advance(" ");
     result.first = expression();
     result.statements = block();
-    if (token.text === "else") {
-        result.else_if = [];
-        while (token.text === "else") {
-            advance("else");
-            if (token.text !== " ") {
-                result.else = block();
-                break;
-            }
-            advance(" ");
-            elif = token;
-            advance("if");
-            advance(" ");
-            elif.kind = "if";
-            elif.first = expression();
-            elif.statements = block();
-            result.else_if.push(elif);
-        }
-    }
+    more_else(result);
     advance("fi");
-    ifs[function_nr] -= 1;
     return result;
 };
 
 statement.jump = function jump_statement() {
-
-// To do: Give a warning if there is closure.
-
-    const result = token;
+    const result = token();
     advance("jump");
     advance(" ");
-    let expression = lookup();
-    while (true) {
-        if (token.kind !== "." && token.kind !== "[") {
-            break;
-        }
-        expression = operable[token.kind](expression);
-    }
-    result.first = invoke(expression);
+    result.first = expression();
     return result;
 };
 
 statement.log = function log_statement() {
-    const result = token;
+    const result = token();
     advance("log");
-    advance(" ");
-    const name = token.text;
+    result.first = advance(" ");
     advance("name");
-    result.first = name;
-    logs[name] = true;
     advance(":");
     advance(" ");
     result.second = expression();
@@ -1020,12 +854,11 @@ statement.log = function log_statement() {
 };
 
 statement.return = function return_statement() {
-    const result = token;
+    const result = token();
     if (function_nr === 0 && main.misty_type === "program") {
         error("misplaced", token);
     }
-    advance("return");
-    if (token.kind === "space") {
+    if (advance("return").kind === "space") {
         advance(" ");
         result.first = expression();
     }
@@ -1033,14 +866,14 @@ statement.return = function return_statement() {
 };
 
 statement.send = function send_statement() {
-    const result = token;
+    const result = token();
     advance("send");
     advance(" ");
     result.first = expression();
     advance(":");
     advance(" ");
     result.second = expression();
-    if (token.text === ":") {
+    if (token().text === ":") {
         advance(":");
         advance(" ");
         result.third = expression();
@@ -1049,96 +882,93 @@ statement.send = function send_statement() {
 };
 
 statement.use = function use_statement() {
-    const result = token;
+    const result = token();
+    let second;
     if (function_nr !== 0) {
-        error("misplaced", result);
+        return fatal("misplaced", result);
     }
     advance("use");
-    advance(" ");
-    let name = token;
+    const name = advance(" ");
     result.first = name;
-    advance("name");
-    declare(name, "use");
-    let second = name;
-    if (token.text === ":") {
+    consecrate(name, "variable");
+    second = name;
+    if (advance("name").text === ":") {
         advance(":");
-        advance(" ");
-        if (token.kind === "name") {
-            second = token.text;
-        } else if (token.kind === "text") {
-            second = token;
+        const path = advance(" ");
+        if (path.kind === "name") {
+            second = path.text;
+        } else if (path.kind === "text") {
+            second = path;
         } else {
-            error("expected", token, "text");
+            error("expected", path, "text");
         }
         advance();
     } else {
         second = result.first.text;
     }
-    main.uses.push(second);
     result.second = invoke(second);
-    unstifle(result);
     return result;
 };
 
 statement.var = function var_statement() {
-    const result = token;
-    let name;
-    if (ifs[function_nr] > 0) {
-        error("misplaced", result);
-    }
+    const result = token();
     advance("var");
-    advance(" ");
-    name = token;
+    const name = advance(" ");
     advance("name");
-    declare(name, "var");
+    consecrate(name, "variable");
     result.first = name;
     advance(":");
     advance(" ");
     result.second = expression();
-    unstifle(name);
     return result;
 };
 
 function misty() {
-    try {
-        advance("misty");
-        advance(" ");
-        let kind = token.text;
-        if (kind !== "program" && kind !== "subprogram") {
-            return error("expected", the_body, "program' 'subprogram");
-        }
-
-        advance("name");
-        advance(" ");
-        let name = token;
-        advance("name");
-        main = {
-            functions,
-            misty: kind,
-            name: name.text,
-            patterns,
-            scopes,
-            uses: []
-        }
-        function_stuff(kind, name);
-        if (token.kind !== "end of file") {
-            linebreak();
-        }
-        advance("end of file");
-        main.endowments = Object.keys(endowments);
-        main.intrinsics = Object.keys(intrinsic_used).sort();
-        main.logs = Object.keys(logs);
-    } catch (ignore) {
-        debugger;
+    advance("misty");
+    const kind = advance(" ").text;
+    if (kind !== "program" && kind !== "subprogram") {
+        return error("expected", token, "program' 'subprogram");
     }
+    advance("name");
+    const name = advance(" ");
+    advance("name");
+    main = {
+        functions,
+        misty: kind,
+        name: name.text,
+        patterns
+    };
+    function_stuff(name);
+    if (token().kind !== "end_of_file") {
+        linebreak();
+    }
+    advance("end_of_file");
+    main.endowments = Object.keys(endowments);
 }
 
 export default Object.freeze(function parse(tokens) {
-    initialize(tokens);
-    if (tokens.length < 3) {
-        return ["Bad input"];
-    }
+    const dispenser_record = dispenser(tokens, error);
+    abandon = dispenser_record.abandon;
+    advance = dispenser_record.advance;
+    token = dispenser_record.token;
+    next_token = dispenser_record.next_token;
+    next_next_token = dispenser_record.next_next_token;
+
+    consecration = empty();
+    endowments = empty();
+    errors = [];
+    function_nr = undefined;
+    functions = [];
+    halt = false;
+    indentation = 0;
+    patterns = [];
+
+    intrinsic_structure_names.forEach(function (name) {
+        consecration[name] = ["unused"];
+    });
+
     misty();
+
     return (
         errors.length > 0
         ? errors
