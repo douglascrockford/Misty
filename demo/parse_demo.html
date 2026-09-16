@@ -52,6 +52,7 @@ pre {
 
 <input id=clear type=button value="clear">
 <input id=tokens type=button value="tokens">
+<input id=parse type=button value="parse">
 <input id=compile type=button value="compile">
 <input id=complete type=button value="complete">
 <input id=scope type=button value="scope">
@@ -73,7 +74,7 @@ function escapify(text) {
     return "\"" + text.replace(/\\/g, "\\b").replace(/"/g, "\\q")  + "\"";
 }
 
-function compiler(tree) {
+function display(tree) {
     if (Array.isArray(tree)) {
         return tree.join(end_of_line);
     }
@@ -105,6 +106,16 @@ function compiler(tree) {
                 } else if (typeof token.function_nr === "number") {
                     emit("ƒ" + token.function_nr);
                 }
+            } else if (token.kind === "infix") {
+                emit("(");
+                token.operators.forEach(function (operator, operator_nr) {
+                    emit(token.operands[operator_nr]);
+                    emit(" ");
+                    emit(operator.text);
+                    emit(" ");
+                });
+                emit(token.operands[token.operators.length]);
+                emit(")");
             } else if (token.kind === "function") {
                 emit("ƒ" + token.function_nr);
             } else if (token.kind === "array") {
@@ -145,17 +156,9 @@ function compiler(tree) {
                 emit(" ");
                 emit(token.third);
                 emit(")");
-            } else if (token.kind === "operator") {
-                emit("(");
-                emit(token.text);
-                emit(" ");
-                emit(token.first);
-                emit(" ");
-                emit(token.second);
-                emit(")");
             } else {
                 emit(token.text);
-                emit("????");;
+                emit("????");
             }
         }
     }
@@ -163,10 +166,6 @@ function compiler(tree) {
     function emit_statement(token) {
         emit();
         emit(token.text);
-        if (token.label) {
-            emit(" ");
-            emit(token.label);
-        }
         if (token.first) {
             emit(" ");
             if (token.push) {
@@ -175,10 +174,10 @@ function compiler(tree) {
             emit(token.first);
             if (token.second) {
                 emit(" ");
+                emit(token.second);
                 if (token.pop) {
                     emit("[]");
                 }
-                emit(token.second);
                 if (token.third) {
                     emit(" ");
                     emit(token.third);
@@ -235,6 +234,7 @@ function compiler(tree) {
     const outputlegend = document.getElementById("outputlegend");
     const clear = document.getElementById("clear");
     const tokens = document.getElementById("tokens");
+    const parse_node = document.getElementById("parse");
     const compile = document.getElementById("compile");
     const complete = document.getElementById("complete");
     const scope = document.getElementById("scope");
@@ -262,10 +262,16 @@ function compiler(tree) {
         outputlegend.replaceChildren("Tokens");
         inputation.focus();
     }, false);
+    parse_node.addEventListener("click", function (event) {
+        outputlegend.replaceChildren("parse");
+        outputation.innerHTML = "";
+        outputation.append(display(parse(tokenize(inputation.value))));
+        inputation.focus();
+    }, false);
     compile.addEventListener("click", function (event) {
         outputlegend.replaceChildren("compile");
         outputation.innerHTML = "";
-        outputation.append(compiler(parse(tokenize(inputation.value))));
+        outputation.append(display(slot((parse(tokenize(inputation.value))))));
         inputation.focus();
     }, false);
     complete.addEventListener("click", function (event) {
@@ -319,24 +325,27 @@ function compiler(tree) {
         outputlegend.replaceChildren("Scope");
         inputation.focus();
     }, false);
+    function out_array(label, array) {
+        if (Array.isArray(array)) {
+            outputation.append(label + ": " + array.join(" ") + end_of_line);
+        }
+    }
     intrin.addEventListener("click", function (event) {
         outputation.innerHTML = "";
         let tree = parse(tokenize(inputation.value));
         if (Array.isArray(tree)) {
             outputation.append(tree.join(end_of_line));
         } else {
-            outputation.append(
-                "Intrinsics: " + tree.intrinsics.join(" ") + end_of_line +
-                "Endowments: " + tree.endowments.join(" ") + end_of_line +
-                tree.uses.reduce(function (accumulator, value) {
-                    if (typeof value === "string") {
-                        return accumulator + " " + value;
-                    } else {
-                        return accumulator + " " + escapify(value.text);
-                    }
-                }, "Uses:") + end_of_line +
-                "Logs: " + tree.logs.join(" ") + end_of_line
-            );
+            out_array("Intrinsics" + tree.intrinsics);
+            out_array("Endowments", tree.endowments);
+            out_array("Logs" + tree.logs);
+            out_array("Uses", tree.uses.reduce(function (accumulator, value) {
+                if (typeof value === "string") {
+                    return accumulator + " " + value;
+                } else {
+                    return accumulator + " " + escapify(value.text);
+                }
+            }, ""));
         }
         outputlegend.replaceChildren("Intrinsics Endowments Uses Logs");
         inputation.focus();
