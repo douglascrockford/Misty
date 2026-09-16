@@ -888,6 +888,9 @@ assign result: or(true false)    # result is true</pre>
 <p>The  requestor function itself returns a <a href="functions.html#cancel">cancel</a> function that cancels all of the pending requestors from the <var>requestor_array</var>.</p>
 <h4 id=power>power(<var>first</var> <var>second</var>)</h4>
 <p>Raise to a power.</p>
+<h6>Examples:</h6>
+<pre>power(2 3)    # 8
+power(3 2)    # 9</pre>
 <h4 id="race">race(<var>requestor_array</var> <var>throttle</var> <var>need</var>)</h4>
 <p>Race. The <code>race</code> function is a <a href="programs.html#requestor_factory">requestor factory</a> that takes an array of <a href="functions.html#requestor">requestor</a> functions and returns a <a href="functions.html#requestor">requestor</a> function that
 starts all of the <a href="functions.html#requestor">requestors</a> in the <var>requestor_array</var> at once.</p>
