@@ -96,7 +96,7 @@ function display(tree) {
             });
         } else if (token.kind === "text") {
             emit(escapify(token.text));
-        } else if (token.kind === "number" || token.kind === "functino") {
+        } else if (token.kind === "number" || token.kind === "apostrophic") {
             emit(token.text);
         } else {
             if (token.kind === "name") {
