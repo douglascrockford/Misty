@@ -99,7 +99,8 @@ This is descriptive of one particular implementation.
 <h4>level</h4>
 <p><code>0</code> if a variable is declared in the current function<br>
 <code>1</code> if a variable is declared in the outer function<br>
-<code>2</code> or after and so on</p>
+<code>2</code> or after and so on<br>
+<code>null</code> if the make is <code>"intrinsic"</code> or <code>"endowment".</code></p>
 <h4>make</h4>
 <p><code>&quot;def&quot; &quot;endowment&quot; &quot;function&quot; &quot;intrinsic&quot; &quot;parameter&quot; &quot;use&quot; &quot;var&quot;</code></p>
 <h4>text</h4>
@@ -148,7 +149,7 @@ This is descriptive of one particular implementation.
 <p>The number of spaces.</p>
 <h2 id="operator">Operators</h2>
 <h3 id="infix">Infix operators</h3>
-<p>Operators having the same precedence will be gathered into a single node. The infix operators are</p>
+<p>Operators having the same precedence are gathered into a single node. The infix operators are</p>
 <pre>|  *  /  //  +  -  &amp;  &amp;&amp;  =  &lt;&gt;  &lt;  &lt;=  &gt;  &gt;=  /\  \/</pre>
 <h4>kind</h4>
 <p><code>&quot;infix&quot;</code></p>
@@ -156,21 +157,14 @@ This is descriptive of one particular implementation.
 <p>An array of operands. The array has a length that is one greater than the length of the operators array.</p>
 <h4>second</h4>
 <p>An array of operators. The array has a length of at least one.</p>
-<h3>The <code>.</code> operator</h3>
-<h4>text</h4>
-<p><code>&quot;.&quot;</code></p>
-<h4>first</h4>
-<p>The left operand node.</p>
-<h4>second</h4>
-<p>A text token.</p>
-<h3>Subscript</h3>
+<h3>Refinement</h3>
 <h4>kind</h4>
 <p><code>&quot;[&quot;</code></p>
 <h4>first</h4>
 <p>The left operand node.</p>
 <h4>second</h4>
-<p>The right operand node. If <code>right</code> is missing, then <code>[]</code> are representing the push/pop operator.</p>
-<h3 id="invoke">The (<small>invoke</small> operator</h3>
+<p>The right operand node.</p>
+<h3 id="invoke">Invocation</h3>
 <h4>text</h4>
 <p><code>&quot;(&quot;</code></p>
 <h4>first</h4>
