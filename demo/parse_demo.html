@@ -134,26 +134,23 @@ function display(tree) {
                 });
                 emit("}");
             } else if (token.text === "[") {
-                emit("(.");
-                emit(" ");
                 emit(token.first);
-                emit(" ");
+                emit("[");
                 emit(token.second);
-                emit(")");
+                emit("]");
             } else if (token.text === "(") {
-                emit("(");
                 emit(token.first);
+                emit("(");
                 if (token.second && token.second.length > 0) {
-                    emit(" ");
                     emit(token.second)
                 }
                 emit(")");
             } else if (token.text === "then") {
-                emit("(then ");
+                emit("(");
                 emit(token.first);
-                emit(" ");
+                emit(" then ");
                 emit(token.second);
-                emit(" ");
+                emit(" else ");
                 emit(token.third);
                 emit(")");
             } else {
