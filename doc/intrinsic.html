@@ -489,7 +489,10 @@ function?(&quot;function&quot;)     # false
 function?(null)           # false
 function?(function?)      # true</pre>
 <h4><span id="int?">int?</span>(<var>number</var>)</h4>
-<p>Is the <var>number</var> an int? An int is  an integer that fits in 56 bits.  All ints  in the range <code>-36028797018963968</code> thru <code>36028797018963967</code>. Misty has many more integers that are not ints. Every int is an integer, but not every integer is an int.</p>
+<p>Is the <var>number</var> an int? An int is  an integer that fits in 56 bits.  The ints are in the range <code>-36028797018963968</code> thru <code>36028797018963967</code>. Misty has many more integers that are not ints. Every int is an integer, but not every integer is an int.</p>
+<pre>int?(65.0000000)              # true
+int?(<code>36028797018963967)       # true</code>
+int?(<code>36028797018963970)       # false</code></pre>
 <h4 id="integer?">integer?(<var>value</var>)</h4>
 <p>Is the <var>value</var> an integer? If the <var>value</var> is a number and if its fraction part
 is zero, then the result is <code>true</code>. Otherwise, the result is <code>false</code>.</p>
