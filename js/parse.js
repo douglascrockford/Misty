@@ -268,7 +268,7 @@ function expression(open = false) {
     }
 
 // Here we go. Get a value. It could be a variable or a literal.
-// It might have a suffix. If there is an operator following, this
+// It might have a suffix. If there is an infix operator following, this
 // will be on the left side.
 
     left = value();
@@ -355,6 +355,9 @@ function expression(open = false) {
                 previous_precedence - 1,
                 current_precedence + 1
             );
+
+// Make a new node.
+
             if (precedent[current_precedence] === undefined) {
                 left = {
                     kind: "infix",
@@ -362,6 +365,9 @@ function expression(open = false) {
                     operators: [operator]
                 };
             } else {
+
+// Use the preious node.
+
                 right = precedent[current_precedence];
                 precedent[current_precedence] = undefined;
                 right.operands.push(left);
