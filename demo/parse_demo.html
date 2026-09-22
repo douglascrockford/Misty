@@ -101,9 +101,7 @@ function display(tree) {
         } else {
             if (token.kind === "name") {
                 emit(token.text);
-                if (token.make === "endowment") {
-                    emit("!");
-                } else if (typeof token.function_nr === "number") {
+                if (typeof token.function_nr === "number") {
                     emit("ƒ" + token.function_nr);
                 }
             } else if (token.kind === "infix") {
