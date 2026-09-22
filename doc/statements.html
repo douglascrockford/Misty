@@ -53,18 +53,29 @@ optional_box
     <code>""</code>
     <code>"[]"</code>
 </p>
-<p>The <code>assign</code> statement is the instrument of <a href="types.html#immutability">mutation</a>. It can replace the value of a variable that was
-created by <a href="#var">the <code>var</code> statement</a>.</p>
+<p>The <code>assign</code> statement is the only instrument of <a href="types.html#immutability">mutation</a>. Mutation is problematic, but sometimes necessary.</p>
+<p>The <code>assign</code> statement can replace the value of a variable that was
+    created by <a href="#var">the <code>var</code> statement</a>. It can not replace the values of parameters, or names created by <code>def</code>, <code>use</code>, or <code>function</code>.</p>
 <p>The <code>assign</code> statement can also act on values that are mutable.</p>
 <ul>
-    <li>Replace an element of a mutable array.</li>
     <li>Create a new field in a mutable record.</li>
     <li>Replace a field of a mutable record.</li>
     <li>Delete a field from a mutable record by assigning <code>null</code>.</li>
+    <li>Replace an element of a mutable array.</li>
     <li>Append (or push) an element to an array: <code>assign <var>array</var>[]: <var>value</var></code></li>
     <li>Remove (or pop) an element from the end of an array: <code>assign <var>variable</var>: <var>array</var>[]</code></li>
 </ul>
 <p>Attempting any of those changes on a <a href="intrinsic.html#stone">stone</a> object <a href="programs.html#halt">halts the actor</a>.</p>
+<p>Any other use of assign causes a build error.</p>
+<h6>Examples:</h6>
+<pre>assign index: index + 1
+assign my_little_record.new: value
+assign my_little_record.new: value + 1
+assign my_little_record.new: null
+assign my_little_array[index]: value
+assign stack[]: value
+assign value: stack[]
+</pre>
 <h3 id="call">The <code>call</code> statement</h3>
 <p class="rule">
 call_statement
@@ -103,11 +114,12 @@ def_value
 <pre>def double: function double (number) {
     return number + number
 }
+
 def double(number) {
     return number + number
 }</pre>
 <p>Within a function, variables must be declared before they are used. However, inner functions may use all of the variables of an outer function.</p>
-<p>If a variable is declared in an <code>if</code> statement, every branch must also declare that variable. The variable is visible to the rest of the function.</p>
+<p>The <code>def</code> statement may not be placed in an  <code>if</code> statement.</p>
 <h6>Example:</h6>
 <pre>def sqrt_2: 1.4142135623730950
 </pre>
@@ -283,7 +295,7 @@ locator
     devices (like keyboards, camera, and microphones),  output devices (like
     printers, displays, and speakers), and operating system services.
     Typically, access to powerful subprograms is limited to subprograms that attenuate the power, presenting limited capabilities to other subprograms and programs.</p>
-<p>If a variable is declared in an <code>if</code> statement, every branch must also declare that variable. The variable is visible to the rest of the function.</p>
+<p>The <code>use</code> statement may not be placed in an <code>if</code> statement or in a function.</p>
 <p>&nbsp;</p>
 <p>Example:</p>
 <pre>use lang: language_library(&quot;en&quot;)</pre>
@@ -296,7 +308,7 @@ var_statement
 <p>The <code>var</code> statement creates a variable in the current function scope.
 Note that <code>:</code> <dfn>expression</dfn> is not optional. The value of a variable can be replaced by <a href="#assign">the <code>assign</code> statement</a>. The <dfn>name</dfn> is the name of a new variable in this scope. The expression on the right side of the <code>:</code><small>colon</small> gives the initial value of the variable.  The <dfn>name</dfn> may not be used in the <dfn>expression</dfn> on the right side of the <code>:</code><small>colon</small>.</p>
 <p>Within a function, variables must be declared before they are used. However, inner functions may use all of the variables of an outer function.</p>
-<p>If a variable is declared in an <code>if</code> statement, every branch must also declare that variable. The variable is visible to the rest of the function.</p>
+<p>The <code>var</code> statement may not be placed in an <code>if</code> statement.</p>
 <h6>Examples:</h6>
 <pre>var first_name: &quot;&quot;
 var last_name: &quot;&quot;
