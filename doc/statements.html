@@ -62,7 +62,7 @@ optional_box
     <li>Replace a field of a mutable record.</li>
     <li>Delete a field from a mutable record by assigning <code>null</code>.</li>
     <li>Replace an element of a mutable array.</li>
-    <li>Append (or push) an element to an array: <code>assign <var>array</var>[]: <var>value</var></code></li>
+    <li>Append (or push) an element to the end of an array: <code>assign <var>array</var>[]: <var>value</var></code></li>
     <li>Remove (or pop) an element from the end of an array: <code>assign <var>variable</var>: <var>array</var>[]</code></li>
 </ul>
 <p>Attempting any of those changes on a <a href="intrinsic.html#stone">stone</a> object <a href="programs.html#halt">halts the actor</a>.</p>
@@ -106,7 +106,7 @@ def_value
     parameter_list space body
 </p>
 <p>The <code>def</code> statement defines a read-only variable within
-    the current function. The <dfn>name</dfn> may not be used on the right side of the <code>:</code><small>colon</small>.The variable is read-only, but the value it contains
+    the current function. The variable is read-only, but the value it contains
     may be mutable. Names that are defined with the <code>def</code> statement
     can not be changed with the <code>assign</code> statement. If the value is mutable,
   then the value's members or elements may be changed with the <code>assign</code> statement.  </p>
@@ -119,7 +119,6 @@ def double(number) {
     return number + number
 }</pre>
 <p>Within a function, variables must be declared before they are used. However, inner functions may use all of the variables of an outer function.</p>
-<p>The <code>def</code> statement may not be placed in an  <code>if</code> statement.</p>
 <h6>Example:</h6>
 <pre>def sqrt_2: 1.4142135623730950
 </pre>
@@ -295,8 +294,6 @@ locator
     devices (like keyboards, camera, and microphones),  output devices (like
     printers, displays, and speakers), and operating system services.
     Typically, access to powerful subprograms is limited to subprograms that attenuate the power, presenting limited capabilities to other subprograms and programs.</p>
-<p>The <code>use</code> statement may not be placed in an <code>if</code> statement or in a function.</p>
-<p>&nbsp;</p>
 <p>Example:</p>
 <pre>use lang: language_library(&quot;en&quot;)</pre>
 
@@ -306,9 +303,8 @@ var_statement
     <code>&quot;var&quot;</code> space name <code>':'</code> space expression
 </p>
 <p>The <code>var</code> statement creates a variable in the current function scope.
-Note that <code>:</code> <dfn>expression</dfn> is not optional. The value of a variable can be replaced by <a href="#assign">the <code>assign</code> statement</a>. The <dfn>name</dfn> is the name of a new variable in this scope. The expression on the right side of the <code>:</code><small>colon</small> gives the initial value of the variable.  The <dfn>name</dfn> may not be used in the <dfn>expression</dfn> on the right side of the <code>:</code><small>colon</small>.</p>
+Note that <code>:</code> <dfn>expression</dfn> is not optional. The value of a variable may be replaced by <a href="#assign">the <code>assign</code> statement</a>. The <dfn>name</dfn> is the name of a new variable in this scope. The expression on the right side of the <code>:</code><small>colon</small> gives the initial value of the variable.  The <dfn>name</dfn> may not be used in the <dfn>expression</dfn> on the right side of the <code>:</code><small>colon</small>.</p>
 <p>Within a function, variables must be declared before they are used. However, inner functions may use all of the variables of an outer function.</p>
-<p>The <code>var</code> statement may not be placed in an <code>if</code> statement.</p>
 <h6>Examples:</h6>
 <pre>var first_name: &quot;&quot;
 var last_name: &quot;&quot;
