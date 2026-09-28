@@ -1,5 +1,5 @@
 // parse.js
-// 2026-09-16
+// 2026-09-26
 
 // Missing feature:
 //      patterns
@@ -226,11 +226,16 @@ function value() {
 
 // Produce a name or literal, optionally with suffixes.
 
-    const action = initial[token().kind];
+    const node = token();
+    const action = (
+        node.kind === "operator"
+        ? initial[node.text]
+        : initial[node.kind]
+    );
     if (typeof action !== "function") {
-        return fatal("unexpected", token());
+        advance("name");
     }
-    return suffix(action(token()));
+    return suffix(action(node));
 }
 
 function expression(open = false) {
@@ -772,6 +777,12 @@ statement.assign = function assign_statement() {
     advance("assign");
     advance(" ");
     result.first = expression();
+    if (
+        result.first.kind !== "name" &&
+        (result.first.kind !== "operator" || result.first.text !== "[")
+    ) {
+        error("unexpected", result.first);
+    }
     if (token().text === "[]") {
         result.push = true;
         advance("[]");
@@ -791,6 +802,9 @@ statement.call = function call_statement() {
     advance("call");
     advance(" ");
     result.first = expression();
+    if (result.first.kind !== "operator" || result.first.text !== "(") {
+        error("expected", result.first, "(");
+    }
     return result;
 };
 
@@ -845,6 +859,9 @@ statement.jump = function jump_statement() {
     advance("jump");
     advance(" ");
     result.first = expression();
+    if (result.first.kind !== "operator" || result.first.text !== "(") {
+        error("expected", result.first, "(");
+    }
     return result;
 };
 
@@ -891,7 +908,7 @@ statement.use = function use_statement() {
     const result = token();
     let second;
     if (function_nr !== 0) {
-        return fatal("misplaced", result);
+        return error("misplaced", result);
     }
     advance("use");
     const name = advance(" ");
