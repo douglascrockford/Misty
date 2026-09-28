@@ -136,6 +136,8 @@ function display(tree) {
                 emit("[");
                 emit(token.second);
                 emit("]");
+            } else if (token.text === "[]") {
+                emit("[]");
             } else if (token.text === "(") {
                 emit(token.first);
                 emit("(");
