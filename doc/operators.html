@@ -194,7 +194,7 @@ open_input_values
 <p>If a function is invoked with too few input values, the missing input values are <code>null</code>.
 If a function is invoked with excess input values, the actor  <a href="programs.html#halt">halts</a>.</p>
 <p>A function invocation can pass at most 4 input values. If you need more, consider passing a single record literal instead. </p>
-<p>If a function is used only for its side effects, use the <code><a href="statements.htm l#call">call</a></code><a href="statements.htm l#call"> statement</a>.</p>
+<p>If a function is used only for its side effects, use the <code><a href="statements.html#call">call</a></code><a href="statements.html#call"> statement</a>.</p>
 <h2 id="infix">Infix Operators</h2>
 <p class="rule">
 infix_operator
@@ -219,8 +219,8 @@ infix_operator
 <h3 id="multiplicative">Multiplicative Operators</h3>
 
 
-<p>Note that when <code>*</code><small>multiply</small> is used with <code>/</code><small>divide</small> and <code>//</code><small>integer divide</small> in an expression, parentheses muct be used to determine the relative precedence.</p>
-<p>S<code>o a * b / c </code>is an error, but<code> (a * b) / c </code>and<code> a * (b / c) </code>are allowed.</p>
+<p>Note that when <code>*</code><small>multiply</small> is used with <code>/</code><small>divide</small> and <code>//</code><small>integer divide</small> in an expression, parentheses must be used to determine the relative precedence.</p>
+<p>So <code> a * b / c </code>is an error, but<code> (a * b) / c </code>and<code> a * (b / c) </code>are allowed.</p>
 <h4><span id="*">*</span><small>asterisk</small></h4>
 <p>Multiplication.
   If it can be determined at compile time that either operand is zero, the other operand
@@ -289,8 +289,8 @@ null && &quot;ok&quot;                      # halt
 <p>The two equality operators (<code>=</code><small>equal</small> and <code>&lt;&gt;</code><small>not equal)</small> can take values of all types. Objects are equal only if they are the same object. Texts containing the same characters in the same order are equal.</p>
 <p>The four inequality operators (<code>&lt;</code><small>less than</small> <code>&lt;=</code><small>less than or equal</small> <code>&gt;</code><small>greater than</small> <code>&gt;=</code><small>greater than or equal)</small> only work on a pair of numbers or a pair of texts.
     In all other cases they halt.</p>
-<p>Two or more relational operators can be strung together to make more complicated expressions. This can be useful in rnage check.</p>
-<p>So<code> a &lt; b &lt;= c </code>produces the same result as<code> a &lt; b /\ b &lt;= c</code>, except that <code>b</code> is evaluted once. In both cases, <code>c</code> is only evaluated if<code> a &lt; b </code>is <code>true</code>.</p>
+<p>Two or more relational operators can be strung together to make more complicated expressions. This can be useful in range checks.</p>
+<p>So<code> a &lt; b &lt;= c </code>produces the same result as<code> a &lt; b /\ b &lt;= c</code>, except that <code>b</code> is evaluated once. In both cases, <code>c</code> is only evaluated if<code> a &lt; b </code>is <code>true</code>.</p>
 <p>Note that<code> (a &lt; b) &lt; c </code>halts because<code> (a &lt; b) </code>produces a logical value and <code>&lt;</code><small>less than</small> does not work with logical values.</p>
 <h4 id="=">=</h4>
 <p>Equal. If the operands are the same then the result is <code>true</code>.</p>
@@ -300,10 +300,10 @@ null && &quot;ok&quot;                      # halt
 fi
 </pre>
 <h4 id="&lt;&gt;">&lt;&gt;</h4>
-<p>Not equal. If the operands are not the same, then the result is <code>false</code>.  It is the same as <code>not(<var>left</var> = <var>right</var>)</code>.</p>
+<p>Not equal. If the operands are not the same, then the result is <code>true</code>.  It is the same as <code>not(<var>left</var> = <var>right</var>)</code>.</p>
 <h4 id="&lt;">&lt;</h4>
 <p>Less than.</p>
-<p> If the operands both numbers or both texts, then if the left operand is less than
+<p> If the operands are both numbers or both texts, then if the left operand is less than
     the right operand, then the result is <code>true</code>. If the left operand
 is greater than or equal to the right operand the result is <code>false</code>. If the two operands are not both numbers     or both texts, then it halts.</p>
 <h4 id="&lt;=">&lt;=</h4>
@@ -327,14 +327,14 @@ p /\ (q \/ r)    # ok</pre>
   If the left operand is <code>true</code> and the right operand is <code>true</code>, then the result is <code>true</code>.</p>
   <p> If the left operand is neither <code>true</code> nor <code>false</code>, then the <a href="programs.html#halt">actor halts</a>. If the left operand is <code>true</code> and the right operand is  neither <code>true</code> nor <code>false</code>, then  the <a href="programs.html#halt">actor halts</a>.</p>
 <pre>3 &lt; 4 /\ 5 &lt; 6    # true</pre>
-<p>It made by combining <code>/</code><small>slash</small> and <code>\</code><small>backslash</small>.</p>
+<p>It is made by combining <code>/</code><small>slash</small> and <code>\</code><small>backslash</small>.</p>
 <h4 id="or">\/</h4>
 <p>Short-circuit Or. If the left operand is <code>true</code>, then the result is <code>true</code> and the right operand is not evaluated.
   If the left operand is <code>false</code> and the right operand is <code>false</code>, then the result is <code>false</code>.
-<code>false</code>and the right operand is <code>true</code>, then the result is <code>true</code>.</p>
-  <p>If the left operand is neither <code>true</code> nor <code>false</code>, then the <a href="programs.html#halt">actor halts</a>. If the left operand is <code>false</code> and the right operand is  neither <code>true</code> nor <code>false</code>, then  the <a href="programs.html#halt">actor halts</a>.</p>
+If the left operand is <code>false</code> and the right operand is <code>true</code>, then the result is <code>true</code>.</p>
+  <p>If the left operand is neither <code>true</code> nor <code>false</code>, then the <a href="programs.html#halt">actor halts</a>. If the left operand is <code>false</code> and the right operand is neither <code>true</code> nor <code>false</code>, then  the <a href="programs.html#halt">actor halts</a>.</p>
 <pre>3 &lt; 4 \/ 6 &lt; 5    # true</pre>
-<p>It made by combining <code>\</code><small>backslash</small> and <code>/</code><small>slash</small>.</p>
+<p>It is made by combining <code>\</code><small>backslash</small> and <code>/</code><small>slash</small>.</p>
 <h3 id="default">Default Operator</h3>
 <h4 id="|">|</h4>
 <p>Short-circuit Default. If the left operand is not <code>null</code>, then the result
@@ -376,7 +376,7 @@ foo | 0          # 0</pre>
   </tr>
   </tbody>
 </table>
-<p>Infix perators group left to
+<p>Infix operators group left to
   right. The selection, subscript, and invocation operators have the highest precedence (tightest).
 The ternary operator has the lowest (loosest) precedence. Grouping can be made explicit with parens.</p>
 <h6>Examples:</h6>
