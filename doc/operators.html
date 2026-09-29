@@ -290,7 +290,7 @@ null && &quot;ok&quot;                      # halt
 <p>The four inequality operators (<code>&lt;</code><small>less than</small> <code>&lt;=</code><small>less than or equal</small> <code>&gt;</code><small>greater than</small> <code>&gt;=</code><small>greater than or equal)</small> only work on a pair of numbers or a pair of texts.
     In all other cases they halt.</p>
 <p>Two or more relational operators can be strung together to make more complicated expressions. This can be useful in range checks.</p>
-<p>So<code> a &lt; b &lt;= c </code>produces the same result as<code> a &lt; b /\ b &lt;= c</code>, except that <code>b</code> is evaluted once. In both cases, <code>c</code> is only evaluated if<code> a &lt; b </code>is <code>true</code>.</p>
+<p>So<code> a &lt; b &lt;= c </code>produces the same result as<code> a &lt; b /\ b &lt;= c</code>, except that <code>b</code> is evaluated once. In both cases, <code>c</code> is only evaluated if<code> a &lt; b </code>is <code>true</code>.</p>
 <p>Note that<code> (a &lt; b) &lt; c </code>halts because<code> (a &lt; b) </code>produces a logical value and <code>&lt;</code><small>less than</small> does not work with logical values.</p>
 <h4 id="=">=</h4>
 <p>Equal. If the operands are the same then the result is <code>true</code>.</p>
