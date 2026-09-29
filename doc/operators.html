@@ -331,7 +331,7 @@ p /\ (q \/ r)    # ok</pre>
 <h4 id="or">\/</h4>
 <p>Short-circuit Or. If the left operand is <code>true</code>, then the result is <code>true</code> and the right operand is not evaluated.
   If the left operand is <code>false</code> and the right operand is <code>false</code>, then the result is <code>false</code>.
-<code>false</code>and the right operand is <code>true</code>, then the result is <code>true</code>.</p>
+If the left operand is <code>false</code>and the right operand is <code>true</code>, then the result is <code>true</code>.</p>
   <p>If the left operand is neither <code>true</code> nor <code>false</code>, then the <a href="programs.html#halt">actor halts</a>. If the left operand is <code>false</code> and the right operand is  neither <code>true</code> nor <code>false</code>, then  the <a href="programs.html#halt">actor halts</a>.</p>
 <pre>3 &lt; 4 \/ 6 &lt; 5    # true</pre>
 <p>It is made by combining <code>\</code><small>backslash</small> and <code>/</code><small>slash</small>.</p>
