@@ -538,7 +538,7 @@ assign my_text[0]: &quot;r&quot;   # halt
 <p>An immutable(stone) object can not be changed or mutated. An attempt to modify an immutable object <a href="programs.html#halt">halts</a>.</p>
 <p>These values are always immutable: <code>true false null</code>.</p>
 <p>Values of these types are always immutable: <code>number text function pattern</code>. Note that addition does not change a number object; it makes a new number object.</p>
-<p>Values of these types are initially mutable, but can be transformed into immutable values by the intrinsic <a href="intrinsics.htnl#stone"><code>stone</code></a> function: <code>array record blob</code>.</p>
+<p>Values of these types are initially mutable, but can be transformed into immutable values by the intrinsic <a href="intrinsics.html#stone"><code>stone</code></a> function: <code>array record blob</code>.</p>
 <p>The state of mutability of a value can be sensed with the <a href="intrinsic.html#stone?"><code>stone?</code></a> intrinsic function.</p>
 <p>Immutable objects are generally safer to pass to functions in subprograms that are not fully trusted.</p>
 </body>
