@@ -126,9 +126,9 @@ function display(tree) {
                     if (field_nr !== 0) {
                         emit(" ");
                     }
-                    emit(escapify(field.first));
+                    emit(escapify(field.text));
                     emit(": ");
-                    emit(field.second);
+                    emit(token.second[field_nr]);
                 });
                 emit("}");
             } else if (token.text === "[") {

@@ -1,5 +1,5 @@
 // parse.js
-// 2026-09-26
+// 2026-09-29
 
 // Missing feature:
 //      patterns
@@ -68,7 +68,7 @@ const error_message = {
     unexpected: "Unexpected {term_a}."
 };
 
-let error_preamble = "[{from_row}.{from_column}] ";
+const error_preamble = "[{from_row}.{from_column}] ";
 
 function error_term(the_token) {
     if (the_token === undefined) {
@@ -463,96 +463,6 @@ prefix("apostrophic", function functino() {
     return the_functino;
 });
 
-function paren_expression() {
-    let result;
-    if (advance("(").kind === "newline") {
-        indent();
-        result = expression(0, true);
-        if (indentation_q()) {
-            linebreak();
-            result = token();
-            result.first = result;
-            advance("then");
-            result.kind = "operator";
-            advance(" ");
-            result.second = expression(0, true);
-            linebreak();
-            advance("else");
-            advance(" ");
-            result.third = expression(0, true);
-        }
-        outdent();
-    } else {
-        result = expression(0, false);
-    }
-    advance(")");
-    return result;
-}
-
-function more_fields(store, open) {
-    let colon;
-    let key = token();
-    if (key.kind !== "text" && key.kind !== "name") {
-        error("expected", key, "a key");
-    }
-    if (next_token().text === "(" && key.kind === "name") {
-        advance();
-        store.push({
-            kind: "operator",
-            text: ":",
-            first: key.text,
-            second: function_stuff(key)
-        });
-    } else {
-        if (key.kind !== "name" || (
-            next_token().kind !== "newline" && next_token().kind !== "space"
-        )) {
-            colon = advance();
-            advance(":");
-            advance(" ");
-            colon.first = key.text;
-            colon.second = expression(0);
-            store.push(colon);
-        } else {
-            store.push({
-                kind: "operator",
-                text: ":",
-                first: key.text,
-                second: expression(0)
-            });
-        }
-    }
-    if (token().kind === "space") {
-        advance(" ");
-        more_fields(store, open);
-    }
-    if (open && indentation_q()) {
-        linebreak();
-        more_fields(store, open);
-    }
-}
-
-function record_literal() {
-    const open_brace = token();
-    open_brace.first = [];
-    open_brace.kind = "record";
-    const following = advance("{");
-    if (following.kind === "}") {
-        advance("}");
-        return open_brace;
-    }
-    const open = following.kind === "newline";
-    if (open) {
-        indent();
-    }
-    more_fields(open_brace.first, open);
-    if (open) {
-        outdent();
-    }
-    advance("}");
-    return open_brace;
-}
-
 function more_parameters(list, open) {
     const parameter = token;
     consecrate(parameter, "variable");
@@ -665,14 +575,95 @@ intrinsic_structure("function", function () {
         return function_stuff();
     }
 });
+
 intrinsic_structure("pattern", function () {
     let the_pattern = token();
     advance(" ");
     fatal("not implemented", the_pattern);
     return the_pattern;
 });
-prefix("(", paren_expression);
-prefix("{", record_literal);
+
+prefix("(", function paren_expression() {
+    let result;
+    if (advance("(").kind === "newline") {
+        indent();
+        result = expression(0, true);
+        if (indentation_q()) {
+            linebreak();
+            result = token();
+            result.first = result;
+            advance("then");
+            result.kind = "operator";
+            advance(" ");
+            result.second = expression(0, true);
+            linebreak();
+            advance("else");
+            advance(" ");
+            result.third = expression(0, true);
+        }
+        outdent();
+    } else {
+        result = expression(0, false);
+    }
+    advance(")");
+    return result;
+});
+
+function more_fields(keys, values, open) {
+    const key = token();
+    const next = advance();
+    if (key.kind === "name") {
+        if (next.text === ":") {
+            advance(":");
+            advance(" ");
+            keys.push(key);
+            values.push(expression(0));
+        } else if (next.text === "(") {
+            keys.push(key);
+            values.push(function_stuff(key));
+        } else {
+            keys.push(key);
+            values.push(key);
+        }
+    } else if (key.kind == "text") {
+        advance(":");
+        advance(" ");
+        keys.push(key);
+        values.push(expression(0));
+    } else {
+        error("expected", key, "a key");
+    }
+    if (token().kind === "space") {
+        advance(" ");
+        return more_fields(keys, values, open);
+    }
+    if (open && indentation_q()) {
+        linebreak();
+        return more_fields(keys, values, open);
+    }
+}
+
+prefix("{", function record_literal() {
+    const open_brace = token();
+    open_brace.first = [];      // The keys
+    open_brace.second = [];     // The value expressions
+    open_brace.kind = "record";
+    const following = advance("{");
+    if (following.kind === "}") {
+        advance("}");
+        return open_brace;
+    }
+    const open = following.kind === "newline";
+    if (open) {
+        indent();
+    }
+    more_fields(open_brace.first, open_brace.second, open);
+    if (open) {
+        outdent();
+    }
+    advance("}");
+    return open_brace;
+});
 
 function more_elements(store, open) {
     store.push(expression());
