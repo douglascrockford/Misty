@@ -227,15 +227,15 @@ function value() {
 // Produce a name or literal, optionally with suffixes.
 
     const node = token();
-    const action = (
+    let action = (
         node.kind === "operator"
         ? initial[node.text]
         : initial[node.kind]
     );
-    if (typeof action !== "function") {
-        advance("name");
+    if (typeof action === "function") {
+        return suffix(action(node));
     }
-    return suffix(action(node));
+    fatal("expected", node, "a value");
 }
 
 function expression(open = false) {
@@ -277,6 +277,9 @@ function expression(open = false) {
 // will be on the left side.
 
     left = value();
+    if (left === undefined) {
+        return;
+    }
 
 // Is there a space followed by an infix operator?
 // Every valid infix operator has a precedence level.
@@ -574,6 +577,17 @@ intrinsic_structure("function", function () {
     } else {
         return function_stuff();
     }
+});
+
+intrinsic_structure("subprogram", function () {
+    let the_subprogram = token();
+    const locator = advance(" ");
+    if (locator.kind !== "name" && locator.kind !== "text") {
+        return fatal("expected", locator, "a locator");
+    }
+    advance();
+    the_subprogram.first = locator;
+    return invoke(the_subprogram);
 });
 
 intrinsic_structure("pattern", function () {
@@ -895,35 +909,6 @@ statement.send = function send_statement() {
     return result;
 };
 
-statement.use = function use_statement() {
-    const result = token();
-    let second;
-    if (function_nr !== 0) {
-        return error("misplaced", result);
-    }
-    advance("use");
-    const name = advance(" ");
-    result.first = name;
-    consecrate(name, "variable");
-    second = name;
-    if (advance("name").text === ":") {
-        advance(":");
-        const path = advance(" ");
-        if (path.kind === "name") {
-            second = path.text;
-        } else if (path.kind === "text") {
-            second = path;
-        } else {
-            error("expected", path, "text");
-        }
-        advance();
-    } else {
-        second = result.first.text;
-    }
-    result.second = invoke(second);
-    return result;
-};
-
 statement.var = function var_statement() {
     const result = token();
     advance("var");
@@ -961,7 +946,7 @@ function misty() {
 }
 
 export default Object.freeze(function parse(tokens) {
-    const dispenser_record = dispenser(tokens, error);
+    const dispenser_record = dispenser(tokens, fatal);
     abandon = dispenser_record.abandon;
     advance = dispenser_record.advance;
     token = dispenser_record.token;

@@ -20,7 +20,6 @@ statement
     log_statement
     return_statement
     send_statement
-    use_statement
     var_statement
 </p>
 <p class="rule">
@@ -218,7 +217,7 @@ channel
 </ul>
 <h6>A log channel can have<dfn> </dfn>any name. For example:</h6>
 <blockquote>
-    <code>abort abuse account activity adventure alarm alert alpha analysis anomaly authorization beta billing breech budget bug catastrophic cause checklist cloud compliance console contract crash criminal dashboard data dayfile debug
+    <code>abort abuse account activity adventure alarm alert alpha analysis anomaly audit authorization beta billing breech budget bug catastrophic cause checklist cloud compliance console contract crash criminal dashboard data dayfile debug
         delay delta demo development disaster disconnect disruption down emergency epic error event evidence example exception exec exhausted experimental
         expired failover failure fantasy fatal fault feature finished format fraud frontier gamma government guest hallucination halt hello heartbeat host hygiene idle ignore illegal inconsistent info intervention key kyc legal limit local
         log loss major main maintenance malfunction measurement memory metric migration minor mishap money monitor motivation network normal null offline online operations overload page panic partition partner permission policy portal
@@ -269,34 +268,6 @@ The left <dfn>expression</dfn> must resolve to an actor address object or a mess
 <p>If a <dfn>callback</dfn> function is included, then the <dfn>callback</dfn> function  receives the reply, not the <a href="programs.html#receiver">receiver</a> function. See <a href="functions.html#callback">callback</a>.</p>
 <h6>Example:</h6>
 <pre>send server: message: reply_callback</pre>
-
-<h3 id="use">The <code>use</code> statement</h3>
-<p class="rule">
-use
-    <code>"use"</code> space name optional_locator invocation
-</p>
-<p class="rule">
-optional_locator
-    <code>""</code>
-    <code>':'</code> space locator
-</p>
-<p class="rule">
-locator
-    text_literal
-    name
-</p>
-<p>The <code>use</code> statement makes a subprogram available to a program or another subprogram. The return value of the subprogram is bound to the <dfn>name</dfn>. An optional <dfn>locator</dfn> can be provided for finding the subprogram file in the <a href="system.html#shop">program shop</a>. Standard subprograms do not require a locator. The <dfn>name</dfn> may not be used as an argument on the right side of the <code>:</code><small>colon</small>. The <code>use</code> statement may not be used in functions.</p>
-<p>The subprograms are stored in the program shop, which contains the standard subprograms that are located with the <dfn>name</dfn> form, and the extra subprograms that are located with the <dfn>text_literal</dfn> form.
-    In the <dfn>text_literal</dfn> form, it is recommended that the text contain a prefix to indicate the source or usage of the subprogram. Guest code (programs from third parties that are not fully trusted) may be restricted from use of the <code>use</code> statement, or may have restrictions on which subprograms they can employ.</p>
-<p id="power">A <a href="system.html#policy">system</a> may provide
-    powerful subprograms that act as interfaces to powerful
-    endowments such as communication devices, data storage devices, input
-    devices (like keyboards, camera, and microphones),  output devices (like
-    printers, displays, and speakers), and operating system services.
-    Typically, access to powerful subprograms is limited to subprograms that attenuate the power, presenting limited capabilities to other subprograms and programs.</p>
-<p>Example:</p>
-<pre>use lang: language_library(&quot;en&quot;)</pre>
-
 <h3 id="var">The <code>var</code> statement</h3>
 <p class="rule">
 var_statement

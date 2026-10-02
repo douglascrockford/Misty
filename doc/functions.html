@@ -294,4 +294,6 @@ assign sloppy: '='(first second true)     # sloppy is true</pre>
 <p>A cancel function has this signature:</p>
 <pre>function cancel(<var>reason</var> <var>abandon</var> | true)</pre>
 <p>The <var>reason</var> is optional, but if included might be logged or propagated. If <var>abandon</var> is <code>true</code>, then simply stop the requested work. If abandon is <code>false</code>, then if possible, complete the assignment, perhaps by calling the <a href="#callback">callback</a> with the <var>reason</var>.</p>
+<h2 id="programs">Programs and Subprograms</h2>
+<p>Programs and subprograms are special cases of functions. A <a href="programs.html">program</a> is a function that is called when an actor is started. A <a href="programs.html#subprogram">subprogram</a> is an independent function that is called with the <code>subprogram</code> construct.</p>
 </body></html>

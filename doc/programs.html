@@ -38,28 +38,50 @@ title
 }</pre>
 <p>A misty program gives the entry point for an executable.</p>
 <p>When an actor is started, the statements in the <code>program</code> file are executed. The statements should start the execution of the actor, which usually involves the setting of a <a href="#receiver">receiver</a> so that the actor can receive messages. Other sorts of initialization may take place as well. </p>
-<p>The program can pull in code from the subprogram library with the <a href="statements.html#use"><code>use</code></a> statement.</p>
-<p>A subprogram provides functionality to a program or other subprograms. These can be used to build reusable libraries. The body of the subprogram contains a string of statements.</p>
-<p>A subprogram executes its body, as a function does, and returns a value that is bound to the name in the <code>use</code> statement. Typically, it will return a constructor function, but it can also return a record of functions. The return value is stone. Subprograms can be used to protect capabilities.
-    For example, a trusted subprogram might be given access to a block of display memory.
-    The subprogram will be able to modify the pixels.
-    A program using the subprogram will only be able to access the pixels as permitted by the functions that the subprogram provides.
-    Untrusted programs may use trusted subprograms. If the trusted subprogram is properly constructed, the program can not abuse it.</p>
+<p>A subprogram executes its body, as a function does, and returns a value that is bound to the name in the <code>use</code> statement. </p>
 <p>The last statement in a <code>subprogram</code> is a <a href="statements.html#return"><code>return</code></a> statement, which usually returns a function or a record containing functions. That return value is bound to the name in a <code>use</code> statement. A <code>program</code> file does not end with a <code>return</code> statement. </p>
 <p> If two actors reference the same subprogram, the subprogram is executed twice. Actors never share memory.</p>
 <p>Subprograms can not have cyclical dependences.
     Subprogram <code>a</code> can not use subprogram <code>b</code> if subprogram <code>b</code> uses subprogram <code>a</code>.</p>
-<p>In this example, the <code>example</code> program uses the <code>app_master_2000</code> subprogram,
+<p>In this example, program <code>example</code>  uses the <code>app_master_2000</code> subprogram,
     and designates its <code>handler</code> function as the receiver of messages for the actor.</p>
 <pre>misty program example() {
-
-    use app: &quot;app_master_2000&quot;()
+    def app: subprogram &quot;app_master_2000&quot;()
     call receiver!(app.handler)
-
 }</pre>
 <p>Actors are started with the <code><a href="#start">start!(<var>program</var>)</a></code> function. An actor that starts another actor is called an <b id="master">overling</b>. An actor started by an overling is called an <b id="underling">underling</b>. An actor can be a underling to one actor and an overling to many others.</p>
 <p>Communication between actors happens exclusively with messages with the <a href="statements.html#send"><code>send</code></a> statement. Messages are usually transmitted over some sort of connection. </p>
 <p>A subprogram can have arguments passed to it from a <a href="statements.html#use"><code>use</code> statement</a>. A program can have arguments passed to it from a command line or <code><a href="#start">start!</a></code>.</p>
+<h2 id="subprogram">Subprogram</h2>
+<p>A <code>misty program</code> makes an executable that can be executed by an actor. </p>
+<p>A <code>misty subprogram</code> is an independent function that can be called from a program or subprogram. 
+Sometimes, subprograms are endowed with extraordinnary capabilites by the policy machine. A subprogram provides functionality to a program or other subprograms. They can be used to build reusable libraries. The body of the subprogram contains a string of statements.</p>
+<p>A subprogram is called with the subprogram construct:
+</p>
+<p class="rule">subprogram 
+    <code>"subprogram"</code> space locator invocation
+</p>
+<p class="rule">locator
+    text_literal
+    name 
+</p>
+<p>A system provides a library of standard subprograms that are identified by names. Other subprograms are accessed with a <dfn>locator</dfn> text that finds the subprogram file in the <a href="system.html#shop">program shop</a>. </p>
+<p>The subprograms are stored in the program shop, which contains the standard subprograms that are located with the <dfn>name</dfn> form, and the extra subprograms that are located with the <dfn>text_literal</dfn> form.
+    In the <dfn>text_literal</dfn> form, it is recommended that the text contain a prefix to indicate the source or usage of the subprogram. Guest code (programs from third parties that are not fully trusted) may be restricted from use of subprograms, or may have restrictions on which subprograms they can employ.</p>
+<p id="power">Typically, a subprogram returns  a constructor function, but it can also return a record of functions. The return value is stone. Subprograms can be used to protect capabilities.
+    For example, a trusted subprogram might be given access to a block of display memory.
+    The subprogram will be able to modify the pixels.
+    A program using the subprogram will only be able to access the pixels as permitted by the functions that the subprogram provides.
+    Untrusted programs may use trusted subprograms. If the trusted subprogram is properly constructed, the program can not abuse it.</p>
+<p>A <a href="system.html#policy">system</a> may provide
+    powerful subprograms that act as interfaces to powerful
+    endowments such as communication devices, data storage devices, input
+    devices (like keyboards, camera, and microphones),  output devices (like
+    printers, displays, and speakers), and operating system services.
+    Typically, access to powerful subprograms is limited to subprograms that attenuate the power, presenting limited capabilities to other subprograms and programs.</p>
+<p>Example:</p>
+<pre>def lang: subprogram language_library(&quot;en&quot;)
+</pre>
 <h2 id="actor_address_object">Actor address object</h2>
 <p>An actor address object contains the information needed to communicate with an actor.
 An actor object can be transmitted to other actors, even on other machines.</p>
