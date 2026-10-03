@@ -54,7 +54,7 @@ optional_box
 </p>
 <p>The <code>assign</code> statement is the only instrument of <a href="types.html#immutability">mutation</a>. Mutation is problematic, but sometimes necessary.</p>
 <p>The <code>assign</code> statement can replace the value of a variable that was
-    created by <a href="#var">the <code>var</code> statement</a>. It can not replace the values of parameters, or names created by <code>def</code>, <code>use</code>, or <code>function</code>.</p>
+    created by <a href="#var">the <code>var</code> statement</a>. It can not replace the values of parameters, or names created by <code>def</code> or <code>function</code>.</p>
 <p>The <code>assign</code> statement can also act on values that are mutable.</p>
 <ul>
     <li>Create a new field in a mutable record.</li>
@@ -185,15 +185,15 @@ else if list[at].op = &quot;opx&quot;
     assign list[at].yz: list[at].yz + 1
 fi
 assign at: at + 1</pre>
-<p>An <code>if</code> statement may contain <code>def</code> and <code>use</code>
+<p>An <code>if</code> statement may contain <code>def</code> and <code>var</code>
   statements only if the name being defined appears in both the then branch and the else branch.
   The name ia visible to the rest of the function.
 </p>
 <h6>Example:</h6>
 <pre>if allowed!
-    use retricted: "hard to get stuff"()
+    def retricted: true
 else
-    def restricted: null
+    def restricted: false
 fi</pre>
 
 <h3 id="log">The <code>log</code> statement</h3>
