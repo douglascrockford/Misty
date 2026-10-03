@@ -93,7 +93,7 @@ If the function is invoked with too many arguments, the<a href="programs.html#ha
 </p>
 <p class="rule">
 body
-    <code>'{'</code> statements <code>'}'</code>
+    <code>'{'</code> indent statements outdent<code>'}'</code>
 </p>
 <p><a href="statements.html#return">The <code>return</code> statement</a> or <a href="statements.html#jump">the <code>jump</code> statement</a> gives the return value. Implicit return (falling through the bottom) returns <code>null</code>.</p>
 
@@ -159,9 +159,8 @@ A function is free to reuse any of those outer names by declaration, but in doin
   <p><var>function</var><code>(&quot;</code><var>name</var><code>&quot;</code> <code>[</code><var>argument_a</var>
     <var>argument_b</var><code>])</code></p>
 </blockquote>
-<p>The <var>function</var> will be called with the <var>name</var> of the method and an array
-  of arguments. The result that is returned by the <var>function</var>
-  will be given to the caller.</p>
+<p>The <var>function</var> is called with the <var>name</var> of the method and an array
+  of arguments. </p>
 <h6>Example:</h6>
 <pre>def my_record: {
     a(value) (
@@ -174,7 +173,6 @@ def pseudorecord(name arguments) {
         return apply(my_record[name] arguments)
     fi
     log error: "something is wrong with" && name
-    disrupt
 }
 
 function?(pseudorecord)      # true
@@ -186,7 +184,7 @@ null?(pseudorecord.a)        # true
 function?(pseudorecord.a)    # false
 
 pseudorecord.a("ok")         # "a-ok"
-pseudorecord.b("ok")         # disrupt</pre>
+pseudorecord.b("ok")         # null</pre>
 
 <h2 id="functino">Operator Functions</h2>
 <p class="rule">
