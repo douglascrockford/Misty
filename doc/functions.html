@@ -147,45 +147,6 @@ The names are declared by</p>
 <p>A function is not required to use any of the outer names.
 A function is free to reuse any of those outer names by declaration, but in doing so, it loses its right to use the outer version.</p>
 <p>An inner function can see the scope of an outer function, but an outer function may not see into the scope of an inner function. A function can be both an inner function (to the function it is nested inside) and an outer function (of the functions nested inside of itself).</p>
-<h2>Proxy</h2>
-<p>A <var>function</var> can be used as a proxy for a record. If a <var>function</var> is called
-  as</p>
-<blockquote>
-  <p><var>function</var><code>.</code><var>name</var><code>(</code><var>argument_a</var>
-    <var>argument_b</var><code>)</code></p>
-</blockquote>
-<p>then the <var>function</var> will be called as though it had been written as</p>
-<blockquote>
-  <p><var>function</var><code>(&quot;</code><var>name</var><code>&quot;</code> <code>[</code><var>argument_a</var>
-    <var>argument_b</var><code>])</code></p>
-</blockquote>
-<p>The <var>function</var> is called with the <var>name</var> of the method and an array
-  of arguments. </p>
-<h6>Example:</h6>
-<pre>def my_record: {
-    a(value) (
-        "a-" & value
-    )
-}
-
-def pseudorecord(name arguments) {
-    if function?(my_record[name])
-        return apply(my_record[name] arguments)
-    fi
-    log error: "something is wrong with" && name
-}
-
-function?(pseudorecord)      # true
-stone?(pseudorecord)         # true
-record?(pseudorecord)        # false
-length(pseudorecord)         # 2
-
-null?(pseudorecord.a)        # true
-function?(pseudorecord.a)    # false
-
-pseudorecord.a("ok")         # "a-ok"
-pseudorecord.b("ok")         # null</pre>
-
 <h2 id="functino">Operator Functions</h2>
 <p class="rule">
 function_operator
