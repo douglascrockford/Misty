@@ -1,5 +1,5 @@
 // parse.js
-// 2026-09-29
+// 2026-10-02
 
 // Missing feature:
 //      patterns
@@ -441,7 +441,7 @@ function variable() {
         consecration[result.text][function_nr] !== "variable"
     ) {
         consecrate(result, "structural");
-        return action();
+        return action(result);
     }
     return result;
 }
@@ -579,15 +579,15 @@ intrinsic_structure("function", function () {
     }
 });
 
-intrinsic_structure("subprogram", function () {
-    let the_subprogram = token();
+intrinsic_structure("module", function (the_module) {
     const locator = advance(" ");
     if (locator.kind !== "name" && locator.kind !== "text") {
         return fatal("expected", locator, "a locator");
     }
     advance();
-    the_subprogram.first = locator;
-    return invoke(the_subprogram);
+    the_module.kind = "module";
+    the_module.first = locator;
+    return invoke(the_module);
 });
 
 intrinsic_structure("pattern", function () {
@@ -925,8 +925,8 @@ statement.var = function var_statement() {
 function misty() {
     advance("misty");
     const kind = advance(" ").text;
-    if (kind !== "program" && kind !== "subprogram") {
-        return error("expected", token, "program' 'subprogram");
+    if (kind !== "program" && kind !== "module") {
+        return error("expected", token, "program' 'module");
     }
     advance("name");
     const name = advance(" ");

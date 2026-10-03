@@ -1,8 +1,8 @@
-misty subprogram tokenize() {
+misty module tokenize() {
 
-# 2026-07-21
+# 2026-10-02
 
-# This subprogram returns a function that takes a text and converts it into an
+# This module returns a function that takes a text and converts it into an
 # array of tokens. The argument is a source text. The return value is an array
 # of token records.
 

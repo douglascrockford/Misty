@@ -131,6 +131,10 @@ function display(tree) {
                     emit(token.second[field_nr]);
                 });
                 emit("}");
+            } else if (token.kind === "module") {
+                emit("module");
+                emit(" ");
+                emit(token.first);
             } else if (token.text === "[") {
                 emit(token.first);
                 emit("[");

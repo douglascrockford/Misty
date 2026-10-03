@@ -1,6 +1,6 @@
-misty subprogram deque() {
+misty module deque() {
 
-# 2026-06-07
+# 2026-10-02
 
 # deque: Double ended queue (pronounced /dek/)
 

@@ -208,9 +208,9 @@ channel
 <p>The <code>log</code> statement sends the value of an expression to a channel (or log actor).
     It is used to capture information about the execution of the program for analysis and administration.
  Logs can provide insight into the operation of a system. </p>
-<p>A channel has a status for each program or subprogram according to <a href="system.html#policy">policy</a>:</p>
+<p>A channel has a status for each program or module according to <a href="system.html#policy">policy</a>:</p>
 <ul>
-    <li><code>forbidden</code>: The program or subprogram will not  build as long as the source mentions this channel.</li>
+    <li><code>forbidden</code>: The program or module will not  build as long as the source mentions this channel.</li>
     <li><code>allowed</code>. Log messages are sent immediately to the channel actor.</li>
     <li><code>ignored</code>: The <code>log</code> statement is ignored. It is treated as a comment. It might be <code>allowed</code> on a later build.</li>
     <li><code>conditional</code>. The <code>log</code> statement is ignored at first, but can be allowed at any tine. The <code>debug</code> channel is an example. If the debugger is running, the <code>debug</code> channel is enabled.</li>
@@ -220,8 +220,8 @@ channel
     <code>abort abuse account activity adventure alarm alert alpha analysis anomaly audit authorization beta billing breech budget bug catastrophic cause checklist cloud compliance console contract crash criminal dashboard data dayfile debug
         delay delta demo development disaster disconnect disruption down emergency epic error event evidence example exception exec exhausted experimental
         expired failover failure fantasy fatal fault feature finished format fraud frontier gamma government guest hallucination halt hello heartbeat host hygiene idle ignore illegal inconsistent info intervention key kyc legal limit local
-        log loss major main maintenance malfunction measurement memory metric migration minor mishap money monitor motivation network normal null offline online operations overload page panic partition partner permission policy portal
-        practice privacy probe progress protocol prototype public quality quantum range recover region regulation reject remote reset risk routine sample scope security
+        log loss major main maintenance malfunction measurement memory metric migration minor mishap module money monitor motivation network normal null offline online operations overload page panic partition partner permission policy portal
+        practice privacy probe program progress protocol prototype public quality quantum range recover region regulation reject remote reset risk routine sample scope security
         serious service simulation situation spam special sponsor start state statistics stop storage store stress summary super support suspend suspicious syntax system telemetry test time tomorrow tool trace training
         transition trend trial trivial type unknown unneeded up usage vault verbose violation warning web world</code>
 </blockquote>

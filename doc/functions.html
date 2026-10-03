@@ -90,7 +90,7 @@ If the function is invoked with too many arguments, the<a href="programs.html#ha
     The default arity is <code>null</code>, meaning unlimited.</p>
 <h3>Body</h3>
 <p>And then, the body, a string of statements wrapped in <code>{}</code><small>braces</small>.
-A function body may not contain a <code>use</code> statement.</p>
+</p>
 <p class="rule">
 body
     <code>'{'</code> statements <code>'}'</code>
@@ -120,7 +120,7 @@ body
 <div class=scope>
     <p>intrinsic</p>
 <div class=scope>
-    <p>subprogram</p>
+    <p>module</p>
 <div class=scope>
     <p>outer function</p>
     <div class=scope>
@@ -132,7 +132,6 @@ The names are declared by</p>
     <li>the function's given name</li>
     <li>each name in the parameter list</li>
     <li>the <code><a href="statements.html#def">def</a></code><a href="statements.html#def"> statement</a></li>
-    <li>the <code><a href="statements.html#use">use</a></code><a href="statements.html#use"> statement</a></li>
     <li>the <code><a href="statements.html#var">var</a></code><a href="statements.html#var"> statement</a></li>
 </ul>
 <p>A name in a function can only be declared once, and it must be declared before it is used. </p>
@@ -141,7 +140,7 @@ The names are declared by</p>
     the <code>if</code> statement, the <code>def</code> must be encountered once. The declaration must appear once in every branch
 </p>
 <p>In addition to the declared names, a function also has access to the names in the scopes of all of the functions it is nested in,
-    including the misty subprogram and the <span id="intrinsic.html"><a href="intrinsics.html">intrinsics</a></span>.
+    including the misty module and the <span id="intrinsic.html"><a href="intrinsics.html">intrinsics</a></span>.
     A function may use those outer names as if they were its own without declaration.
     Names that were declared with <code>var</code> may have there values replaced by the <code>assign</code> statement.
     A function may continue to enjoy access to the scope of an outer function even after the outer function has returned.</p>
@@ -294,6 +293,6 @@ assign sloppy: '='(first second true)     # sloppy is true</pre>
 <p>A cancel function has this signature:</p>
 <pre>function cancel(<var>reason</var> <var>abandon</var> | true)</pre>
 <p>The <var>reason</var> is optional, but if included might be logged or propagated. If <var>abandon</var> is <code>true</code>, then simply stop the requested work. If abandon is <code>false</code>, then if possible, complete the assignment, perhaps by calling the <a href="#callback">callback</a> with the <var>reason</var>.</p>
-<h2 id="programs">Programs and Subprograms</h2>
-<p>Programs and subprograms are special cases of functions. A <a href="programs.html">program</a> is a function that is called when an actor is started. A <a href="programs.html#subprogram">subprogram</a> is an independent function that is called with the <code>subprogram</code> construct.</p>
+<h2 id="programs">Programs and Modules</h2>
+<p>Programs and modules are special cases of functions. A <a href="programs.html">program</a> is a function that is called when an actor is started. A <a href="programs.html#module">module</a> is an independent function that is called with the <code>module</code> construct.</p>
 </body></html>
