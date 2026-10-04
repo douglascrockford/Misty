@@ -34,6 +34,10 @@ if (!name) {
     console.log("Missing filename.");
     process.exit(1);
 }
+if (!/^[a-zA-Z0-9_-]+$/.test(name)) {
+    console.log("Bad filename.");
+    process.exit(1);
+}
 function read_source(name) {
     let source = "";
     try {
