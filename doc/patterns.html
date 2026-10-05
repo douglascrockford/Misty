@@ -72,7 +72,7 @@ def url: pattern (lib) {
     IP address:</p>
 <pre>ip4: pattern {4 {&quot;octet&quot;: 1-3 digit / &quot;.&quot;}}</pre>
 <p>It matches exactly four groups of one to three digits separated by <code>.</code><small>period</small>.
-  Each group of digits is sltored in the result under the name <code>octet</code>.
+  Each group of digits is stored in the result under the name <code>octet</code>.
   So</p>
 <pre>extract(&quot;198.137.240.92&quot; lib.ip4)
     # {octet: [&quot;198&quot; &quot;137&quot; &quot;240&quot; &quot;92&quot;]}</pre>
