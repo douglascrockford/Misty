@@ -483,7 +483,7 @@ false?(null)       # false</pre>
 <p>Is the <var>value</var> a function? If the <var>value</var> is a function, then the result is <code>true</code>. Otherwise, the result is <code>false</code>.</p>
 <pre>function?(0)              # false
 function?(function () {
-    return null;
+    return null
 })                        # true
 function?(&quot;function&quot;)     # false
 function?(null)           # false
@@ -591,7 +591,7 @@ upper?(&quot;&quot;)         # false</pre>
     the result is <code>false</code>.</p>
 <pre>whitespace?(0)          # false
 whitespace?(32)         # false
-whitespace?(char(32))   # true
+whitespace?(character(32))   # true
 whitespace?(&quot;0&quot;)        # false
 whitespace?(&quot; &quot;)        # true
 whitespace?(&quot;\t&quot;)       # true
@@ -651,7 +651,7 @@ in radians, between <code>0</code> and <code>2</code> <code>*</code> <code>pi</c
     tangent, in cycles, between <code>-1</code> and 1.</p>
 <h4 id="ceiling">ceiling(<var>number</var> <var>place</var>)</h4>
 <p>If <var>place</var> is <code>0</code> or <code>null</code>, the <var>number</var> is rounded up to the smallest integer that is greater than or equal to the
-    <var>number</var>. If <var>place</var> is a small positive integer, then the <var>number</var> is rounded up to that  decimal place.</p>
+    <var>number</var>. If <var>place</var> is a small negative integer, then the <var>number</var> is rounded up to that  decimal place.</p>
 <h6>Examples:</h6>
 <pre>assign result: ceiling(12.3775)         # result is 13
 assign result: ceiling(12.3775 0)       # result is 13
@@ -672,7 +672,7 @@ assign result: ceiling(-12.3775)        # result is -12</pre>
 <h4 id="extract">extract(<var>text</var> <var>pattern</var> <var>from</var> <var>to</var>)</h4>
 <p>The <var>text</var> is matched to the <var>pattern</var>. If it does not match, the result is <code>null</code>. If the <var>pattern</var> does match, then the result is a record containing the saved fields.</p>
 <h4 id="fallback">fallback(<var>requestor_array</var>)</h4>
-<p>The <code>fallback</code> <a href="program.html#factory">requestor factory</a> returns a <a href="function.html#requestor">requestor function</a> that tries each of the requestors in the <var>requstor_array</var> until it gets a success. When the requestor is called, it calls the first requestor in <code><var>requestor_array</var></code>. If that is eventually successful, its value is passed to the <a href="function.html#callback">callback</a>. But if that requestor fails, the next requestor is called, and so on. If none of the requestors is successful, then the fallback fails. If any one succeeds, then the fallback succeeds.</p>
+<p>The <code>fallback</code> <a href="functions.html#requestor_factory">requestor factory</a> returns a <a href="functions.html#requestor">requestor function</a> that tries each of the requestors in the <var>requestor_array</var> until it gets a success. When the requestor is called, it calls the first requestor in <code><var>requestor_array</var></code>. If that is eventually successful, its value is passed to the <a href="functions.html#callback">callback</a>. But if that requestor fails, the next requestor is called, and so on. If none of the requestors is successful, then the fallback fails. If any one succeeds, then the fallback succeeds.</p>
 <p>The fallback requestor returns a <a href="programs.html#cancel">cancel</a> function that can be called when the result is no longer needed.</p>
 <h4 id=filter>filter(<var>array</var> <var>function</var>)</h4>
 <p> The <code>filter</code> function calls a <var>function</var> for every
@@ -695,7 +695,7 @@ def integers: filter(data integer?)    # integers is [0 2 4]</pre>
 <p><code>find</code> returns the element number of the found value. If nothing is found, <code>find</code> returns <code>null</code>.</p>
 <h4 id="floor">floor(<var>number</var> <var>place</var>)</h4>
 <p>If <var>place</var> is <code>0</code> or <code>null</code>, the <var>number</var> is rounded down to the greatest integer that is less than or equal to
-    the <var>number</var>. If <var>place</var> is a small positive integer, then the <var>number</var> is rounded down to that many decimal places. For positive
+    the <var>number</var>. If <var>place</var> is a small negative integer, then the <var>number</var> is rounded down to that many decimal places. For positive
     numbers, this is like discarding decimal places.</p>
 <h6>Examples:</h6>
 <pre>assign result: floor(12.3775)         # result is 12
@@ -855,7 +855,7 @@ min(max(8 3) 7)     # 7</pre>
 <pre>min(3 4)            # 3</pre>
 <h4>min(<var>array</var>) </h4>
 <p>Minimum. The result is the least number in the <var>array</var>. If the array is empty or contains a non-number, the result is <code>null</code>.</p>
-<pre>max([12 48 24])    # 12</pre>
+<pre>min([12 48 24])    # 12</pre>
 <h4 id=modulo>modulo(<var>dividend</var> <var>divisor</var>)</h4>
 <p>The result of <code>modulo(<var>dividend</var> <var>divisor</var>)</code> is
 <code><var>dividend</var> - (<var>divisor</var> * floor(<var>dividend</var> / <var>divisor</var>))</code>.
@@ -890,7 +890,7 @@ assign result: or(15 3)          # result is 15
 assign result: or(13 3)          # result is 15
 assign result: or(true false)    # result is true</pre>
 <h4 id="parallel">parallel(<var>requestor_array</var> <var>throttle</var> <var>need</var>)</h4>
-<p>Parallel. The <code>parallel</code> <a href="programs.html#requestor_factory">requestor factory</a> returns a <a href="functions.html#requestor">resquestor function</a>. When the <a href="functions.html#requestor">requestor function</a> is called with a <a href="functions.html#callback">callback</a> function and a value, every requestor in the <var>requestor_array</var> is called with the value, and the results are placed in corresponding elements of the results array. This all happens in parallel. The value produced by the first element of the <var>requestor_array</var> provides the first element of the result. The completed results array is passed to the <a href="functions.html#callback">callback</a> function.</p>
+<p>Parallel. The <code>parallel</code> <a href="functions.html#requestor_factory">requestor factory</a> returns a <a href="functions.html#requestor">requestor function</a>. When the <a href="functions.html#requestor">requestor function</a> is called with a <a href="functions.html#callback">callback</a> function and a value, every requestor in the <var>requestor_array</var> is called with the value, and the results are placed in corresponding elements of the results array. This all happens in parallel. The value produced by the first element of the <var>requestor_array</var> provides the first element of the result. The completed results array is passed to the <a href="functions.html#callback">callback</a> function.</p>
 <p>By default, it starts all of the requestors in the <var>requestor_array</var> at once, each in its own turn so that they do not interfere with each other. This can shock some systems by unleashing a lot of demand all at once. To mitigate the shock, the optional <var>throttle</var> argument sets the maximum number of requestors running at a time. As requestors succeed or fail, waiting requestors can be started. The <var>throttle</var> is optional. If provided, the <var>throttle</var> is a number: the maximum number of requestors to have
     running at any time. </p>
 <p>Ordinarily, the number of successes must be the same as the number of requestors in the <var>requestor_array</var>. If you need few successes, specify your need with the <var>need</var> argument. The <var>need</var> could be <code>1</code>, meaning that 1 or more successes are needed. The <code>need</code> could be <code>0</code>, meaning that no successes are needed. If the number of successes is greater than or equal to <code><var>need</var></code>, then the whole operation succeeds. The <var>need</var>  must be between <code>0</code> and <var>requestor_array</var><code>.length</code>.</p>
@@ -901,7 +901,7 @@ assign result: or(true false)    # result is true</pre>
 <pre>power(2 3)    # 8
 power(3 2)    # 9</pre>
 <h4 id="race">race(<var>requestor_array</var> <var>throttle</var> <var>need</var>)</h4>
-<p>Race. The <code>race</code> function is a <a href="programs.html#requestor_factory">requestor factory</a> that takes an array of <a href="functions.html#requestor">requestor</a> functions and returns a <a href="functions.html#requestor">requestor</a> function that
+<p>Race. The <code>race</code> function is a <a href="functions.html#requestor_factory">requestor factory</a> that takes an array of <a href="functions.html#requestor">requestor</a> functions and returns a <a href="functions.html#requestor">requestor</a> function that
 starts all of the <a href="functions.html#requestor">requestors</a> in the <var>requestor_array</var> at once.</p>
 <p>By default, it starts all of the requestors in the <var>requestor_array</var> at once, each in its own turn so that they do not interfere with each other. This can shock some systems by unleashing a lot of demand at once. To mitigate the shock, the optional <code>throttle</code> argument sets the maximum number of requestors running at a time. As requestors succeed or fail, waiting requestors can be started.</p>
 <p>By default, a single result is produced. If an array of results is need, specify the needed number of results in the <code>need</code> parameter. When the needed number of successful results is obtained, the operation ends. The results go into a sparce array aligned with the <var>requestor_array</var>, and unfinished requestors are cancelled. The <code>need</code> argument must be between <code>1</code> and <var>requestor_array</var><code>.length</code>.</p>
@@ -963,11 +963,11 @@ assign result: reverse(98.6)                  # null</pre>
 <pre>assign result: right(12 10)                    # result is 0
 assign result: right(19 2)                     # result is 4
 assign result: right(-9007199254740992 53)     # result is 7
-assign result: right(-2)                       # result is 36028797018963967</pre>
+assign result: right(-2 1)                     # result is 36028797018963967</pre>
 <h4 id="right_signed">right_signed(<var>first</var> <var>second</var>)</h4>
 <p>Right shift with sign fill.</p>
 <h6>Examples:</h6>
-<pre>assign result: <code>right</code>(-2 1)                     # result is -1</pre>
+<pre>assign result: <code>right_signed</code>(-2 1)              # result is -1</pre>
 <h4 id=rotate>rotate(<var>first</var> <var>second</var>)</h4>
 <p>Left shift with carry  fill.</p>
 <h6>Examples:</h6>
@@ -993,7 +993,7 @@ round(-12.3775 -2)     # -12.38</pre>
 <p><var>target</var>: a text or pattern that should be found in the source.</p>
 <p><var>from</var>: The starting position for the search. The default is <code>0</code>, the beginning of the text. If from is negative, it is added to <code>length(</code><var>text</var><code>)</code>.</p>
 <h4 id="sequence">sequence(<var>requestor_array</var>)</h4>
-<p>Sequence. The <code>sequence</code> <a href="programs.html#requestor_factory">requestor factory</a>
+<p>Sequence. The <code>sequence</code> <a href="functions.html#requestor_factory">requestor factory</a>
 that takes a <var>requestor_array</var> and returns a <a href="functions.html#requestor">requestor</a> function that
     starts all of the <a href="functions.html#requestor">requestors</a> in the <var>requestor_array</var> one at a time.
     The result of each becomes the argument to the next. The last result is the result of the sequence. </p>
@@ -1103,7 +1103,7 @@ assign result: sqrt(-1)     # result is null </pre>
     in cycles.</p>
 <h4 id="trim">trim(<var>text</var> <var>reject</var>)</h4>
 <p>The <code>trim</code> function removes selected characters from the ends of a <var>text</var>. The default is to remove control characters and spaces.</p>
-<pre>assign result: &quot;  Hello   there   &quot;.trim()    # result is &quot;Hello   there&quot;</pre>
+<pre>assign result: trim(&quot;  Hello   there   &quot;)    # result is &quot;Hello   there&quot;</pre>
 <h4 id="trunc">trunc(<var>number</var> <var>place</var>)</h4>
 <p>The <var>number</var> is truncated toward zero. If the <var>number</var> is positive, the result is the same as <code>floor(</code><var>place</var><code>)</code>.
     If the <var>number</var> is negative, the result is the same as <code>ceiling(</code><var>place</var><code>)</code>.</p>
@@ -1111,9 +1111,9 @@ assign result: sqrt(-1)     # result is null </pre>
     down to that many decimal places. This is like discarding decimal places.</p>
 <h6>Examples:</h6>
 <pre>assign result: trunc(12.3775 0)      # result is 12
-assign result: trunc(12.3775 2)      # result is 12.37
+assign result: trunc(12.3775 -2)     # result is 12.37
 assign result: trunc(-12.3775)       # result is -12
-assign result: trunc(-12.3775 2)     # result is -12.37</pre>
+assign result: trunc(-12.3775 -2)    # result is -12.37</pre>
 <h4 id="turkish_lower">turkish_lower(<var>text</var>)</h4>
 <p>Similar to <code>lower</code>, except that <code>I</code> goes to <code>&inodot;</code><small>dotless i</small>.</p>
 <h4 id="turkish_upper">turkish_upper(<var>text</var>)</h4>
