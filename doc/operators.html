@@ -377,9 +377,7 @@ foo | 0          # 0</pre>
   </tr>
   </tbody>
 </table>
-<p>Infix operators group left to
-  right. The selection, subscript, and invocation operators have the highest precedence (tightest).
-The ternary operator has the lowest (loosest) precedence. Grouping can be made explicit with parens.</p>
+<p>Infix operators of the same precedence level group left to right. Higher-precedence operators bind tighter than lower-precedence ones. The selection, subscript, and invocation operators have the highest precedence (tightest). The ternary operator has the lowest (loosest) precedence. Grouping can be made explicit with parens.</p>
 <h6>Examples:</h6>
 <pre>&quot;$&quot; & 3 + 4                        # &quot;$7&quot;
 10 - 5 + 2                         # 7
