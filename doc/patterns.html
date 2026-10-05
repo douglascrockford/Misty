@@ -25,10 +25,10 @@
 <p>A pattern literal,  written as  <code>pattern</code><small></small> followed by
   a pattern expression, produces an immutable pattern object.</p>
 <h2 id="first example">An Example</h2>
-<p>We want to extract information from a url. We define an <code>lib</code>
+<p>We want to extract information from a url. We define a <code>lib</code>
   library record containing two patterns (<code>ip4</code> and <code>name</code>)
   and a <code>url</code> pattern that uses the <code>lib</code>.
-  The <code>word</code> introduces a pattern,
+  The word <code>pattern</code> introduces a pattern,
 much as <code>function</code><small></small> introduces a function. Patterns may not be created in a function that has a pattern variable or input in its scope.</p>
 <pre>def lib: {
     ip4: pattern {4 {&quot;octet&quot;: 1-3 digit / &quot;.&quot;}}
@@ -54,7 +54,7 @@ def url: pattern (lib) {
     scheme: &quot;http&quot;
     slash: &quot;//&quot;
 }</pre>
-<p>We can call <code>match</code> again with a different text:</p>
+<p>We can call <code>extract</code> again with a different text:</p>
 <pre>assign result: extract(&quot;216.168.224.111:9997?clearance=top&quot; url)</pre>
 <h6>The <code>result</code> is a record containing</h6>
 <pre>{
@@ -69,12 +69,12 @@ def url: pattern (lib) {
 (?:\/([^?#]*))?(?:\?([^#]*))?(?:#(.*))?$/</pre>
 <p>The regular expression is much more compact than the pattern, but it is also much harder to understand.</p>
 <p>Let's take the pattern apart. First, we had a library pattern for matching a dotted
-    IP addresses:</p>
+    IP address:</p>
 <pre>ip4: pattern {4 {&quot;octet&quot;: 1-3 digit / &quot;.&quot;}}</pre>
 <p>It matches exactly four groups of one to three digits separated by <code>.</code><small>period</small>.
-  Each group of digits is stored in the result under the name <code>octet</code>.
+  Each group of digits is sltored in the result under the name <code>octet</code>.
   So</p>
-<pre>lib.id.extract(&quot;198.137.240.92&quot;)
+<pre>extract(&quot;198.137.240.92&quot; lib.ip4)
     # {octet: [&quot;198&quot; &quot;137&quot; &quot;240&quot; &quot;92&quot;]}</pre>
 <p>The <code>/</code><small>slash</small> operator allows us to specify a separator.
   The pattern could be written without the <code>/</code><small>slash</small>
@@ -93,7 +93,7 @@ name: pattern {1- [letter digit &quot;_-%&quot;]}
   <code>-</code><small>minus sign</small>, and <code>%</code><small>percent
 sign</small>.</p>
 <pre>
-filename: lib.name.extract{&quot;doom.dust&quot;}
+def filename: extract(&quot;doom.dust&quot; lib.name)
     # null because a name can't contain &quot;.&quot;
 </pre>
 <p>The <code>url</code> pattern matches urls. It matches in seven steps.</p>
@@ -112,7 +112,7 @@ filename: lib.name.extract{&quot;doom.dust&quot;}
   </li>
   <li> It matches a host name or address. This component
     is not optional. It is saved under the name <code>host</code>. First
-    we attempt to match using the <code>ip</code> pattern we defined earlier.
+    we attempt to match using the <code>ip4</code> pattern we defined earlier.
     If that does not match, then we'll match a dotted domain name (one or
     more names separated by dots).
     <pre>&quot;host&quot;: {ip4 | 1- {name / &quot;.&quot;}}</pre>
@@ -150,7 +150,7 @@ record?(url)        # false</pre>
 <h2 id="library">Pattern Library</h2>
 <p>A pattern library is a record containing patterns that can be used by
   other patterns. The <code>lib</code> record in the <a href="#first example">first example</a> is a pattern library.</p>
-<p>A pattern library can contain patterns, texts, and arrays..</p>
+<p>A pattern library can contain patterns, texts, and arrays.</p>
 <p>When an ordinary text is used as a pattern, it  matches identical text.</p>
 <p>When an ordinary array of texts is used as a pattern, it is used as a group, trying the texts in order  until there is a match.</p>
 <h2>Pattern expressions</h2>
@@ -230,7 +230,7 @@ pattern_element
     pattern_text
     name
 </p>
-<p>A pattern group is wrapped in wrapped in <code>{ }</code><small>braces</small>. A group
+<p>A pattern group is wrapped in <code>{ }</code><small>braces</small>. A group
     matches if all of the pattern expressions in it match.</p>
 <p>Alternatives are separated by line breaks or <code>,</code><small>comma</small>. A
     set of alternatives matches if any one of the alternatives matches.</p>
@@ -337,7 +337,7 @@ pattern_text
 (including noncharacters)</td></tr></table>
 <p>A name can refer to one of the system-supplied names. These include <code>ascii</code>,
   <code>char</code>,
-  <code>digit</code>, <code>end</code>, <code>hex</code>, <code>letter</code>, <code>lower</code>, <code>space</code>, <code>upper</code> as well as the two character <a href="http://www.unicode.org/reports/tr44/tr44-4.html#General_Category_Values">Unicode General Categories</a>. The Unicode General Categories are only available in <a href="#class">character classes.</a></p>
+  <code>digit</code>, <code>end</code>, <code>hex</code>, <code>letter</code>, <code>lower</code>, <code>space</code>, <code>upper</code> as well as the two-character <a href="http://www.unicode.org/reports/tr44/tr44-4.html#General_Category_Values">Unicode General Categories</a>. The Unicode General Categories are only available in <a href="#class">character classes.</a></p>
 <p>A name can refer to a user-defined pattern in a library. This allows the breaking of a complex
   pattern into simpler subpatterns. It also allows for the recognition of context-free languages.</p>
 <p>A name can refer to a user-defined text in a library.</p>
@@ -435,7 +435,7 @@ pattern_quantifier
   item can be matched.</p>
 <pre>1- item</pre>
 <p>An optional item is indicated by a prefix of <code>-</code><small>minus sign</small>.
-  This indicates that the item may match zero or one times.</p>
+  This indicates that the item may match zero or one time.</p>
 <pre>- item</pre>
 <p>If the next to last item in a pattern group is <code>/</code><small>slash</small>
   then the last item in the group is matched before every iteration except
@@ -450,7 +450,7 @@ pattern_depot
     name <code>':'</code> space
 </p>
 <p>Patterns can be used to extract information from texts. The <code>extract</code>
-  method returns a record containing the saved matching material.</p>
+  function returns a record containing the saved matching material.</p>
 <p>To save material, place a <var>text</var> or a <var>name</var> and a <code>:</code><small>colon</small> immediately
   before any pattern expression. All of the text that is matched by that
   pattern expression will be saved in the result record, using the <var>text</var>
@@ -465,12 +465,12 @@ pattern_depot
     <pre><a href="intrinsic.html#replace">replace(<var>text</var> <var>pattern</var> <var>replacement</var> <var>limit</var>)</a></pre>
     <pre><a href="intrinsic.html#search">search(<var>text</var> <var>pattern</var> <var>from</var>)</a></pre>
 </blockquote>
-<p>For example, the <code>array()</code> method can be used
+<p>For example, the <code>array()</code> function can be used
     to break the contents of a file into an array of texts. If the <var>separator</var> pattern is found in the <var>text</var>, then the subtext before the match
     is stored in the new array, and the match is repeated on the remainder
     until no more matches are possible. The remainder of the text is stored
-    in the array and the array is result.</p>
-<pre>var lines: array(file, pattern {end})</pre>
+    in the array and the array is returned.</p>
+<pre>var lines: array(file pattern {end})</pre>
 <p>This will break on <dfn>linefeed</dfn>, <dfn>carriage return</dfn>, and <dfn>carriage return
     linefeed</dfn>.</p>
 </body></html>
