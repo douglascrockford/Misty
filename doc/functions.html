@@ -22,10 +22,10 @@ div.scope {
   values. Functions can be stored in variables, records, and arrays; functions
   can be passed as parameters to other functions;  functions can be returned
   as the results of functions. Functions can not be sent in messages to other processes. Function objects are immutable values. A function introduces
-  a new scope: variables defined in a functions are not visible outside
+  a new scope: variables defined in a function are not visible outside
   of the function, but will be visible to inner functions.</p>
 <h2>Making Functions</h2>
-<p>Function objects are made with the <code>function</code> operator that takes an parameter list and a body and produces a function object.</p>
+<p>Function objects are made with the <code>function</code> operator that takes a parameter list and a body and produces a function object.</p>
 
 <p class="rule">
 function_literal
@@ -83,10 +83,10 @@ optional_arity
   body can not modify the parameters, but can modify the values of the parameters if they are not stone. Parameters behave as <code>def</code>, not <code>var</code>. The number of
   names in the parameter list determines the function's arity.
 If the function is invoked with too many arguments, the<a href="programs.html#halt"> actor halts</a>.</p>
-<p>If the function is invoked with too few parameters, the missing values will get <code>null</code>. The <code>|</code><small>default</small> operator is allowed in parameter lists, replacing a <code>null</code> argument with a value from an <dfn>expression</dfn>.</p>
+<p>If the function is invoked with too few arguments, the missing values will get <code>null</code>. The <code>|</code><small>default</small> operator is allowed in parameter lists, replacing a <code>null</code> argument with a value from an <dfn>expression</dfn>.</p>
 <p>There is an alternate form for functions that can receive all of their arguments as a single array.
-    A single parameter is bound to an array of arguments. See <a href="intrinsics.html#apply">apply</a>.
-    An optional arity can be provided that sets the maximum number of arguments and provide a value to the <a href="intrinsics.html#length">length</a> function.
+    A single parameter is bound to an array of arguments. See <a href="intrinsic.html#apply">apply</a>.
+    An optional arity can be provided that sets the maximum number of arguments and provides a value to the <a href="intrinsic.html#length">length</a> function.
     The default arity is <code>null</code>, meaning unlimited.</p>
 <h3>Body</h3>
 <p>And then, the body, a string of statements wrapped in <code>{}</code><small>braces</small>.
@@ -101,7 +101,7 @@ body
 <p>The <var>context</var> of a function is the function in which it is made.
   An outer function provides the context for an inner function. The inner
   function has access to all of the outer function's variables, definitions,
-  and parameters.The context (or lexical closure)
+  and parameters. The context (or lexical closure)
   remains available to the inner function even after the outer function
   has finished its invocation and returned.  If an inner function redefines names that are already defined in the context (parameters, <code>def</code>, or <code>var</code>), it is not able to access the outer names.</p>
 <h2 id="invocation">Invocation</h2>
@@ -126,7 +126,7 @@ body
     <div class=scope>
         <p>inner function</p>
 </div></div></div></div>
-<p>A function creates as scope. A scope is a set of names belonging to the particular invocation of a function.
+<p>A function creates a scope. A scope is a set of names belonging to the particular invocation of a function.
 The names are declared by</p>
 <ul>
     <li>the function's given name</li>
@@ -137,12 +137,12 @@ The names are declared by</p>
 <p>A name in a function can only be declared once, and it must be declared before it is used. </p>
 <p>Inner functions can see all of the variables of their outer functions. </p>
 <p> No matter what path is taken thru
-    the <code>if</code> statement, the <code>def</code> must be encountered once. The declaration must appear once in every branch
+    the <code>if</code> statement, the <code>def</code> must be encountered once. The declaration must appear once in every branch.
 </p>
 <p>In addition to the declared names, a function also has access to the names in the scopes of all of the functions it is nested in,
-    including the misty module and the <span id="intrinsic.html"><a href="intrinsics.html">intrinsics</a></span>.
+    including the misty module and the <span id="intrinsic.html"><a href="intrinsic.html">intrinsics</a></span>.
     A function may use those outer names as if they were its own without declaration.
-    Names that were declared with <code>var</code> may have there values replaced by the <code>assign</code> statement.
+    Names that were declared with <code>var</code> may have their values replaced by the <code>assign</code> statement.
     A function may continue to enjoy access to the scope of an outer function even after the outer function has returned.</p>
 <p>A function is not required to use any of the outer names.
 A function is free to reuse any of those outer names by declaration, but in doing so, it loses its right to use the outer version.</p>
@@ -179,7 +179,7 @@ function_operator
 <p>Three  are short circuiting in their operator form, but not in their functino form:
     <code>'/\'</code><small>and</small>&nbsp;&nbsp; <code>'\/'</code><small>or</small>&nbsp;&nbsp; <code>'|'</code><small>default</small>.</p>
 <h6>Examples:</h6>
-<pre>'+'(3, 4) = 3 + 4          # true
+<pre>'+'(3 4) = 3 + 4          # true
 reduce([1 2 3 4 5] '+')    # 15</pre>
 <h4>'='<small>equal</small></h4>
 <p>The equal function can take two or three arguments. The first two arguments are values to be compared.
@@ -214,8 +214,8 @@ assign sloppy: '='(first second true)     # sloppy is true</pre>
 <p>A callback function is a function that is used to deliver functional results from the future. A callback function has this signature:</p>
 <pre>function (<var>value</var> <var>reason</var>)</pre>
 <p>The <var>value</var> is the value of the operation if it was successful. The <var>value</var> is <code>null</code> if it is unsuccessful.</p>
-<p>If the <var>value</var> is <code>null</code>, then the optional <var>reason</var> may include an error message or indication of the cause of the unsuccess.</p>
-<p><a href="#requestor_function">Requestor functions</a> take a callback.</p>
+<p>If the <var>value</var> is <code>null</code>, then the optional <var>reason</var> may include an error message or indication of the cause of the failure.</p>
+<p><a href="#requestor">Requestor functions</a> take a callback.</p>
 <h6>These endowment functions take a callback: </h6>
 <ul>
     <li><code><a href="programs.html#clock">clock!</a></code></li>
@@ -228,17 +228,17 @@ assign sloppy: '='(first second true)     # sloppy is true</pre>
 <p>The <a href="statements.html#send">send</a> statement can take a callback to receive replies.</p>
 
 <h3 id="requestor_factory">Requestor Factory</h3>
-<p>A factory function is any function that returns a function. A requestor factory is a function that returns a <a href="#requewstor">requestor function</a>. These standard functions are requestor factories:</p>
+<p>A factory function is any function that returns a function. A requestor factory is a function that returns a <a href="#requestor">requestor function</a>. These standard functions are requestor factories:</p>
 <p>functions returned by these intrinsic functions:</p>
 <ul>
     <li><code><a href="intrinsic.html#fallback">fallback</a></code></li>
     <li><a href="intrinsic.html#parallel"><code>parallel</code></a></li>
     <li><code><a href="intrinsic.html#race">race</a></code></li>
     <li><a href="intrinsic.html#sequence"><code>sequence</code></a></li>
-    <li><code><a href="programs.html#time_limit">time_limit!</a></code></li>
+    <li><code><a href="programs.html#timeout">time_limit!</a></code></li>
 </ul>
 
-<h3>Requestor Function</h3>
+<h3 id="requestor">Requestor Function</h3>
 <p>A requestor function encapsulates a unit of work, communicating the result thru a <a href="#callback">callback</a>, allowing work to progress over many turns. A requestor function has this signature:</p>
 <pre>function requestor(<var>callback</var> <var>value</var>)</pre>
 <p>When the requestor function is finished, it calls the <a href="#callback"><var>callback</var></a> function with the result.</p>
@@ -246,8 +246,8 @@ assign sloppy: '='(first second true)     # sloppy is true</pre>
 <p>A common usage is to send a message to some actor. When the reply eventually arrives, extract a result from the reply and pass it to the <var><a href="#callback">callback</a></var>.</p>
 <p>A requestor function can optionally return a <a href="#cancel">cancel</a> function.</p>
 
-<h3>Cancel</h3>
-<p>A requestor function may optionally return a <a href="#cancel">cancel</a> function. When the cancel function is called, it attempts to stop the work of the requestor. A cancel function try to send a message to some actor informing it that the result is no longer needed. The purpose of cancel is to stop work that is no longer required. It is advisory. It is not an undo. It is not guaranteed, particularly in the case where cancel is called after some actor has completed its work.</p>
+<h3 id="cancel">Cancel</h3>
+<p>A requestor function may optionally return a <a href="#cancel">cancel</a> function. When the cancel function is called, it attempts to stop the work of the requestor. A cancel function tries to send a message to some actor informing it that the result is no longer needed. The purpose of cancel is to stop work that is no longer required. It is advisory. It is not an undo. It is not guaranteed, particularly in the case where cancel is called after some actor has completed its work.</p>
 <p>Cancel is most effective with the <a href="#requestor_factory">requestor factories</a> that are organizing the work.</p>
 <p>A cancel function has this signature:</p>
 <pre>function cancel(<var>reason</var> <var>abandon</var> | true)</pre>
