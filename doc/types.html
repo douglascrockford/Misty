@@ -231,7 +231,7 @@ more_open_fields
 <pre>def empty_record: {}    # empty_record is {}
 </pre>
 <p>The statement:</p>
-<pre>def stooge: {first: &quot;Curly&quot;, last: &quot;Howard&quot;}</pre>
+<pre>def stooge: {first: &quot;Curly&quot; last: &quot;Howard&quot;}</pre>
 <p> has the same result as</p>
 <pre>def stooge: {
     first: &quot;Curly&quot;
@@ -279,7 +279,7 @@ def object: {
 var first_name: stooge.first          # first_name is &quot;Curly&quot;
 assign first_name: null.first         # first_name is null
 assign new_stooge: record(stooge)
-assign new_stooge.first: &quot;Shemp&quot;      # new_stooge is {first: &quot;Shemp&quot;}
+assign new_stooge.first: &quot;Shemp&quot;      # new_stooge is {first: &quot;Shemp&quot; last: &quot;Howard&quot;}
 assign last_name: new_stooge.last     # last_name is &quot;Howard&quot;</pre>
 <p>The subscript notation is similar to the dot notation, but instead of
     taking an identifier (which is used as a text) it can take an expression that produces a valid key. It can be used for dynamically making
@@ -287,12 +287,12 @@ assign last_name: new_stooge.last     # last_name is &quot;Howard&quot;</pre>
 <p>The subscript expression is wrapped
     in <code>[</code><small>left bracket</small> and <code>]</code><small>right bracket</small>.</p>
 <h6>Example:</h6>
-<pre>def stooge: {first: &quot;Curly&quot;, last: &quot;Howard&quot;}
+<pre>def stooge: {first: &quot;Curly&quot; last: &quot;Howard&quot;}
 assign first_name: stooge[&quot;first&quot;]           # first_name is &quot;Curly&quot;
-assign stooge.first: "Jerome"                # {first: &quot;Curly&quot; last: &quot;Howard&quot;}
-assign stooge.middle: "Lester"               # {first: &quot;Curly&quot; middle: &quot;Lester&quot; last: &quot;Howard&quot;}
+assign stooge.first: "Jerome"                # {first: &quot;Jerome&quot; last: &quot;Howard&quot;}
+assign stooge.middle: "Lester"               # {first: &quot;Jerome&quot; middle: &quot;Lester&quot; last: &quot;Howard&quot;}
 assign stooge[null]: &quot;Mogo on the Gogogo&quot;    # halt
-assign stooge: {}                            # halt
+assign stooge: {}                            # error
 </pre>
 <h3 id="delete">Delete</h3>
 <p>A field can be deleted by replacing its value with <code>null</code>.</p>
@@ -479,7 +479,7 @@ The long text literal is closed by a quote on the next line at the normal indent
 
 "
     \u{43}\u{061}\u{0074}
-"                          # "\bu{43}\bu{061}\nu{0074}"
+"                          # "\bu{43}\bu{061}\bu{0074}"
 
 "
     Nesting and escapement are not problems.

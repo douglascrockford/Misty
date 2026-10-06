@@ -150,7 +150,7 @@ my_actor = your_actor             # false (probably)</pre>
 <h4 id="clock"><code>clock!(<var>callback</var>)</code></h4>
 <p>The <code>clock!</code> function takes a <var>callback</var> function argument that will eventually be called with  the current time
     in number form in seconds.  See <a href="time.html">time</a>.</p>
-<h4 id="delay"><code>delay!(</code><var>callback</var><code>,</code> <var>seconds</var><code>)</code></h4>
+<h4 id="delay"><code>delay!(</code><var>callback</var> <var>seconds</var><code>)</code></h4>
 <p>The <code>delay!</code> function is used to schedule the invocation of a <var>callback</var> function at a later time. Any value returned
     from the <var>callback</var> is ignored. There is no guarantee that the <var>callback</var> will ever be invoked. The delayed invocation will not interrupt
     normal processing. The invocation is delayed until a sunsequent turn. </p>
@@ -159,7 +159,7 @@ my_actor = your_actor             # false (probably)</pre>
 <p>The <code>delay!</code> function immediately returns a <a href="#functions.html#cancel">cancel</a> function.
     Calling the <a href="#requestor">cancel</a> function will cancel the delayed execution of the <var>callback</var>, if it is not too late. If it is too late, the cancel is ignored.</p>
 <h6>Example:</h6>
-<pre>assign cancel_continuation: delay!(continuation, 0.1)
+<pre>assign cancel_continuation: delay!(continuation 0.1)
 </pre>
 <h4 id="timeout">time_limit!(<var>requestor</var>, <var>seconds</var>)</h4>
 <p>The <code>time_limit!</code> function is a <a href="programs.html#requestor_factory">requestor factory</a> that takes a <var><a href="programs.html#requestor">requestor</a></var><a href="programs.html#requestor"> function</a> and returns a similar time limited <a href="programs.html#requestor">requestor function</a>, that acts the same, but will automatically <a href="functions.html#cancel">cancel</a> when the time is exceeded.</p>
@@ -211,7 +211,7 @@ my_actor = your_actor             # false (probably)</pre>
 <p>The <var>program</var> text  identifies the  executable in  the program shop that the new actor runs. The program shop may start an existing executable, or may generate a new executable. If the <var>program</var> text is a text literal, then the Policy Machine will decide if it is permitted at build time. If the <var>program</var> text is an expresion, the Policy Machine will decide at run time</p>
 <p>The current actor is the overling of the new actor The new actor is an underling of the current actor. The overling is notified via the <var>callback</var> when the underling stops. </p>
 <h6>Example:</h6>
-<pre>call start!(callback, &quot;example.mst&quot;)</pre>
+<pre>call start!(callback &quot;example.mst&quot;)</pre>
 <h4 id="stop">stop!(<var>actor</var>) </h4>
 <p>The <code>stop!</code> function stops an underling. The <code>stop!</code> function returns <code>null</code>. </p>
 <h4 id="unneeded">unneeded!(<var>function</var> <var>seconds</var>)</h4>
