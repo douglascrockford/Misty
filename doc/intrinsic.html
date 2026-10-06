@@ -432,7 +432,7 @@ Otherwise, the result is <code>false</code>.</p>
 array?({})                                   # false
 array?([])                                   # true
 not(array?([]))                              # false
-array?(pattern (1- {letter digit &quot;_-%&quot;}))    # false
+array?(pattern {1- [letter digit &quot;_-%&quot;]})    # false
 array?(null)                                 # false
 array?(&quot;array&quot;)                              # false</pre>
 <h4 id="blob?">blob?(<var>value</var>)</h4>
@@ -548,7 +548,7 @@ number?(1)           # true</pre>
 <h4><span id="pattern?">pattern?</span>(<var>value</var>)</h4>
 <p>Is the <var>value</var> a pattern? If the <var>value</var> is a pattern, then the result is <code>true</code>.
     Otherwise, the result is <code>false</code>.</p>
-<pre>pattern?(pattern (1- {letter digit &quot;_-%&quot;}))   # true</pre>
+<pre>pattern?(pattern {1- [letter digit &quot;_-%&quot;]})   # true</pre>
 <h4><span id="record?">record?</span>(<var>value</var>)</h4>
 <p>Is the <var>value</var> a record? If the <var>value</var> is a record, then the result is <code>true</code>.
     Otherwise, the result is <code>false</code>.</p>
@@ -558,8 +558,7 @@ record?([])                                   # false
 record?(&quot;record&quot;)                             # false
 record?(&quot;{}&quot;)                                 # false
 record?(function () ({}))                     # false
-record?(pattern (1- {letter digit &quot;_-%&quot;}))    # false
-record?(@)                                    # true</pre>
+record?(pattern {1- [letter digit &quot;_-%&quot;]})    # false</pre>
 <h4 id="stone?">stone?(<var>value</var>)</h4>
 <p>Is the value <a href="#stone">stone</a>?</p>
 <pre>stone?("false")     # true
@@ -1074,7 +1073,7 @@ assign stooges: sort(stooges [50 60 20 40 10 30])
     #     {first: &quot;Joe&quot; last: &quot;DeRita&quot;}
     # ]
 assign stooges: sort(stooges array(stooges function (stooge) {
-    return upper(stooge.last && stooges.first)
+    return upper(stooge.last && stooge.first)
 }))
     # stooges is now [
     #     {first: &quot;Joe&quot; last: &quot;Besser&quot;}
