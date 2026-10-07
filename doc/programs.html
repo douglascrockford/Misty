@@ -161,7 +161,7 @@ my_actor = your_actor             # false (probably)</pre>
 <h6>Example:</h6>
 <pre>assign cancel_continuation: delay!(continuation 0.1)
 </pre>
-<h4 id="timeout">time_limit!(<var>requestor</var>, <var>seconds</var>)</h4>
+<h4 id="timeout">time_limit!(<var>requestor</var> <var>seconds</var>)</h4>
 <p>The <code>time_limit!</code> function is a <a href="programs.html#requestor_factory">requestor factory</a> that takes a <var><a href="programs.html#requestor">requestor</a></var><a href="programs.html#requestor"> function</a> and returns a similar time limited <a href="programs.html#requestor">requestor function</a>, that acts the same, but will automatically <a href="functions.html#cancel">cancel</a> when the time is exceeded.</p>
 <p>The requestor function returned by <code>time_limit!</code> returns its own <a href="functions.html#cancel">cancel</a> function that cancels the <var>requestor</var>, not the time limit..</p>
 <h3>Actor functions </h3>

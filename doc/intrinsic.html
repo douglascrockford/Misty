@@ -919,16 +919,16 @@ starts all of the <a href="functions.html#requestor">requestors</a> in the <var>
 <ul>
     <li>If <code>length(</code><var>array</var><code>)</code> is <code>0</code>, then it returns <code>null</code>. </li>
     <li>If <code>length(</code><var>array</var><code>)</code> is 1, then it returns <var>array</var><code>[0]</code>.</li>
-    <li>If <code>length(</code><var>array</var><code>)</code> is 2, it returns <var>function</var><code>(</code><var>array</var><code>[0],</code> <var>array</var><code>[1])</code>. </li>
-    <li>If <code>length(</code><var>array</var><code>)</code> is 3, it returns <var>function</var><code>(</code><var>function</var><code>(</code><var>array</var><code>[0],</code> <var>array</var><code>[1])</code>, <var>array</var><code>[2])</code>. </li>
+    <li>If <code>length(</code><var>array</var><code>)</code> is 2, it returns <var>function</var><code>(</code><var>array</var><code>[0]</code> <var>array</var><code>[1])</code>. </li>
+    <li>If <code>length(</code><var>array</var><code>)</code> is 3, it returns <var>function</var><code>(</code><var>function</var><code>(</code><var>array</var><code>[0]</code> <var>array</var><code>[1])</code> <var>array</var><code>[2])</code>. </li>
     <li>And so on.</li>
 </ul>
 <p>If <var>initial</var> is not <code>null</code>:</p>
 <ul>
     <li>If <code>length(</code><var>array</var><code>)</code> is <code>0</code>, then it returns <var>initial</var>. </li>
-    <li>If <code>length(</code><var>array</var><code>)</code> is 1, then it returns <code><var>function</var>(<var>initial</var>, <var>array</var>[0])</code>.</li>
-    <li> If <code>length(</code><var>array</var><code>)</code> is 2, it returns <var>function</var><code>(<var>function</var>(<var>initial</var>, </code><var>array</var><code>[0]), </code><var>array</var><code>[1])</code>. </li>
-    <li>If <code>length(</code><var>array</var><code>)</code> is 3, it returns <var>function</var><code>(</code><var>function</var><code>(<var>function</var>(<var>initial</var>, </code><var>array</var><code>[0]), </code><var>array</var><code>[1]), </code><var>array</var><code>[2])</code>. </li>
+    <li>If <code>length(</code><var>array</var><code>)</code> is 1, then it returns <code><var>function</var>(<var>initial</var> <var>array</var>[0])</code>.</li>
+    <li> If <code>length(</code><var>array</var><code>)</code> is 2, it returns <var>function</var><code>(<var>function</var>(<var>initial</var> </code><var>array</var><code>[0]) </code><var>array</var><code>[1])</code>. </li>
+    <li>If <code>length(</code><var>array</var><code>)</code> is 3, it returns <var>function</var><code>(</code><var>function</var><code>(<var>function</var>(<var>initial</var> </code><var>array</var><code>[0]) </code><var>array</var><code>[1]) </code><var>array</var><code>[2])</code>. </li>
     <li>And so on.</li>
 </ul>
 <p>If <var>reverse</var> is <code>true</code>, then the work begins at the end of the array and works backward.</p>
