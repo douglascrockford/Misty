@@ -159,7 +159,7 @@ text keys in the <var>record</var>. The keys are not guaranteed
     how the text is interpreted. If the format is not one of those listed,
     then <code>null</code> is returned.</p>
 <h4>number(<var>other</var>)</h4>
-<p>If <var>other</var> is <code>null</code>, or a function, or a pattern, or an actor adress object, then the result is <code>null</code>.</p>
+<p>If <var>other</var> is <code>null</code>, or a function, or a pattern, or an actor address object, then the result is <code>null</code>.</p>
 <h6>Examples:</h6>
 <pre>assign result: number(&quot;123,456,789.10&quot; &quot;d&quot;)     # result is 123456789.1
 assign result: number(&quot;123.456.789,10&quot; &quot;v&quot;)     # result is 123456789.1
@@ -194,9 +194,9 @@ assign result: number(null)                     # result is null
 <p>Functional Value Set. Make a record using the array as the source of the keys. The <var>function</var> is called for each key, yielding the field values.</p>
 <h3 id="text">Text</h3>
 <h4>text(<var>array</var>)</h4>
-<p>Convert an array to text. The array can contain text and unicode codepoints. All are concatenated together to make a single text. If other values are in the array, then the result is <code>null</code>.</p>
+<p>Convert an array to text. The array can contain text and Unicode codepoints. All are concatenated together to make a single text. If other values are in the array, then the result is <code>null</code>.</p>
 <h4>text(<var>array</var> <var>separator</var>)</h4>
-<p>Convert an array to text. The <var>array</var> can contain text and unicode codepoints. All are concatenated together to make a single text. The <var>separator</var> text is inserted between each piece. The default <var>separator</var> is the empty text.</p>
+<p>Convert an array to text. The <var>array</var> can contain text and Unicode codepoints. All are concatenated together to make a single text. The <var>separator</var> text is inserted between each piece. The default <var>separator</var> is the empty text.</p>
 <h4>text(<var>number</var> <var>radix</var>)</h4>
 <p>Convert a number to text.  The optional <var>radix</var> is an int from <code>2</code> thru <code>37</code>. (<a href="https://www.crockford.com/base32.html">See Base 32.</a>) The default <var>radix</var> is 10.</p>
 <h4><code>text(<var>number</var> </code><var>format</var><code>) </code></h4>
@@ -365,7 +365,7 @@ format_places
 </table>
 <p>The integer styles first <code>trunc</code> the <var>number</var>. The fractional part of the <var>number</var> is ignored. The separation character is <code>_</code><small>underbar</small>.</p>
 <p>The optional <var>places</var> determines the minimum number of digits
-    to show. More leading <code>0</code> may be shown if necessary. The default is determined
+    to show. More leading zeros may be shown if necessary. The default is determined
     by the <var>format</var>, as seen in the table.</p>
 <p>The optional <var>separation</var> determines the spacing of the separator
     character. For example, to place a separator between billions, millions,
@@ -618,7 +618,7 @@ assign result: and(true false)    # result is false</pre>
 <h4 id="apply">apply(<var>function</var> <var>array</var>)</h4>
 <p>Apply. Execute the <var>function</var> and return its return value. Pass the elements of the <var>array</var> as arguments.</p>
 <p>If the first argument is not a function, <code>apply</code> returns its first argument.</p>
-<p>If <code>length(<var>array</var>)</code> is greater than <code>length(<var>function</var>)</code>, it <a href="programs.html#halts">halts</a>.</p>
+<p>If <code>length(<var>array</var>)</code> is greater than <code>length(<var>function</var>)</code>, it <a href="programs.html#halt">halts</a>.</p>
 <p>If the second argument is not an array, it is used as a single argument.</p>
 <h6>Examples:</h6>
 <pre>apply(and [12 10])        # 8
@@ -632,7 +632,7 @@ in radians, between <code>0</code> and <code>2</code> <code>*</code> <code>pi</c
 <h4 id=arcsin>arcsin(<var>number</var>)</h4>
 <p>Compute the arc sine.  The <var>number</var> should be
     between <code>-1</code> and <code>1</code>. The result is the inverse sine,
-    in randians, between <code>neg(</code>pi<code>)</code> and <code>pi</code>.</p>
+    in radians, between <code>neg(</code>pi<code>)</code> and <code>pi</code>.</p>
 <h4 id=arctan>arctan(<var>number</var> <var>x</var>)</h4>
 <p>Compute the arc tangent. If the optional <var>x</var> is supplied, then the value is obtained from <var>number</var> <code>/</code> <var>x</var> (assuming that the <var>number</var> is <var>y</var>), using the signs of both to determine the quadrant. The <var>x</var> is allowed to be <code>0</code>. </p>
 <p>The result is the inverse
@@ -672,7 +672,7 @@ assign result: ceiling(-12.3775)        # result is -12</pre>
 <p>The <var>text</var> is matched to the <var>pattern</var>. If it does not match, the result is <code>null</code>. If the <var>pattern</var> does match, then the result is a record containing the saved fields.</p>
 <h4 id="fallback">fallback(<var>requestor_array</var>)</h4>
 <p>The <code>fallback</code> <a href="functions.html#requestor_factory">requestor factory</a> returns a <a href="functions.html#requestor">requestor function</a> that tries each of the requestors in the <var>requestor_array</var> until it gets a success. When the requestor is called, it calls the first requestor in <code><var>requestor_array</var></code>. If that is eventually successful, its value is passed to the <a href="functions.html#callback">callback</a>. But if that requestor fails, the next requestor is called, and so on. If none of the requestors is successful, then the fallback fails. If any one succeeds, then the fallback succeeds.</p>
-<p>The fallback requestor returns a <a href="programs.html#cancel">cancel</a> function that can be called when the result is no longer needed.</p>
+<p>The fallback requestor returns a <a href="functions.html#cancel">cancel</a> function that can be called when the result is no longer needed.</p>
 <h4 id=filter>filter(<var>array</var> <var>function</var>)</h4>
 <p> The <code>filter</code> function calls a <var>function</var> for every
     element in the <var>array</var>, passing each element and its element number.</p>
@@ -727,7 +727,7 @@ texts or a record of texts.</p>
     be used as a number or name to select a value from the <var>collection</var>.
     (The value need not be a text.)</p>
 <p>If a <var>transformer</var> argument is a function, then it is
-    called with the <var>collection</var><code>[</code><var>left_text</var><code>]</code> and right_text as argumentss. If it returns a text, then the substitution
+    called with the <var>collection</var><code>[</code><var>left_text</var><code>]</code> and right_text as arguments. If it returns a text, then the substitution
     is made.</p>
 <p>If a <var>transformer</var> argument is a record, then the right_text
     is used to select a function from the <var>transformer</var>. That
@@ -747,7 +747,7 @@ text<code>)</code>. If it returns a text, then the substitution is made.</p>
 <pre>var result: format(&quot;{0} in {1}!&quot; [&quot;Malmborg&quot; &quot;Plano&quot;])
     # result is &quot;Malmborg in Plano!&quot;</pre>
 <h4 id="fraction">fraction(<var>number</var>)</h4>
-<p>The <code>fraction</code> function returns the fractional part of a <var>number</var> The result has the same sign as the <var>number</var>, so that <code>fraction(<var>number</var>) + whole(<var>number</var>) = <var>number</var></code> is <code>true</code>. It returns <code>null</code> for non-numbers. Also see <code><a href="#whole">whole</a></code>.</p>
+<p>The <code>fraction</code> function returns the fractional part of a <var>number</var>. The result has the same sign as the <var>number</var>, so that <code>fraction(<var>number</var>) + whole(<var>number</var>) = <var>number</var></code> is <code>true</code>. It returns <code>null</code> for non-numbers. Also see <code><a href="#whole">whole</a></code>.</p>
 <h4 id="left">left(<var>first</var> <var>second</var>)</h4>
 <p>Left shift. It is similar to multiplying by a power of two. Bits that fall off of the left edge are lost.</p>
 <h6>Examples:</h6>
@@ -892,7 +892,7 @@ assign result: or(true false)    # result is true</pre>
 <p>Parallel. The <code>parallel</code> <a href="functions.html#requestor_factory">requestor factory</a> returns a <a href="functions.html#requestor">requestor function</a>. When the <a href="functions.html#requestor">requestor function</a> is called with a <a href="functions.html#callback">callback</a> function and a value, every requestor in the <var>requestor_array</var> is called with the value, and the results are placed in corresponding elements of the results array. This all happens in parallel. The value produced by the first element of the <var>requestor_array</var> provides the first element of the result. The completed results array is passed to the <a href="functions.html#callback">callback</a> function.</p>
 <p>By default, it starts all of the requestors in the <var>requestor_array</var> at once, each in its own turn so that they do not interfere with each other. This can shock some systems by unleashing a lot of demand all at once. To mitigate the shock, the optional <var>throttle</var> argument sets the maximum number of requestors running at a time. As requestors succeed or fail, waiting requestors can be started. The <var>throttle</var> is optional. If provided, the <var>throttle</var> is a number: the maximum number of requestors to have
     running at any time. </p>
-<p>Ordinarily, the number of successes must be the same as the number of requestors in the <var>requestor_array</var>. If you need few successes, specify your need with the <var>need</var> argument. The <var>need</var> could be <code>1</code>, meaning that 1 or more successes are needed. The <code>need</code> could be <code>0</code>, meaning that no successes are needed. If the number of successes is greater than or equal to <code><var>need</var></code>, then the whole operation succeeds. The <var>need</var>  must be between <code>0</code> and <var>requestor_array</var><code>.length</code>.</p>
+<p>Ordinarily, the number of successes must be the same as the number of requestors in the <var>requestor_array</var>. If you need fewer successes, specify your need with the <var>need</var> argument. The <var>need</var> could be <code>1</code>, meaning that 1 or more successes are needed. The <code>need</code> could be <code>0</code>, meaning that no successes are needed. If the number of successes is greater than or equal to <code><var>need</var></code>, then the whole operation succeeds. The <var>need</var>  must be between <code>0</code> and <var>requestor_array</var><code>.length</code>.</p>
 <p>The  requestor function itself returns a <a href="functions.html#cancel">cancel</a> function that cancels all of the pending requestors from the <var>requestor_array</var>.</p>
 <h4 id=power>power(<var>first</var> <var>second</var>)</h4>
 <p>Raise to a power.</p>
@@ -903,7 +903,7 @@ power(3 2)    # 9</pre>
 <p>Race. The <code>race</code> function is a <a href="functions.html#requestor_factory">requestor factory</a> that takes an array of <a href="functions.html#requestor">requestor</a> functions and returns a <a href="functions.html#requestor">requestor</a> function that
 starts all of the <a href="functions.html#requestor">requestors</a> in the <var>requestor_array</var> at once.</p>
 <p>By default, it starts all of the requestors in the <var>requestor_array</var> at once, each in its own turn so that they do not interfere with each other. This can shock some systems by unleashing a lot of demand at once. To mitigate the shock, the optional <code>throttle</code> argument sets the maximum number of requestors running at a time. As requestors succeed or fail, waiting requestors can be started.</p>
-<p>By default, a single result is produced. If an array of results is need, specify the needed number of results in the <code>need</code> parameter. When the needed number of successful results is obtained, the operation ends. The results go into a sparce array aligned with the <var>requestor_array</var>, and unfinished requestors are cancelled. The <code>need</code> argument must be between <code>1</code> and <var>requestor_array</var><code>.length</code>.</p>
+<p>By default, a single result is produced. If an array of results is needed, specify the needed number of results in the <code>need</code> parameter. When the needed number of successful results is obtained, the operation ends. The results go into a sparse array aligned with the <var>requestor_array</var>, and unfinished requestors are cancelled. The <code>need</code> argument must be between <code>1</code> and <var>requestor_array</var><code>.length</code>.</p>
 <p>The returned requestor function returns a <a href="functions.html#cancel">cancel</a> function that cancels all of the pending requestors from the <var>requestor_array</var>.</p>
 <h4 id="reduce">reduce(<var>array</var> <var>function</var> <var>initial</var> <var>reverse</var>)</h4>
 <p>Reduce. The <code>reduce</code> function takes a <var>function</var> that takes
@@ -940,7 +940,7 @@ def product: reduce(data '*')    # product is 362880</pre>
 <p>Remainder. For ints, the remainder is <var>dividend</var><code> - ((</code><var>dividend</var><code> // </code><var>divisor</var><code>) * </code><var>divisor</var><code>)</code>.</p>
 <h4 id="repeat">repeat(<var>text</var> <var>number</var> <var>separator</var>)</h4>
 <p>Make a new text containing <var>number</var> copies of the <var>text</var>. Optionally, a <var>separator</var> text can be inserted between the repetitions.</p>
-<p>IF the separator is a non-empty text, then</p>
+<p>If the separator is a non-empty text, then</p>
 <pre>repeat(my_text count tween) = text(repeat(my_text &amp; tween count) 0 neg(length(tween)))</pre>
 <h4 id="replace">replace(<var>text</var> <var>target</var> <var>replacement</var><code> <var>limit</var></code>)</h4>
 <p>Return a new text in which the <var>target</var> is replaced by the <var>replacement</var>.</p>
@@ -996,7 +996,7 @@ round(-12.3775 -2)     # -12.38</pre>
 that takes a <var>requestor_array</var> and returns a <a href="functions.html#requestor">requestor</a> function that
     starts all of the <a href="functions.html#requestor">requestors</a> in the <var>requestor_array</var> one at a time.
     The result of each becomes the argument to the next. The last result is the result of the sequence. </p>
-<p><code>sequence</code> returns a <a href="functions.html#requestor">requestor</a> that returns a <a href="functions.html#cancel">cancel function</a> and processes each <a href="functions.html#requestor">requestor</a> in <code>requestor_array</code> one at a time. Each of those requestors is passed the result of the previous <a href="functions.html#requestor">requestor</a> as its <code>value</code> argument. If all succeed, then the sequence succeeds, giving the result of the last of the requestors. If any fail, then the sequence fails.The sequence succeeds if every requestor in the <var>requestor_array</var> succeeds</p>
+<p><code>sequence</code> returns a <a href="functions.html#requestor">requestor</a> that returns a <a href="functions.html#cancel">cancel function</a> and processes each <a href="functions.html#requestor">requestor</a> in <code>requestor_array</code> one at a time. Each of those requestors is passed the result of the previous <a href="functions.html#requestor">requestor</a> as its <code>value</code> argument. If all succeed, then the sequence succeeds, giving the result of the last of the requestors. If any fail, then the sequence fails. The sequence succeeds if every requestor in the <var>requestor_array</var> succeeds.<p>
 <h4 id=sin>sin(<var>number</var>)</h4>
 <p>Compute the sine.  The <var>number</var> should be in
     radians. The result is the sine, between <code>-1</code> and <code>1</code>.</p>
@@ -1090,7 +1090,7 @@ assign stooges: sort(stooges array(stooges function (stooge) {
 <pre>assign result: sqrt(256)    # result is 16
 assign result: sqrt(-1)     # result is null </pre>
 <h4 id="stone">stone(<var id="stone">value</var>) </h4>
-<p>Petrify the <var>value</var>, turning it into stone. Its contents are preserved, but it can no longer be modified by the <a href="statements.html#assign"><code>assign</code> statement</a> or the <a href="blobs.htmnl#write">blob.write</a> functions. This is usually performed on arrays, records, and blobs. All other types are already stone. Attempting to turn a value that is stone to stone will have no effect.</p>
+<p>Petrify the <var>value</var>, turning it into stone. Its contents are preserved, but it can no longer be modified by the <a href="statements.html#assign"><code>assign</code> statement</a> or the <a href="blobs.html#write">blob.write</a> functions. This is usually performed on arrays, records, and blobs. All other types are already stone. Attempting to turn a value that is stone to stone will have no effect.</p>
 <p>The stone operation is deep. Any mutable objects in the value will also be turned to stone.</p>
 <p>This can not be reversed. Immutable objects can never become mutable. A mutable copy can be made of an immutable object, but the original object remains immutable.</p>
 <p>The <code>stone</code> function returns the <var>value</var>.</p>
@@ -1138,7 +1138,7 @@ assign result: xor(13.01 3)  # result is null</pre>
 <pre>assign result: zeros(-1)    # result is 0
 assign result: zeros(0)     # result is 56
 assign result: zeros(1)     # result is 55</pre><h2 id="structurals">Structurals</h2>
-<p>The structurals are words that are used to create syntactic structures in the language, If you do not need those structures, you can reuse those words. Currently, the structural words are:</p>
+<p>The structurals are words that are used to create syntactic structures in the language. If you do not need those structures, you can reuse those words. Currently, the structural words are:</p>
 <ul>
     <li><code><a href="functions.html">function</a></code></li>
     <li><code><a href="programs.html#module">module</a></code></li>
