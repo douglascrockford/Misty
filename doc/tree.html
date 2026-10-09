@@ -72,7 +72,7 @@ This is descriptive of one particular implementation.
 <h4>endowments</h4>
 <p>An array of endowment names.</p>
 <h4>functions</h4>
-<p>An array of functions. For each <a href="#function">function</a> there is a record in this array, plus function <code>0</code>, the program or module.</p>
+<p><a href="#functions">An array of functions.</a> For each <a href="#function">function</a> there is a record in this array, plus function <code>0</code>, the program or module.</p>
 <h4>intrinsics</h4>
 <p>An array of intrinsics that are used. This information might be used by a linker.</p>
 <h4>kind</h4>
@@ -84,9 +84,9 @@ This is descriptive of one particular implementation.
 <h4>name</h4>
 <p>The name of the file. </p>
 <h4>patterns</h4>
-<p>An array of pattern definitions.</p>
+<p><a href="#patterns">An array of pattern definitions.</a></p>
 <h4>scopes</h4>
-<p>An array of scopes. This array is parallel with the <code>functions</code> array. It contains records containing the names that are used in each function. The names can be the function name and inputs, and additional names created with <code>def</code> and <code>var</code>. The scope also contains names that are found in outer functions and intrinsics.</p>
+<p><a href="#sccopes">An array of scopes.</a> This array is parallel with the <code>functions</code> array. It contains records containing the names that are used in each function. The names can be the function name and inputs, and additional names created with <code>def</code> and <code>var</code>. The scope also contains names that are found in outer functions and intrinsics.</p>
 <p>A scope is used to determine what a name in a function refers to.</p>
 <h4>modules</h4>
 <p>An array of modules that are mentioned in module constructs. This information might be used by a linker.</p>
@@ -247,7 +247,7 @@ This is descriptive of one particular implementation.
 <p>A name token.</p>
 <h4>second</h4>
 <p>An optional expression node. The default is <code>null</code>.</p>
-<h2 id="function">Function</h2>
+<h2 id="functions">Functions</h2>
 <p>The <code>function</code> operator does two things: It makes a function definition that it appends to the <code>functions</code> array, and it makes a reference to that function definition.</p>
 <h3>Function reference</h3>
 <h4>kind</h4>
@@ -271,7 +271,7 @@ This is descriptive of one particular implementation.
 <p>The number of slots that are protected during memory reclamation.</p>
 <h4>nr_slots</h4>
 <p>The number of slots required for the this function's inputs, vars, and defs.</p>
-<h2 id="scope">Scope</h2>
+<h2 id="scopes">Scopes</h2>
 <p>The root node contains an array of scopes. The <code>scopes</code> array is indexed by <code>function_nr</code>, like the <code>functions</code> array. Each function definition has a scope record containing all of the names used in that function. </p>
 <p>A scope record contains  name fields, where the key is a variable name, and the field is a record containing:</p>
 <h4>closure</h4>
@@ -291,7 +291,7 @@ This is descriptive of one particular implementation.
 <p>The name of the variable.</p>
 <h4>nr_uses</h4>
 <p>The number of appearences where the variable is actually used.</p>
-<h2 id="pattern">Pattern</h2>
+<h2 id="pattern">Patterns</h2>
 <p>The <code>pattern</code> operator does two things: It makes a function definition that it appends to the <code>patterns</code> array, and it makes a reference to that pattern definition.</p>
 <h3>Pattern reference</h3>
 <h4>kind</h4>
