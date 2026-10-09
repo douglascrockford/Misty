@@ -41,21 +41,21 @@ title
 <p>A module executes its body, as a function does, and returns a value. </p>
 <p>The last statement in a <code>module</code> is a <a href="statements.html#return"><code>return</code></a> statement, which usually returns a function or a record containing functions. A <code>program</code> file does not end with a <code>return</code> statement. </p>
 <p> If two actors reference the same module, the module is executed twice. Actors never share memory.</p>
-<p>modules can not have cyclical dependences.
-    module <code>a</code> can not use module <code>b</code> if module <code>b</code> uses module <code>a</code>.</p>
+<p>Modules cannot have cyclical dependencies.
+    Module <code>a</code> cannot use module <code>b</code> if module <code>b</code> uses module <code>a</code>.</p>
 <p>In this example, program <code>example</code>  uses the <code>app_master_2000</code> module,
     and designates its <code>handler</code> function as the receiver of messages for the actor.</p>
 <pre>misty program example() {
     def app: module &quot;app_master_2000&quot;()
     call receiver!(app.handler)
 }</pre>
-<p>Actors are started with the <code><a href="#start">start!(<var>program</var>)</a></code> function. An actor that starts another actor is called an <b id="master">overling</b>. An actor started by an overling is called an <b id="underling">underling</b>. An actor can be a underling to one actor and an overling to many others.</p>
+<p>Actors are started with the <code><a href="#start">start!(<var>program</var>)</a></code> function. An actor that starts another actor is called an <b id="master">overling</b>. An actor started by an overling is called an <b id="underling">underling</b>. An actor can be an underling to one actor and an overling to many others.</p>
 <p>Communication between actors happens exclusively with messages with the <a href="statements.html#send"><code>send</code></a> statement. Messages are usually transmitted over some sort of connection. </p>
 <p>A module can have arguments passed to it from a <a href="programs.html#module"><code>module</code> construct</a>. A program can have arguments passed to it from a command line or <code><a href="#start">start!</a></code>.</p>
 <h2 id="module">module</h2>
 <p>A <code>misty program</code> makes an executable that can be executed by an actor. </p>
 <p>A <code>misty module</code> is an independent function that can be called from a program or module.
-Sometimes, modules are endowed with extraordinnary capabilites by the policy machine. A module provides functionality to a program or other modules. They can be used to build reusable libraries. The body of the module contains a string of statements.</p>
+Sometimes, modules are endowed with extraordinary capabilities by the policy machine. A module provides functionality to a program or other modules. They can be used to build reusable libraries. The body of the module contains a string of statements.</p>
 <p>A module is called with the module construct:
 </p>
 <p class="rule">module
@@ -68,7 +68,7 @@ Sometimes, modules are endowed with extraordinnary capabilites by the policy mac
 <p>A system provides a library of standard modules that are identified by names. Other modules are accessed with a <dfn>locator</dfn> text that finds the module file in the <a href="system.html#shop">program shop</a>. </p>
 <p>The modules are stored in the program shop, which contains the standard modules that are located with the <dfn>name</dfn> form, and the extra modules that are located with the <dfn>text_literal</dfn> form.
     In the <dfn>text_literal</dfn> form, it is recommended that the text contain a prefix to indicate the source or usage of the module. Guest code (programs from third parties that are not fully trusted) may be restricted from use of modules, or may have restrictions on which modules they can employ.</p>
-<p id="power">Typically, a module returns  a constructor function, but it can also return a record of functions. The return value is stone. modules can be used to protect capabilities.
+<p id="power">Typically, a module returns  a constructor function, but it can also return a record of functions. The return value is stone. Modules can be used to protect capabilities.
     For example, a trusted module might be given access to a block of display memory.
     The module will be able to modify the pixels.
     A program using the module will only be able to access the pixels as permitted by the functions that the module provides.
@@ -76,7 +76,7 @@ Sometimes, modules are endowed with extraordinnary capabilites by the policy mac
 <p>A <a href="system.html#policy">system</a> may provide
     powerful modules that act as interfaces to powerful
     endowments such as communication devices, data storage devices, input
-    devices (like keyboards, camera, and microphones),  output devices (like
+    devices (like keyboards, cameras, and microphones),  output devices (like
     printers, displays, and speakers), and operating system services.
     Typically, access to powerful modules is limited to modules that attenuate the power, presenting limited capabilities to other modules and programs.</p>
 <p>Example:</p>
@@ -105,7 +105,7 @@ my_actor = your_actor             # false (probably)</pre>
 <p>An actor is created by another actor by <a href="#start"><code>start!(<var>program</var>)</code></a> which produces a new private address object. Over its existence, an actor will receive messages, which may cause it to change its state and send messages.</p>
 <p>When an actor stops, it will no longer send or receive messages. Ultimately, there are four ways that an actor stops:</p>
 <h3>Stop</h3>
-<p>An overling actor may stop a underling by calling <code><a href="#stop">stop!(<var>underling</var>)</a></code>.  If the underling actor is in the middle of executing a turn when it is stopped, any messages sent in that final turn will not be put into the outgoing queue.</p>
+<p>An overling actor may stop an underling by calling <code><a href="#stop">stop!(<var>underling</var>)</a></code>.  If the underling actor is in the middle of executing a turn when it is stopped, any messages sent in that final turn will not be put into the outgoing queue.</p>
 <p>An actor can also stop itself by calling <a href="#stop"><code>stop!()</code></a>. It might do this as a result of being told to do so by its overling or another trusted actor, or because it has fulfilled its purpose or become <a href="#unneeded">unneeded</a>. Any messages sent in this final turn are put into the outgoing queue. </p>
 <h3>Failure</h3>
 <p>A bug can cause an actor to <a href="programs.html#halt">halt</a>.</p>
@@ -122,7 +122,7 @@ my_actor = your_actor             # false (probably)</pre>
 <p>Some messages can be used to reply to the original sender of the message.</p>
 <h2 id="data">Actor Data Structures</h2>
 <h3 id="address">Actor  Address Object</h3>
-<p>An actor address object is used with the <code><a href="statements.html#send">send</a></code> statement. It contains an actor's private address. A message may contain actor address objects, which will give the recipient actor the capability to send messages to those actors at the private addresses.</a></p>
+<p>An actor address object is used with the <code><a href="statements.html#send">send</a></code> statement. It contains an actor's private address. A message may contain actor address objects, which will give the recipient actor the capability to send messages to those actors at the private addresses.</p>
 <p>There are three ways that an actor can obtain the actor address object of another actor.</p>
 <ul>
     <li><dfn>construction</dfn>: by being given capabilities by <a href="system.html#policy">the policy machine</a> at the time of the construction of the executable</li>
@@ -130,12 +130,12 @@ my_actor = your_actor             # false (probably)</pre>
     <li><dfn>introduction</dfn>: by receiving a message containing an actor's private address object</li>
 </ul>
 <h3 id="message">Message object</h3>
-<p>Ordinarily, a message object is obtained from the <var><a href="function.html#callback">callback</a></var> function that is registered with <code><a href="#receiver">receiver!</a></code>. It acts like an ordinary record. </p>
+<p>Ordinarily, a message object is obtained from the <var><a href="functions.html#callback">callback</a></var> function that is registered with <code><a href="#receiver">receiver!</a></code>. It acts like an ordinary record. </p>
 <p>When a message is sent using the callback form, the message itself may be used once as an actor's private address for transmitting the reply.</p>
 <h2 id="turns">Turns</h2>
-<p>Computation takes place in an actor in a interval of time called a <dfn>turn</dfn>.
+<p>Computation takes place in an actor in an interval of time called a <dfn>turn</dfn>.
     A turn starts with the receiving of a message.
-    A function (such as the <var>callback</var> function registered with <code>receive!</code>, <code>portal!</code>, <code>clock</code>!, or <code><a href="intrinsic.html#delay">delay</a></code><a href="#delay">!</a>)
+    A function (such as the <var>callback</var> function registered with <code>receive!</code>, <code>portal!</code>, <code>clock</code>!, or <code><a href="#delay">delay</a></code><a href="#delay">!</a>)
     will run to completion. Any outgoing messages are held until the turn completes successfully,
     at which time outgoing messages go into the outgoing message queue and are sent.</p>
 <p>An actor will not receive another message until the turn ends. Each turn will process exactly one message.</p>
@@ -153,17 +153,17 @@ my_actor = your_actor             # false (probably)</pre>
 <h4 id="delay"><code>delay!(</code><var>callback</var> <var>seconds</var><code>)</code></h4>
 <p>The <code>delay!</code> function is used to schedule the invocation of a <var>callback</var> function at a later time. Any value returned
     from the <var>callback</var> is ignored. There is no guarantee that the <var>callback</var> will ever be invoked. The delayed invocation will not interrupt
-    normal processing. The invocation is delayed until a sunsequent turn. </p>
+    normal processing. The invocation is delayed until a subsequent turn. </p>
 <p>The <var>seconds</var> argument specifies when the invocation will occur,
     no sooner than <var>seconds</var> seconds after now. The <var>seconds</var> argument must be a non-negative number or <code>null</code> that behaves as <code>0</code>. When the time comes, a delay message is placed in the queue like any other message. When the message is delivered to the actor, the <var>callback</var> is called, but the delay message is not passed to it.</p>
-<p>The <code>delay!</code> function immediately returns a <a href="#functions.html#cancel">cancel</a> function.
-    Calling the <a href="#requestor">cancel</a> function will cancel the delayed execution of the <var>callback</var>, if it is not too late. If it is too late, the cancel is ignored.</p>
+<p>The <code>delay!</code> function immediately returns a <a href="functions.html#cancel">cancel</a> function.
+    Calling the <a href="functions.html#cancel">cancel</a> function will cancel the delayed execution of the <var>callback</var>, if it is not too late. If it is too late, the cancel is ignored.</p>
 <h6>Example:</h6>
 <pre>assign cancel_continuation: delay!(continuation 0.1)
 </pre>
 <h4 id="timeout">time_limit!(<var>requestor</var> <var>seconds</var>)</h4>
-<p>The <code>time_limit!</code> function is a <a href="programs.html#requestor_factory">requestor factory</a> that takes a <var><a href="programs.html#requestor">requestor</a></var><a href="programs.html#requestor"> function</a> and returns a similar time limited <a href="programs.html#requestor">requestor function</a>, that acts the same, but will automatically <a href="functions.html#cancel">cancel</a> when the time is exceeded.</p>
-<p>The requestor function returned by <code>time_limit!</code> returns its own <a href="functions.html#cancel">cancel</a> function that cancels the <var>requestor</var>, not the time limit..</p>
+<p>The <code>time_limit!</code> function is a <a href="functions.html#requestor_factory">requestor factory</a> that takes a <var><a href="functions.html#requestor">requestor</a></var><a href="functions.html#requestor"> function</a> and returns a similar time limited <a href="functions.html#requestor">requestor function</a>, that acts the same, but will automatically <a href="functions.html#cancel">cancel</a> when the time is exceeded.</p>
+<p>The requestor function returned by <code>time_limit!</code> returns its own <a href="functions.html#cancel">cancel</a> function that cancels the <var>requestor</var>, not the time limit.</p>
 <h3>Actor functions </h3>
 <p>The following functions are critical for the implementation of actors.</p>
 <h4 id="contact">contact!(<var>callback</var> <var>record</var>) </h4>
@@ -192,12 +192,12 @@ my_actor = your_actor             # false (probably)</pre>
         </ul>
     </li>
 </ul>
-<h4 id="cpuple">couple</span>!(<var>actor</var>)</h4>
+<h4 id="couple">couple!(<var>actor</var>)</h4>
 <p>The <code>couple!</code> function causes this actor to stop when another <var>actor</var> stops. The <code>couple</code> function returns <code>null</code>.</p>
 <pre>call couple!(patron)</pre>
 <h4 id="done">done!()</h4>
 <p>This actor has completed its mission. Release all outgoing messages and halt.</p>
-<h4 id="halt">halt!()</h4>
+<h4 id="halt_function">halt!()</h4>
 <p>Halt this actor. Outgoing messages are not delivered. See <a href="#halt">halt</a>.</p>
 <h4 id="portal">portal!(<var>callback</var> <var>port</var>) </h4>
 <p>A <dfn>portal</dfn> is a special actor with a public address that performs introduction services. The <code>portal!</code> function binds a <var>callback</var> function that listens on a specific network <var>port</var> for <a href="#contact">contacts</a> by external actors that need to acquire private actor address objects.
@@ -205,11 +205,11 @@ my_actor = your_actor             # false (probably)</pre>
     A portal can respond by <a href="#start">starting</a> a new actor, or finding an existing actor, or by forwarding the contact message to another actor.
     This is how distributed Misty networks are bootstrapped. The <code>portal!</code> function returns <code>null</code>.</p>
 <h4 id="receiver">receiver!(<var>callback</var>)</h4>
-<p>The <code>receiver!</code> <var>callback</var> function registers a <var>callback</var> that will receive all messages sent to the actor except for <a href="intrinsic.html#delay">delay</a> events, reply messages (which are sent to the <a href="statements.html#send"><code>send</code></a> <var>callback</var>), the <a href="#unneeded"><code>unneeded</code></a> message, and <a href="#portal">portal</a> <a href="#contact">contact</a> messages. The <code>receiver!</code> function returns <code>null</code>.</p>
+<p>The <code>receiver!</code> <var>callback</var> function registers a <var>callback</var> that will receive all messages sent to the actor except for <a href="#delay">delay</a> events, reply messages (which are sent to the <a href="statements.html#send"><code>send</code></a> <var>callback</var>), the <a href="#unneeded"><code>unneeded</code></a> message, and <a href="#portal">portal</a> <a href="#contact">contact</a> messages. The <code>receiver!</code> function returns <code>null</code>.</p>
 <h4 id="start">start!(<var>callback</var> <var>program</var>)</h4>
 <p>The <code>start!</code> function creates a new actor. The <var>callback</var> function receives messages about the new actor, starting with a message containing the new actor's address object.</p>
-<p>The <var>program</var> text  identifies the  executable in  the program shop that the new actor runs. The program shop may start an existing executable, or may generate a new executable. If the <var>program</var> text is a text literal, then the Policy Machine will decide if it is permitted at build time. If the <var>program</var> text is an expresion, the Policy Machine will decide at run time</p>
-<p>The current actor is the overling of the new actor The new actor is an underling of the current actor. The overling is notified via the <var>callback</var> when the underling stops. </p>
+<p>The <var>program</var> text  identifies the  executable in  the program shop that the new actor runs. The program shop may start an existing executable, or may generate a new executable. If the <var>program</var> text is a text literal, then the Policy Machine will decide if it is permitted at build time. If the <var>program</var> text is an expression, the Policy Machine will decide at run time.</p>
+<p>The current actor is the overling of the new actor. The new actor is an underling of the current actor. The overling is notified via the <var>callback</var> when the underling stops. </p>
 <h6>Example:</h6>
 <pre>call start!(callback &quot;example.mst&quot;)</pre>
 <h4 id="stop">stop!(<var>actor</var>) </h4>
@@ -217,7 +217,7 @@ my_actor = your_actor             # false (probably)</pre>
 <h4 id="unneeded">unneeded!(<var>function</var> <var>seconds</var>)</h4>
 <p>The <code>unneeded</code>! function registers a <var>function</var> that is called when the actor  has not received a message in the recent <var>seconds</var>.  The default for <var>seconds</var> is the <a href="system.html#ar">ar timer</a>. This likely means that the actor is no longer needed. The actor should finish its work and then <code><a href="#stop">stop!()</a></code>. </p>
 <p>If the <code>unneeded</code> timer is not used, then the <a href="system.html#ar">ar timer</a> is used by default. The <code>unneeded!</code> function allows for setting a longer or shorter time than the ar timer.</p>
-<p>This differs from the <a href="system.html#ar">ar timer</a> in two way: It is optional. The actor is notified by the callback <var>function</var> before it is  stopped. </p>
+<p>This differs from the <a href="system.html#ar">ar timer</a> in two ways: It is optional. The actor is notified by the callback <var>function</var> before it is  stopped. </p>
 <p>The <code>unneeded</code> function returns <code>null</code>.</p>
 <h3 id="other">Other functions</h3>
 <p>The Policy Machine can grant access to other functions that access capabilities that are typically associated with operating systems, databases, and cryptographic systems.</p>
