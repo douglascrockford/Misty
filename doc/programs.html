@@ -135,11 +135,11 @@ my_actor = your_actor             # false (probably)</pre>
 <h2 id="turns">Turns</h2>
 <p>Computation takes place in an actor in an interval of time called a <dfn>turn</dfn>.
     A turn starts with the receiving of a message.
-    A function (such as the <var>callback</var> function registered with <code>receive!</code>, <code>portal!</code>, <code>clock</code>!, or <code><a href="#delay">delay</a></code><a href="#delay">!</a>)
+    A function (such as the <var>callback</var> function registered with <code><a href="#receiver">receiver!</a></code>, <code><a href="#portal">portal!</a></code>, <code><a href="#clock">clock!</a></code>, or <code><a href="#delay">delay!</a></code>)
     will run to completion. Any outgoing messages are held until the turn completes successfully,
     at which time outgoing messages go into the outgoing message queue and are sent.</p>
-<p>An actor will not receive another message until the turn ends. Each turn will process exactly one message.</p>
-<p>If a machine has multiple computation units, then it is possible for multiple turns of multiple actors to be going on simultaneously.
+<p>An actor will not receive another message until the turn ends. Each turn  processes exactly one message.</p>
+<p>If a machine has multiple computation units, then it is possible for the turns of multiple actors to be going on simultaneously.
     Turns can be timesliced. There are no concurrency issues because actors do not share memory.
     They communicate with other actors and the world only by  message passing. </p>
 <h2 id=endowment>Endowment</h2>
@@ -147,10 +147,10 @@ my_actor = your_actor             # false (probably)</pre>
 <p>By default, programs and modules may not use the following features. They are only available if specifically allowed by policy.</p>
 <h3>Time functions</h3>
 <p>Time is considered a critical capability.</p>
-<h4 id="clock"><code>clock!(<var>callback</var>)</code></h4>
+<h4 id="clock">clock!(<var>callback</var>)</h4>
 <p>The <code>clock!</code> function takes a <var>callback</var> function argument that will eventually be called with  the current time
     in number form in seconds.  See <a href="time.html">time</a>.</p>
-<h4 id="delay"><code>delay!(</code><var>callback</var> <var>seconds</var><code>)</code></h4>
+<h4 id="delay">delay!(<var>callback</var> <var>seconds</var>)</h4>
 <p>The <code>delay!</code> function is used to schedule the invocation of a <var>callback</var> function at a later time. Any value returned
     from the <var>callback</var> is ignored. There is no guarantee that the <var>callback</var> will ever be invoked. The delayed invocation will not interrupt
     normal processing. The invocation is delayed until a subsequent turn. </p>
