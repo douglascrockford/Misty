@@ -100,7 +100,7 @@ sign</small>, but not <code>.</code><small>period</small>.</p>
       The item can occur once or not at all; it is optional.
       <pre>- {&quot;scheme&quot;: name &quot;:&quot;}</pre>
       If it had been written as
-      <pre>- &quot;scheme&quot;: {name &quot;:&quot;}</pre>
+      <pre>&quot;scheme&quot;: - {name &quot;:&quot;}</pre>
       then the <code>:</code><small>colon</small> would be saved as well as the <code>name</code>.
   </li>
   <li>It matches between 0 and 3 slash characters and saves them under the name <code>slash</code>.
@@ -175,7 +175,7 @@ pattern_library_list_closed
     space expression pattern_library_list_closed
 </p>
 <p>A pattern literal is <code>pattern</code> optionally followed
-  by one or more <a href="#library">pattern libraries</a> wrapped in <code>( )</code><small>parens</small>, followed by a pattern <a href="#group">group</a> wrapped in <code>{&nbsp;}</code><small>braces</small>. Patterns may not be created in a function that has a  variable in scope named <code>pattern</code>.</p>
+  by one or more <a href="#library">pattern libraries</a> wrapped in <code>( )</code><small>parens</small>, followed by a pattern <a href="#group">group</a> wrapped in <code>{&nbsp;}</code><small>braces</small>. Patterns may not be created in a function that has a variable in scope named <code>pattern</code>.</p>
 <h3 id="item">Item</h3>
 <p class="rule">
 pattern_element
@@ -191,7 +191,7 @@ pattern_item
     pattern_quantifier pattern_element
     pattern_depot pattern_quantifier pattern_element
 </p>
-<p>A pattern element is a <a href="#group">group of items wraps in braces</a>, or a <a href="#class">character class wrapped in brackets</a>, or <a href="#text">literal text</a>, or a <a href="#name">name</a>.</p>
+<p>A pattern element is a <a href="#group">group of items wrapped in braces</a>, or a <a href="#class">character class wrapped in brackets</a>, or <a href="#text">literal text</a>, or a <a href="#name">name</a>.</p>
 <p>A pattern item is an element with an optional <a href="#depot">depot</a> or <a href="#quantifier">quantifier</a>, or both.</p>
 <h3 id="quantifier">Quantifier</h3>
 <table>
@@ -224,7 +224,7 @@ pattern_item
 <p>By default an element matches exactly once.</p>
 <pre>element</pre>
 <p>Any pattern element can be preceded by a repetition factor. It determines
-    the number of times that the item element match.</p>
+    the number of times that the element matches.</p>
 <pre>5 element</pre>
 <p>A range can be specified with two numbers separated by <code>-</code><small>minus</small>.
     The element will match no fewer than the first number, and no more than the
@@ -250,8 +250,8 @@ even if the minimum number of repetitions has not been reached yet.</p>
 <h3 id=group style="clear: both;">Group</h3>
 <p class="rule">
 pattern_group
-    <code>'{'</code> indent pattern_item more_open_pattern_item outdent <code>'}'</code>
-    <code>'{'</code> pattern_item more_closed_pattern_item <code>'}'</code>
+    <code>'{'</code> indent pattern_item more_open_pattern_group outdent <code>'}'</code>
+    <code>'{'</code> pattern_item more_closed_pattern_group <code>'}'</code>
 </p>
 <p class="rule">
 more_open_pattern_group
