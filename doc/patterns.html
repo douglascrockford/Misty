@@ -149,7 +149,7 @@ record?(url)        # false</pre>
 <p>A pattern library can contain patterns, texts, and arrays.</p>
 <p>When an ordinary text is used as a pattern, it  matches identical text.</p>
 <p>When an ordinary array of texts is used as a pattern, it is used as a group of alternatives, trying the texts in order  until there is a match.</p>
-<h2 id="literal">Pattern literal</h2>
+<h2 id="literal">Pattern Literal</h2>
 <p class="rule">
 pattern_literal
     <code>"pattern"</code> space optional_pattern_library pattern_group
@@ -268,7 +268,7 @@ more_closed_pattern_group
     space <code>'/'</code> space pattern_item
 </p>
 <p>A pattern group is wrapped in <code>{ }</code><small>braces</small>. A group
-    matches if all of the pattern expressions in it match.</p>
+    matches if all of the pattern expressions in it match. In the open form, every item is followed by a line break.</p>
 <p>Alternatives are separated by <code>|</code><small>vertical bar</small>. A
     group of alternatives matches if any one of the alternatives matches.</p>
 <p>Optionally, an item after a <code>/</code><small>slash</small> indicates a separator
