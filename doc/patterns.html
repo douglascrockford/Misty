@@ -23,13 +23,13 @@
   in texts. Patterns are less terse than regular expressions, and much
   easier to read and write.</p>
 <p>A pattern literal,  written as  <code>pattern</code><small></small> followed by
-  a pattern expression, produces an immutable pattern object.</p>
-<h2 id="first example">An Example</h2>
-<p>We want to extract information from a url. We define a <code>lib</code>
+  a pattern group, produces an immutable pattern object. </p>
+<h2 id="example">An Example</h2>
+<p>We want to extract information from a url text. We define a <code>lib</code>
   library record containing two patterns (<code>ip4</code> and <code>name</code>)
   and a <code>url</code> pattern that uses the <code>lib</code>.
   The word <code>pattern</code> introduces a pattern,
-much as <code>function</code><small></small> introduces a function. Patterns may not be created in a function that has a pattern variable or input in its scope.</p>
+much as <code>function</code> introduces a function.</p>
 <pre>def lib: {
     ip4: pattern {4 {&quot;octet&quot;: 1-3 digit / &quot;.&quot;}}
     name: pattern {1- [letter digit &quot;_-%&quot;]}
@@ -91,11 +91,7 @@ name: pattern {1- [letter digit &quot;_-%&quot;]}
 <p>The definition of <code>name</code> in this case is pretty loose: any combination
   of letters, digits, and the characters <code>_</code><small>underbar</small>,
   <code>-</code><small>minus sign</small>, and <code>%</code><small>percent
-sign</small>.</p>
-<pre>
-def filename: extract(&quot;doom.dust&quot; lib.name)
-    # null because a name can't contain &quot;.&quot;
-</pre>
+sign</small>, but not <code>.</code><small>period</small>.</p>
 <p>The <code>url</code> pattern matches urls. It matches in seven steps.</p>
 <ol>
   <li>It optionally matches a <code>name</code> followed by a <code>:</code><small>colon</small>.
@@ -138,7 +134,7 @@ def filename: extract(&quot;doom.dust&quot; lib.name)
   </li>
 </ol>
 <p>Patterns are made of the same tokens as the rest of the Misty Programming Language.
-  That has benefits in development tools. Features like paren balancing are not
+  That has benefits for development tools. Features like paren balancing are not
   imperiled by the mixing of language conventions. Patterns can contain comments, just as functions can.</p>
 <p>The <code>pattern?</code> function can be used to sense patterns.</p>
 <pre>pattern?(url)       # true
@@ -152,8 +148,8 @@ record?(url)        # false</pre>
   other patterns. The <code>lib</code> record in the <a href="#first example">first example</a> is a pattern library.</p>
 <p>A pattern library can contain patterns, texts, and arrays.</p>
 <p>When an ordinary text is used as a pattern, it  matches identical text.</p>
-<p>When an ordinary array of texts is used as a pattern, it is used as a group, trying the texts in order  until there is a match.</p>
-<h2>Pattern expressions</h2>
+<p>When an ordinary array of texts is used as a pattern, it is used as a group of alternatives, trying the texts in order  until there is a match.</p>
+<h2 id="literal">Pattern literal</h2>
 <p class="rule">
 pattern_literal
     <code>"pattern"</code> space optional_pattern_library pattern_group
@@ -179,50 +175,8 @@ pattern_library_list_closed
     space expression pattern_library_list_closed
 </p>
 <p>A pattern literal is <code>pattern</code> optionally followed
-  by one or more <a href="#library">pattern libraries</a> wrapped in <code>( )</code><small>parens</small>, followed by a pattern group wrapped in <code>{&nbsp;}</code><small>braces</small>.</p>
-<h3 id=group style="clear: both;">Group</h3>
-<p class="rule">
-pattern_group
-    <code>'{'</code> pattern_group_filling <code>'}'</code>
-</p>
-<p class="rule">
-pattern_group_filling
-    indent open_pattern_group outdent
-    closed_pattern_group
-</p>
-<p class="rule">
-open_pattern_group
-    pattern_sequence optional_open_pattern_group
-</p>
-<p class="rule">
-optional_open_pattern_group
-    <code>""</code>
-    linebreak optional_open_pattern_separator
-</p>
-<p class="rule">
-optional_open_pattern_separator
-    open_pattern_group <code>'/'</code> space pattern_item
-</p>
-<p class="rule">
-closed_pattern_group
-    pattern_sequence optional_closed_pattern_group
-</p>
-<p class="rule">
-optional_closed_pattern_group
-    <code>""</code>
-    space <code>'|'</code> space closed_pattern_group
-    space <code>'/'</code> space pattern_item
-</p>
-<p class="rule">
-pattern_sequence
-    pattern_item space pattern_sequence
-    pattern_item
-</p>
-<p class="rule">
-pattern_item
-    pattern_depot pattern_quantifier pattern_element
-    pattern_quantifier pattern_depot pattern_element
-</p>
+  by one or more <a href="#library">pattern libraries</a> wrapped in <code>( )</code><small>parens</small>, followed by a pattern <a href="#group">group</a> wrapped in <code>{&nbsp;}</code><small>braces</small>. Patterns may not be created in a function that has a  variable in scope named <code>pattern</code>.</p>
+<h3 id="item">Item</h3>
 <p class="rule">
 pattern_element
     pattern_group
@@ -230,28 +184,111 @@ pattern_element
     pattern_text
     name
 </p>
+<p class="rule">
+pattern_item
+    pattern_element
+    pattern_depot pattern_element
+    pattern_quantifier pattern_element
+    pattern_depot pattern_quantifier pattern_element
+</p>
+<p>A pattern element is a <a href="#group">group of items wraps in braces</a>, or a <a href="#class">character class wrapped in brackets</a>, or <a href="#text">literal text</a>, or a <a href="#name">name</a>.</p>
+<p>A pattern item is an element with an optional <a href="#depot">depot</a> or <a href="#quantifier">quantifier</a>, or both.</p>
+<h3 id="quantifier">Quantifier</h3>
+<table>
+    <tr>
+        <th>Quantifier</th>
+        <th>Repeats</th>
+    </tr>
+    <tr>
+        <td><code>-</code></td>
+        <td><code>0</code> or 1 (optional)</td>
+    </tr>
+    <tr>
+        <td><var>number</var></td>
+        <td>repeat count</td>
+    </tr>
+    <tr>
+        <td nowrap><var>from</var> <code>-</code> <var>thru</var></td>
+        <td>in the range</td>
+    </tr>
+    <tr>
+        <td><var>from</var> <code>-</code></td>
+        <td>at least</td>
+    </tr>
+</table>
+<p class="rule"> pattern_quantifier
+    <code>'-'</code> space
+    number_literal <code>'-'</code> number_literal space
+    number_literal <code>'-'</code> space
+    number_literal space </p>
+<p>By default an element matches exactly once.</p>
+<pre>element</pre>
+<p>Any pattern element can be preceded by a repetition factor. It determines
+    the number of times that the item element match.</p>
+<pre>5 element</pre>
+<p>A range can be specified with two numbers separated by <code>-</code><small>minus</small>.
+    The element will match no fewer than the first number, and no more than the
+    second number.</p>
+<pre>1-5 element</pre>
+<p>If the second number is omitted, then there is no limit to how many times the
+    element can be matched.</p>
+<pre>1- element</pre>
+<p>An optional element is indicated by a prefix of <code>-</code><small>minus sign</small>.
+    This indicates that the item may match zero or one time.</p>
+<pre>- element</pre>
+<p>If the element matches emptiness, then the repetition count is satisfied,
+even if the minimum number of repetitions has not been reached yet.</p>
+<h3 id="depot">Depot</h3>
+<p class="rule"> pattern_depot
+    text_literal <code>':'</code> space
+    name <code>':'</code> space </p>
+<p>Patterns can be used to extract information from texts. The <code><a href="intrinsic.html#extract">extract</a></code><a href="intrinsic.html#extract"> function</a> returns a record containing the saved matching material.</p>
+<p>To save material, place a <var>text</var> or a <var>name</var> and a <code>:</code><small>colon</small> immediately
+    before a pattern element or quantifier. The text that is matched  is saved in the result record, using the <var>text</var> or <var>name</var> as the key. If multiple matches are made (because of repetition or multiple
+    uses of the same <var>text</var>), then all of the matches are saved
+    in an array under the <var>text</var> or <var>name</var>.</p>
+<h3 id=group style="clear: both;">Group</h3>
+<p class="rule">
+pattern_group
+    <code>'{'</code> indent pattern_item more_open_pattern_item outdent <code>'}'</code>
+    <code>'{'</code> pattern_item more_closed_pattern_item <code>'}'</code>
+</p>
+<p class="rule">
+more_open_pattern_group
+    <code>""</code>
+    linebreak pattern_item more_open_pattern_group
+    linebreak <code>'|'</code> space pattern_item more_open_pattern_group
+    linebreak <code>'/'</code> space pattern_item
+</p>
+<p class="rule">
+more_closed_pattern_group
+    <code>""</code>
+    space pattern_item more_closed_pattern_group
+    space <code>'|'</code> space pattern_item more_closed_pattern_group
+    space <code>'/'</code> space pattern_item
+</p>
 <p>A pattern group is wrapped in <code>{ }</code><small>braces</small>. A group
     matches if all of the pattern expressions in it match.</p>
-<p>Alternatives are separated by line breaks or <code>|</code><small>vertical bar</small>. A
-    set of alternatives matches if any one of the alternatives matches.</p>
+<p>Alternatives are separated by <code>|</code><small>vertical bar</small>. A
+    group of alternatives matches if any one of the alternatives matches.</p>
 <p>Optionally, an item after a <code>/</code><small>slash</small> indicates a separator
-    that appears before all but the first repetition. This is allowed only if the maximum number of repetitions is at least <code>2</code>.</p>
-<h3 id=literal>Text literal</h3>
+    that appears before all but the first repetition. This is used only if the maximum number of repetitions is at least <code>2</code>.</p>
+<h3 id=text>Text literal</h3>
 <p class="rule">
 pattern_text
     text_literal
-    <code>'!'</code> space text_literal
+    <code>'*'</code> space text_literal
 </p>
 <p>A text in quotes matches characters in the text. Normally in Misty, text
   comparisons are case sensitive. In patterns, text comparison is also case
-  sensitive, except when a text is preceded by <code>!</code><small>exclamation point</small>
+  sensitive, except when a text is preceded by <code>*</code><small>asterisk</small>
   which allows lowercase letters to match uppercase letters.
 </p>
 <blockquote>
     <p><code>&quot;vorpal&quot;</code> matches <code>&quot;vorpal&quot;</code></p>
-    <p><code>! &quot;vorpal&quot;</code> matches <code>&quot;vorpal&quot;</code> and
+    <p><code>* &quot;vorpal&quot;</code> matches <code>&quot;vorpal&quot;</code> and
         <code>&quot;Vorpal&quot;</code> and <code>&quot;VorPal&quot;</code> and <code>&quot;VORPAL&quot;</code></p>
-    <p><code>! &quot;Vorpal&quot;</code> matches<code> &quot;Vorpal&quot;</code> and <code>&quot;VorPal&quot;</code> and <code>&quot;VORPAL&quot;</code> but not <code>&quot;vorpal&quot;</code></p>
+    <p><code>* &quot;Vorpal&quot;</code> matches<code> &quot;Vorpal&quot;</code> and <code>&quot;VorPal&quot;</code> and <code>&quot;VORPAL&quot;</code> but not <code>&quot;vorpal&quot;</code></p>
 </blockquote>
 <h3 id=name>Name</h3>
 <table>
@@ -391,73 +428,7 @@ pattern_text_extent
 <p>A second <code>/</code><small>slash</small> signals an intersection
   operation on the current set.</p>
 <pre>[ascii / / upper]            # matches upper case ASCII letters.</pre>
-<h2>Repetition</h2>
-<table>
-    <tr>
-    <th>Quantifier</th>
-    <th>Repeats</th>
-  </tr>
-  <tr>
-    <td><code>-</code></td>
-    <td><code>0</code> or 1 (optional)</td>
-  </tr>
-  <tr>
-    <td><var>number</var></td>
-    <td>repeat count</td>
-  </tr>
-  <tr>
-    <td nowrap><var>from</var> <code>-</code> <var>thru</var></td>
-    <td>in the range</td>
-  </tr>
-  <tr>
-    <td><var>from</var> <code>-</code> </td>
-    <td>at least</td>
-  </tr>
-</table>
-<p class="rule">
-pattern_quantifier
-    <code>""</code>
-    <code>'-'</code> space
-    number_literal <code>'-'</code> number_literal space
-    number_literal <code>'-'</code> space
-    number_literal space
-</p>
-<p>By default a pattern expression matches exactly once.</p>
-<pre>item</pre>
-<p>Any pattern expression can be preceded by a repetition factor. It determines
-  the number of times that the item must match.</p>
-<pre>5 item</pre>
-<p>A range can be specified with two numbers separated by <code>-</code><small>minus</small>.
-  The item will match no fewer than the first number, and no more than the
-  second number.</p>
-<pre>1-5 item</pre>
-<p>If the second number is omitted, then there is no limit to how many times the
-  item can be matched.</p>
-<pre>1- item</pre>
-<p>An optional item is indicated by a prefix of <code>-</code><small>minus sign</small>.
-  This indicates that the item may match zero or one time.</p>
-<pre>- item</pre>
-<p>If the next to last item in a pattern group is <code>/</code><small>slash</small>
-  then the last item in the group is matched before every iteration except
-  the first. This is a convenient way to specify a separator.</p>
-<p>If an iteration matches emptiness, then the repetition count is satisfied,
-  even if the minimum number of repetitions has not been reached yet.</p>
-<h2>Saving</h2>
-<p class="rule">
-pattern_depot
-    <code>""</code>
-    text_literal <code>':'</code> space
-    name <code>':'</code> space
-</p>
-<p>Patterns can be used to extract information from texts. The <code>extract</code>
-  function returns a record containing the saved matching material.</p>
-<p>To save material, place a <var>text</var> or a <var>name</var> and a <code>:</code><small>colon</small> immediately
-  before any pattern expression. All of the text that is matched by that
-  pattern expression will be saved in the result record, using the <var>text</var>
-  or <var>name</var> as the key. If multiple matches are made (because of repetition or multiple
-  uses of the same <var>text</var>), then all of the matches will be saved
-  in an array under the <var>text</var> or <var>name</var>.</p>
-<h2>Pattern Functions</h2>
+<h2 id="functions">Pattern Functions</h2>
 <p>Patterns can be used with some of the intrinsic functions.</p>
 <blockquote>
     <pre><a href="intrinsic.html#array">array(<var>text</var> <var>pattern</var>)</a></pre>
