@@ -21,7 +21,7 @@
   expensively ineffective. Archaic measures like file permissions are based
   on the assumption that individuals are responsible for the security properties
   of the programs they run. Security management software that alerts the
-  user to potentially dangerous actions are worse than ineffective: Most
+  user to potentially dangerous actions is worse than ineffective: Most
   people can not possibly be expected to know how to correctly respond to
   those interruptions. Ineffective security measures at best allow us to
   blame the victim, particularly when the fault lies not with the victim
@@ -65,9 +65,9 @@
   a trust boundary. A stoned record allows read-only access to its data members,
   and invocation of its functions.</p>
 <p>Getting a value from an object or setting a value on an object never
-  causes a transfer of control except when panic occurs</p>
+  causes a transfer of control except when panic occurs.</p>
 <h3>Functions</h3>
-<p>Functions are first class immutable values and can be stored in and retrieved
+<p>Functions are first-class immutable values and can be stored in and retrieved
   from objects.</p>
 <h3>Lambda</h3>
 <p>Misty functions are lambdas.
@@ -103,15 +103,15 @@ An actor's private address is a capability.</p>
 <h2>Policy Machine</h2>
 <h3 id=guests>Guests</h3>
 <p>There are situations where code representing another party is allowed to run in your system alongside your own code. Web browsers do this. This situation has obvious security problems.</p>
-<p>Misty can mitigate the problems. First, the code that the guest is to run is delivered to the misty system in source form. The code is compiled with the most restrictive policies. The executable is placed in the program shopwith a distinctive name.</p>
-<p>When a guest program is launched with <code>@.new()</code>, the guest program can be given a very restricted with of capabilities.
+<p>Misty can mitigate the problems. First, the code that the guest is to run is delivered to the misty system in source form. The code is compiled with the most restrictive policies. The executable is placed in the program shop with a distinctive name.</p>
+<p>When a guest program is launched with <code>@.new()</code>, the guest program can be given a very restricted set of capabilities.
 It will not be able to create other actors. It will only be able to send messages to its home system. It will not have an <code>@.portal()</code> function. It will not have an <code>@.garbage()</code> function. Instead, when it becomes unreachable, it automatically dies. It will only have the capabilities that it is explicitly given, so its opportunities to commit mischief are drastically constrained. However, it will be able to do things that are mutually beneficial.</p>
 <h3>Environment</h3>
 <p>The security of the Misty language depends on the security of the run-time
   environment. The interfaces that are provided should practice Capability
   Discipline.</p>
 <p>The Misty System does not depend on passwords, certificates, permission tables, or access control lists.
-It instead relies on object references, which are unforgable, and actor addresses, which are unguessable and cryptographically protected, and public/private keys.</p>
+It instead relies on object references, which are unforgeable, and actor addresses, which are unguessable and cryptographically protected, and public/private keys.</p>
 <h2>Practical</h2>
 <p>&nbsp;</p>
 </body></html>
