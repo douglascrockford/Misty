@@ -18,35 +18,39 @@
 <p>Misty also provides a <code>json</code> record that contains functions
   that process JSON text strictly. Strict JSON has better security and interoperability
   properties.</p>
-<h4>json.decode(<var>text</var> <var>reviver</var>)</h4>
+<h4 id="decode">json.decode(<var>text</var> <var>reviver</var>)</h4>
 <p>The <var>text</var> text is parsed, and the resulting value (usually
   a record or an array) is returned.</p>
-<p>The optional <var>reviver</var> input is a function that will be called
-  for every key and value at every level of the result. Each value will
-  be replaced by the result of the <var>reviver</var> function. This can
+<p>The optional <var>reviver</var> input is a function that is called
+  for every key and value at every level of the result. Each value is replaced by the result of the <var>reviver</var> function. This can
   be used to reform data-only records into method-bearing records, or to
   transform date strings into seconds.</p>
 <pre>assign my_data: json.decode(
     text
-    function (key value) (
-        key.find(&quot;date&quot;)
-        then time.number(value)
-        else value
-    )
+    function (key value) {
+        return (
+            search(key &quot;date&quot;) &lt;&gt; null 
+            then time.number(value)
+            else value
+        )
+    }
 )</pre>
-<h4>json.encode(<var>value</var> <var>space</var> <var>replacer </var> <var>whitelist</var>)</h4>
-<p>Produce a JSON text from a Misty <var>value</var>.  If a record value, at
-  any level, contains a <code>json()</code> method, it will be called, and
-  the value it returns (usually a simpler record) will be JSONified.</p>
+<h4 id="encode">json.encode(<var>value</var> <var>replacer</var> <var>whitelist</var>)</h4>
+<p>Produce a JSON text from a Misty <var>value</var>.  For each record in the value, at
+  any level, if it contains a <code>json()</code> function, the function is  called, and
+  the return value it returns (usually a simpler record) is JSONified instead of the original record.</p>
 <p>If the record does not have a <code>json()</code> method, and if <var>whitelist</var>
 is a record, then only the keys that are associated with <code>true</code> in the <var>whitelist</var> are included.</p>
-<p>If the <var>space</var> input is <code>true</code>, then line breaks and extra whitespace will be included in the text. </p>
 <pre>var my_text: json.encode(
-    my_data
-    function (key value) (
-        key.find(&quot;date&quot;)
-        then time.text(value)
-        else value
-    )
+    my_record
+    function (key value) {
+        return (
+            search(key &quot;date&quot;) &lt;&gt; null 
+            then time.text(value)
+            else value
+        )
+    }
 )</pre>
+<h4 id="pretty">json.pretty(<var>value</var> <var>replacer</var> <var>whitelist</var>)</h4>
+<p>This is like <code>encode</code> except that line breaks and whitespace are inserted into the result to make it more readable.</p>
 </body></html>
