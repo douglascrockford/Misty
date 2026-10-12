@@ -10,18 +10,18 @@
 <img src="../misty.gif" width="204" height="79">
 <h1><a href="https://mistysystem.com/">Misty Programming Language:</a>JSON</h1>
 <p>JSON (JavaScript Object Notation) is a compact, portable, standard data representation
-  language. See <a href="http://www.JSON.org/">JSON.org</a>. It represents
-  arrays as comma-separated values within brackets, and records as colon
-  and comma-separated name<code>:</code>value pairs within braces.</p>
+  language. See <a href="https://www.json.org/">JSON.org</a>. It represents
+  arrays as comma-separated values within brackets, and records as
+  comma-separated name<code>:</code>value pairs within braces.</p>
 <pre>def json: module json()</pre>
 <h2>JSON Methods</h2>
-<p>Misty also provides a <code>JSON</code> record that contains functions
+<p>Misty also provides a <code>json</code> record that contains functions
   that process JSON text strictly. Strict JSON has better security and interoperability
   properties.</p>
 <h4>json.decode(<var>text</var> <var>reviver</var>)</h4>
 <p>The <var>text</var> text is parsed, and the resulting value (usually
   a record or an array) is returned.</p>
-<p>The optional <var>reviver</var> input is a method that will be called
+<p>The optional <var>reviver</var> input is a function that will be called
   for every key and value at every level of the result. Each value will
   be replaced by the result of the <var>reviver</var> function. This can
   be used to reform data-only records into method-bearing records, or to

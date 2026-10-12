@@ -27,18 +27,18 @@ This is descriptive of one particular implementation.
 <p>The tree can be fully realized as a JSON object.</p>
 <h1 id="token">Tokens</h1>
 <p>The module <code>tokenize.mst</code> takes a source text and produces an array of tokens. The tokens are made up of these fields:</p>
-<p>The <code>kind</code> and <code>text</code> fields will be meaningful to the parser that consumes the token list. The other fields are intended for error reporting.These token records are treated as nodes that are woven into a parse tree.</p>
+<p>The <code>kind</code> and <code>text</code> fields will be meaningful to the parser that consumes the token list. The other fields are intended for error reporting. These token records are treated as nodes that are woven into a parse tree.</p>
 <h4>kind</h4>
 <h6>These are the kinds that are produced by the tokenizer:</h6>
 <pre>"name"  "text"  "number"  "comment"  "newline"  "space"  "apostrophic"  "operator"</pre>
-<p>An <code>apostrophic</code> has a text of three of more characters, and the first and last are
+<p>An <code>apostrophic</code> has a text of three or more characters, and the first and last are
 <code>'</code><small>apostrophe</small>. These are used for Misty functinos and
 <a href="https://www.crockford.com/mckeeman.html">McKeeman singletons</a>.</p>
 <p>During the compilation process, the kind can change to <code>&quot;statement&quot;</code> or <code>&quot;logical&quot;</code>.</p>
 <h4>text</h4>
 <p>The characters making up the token. </p>
 <p>The <code>kind: &quot;text&quot;</code> tokens have already had escape sequences decoded and outer quotes removed. </p>
-<p>A contigous run of spaces is made into a single <code>kind: &quot;space&quot;</code> token with a <code>text</code> field containing the entire run of spaces.</p>
+<p>A contiguous run of spaces is made into a single <code>kind: &quot;space&quot;</code> token with a <code>text</code> field containing the entire run of spaces.</p>
 <p>The <code>kind: &quot;operator&quot;</code> includes</p>
 <pre>.  :  (  )  [  ]  {  }  +  -  *  /  //  &amp;  &amp;&amp;  =   &lt;&gt;  &lt;  &gt;  &lt;=   &gt;=  /\  \/  |</pre>
 <h4>number</h4>
@@ -46,11 +46,11 @@ This is descriptive of one particular implementation.
 <h4>at</h4>
 <p>The character position in the source text where the token begins, starting at <code>0</code>.</p>
 <h4>from_row</h4>
-<p>The line number of the the token, starting at <code>0</code>.</p>
+<p>The line number of the token, starting at <code>0</code>.</p>
 <h4>from_column</h4>
 <p>The column number of the start of the token, starting at 0.</p>
 <h4>to_row</h4>
-<p>The line number if the last character of the token.</p>
+<p>The line number of the last character of the token.</p>
 <h4>to_column</h4>
 <p>The column number of the character past the token.</p>
 <h4>indentation</h4>
@@ -84,14 +84,14 @@ This is descriptive of one particular implementation.
 <h4>name</h4>
 <p>The name of the file. </p>
 <h4>patterns</h4>
-<p><a href="#patterns">An array of pattern definitions.</a></p>
+<p><a href="#pattern">An array of pattern definitions.</a></p>
 <h4>scopes</h4>
 <p><a href="#scopes">An array of scopes.</a> This array is parallel with the <code>functions</code> array. It contains records containing the names that are used in each function. The names can be the function name and inputs, and additional names created with <code>def</code> and <code>var</code>. The scope also contains names that are found in outer functions and intrinsics.</p>
 <p>A scope is used to determine what a name in a function refers to.</p>
 <h4>modules</h4>
 <p>An array of modules that are mentioned in module constructs. This information might be used by a linker.</p>
 <h2 id="name">Names</h2>
-<p>Names are use to represent functions, parameters, variables, and constants.</p>
+<p>Names are used to represent functions, parameters, variables, and constants.</p>
 <h4>kind</h4>
 <p><code>&quot;name&quot;</code></p>
 <h4>function_nr</h4>
@@ -100,7 +100,7 @@ This is descriptive of one particular implementation.
 <p><code>0</code> if a variable is declared in the current function<br>
 <code>1</code> if a variable is declared in the outer function<br>
 <code>2</code> or after and so on<br>
-<code>null</code> if the make is <code>"intrinsic"</code> or <code>"endowment".</code></p>
+<code>null</code> if the make is <code>"intrinsic"</code> or <code>"endowment"</code>.</p>
 <h4>make</h4>
 <p><code>&quot;def&quot; &quot;endowment&quot; &quot;function&quot; &quot;intrinsic&quot; &quot;parameter&quot; &quot;use&quot; &quot;var&quot;</code></p>
 <h4>text</h4>
@@ -211,7 +211,7 @@ This is descriptive of one particular implementation.
 <h4>else_if</h4>
 <p>An array of <code>if</code> statement nodes (without <code>else_if</code> or <code>else</code>) that are from <code>else if</code>.</p>
 <h4>else</h4>
-<p>an array of statement nodes (optional).</p>
+<p>An array of statement nodes (optional).</p>
 <h3 id="jump">The jump statement</h3>
 <h4>text</h4>
 <p><code>&quot;jump&quot;</code></p>
@@ -252,10 +252,10 @@ This is descriptive of one particular implementation.
 <h4>kind</h4>
 <p><code>&quot;function&quot;</code></p>
 <h4>function_nr</h4>
-<p>The location of the function definition in the <code>functions</code> array. Function 0 is the <code>program</code> or <code>module.</code></p>
+<p>The location of the function definition in the <code>functions</code> array. Function 0 is the <code>program</code> or <code>module</code>.</p>
 <h4>name</h4>
-<p>If it is an operator function, then <code>name</code> will be name of the operator (functino), such as <code>&quot;'+'&quot;</code>. The name is also  noted in the intrinsics.</p>
-<h3>Function definition</h3>
+<p>If it is an operator function, then <code>name</code> will be the name of the operator (functino), such as <code>&quot;'+'&quot;</code>. The name is also  noted in the intrinsics.</p>
+<h3 id="function">Function definition</h3>
 <h4>kind</h4>
 <p><code>&quot;function&quot;</code></p>
 <h4>parameters</h4>
@@ -269,14 +269,14 @@ This is descriptive of one particular implementation.
 <h4>nr_close_slots</h4>
 <p>The number of slots that are protected during memory reclamation.</p>
 <h4>nr_slots</h4>
-<p>The number of slots required for the this function's inputs, vars, and defs.</p>
+<p>The number of slots required for this function's inputs, vars, and defs.</p>
 <h2 id="scopes">Scopes</h2>
 <p>The root node contains an array of scopes. The <code>scopes</code> array is indexed by <code>function_nr</code>, like the <code>functions</code> array. Each function definition has a scope record containing all of the names used in that function. </p>
 <p>A scope record contains  name fields, where the key is a variable name, and the field is a record containing:</p>
 <h4>closure</h4>
 <p>If the name is used by an inner function, then this is <code>true</code>.</p>
 <h4>function_nr</h4>
-<p>The number of the this function in the <code>functions</code> array..</p>
+<p>The number of this function in the <code>functions</code> array.</p>
 <h4>functino</h4>
 <p>If this is an intrinsic functino, then <code>true</code>.</p>
 <h4>level</h4>
@@ -289,7 +289,7 @@ This is descriptive of one particular implementation.
 <h4>name</h4>
 <p>The name of the variable.</p>
 <h4>nr_uses</h4>
-<p>The number of appearences where the variable is actually used.</p>
+<p>The number of appearances where the variable is actually used.</p>
 <h2 id="pattern">Patterns</h2>
 <p>The <code>pattern</code> operator does two things: It makes a function definition that it appends to the <code>patterns</code> array, and it makes a reference to that pattern definition.</p>
 <h3>Pattern reference</h3>
