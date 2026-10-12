@@ -430,18 +430,19 @@ pattern_text_extent
 <pre>[ascii / / upper]        # matches upper case ASCII letters.</pre>
 <h2 id="functions">Pattern Functions</h2>
 <p>Patterns can be used with some of the intrinsic functions.</p>
-<blockquote>
-    <pre><a href="intrinsic.html#array">array(<var>text</var> <var>pattern</var>)</a></pre>
-    <pre><a href="intrinsic.html#extract">extract(<var>text</var> <var>pattern</var> <var>from</var> <var>to</var>)</a></pre>
-    <pre><a href="intrinsic.html#replace">replace(<var>text</var> <var>pattern</var> <var>replacement</var> <var>limit</var>)</a></pre>
-    <pre><a href="intrinsic.html#search">search(<var>text</var> <var>pattern</var> <var>from</var>)</a></pre>
-</blockquote>
+<pre>
+<a href="intrinsic.html#array">array(<var>text</var> <var>pattern</var>)</a>
+<a href="intrinsic.html#extract">extract(<var>text</var> <var>pattern</var> <var>from</var> <var>to</var>)</a>
+<a href="intrinsic.html#match">match(<var>text</var> <var>pattern</var>)</a>
+<a href="intrinsic.html#replace">replace(<var>text</var> <var>pattern</var> <var>limit</var>)</a>
+<a href="intrinsic.html#search">search(<var>text</var> <var>pattern</var> <var>from</var>)</a>
+</pre>
 <p>For example, the <code>array()</code> function can be used
     to break the contents of a file into an array of texts. If the <var>separator</var> pattern is found in the <var>text</var>, then the subtext before the match
     is stored in the new array, and the match is repeated on the remainder
     until no more matches are possible. The remainder of the text is stored
     in the array and the array is returned.</p>
-<pre>var lines: array(file pattern {end})</pre>
-<p>This will break on <dfn>linefeed</dfn>, <dfn>carriage return</dfn>, and <dfn>carriage return
+<pre>var lines: array(contents pattern {end})</pre>
+<p>This will break on <dfn>linefeed</dfn>, <dfn>carriage_return</dfn>, and <dfn>carriage_return
     linefeed</dfn>.</p>
 </body></html>
