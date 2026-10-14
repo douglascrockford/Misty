@@ -145,7 +145,7 @@ misty module tokenize() {
     }
 
     def ender(character) {
-        return character = end_of_line \/ character = car_reg \/ character = ""
+        return character = end_of_line \/ character = car_reg \/ null?(character)
     }
 
     def newline() {
@@ -159,7 +159,7 @@ misty module tokenize() {
         assign token.kind: "newline"
         if peek() = end_of_line
             call advance()
-            assign token.text: car_reg + end_of_line
+            assign token.text: car_reg & end_of_line
         else
             assign token.text: car_reg
         fi
@@ -183,7 +183,7 @@ misty module tokenize() {
         fi
         assign token.kind: "space"
         assign token.text: snip()
-        assign token.length: token.text.length
+        assign token.length: length(token.text)
         if token.from_column = 0
             assign indentation: token.length
             assign token.indentation: indentation
@@ -192,7 +192,7 @@ misty module tokenize() {
 
     def digit() {
 
-        def int(must) {
+        def int(must | false) {
             if tokenators[peek()] = digit
                 call advance()
                 return int()
@@ -225,7 +225,7 @@ misty module tokenize() {
         assign token.text: snip()
         assign token.number: number(token.text)
         if null?(token.number)
-            call error("Bad number '" + token.text + "'.")
+            call error("Bad number '" & token.text & "'.")
         fi
     }
 
@@ -345,7 +345,7 @@ misty module tokenize() {
         assign indent: count_spaces()
         if indent >= indentation + 4
             assign lines[]: line(repeat(" " indent - (indentation + 4)))
-            jump next_line()
+            jump next_line(lines)
         fi
         return lines
     }
@@ -550,7 +550,7 @@ misty module tokenize() {
     }
 
     def next_token(tokens | []) {
-        if peek() = ""
+        if null?(peek())
             return tokens
         fi
         assign token: {
