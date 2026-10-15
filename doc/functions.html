@@ -22,10 +22,10 @@ div.scope {
   values. Functions can be stored in variables, records, and arrays; functions
   can be passed as parameters to other functions;  functions can be returned
   as the results of functions. Functions can not be sent in messages to other processes. Function objects are immutable values. A function introduces
-  a new scope: variables defined in a function are not visible outside
+  a new scope: variables declared in a function are not visible outside
   of the function, but will be visible to inner functions.</p>
 <h2>Making Functions</h2>
-<p>Function objects are made with the <code>function</code> operator that takes a parameter list and a body and produces a function object.</p>
+<p>Function objects are made with the <code>function</code> operator which takes a parameter list and a body and produces a function object.</p>
 
 <p class="rule">
 function_literal
@@ -46,7 +46,6 @@ optional_function_name
 <p class="rule">
 parameter_list
     <code>'('</code> parameter_list_filler <code>')'</code>
-    <code>'['</code> name optional_arity <code>']'</code>
 </p>
 <p class="rule">
 parameter_list_filler
@@ -73,23 +72,16 @@ more_open_parameters
     <code>""</code>
     linebreak parameter more_open_parameters
 </p>
-<p class="rule">
-optional_arity
-    <code>""</code>
-    space number_literal
-</p>
-<p>When the function is invoked, the arguments will be
-  assigned to these names and made available to the body. The
-  body can not modify the parameters, but can modify the values of the parameters if they are not stone. Parameters behave as <code>def</code>, not <code>var</code>. The number of
-  names in the parameter list determines the function's arity.
-If the function is invoked with too many arguments, the<a href="programs.html#halt"> actor halts</a>.</p>
-<p>If the function is invoked with too few arguments, the missing values will get <code>null</code>. The <code>|</code><small>default</small> operator is allowed in parameter lists, replacing a <code>null</code> argument with a value from an <dfn>expression</dfn>.</p>
-<p>There is an alternate form for functions that can receive all of their arguments as a single array.
-    A single parameter is bound to an array of arguments. See <a href="intrinsic.html#apply">apply</a>.
-    An optional arity can be provided that sets the maximum number of arguments and provides a value to the <a href="intrinsic.html#length">length</a> function.
-    The default arity is <code>null</code>, meaning unlimited.</p>
+<p>When the function is invoked, the arguments are assigned to the parameter names and made available to the body. 
+The body can not modify the parameters, but can modify the values of the parameters if they are not stone. 
+Parameters behave as <code>def</code>, not <code>var</code>.</p>
+<p>
+The number of names in the parameter list determines the function's arity.
+If the function is invoked with too many arguments, the <a href="programs.html#halt">actor halts</a>.
+If the function is invoked with too few parameters, the extra parameters are set to <code>null</code>. 
+The <code>|</code><small>default</small> operator is allowed in parameter lists, replacing a <code>null</code> argument with a value from an <dfn>expression</dfn>.</p>
 <h3>Body</h3>
-<p>And then, the body, a string of statements wrapped in <code>{}</code><small>braces</small>.
+<p>The body is a string of statements wrapped in <code>{}</code><small>braces</small>.
 </p>
 <p class="rule">
 body
@@ -103,17 +95,17 @@ body
   function has access to all of the outer function's variables, definitions,
   and parameters. The context (or lexical closure)
   remains available to the inner function even after the outer function
-  has finished its invocation and returned.  If an inner function redefines names that are already defined in the context (parameters, <code>def</code>, or <code>var</code>), it is not able to access the outer names.</p>
+has finished its invocation and returned. If an inner function redefines names that are already defined in the context (parameters, <code>def</code>, or <code>var</code>), it is not able to access the outer names.</p>
 <h2 id="invocation">Invocation</h2>
 <p>Functions are invoked with the <a href="operators.html#invocation"><code>()</code><small>paren</small> suffix operator</a>.</p>
 <blockquote>
   <p><var>function_value</var><code>(</code><var>arguments</var><code>)</code></p>
 </blockquote>
-<p>The parens can contain zero thru four expressions whose
-  values will be passed to the function as parameters. Each value will be
-  assigned to a named parameter. Parameters that do not have values will
-  be initialized to <code>null</code>. If there are too many arguments,
-  then there is a disruption.</p>
+<p>The parens contain zero or more expressions whose values are passed to the function as parameters. 
+Each value is assigned to a named parameter. 
+Parameters that do not have values are initialized to <code>null</code>. 
+If there are too many arguments, then the actor halts.</p>
+<h6>Example:</h6>
 <pre>call my_function(do re mi)    # function invocation</pre>
 
 <h2 id="scope">Scope</h2>
@@ -134,16 +126,12 @@ The names are declared by</p>
     <li>the <code><a href="statements.html#def">def</a></code><a href="statements.html#def"> statement</a></li>
     <li>the <code><a href="statements.html#var">var</a></code><a href="statements.html#var"> statement</a></li>
 </ul>
-<p>A name in a function can only be declared once, and it must be declared before it is used. </p>
-<p>Inner functions can see all of the variables of their outer functions. </p>
-<p> No matter what path is taken thru
-    the <code>if</code> statement, the <code>def</code> must be encountered once. The declaration must appear once in every branch.
-</p>
+<p>A name in a function can only be declared once, and it must be declared before it is used. 
+However, if a name is declared in an <code>if</code> statement, it must be declared in every branch. That name is visible to the rest of the function.</p>
 <p>In addition to the declared names, a function also has access to the names in the scopes of all of the functions it is nested in,
-    including the misty module and the <span id="intrinsic.html"><a href="intrinsic.html">intrinsics</a></span>.
-    A function may use those outer names as if they were its own without declaration.
-    Names that were declared with <code>var</code> may have their values replaced by the <code>assign</code> statement.
-    A function may continue to enjoy access to the scope of an outer function even after the outer function has returned.</p>
+including the misty program or module and the <span id="intrinsic.html"><a href="intrinsics.html">intrinsics</a></span>.
+A function may use those outer names as if they were its own without further declaration.
+A function may continue to enjoy access to the scope of an outer function even after the outer function has returned.</p>
 <p>A function is not required to use any of the outer names.
 A function is free to reuse any of those outer names by declaration, but in doing so, it loses its right to use the outer version.</p>
 <p>An inner function can see the scope of an outer function, but an outer function may not see into the scope of an inner function. A function can be both an inner function (to the function it is nested inside) and an outer function (of the functions nested inside of itself).</p>
@@ -155,9 +143,9 @@ function_operator
 </p>
 <p>The <a href="operators.html">operators</a> can be used as functions by wrapping the operators with <code>'</code><small>single quote</small>. These operator functions, or <b>functinos</b>, can be used like any other functions. They can be passed as arguments or stored in records and arrays.</p>
 <p>So <code>'+'</code> is the binary add function that can be passed to <a href="intrinsic.html#reduce">the <code>reduce</code> function</a> to make sums.</p>
-<pre>assign total: reduce(data '+')</pre>
 <h6>Examples:</h6>
-<pre>
+<pre>reduce([1 2 3 4 5] '+')    # 15
+
 '/\'(3 4)   # null  <small>and</small>
 '\/'(3 4)   # null  <small>or</small>
 '|'(3 4)    # 3     <small>default</small>
@@ -178,9 +166,6 @@ function_operator
 </pre>
 <p>Three  are short circuiting in their operator form, but not in their functino form:
     <code>'/\'</code><small>and</small>&nbsp;&nbsp; <code>'\/'</code><small>or</small>&nbsp;&nbsp; <code>'|'</code><small>default</small>.</p>
-<h6>Examples:</h6>
-<pre>'+'(3 4) = 3 + 4          # true
-reduce([1 2 3 4 5] '+')    # 15</pre>
 <h4>'='<small>equal</small></h4>
 <p>The equal function can take two or three arguments. The first two arguments are values to be compared.
     If all of the parameters are numbers, an optional <var>tolerance</var> argument may be included which must be a non-negative number.
@@ -214,28 +199,27 @@ assign sloppy: '='(first second true)     # sloppy is true</pre>
 <p>A callback function is a function that is used to deliver functional results from the future. A callback function has this signature:</p>
 <pre>function (<var>value</var> <var>reason</var>)</pre>
 <p>The <var>value</var> is the value of the operation if it was successful. The <var>value</var> is <code>null</code> if it is unsuccessful.</p>
-<p>If the <var>value</var> is <code>null</code>, then the optional <var>reason</var> may include an error message or indication of the cause of the failure.</p>
+<p>If the <var>value</var> is <code>null</code>, then the optional <var>reason</var> may include an error message or indication of the cause of the lack of success.</p>
 <p><a href="#requestor">Requestor functions</a> take a callback.</p>
-<h6>These endowment functions take a callback: </h6>
+<h6>These endowment functions take a callback:</h6>
 <ul>
     <li><code><a href="programs.html#clock">clock!</a></code></li>
     <li><code><a href="programs.html#delay">delay!</a></code></li>
     <li><code><a href="programs.html#contact">contact!</a></code></li>
     <li><code><a href="programs.html#portal">portal!</a></code></li>
     <li><code><a href="programs.html#start">start!</a></code></li>
-    <li><code><a href="programs.html#unneeded">unneeded!</a></code> </li>
+    <li><code><a href="programs.html#unneeded">unneeded!</a></code></li>
 </ul>
 <p>The <a href="statements.html#send">send</a> statement can take a callback to receive replies.</p>
 
 <h3 id="requestor_factory">Requestor Factory</h3>
 <p>A factory function is any function that returns a function. A requestor factory is a function that returns a <a href="#requestor">requestor function</a>. These standard functions are requestor factories:</p>
-<p>functions returned by these intrinsic functions:</p>
 <ul>
     <li><code><a href="intrinsic.html#fallback">fallback</a></code></li>
     <li><a href="intrinsic.html#parallel"><code>parallel</code></a></li>
     <li><code><a href="intrinsic.html#race">race</a></code></li>
     <li><a href="intrinsic.html#sequence"><code>sequence</code></a></li>
-    <li><code><a href="programs.html#timeout">time_limit!</a></code></li>
+    <li><code><a href="programs.html#time_limit">time_limit!</a></code></li>
 </ul>
 
 <h3 id="requestor">Requestor Function</h3>
