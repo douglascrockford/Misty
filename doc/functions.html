@@ -20,7 +20,7 @@ div.scope {
 <h1><a href="https://mistysystem.com/">Misty Programming Language:</a>Functions</h1>
 <p>A function is a parameterized sequence of statements. Functions are first-class
   values. Functions can be stored in variables, records, and arrays; functions
-  can be passed as parameters to other functions;  functions can be returned
+  can be passed as arguments to other functions;  functions can be returned
   as the results of functions. Functions can not be sent in messages to other processes. Function objects are immutable values. A function introduces
   a new scope: variables declared in a function are not visible outside
   of the function, but will be visible to inner functions.</p>
@@ -78,7 +78,7 @@ Parameters behave as <code>def</code>, not <code>var</code>.</p>
 <p>
 The number of names in the parameter list determines the function's arity.
 If the function is invoked with too many arguments, the <a href="programs.html#halt">actor halts</a>.
-If the function is invoked with too few parameters, the extra parameters are set to <code>null</code>. 
+If the function is invoked with too few arguments, the remaining parameters are set to <code>null</code>. 
 The <code>|</code><small>default</small> operator is allowed in parameter lists, replacing a <code>null</code> argument with a value from an <dfn>expression</dfn>.</p>
 <h3>Body</h3>
 <p>The body is a string of statements wrapped in <code>{}</code><small>braces</small>.
@@ -101,7 +101,7 @@ has finished its invocation and returned. If an inner function redefines names t
 <blockquote>
   <p><var>function_value</var><code>(</code><var>arguments</var><code>)</code></p>
 </blockquote>
-<p>The parens contain zero or more expressions whose values are passed to the function as parameters. 
+<p>The parens contain zero or more expressions whose values are passed to the function as arguments. 
 Each value is assigned to a named parameter. 
 Parameters that do not have values are initialized to <code>null</code>. 
 If there are too many arguments, then the actor halts.</p>
@@ -129,7 +129,7 @@ The names are declared by</p>
 <p>A name in a function can only be declared once, and it must be declared before it is used. 
 However, if a name is declared in an <code>if</code> statement, it must be declared in every branch. That name is visible to the rest of the function.</p>
 <p>In addition to the declared names, a function also has access to the names in the scopes of all of the functions it is nested in,
-including the misty program or module and the <span id="intrinsic.html"><a href="intrinsics.html">intrinsics</a></span>.
+including the misty program or module and the <span id="intrinsic.html"><a href="intrinsic.html">intrinsics</a></span>.
 A function may use those outer names as if they were its own without further declaration.
 A function may continue to enjoy access to the scope of an outer function even after the outer function has returned.</p>
 <p>A function is not required to use any of the outer names.
@@ -164,7 +164,7 @@ function_operator
 '//'(3 4)   # 0     <small>integer divide</small>
 '[]'(3 4)   # null  <small>get</small>
 </pre>
-<p>Three  are short circuiting in their operator form, but not in their functino form:
+<p>Three are short-circuiting in their operator form, but not in their functino form:
     <code>'/\'</code><small>and</small>&nbsp;&nbsp; <code>'\/'</code><small>or</small>&nbsp;&nbsp; <code>'|'</code><small>default</small>.</p>
 <h4>'='<small>equal</small></h4>
 <p>The equal function can take two or three arguments. The first two arguments are values to be compared.
@@ -219,7 +219,7 @@ assign sloppy: '='(first second true)     # sloppy is true</pre>
     <li><a href="intrinsic.html#parallel"><code>parallel</code></a></li>
     <li><code><a href="intrinsic.html#race">race</a></code></li>
     <li><a href="intrinsic.html#sequence"><code>sequence</code></a></li>
-    <li><code><a href="programs.html#time_limit">time_limit!</a></code></li>
+    <li><code><a href="programs.html#timeout">time_limit!</a></code></li>
 </ul>
 
 <h3 id="requestor">Requestor Function</h3>
