@@ -118,8 +118,8 @@
 <p>Ordinarily, control flows sequentially, from one instruction to the next. An unconditional branch alters the flow to another instruction. This is used to implement <code>else</code>.</p>
 <h4>&quot;branch&quot;, label</h4>
 <h3 id="conditional">Conditional Branch</h3>
-<p>A conditional branch bifurcates the control flow. Control can flow to the labaelled instruction or to rhe next instruction, depending on the value in the slot.</p>
-<p>Each of these instruction has a dual that flips the condition..</p>
+<p>A conditional branch bifurcates the control flow. Control can flow to the labelled instruction or to the next instruction, depending on the value in the slot.</p>
+<p>Each of these instructions has a dual that flips the condition.</p>
 <h4>&quot;branch_true&quot;, label, slot</h4>
 <p>If the value in the slot is true, branch to the label. Otherwise, continue with the next instruction.</p>
 <h4>&quot;branch_not_true&quot;, label, slot</h4>
@@ -135,7 +135,7 @@
 <h4>&quot;branch_zero&quot;, label, slot</h4>
 <h4>&quot;branch_not_zero&quot;, label, slot</h4>
 <h3 id="tranch">Tranch</h3>
-<p>A tranch is a branch that can trifurcate the control flow.. The third alternative halts.</p>
+<p>A tranch is a branch that can trifurcate the control flow. The third alternative halts.</p>
 <p>A tranch is used in place of a branch when it is not known for certain that the value in the slot is logical.</p>
 <h4>&quot;tranch_true&quot;, label, slot</h4>
 <p>If the value in the slot is true, branch to the label. If the value is false, continue with the next instruction. Otherwise halt because of a type error.</p>
@@ -321,7 +321,7 @@
     <li>Length</li>
     <li>Element[0]</li>
 </ol>
-<p>The <var>capacity</var> is the number of elements that the array can hold. If more elements are needed, then the forward mechanism</a> is used. During  stoning or memory reclamation, the capacity is set to the length.</p>
+<p>The <var>capacity</var> is the number of elements that the array can hold. If more elements are needed, then the forward mechanism is used. During stoning or memory reclamation, the capacity is set to the length.</p>
 <p>The length is the number of elements in use.</p>
 <p>The elements follow, from [0] to [<var>capacity</var> - 1]</p>
 <p>The number of words used by an array is <code><var>capacity</var> + 2</code>.</p>
@@ -344,8 +344,8 @@
     <li>Length</li>
     <li>Bit[0] thru Bit[63]</li>
 </ol>
-<p>The <var>capacity</var> is the number of bits the blob can hold. If more bits are needed, then the forward mechanism</a> is used. During  stoning or memory reclamation, the capacity is set to the length.</p>
-<p>The length is the number of elements in bits. The length is not contrained to be a multiple of a power of two.</p>
+<p>The <var>capacity</var> is the number of bits the blob can hold. If more bits are needed, then the forward mechanism is used. During  stoning or memory reclamation, the capacity is set to the length.</p>
+<p>The length is the number of elements in bits. The length is not constrained to be a multiple of a power of two.</p>
 <p>The bits follow, from <code>[0]</code> to <code>[<var>capacity</var> - 1]</code>, with the <code>[0]</code> bit in the most significant position of word 2, and <code>[63]</code> in the least significant position of word 2. The last word is zero filled, if necessary.</p>
 <p>The number of words used by a blob is <code>(<var>capacity</var> + 63) // 64 + 2</code>.</p>
 <h3>Text</h3>
@@ -357,7 +357,7 @@
     <li>Length (pretext) <i>or</i> Hash (text)</li>
     <li>Character[0] and Character[1]</li>
 </ol>
-<p>The <var>capacity</var> of a pretext is the number of characters it can hold. If more characters are needed, then the forward mechanism</a> is used. During  stoning and memory reclamation, the capacity is set to the length.</p>
+<p>The <var>capacity</var> of a pretext is the number of characters it can hold. If more characters are needed, then the forward mechanism is used. During  stoning and memory reclamation, the capacity is set to the length.</p>
 <p>The capacity of a text is its length, the number of characters it contains.</p>
 <p>The length of a pretext is the number of characters it contains. This will not be greater than the capacity.</p>
 <p>The hash of a text is used in organizing records. If the hash is zero, then the hash has not been computed yet. All texts in the immutable memory have hashes. Texts made by concat will not be given hashes until needed. The hash function is <code><a href="https://www.crockford.com/fash.html">fash</a></code>.</p>
@@ -389,7 +389,7 @@
 <p>Then the variables that are closed over by inner functions.</p>
 <p>Then the variables that are not closed over, followed by the temporaries.</p>
 <p>When a function returns, the caller is set to zero. This is a signal to the memory reclaimer that the frame can be reduced.</p>
-<p>A program is not allowed to see or modify the values in  slots 0, 1, and 2. A program is allow to see, but not modify slot 3. </p>
+<p>A program is not allowed to see or modify the values in  slots 0, 1, and 2. A program is allowed to see, but not modify slot 3. </p>
 <h3 id="code">Code</h3>
 <ol start=0>
     <li>Header (type <code>13</code>)</li>
