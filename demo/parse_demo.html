@@ -53,10 +53,10 @@ pre {
 <input id=clear type=button value="clear">
 <input id=tokens type=button value="tokens">
 <input id=parse type=button value="parse">
-<input id=compile type=button value="compile">
+<input id=compile disabled type=button value="compile">
 <input id=complete type=button value="complete">
-<input id=scope type=button value="scope">
-<input id=intrin type=button value="intrinsics">
+<input id=scope disabled type=button value="scope">
+<input id=intrin disabled type=button value="intrinsics">
 <input id=debugger type=button value="debugger">
 
 </p>
@@ -337,16 +337,9 @@ function display(tree) {
         if (Array.isArray(tree)) {
             outputation.append(tree.join(end_of_line));
         } else {
-            out_array("Intrinsics" + tree.intrinsics);
+            out_array("Intrinsics", tree.intrinsics);
             out_array("Endowments", tree.endowments);
-            out_array("Logs" + tree.logs);
-            out_array("Uses", tree.uses.reduce(function (accumulator, value) {
-                if (typeof value === "string") {
-                    return accumulator + " " + value;
-                } else {
-                    return accumulator + " " + escapify(value.text);
-                }
-            }, ""));
+            out_array("Logs", tree.logs);
         }
         outputlegend.replaceChildren("Intrinsics Endowments Uses Logs");
         inputation.focus();
