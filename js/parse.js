@@ -1,5 +1,5 @@
 // parse.js
-// 2026-10-02
+// 2026-10-18
 
 // Missing feature:
 //      patterns
@@ -825,6 +825,7 @@ statement.def = function def_statement() {
                 text: name.name
             })
         );
+        name.function = true;
     } else {
         advance(":");
         advance(" ");
