@@ -108,8 +108,8 @@ def_value
     the current function. The variable is read-only, but the value it contains
     may be mutable. Names that are defined with the <code>def</code> statement
     can not be changed with the <code>assign</code> statement. If the value is mutable,
-  then the value's members or elements may be changed with the <code>assign</code> statement.  </p>
-<p>If the <code>def</code> is followed by a <a href="functions.html">function literal</a>, then a read only variable having the same name as the function is created and given the value of the function object. So these two statements do the same thing:</p>
+  then the value's members or elements may be changed with the <code>assign</code> statement.</p>
+<p>If the <dfn>name</dfn> is followed by <code>(</code><small>left paren</small> instead of a :colon, then a <a href="functions.html">function literal</a>  having the same name as the function is created and given the value of the function object. These  two statements do a similar thing:</p>
 <pre>def double: function double(number) {
     return number + number
 }
@@ -117,10 +117,23 @@ def_value
 def double(number) {
     return number + number
 }</pre>
-<p>Within a function, variables must be declared before they are used. However, inner functions may use all of the variables of an outer function.</p>
+<p>Within a function, variables must be declared before they are used, except that inner functions can aways see names made by the function form of the <code>def</code> statement.</p>
 <h6>Example:</h6>
 <pre>def sqrt_2: 1.4142135623730950
-</pre>
+
+def thing_1(x) {
+    if x &gt; 0
+        return thing_2(x - 1)	# thing_2 has not been declared yet, but thing_1 can see thing_2
+    fi
+    return x
+}
+
+def thing_2(x) {
+    if x &gt; 0
+        return thing_1(x / 2)
+    fi
+    return x
+}</pre>
 <h3 id="jump">The <code>jump</code> statement</h3>
 <p class="rule">
 jump_statement
@@ -275,7 +288,7 @@ var_statement
 </p>
 <p>The <code>var</code> statement creates a variable in the current function scope.
 Note that <code>:</code> <dfn>expression</dfn> is not optional. The value of a variable may be replaced by <a href="#assign">the <code>assign</code> statement</a>. The <dfn>name</dfn> is the name of a new variable in this scope. The expression on the right side of the <code>:</code><small>colon</small> gives the initial value of the variable.  The <dfn>name</dfn> may not be used in the <dfn>expression</dfn> on the right side of the <code>:</code><small>colon</small>.</p>
-<p>Within a function, variables must be declared before they are used. However, inner functions may use all of the variables of an outer function.</p>
+<p>Within a function, variables must be declared before they are used. </p>
 <h6>Examples:</h6>
 <pre>var first_name: &quot;&quot;
 var last_name: &quot;&quot;
