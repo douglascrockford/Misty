@@ -1,5 +1,5 @@
 // parse.js
-// 2026-10-19
+// 2026-10-20
 
 // Missing feature:
 //      patterns
@@ -474,6 +474,7 @@ function more_parameters(list, open) {
         advance("|");
         advance(" ");
         parameter.first = expression();
+        parameter.after = token().at;
     }
     parameter.parameter_nr = list.length;
     list.push(parameter);
