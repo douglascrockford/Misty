@@ -1,5 +1,5 @@
 // parse.js
-// 2026-10-18
+// 2026-10-19
 
 // Missing feature:
 //      patterns
@@ -825,11 +825,11 @@ statement.def = function def_statement() {
                 text: name.name
             })
         );
-        name.function = true;
     } else {
         advance(":");
         advance(" ");
         result.second = expression();
+        name.after = token().at;
     }
     return result;
 };
@@ -920,6 +920,7 @@ statement.var = function var_statement() {
     advance(":");
     advance(" ");
     result.second = expression();
+    name.after = token().at;
     return result;
 };
 
