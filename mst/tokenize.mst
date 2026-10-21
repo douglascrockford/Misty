@@ -1,6 +1,6 @@
 misty module tokenize() {
 
-# 2026-10-02
+# 2026-10-21
 
 # This module returns a function that takes a text and converts it into an
 # array of tokens. The argument is a source text. The return value is an array
@@ -576,6 +576,7 @@ misty module tokenize() {
         assign at: 0
         assign row_nr: 0
         assign column_nr: 0
+        assign indentation: 0
         jump next_token()
     }
 }
