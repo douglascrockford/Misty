@@ -41,7 +41,7 @@ export default Object.freeze(function dispenser(tokens, error) {
 
     function redact() {
 
-// Skip pver comments, spaces, and newlines that are followed by a newline.
+// Skip over comments, spaces, and newlines that are followed by a newline.
 
         if (c_token !== undefined) {
             if (c_token.kind === "comment") {
