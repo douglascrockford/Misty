@@ -311,7 +311,7 @@ function expression(open = false) {
     };
     let previous_precedence = current_precedence;
 
-// Are there additional infix operators follow?
+// Are there additional infix operators following?
 
     while (true) {
         operator = next_token();
@@ -374,7 +374,7 @@ function expression(open = false) {
                 };
             } else {
 
-// Use the preious node.
+// Use the previous node.
 
                 right = precedent[current_precedence];
                 precedent[current_precedence] = undefined;
