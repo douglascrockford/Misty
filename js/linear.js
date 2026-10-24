@@ -51,7 +51,7 @@ export default Object.freeze(function mgen(tree) {
             then_label = make_label();
             else_label = make_label();
             fi_label = make_label();
-            gen_conditional_jump(statement, then_label, else_label), ;
+            gen_conditional_jump(statement, then_label, else_label);
             gen_label(then_label);
             gen_statements(statement.statements);
             gen_jump(fi_label)
