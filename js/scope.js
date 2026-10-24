@@ -1,5 +1,5 @@
 // scope.js
-// 2026-09-23
+// 2026-09-24
 
 // A. Make the 'scope' record.
 // B. Upgrade 'name' nodes with 'function_nr', 'level', 'make'
@@ -15,6 +15,7 @@ function empty() {
 
 const error_message = {
     already: "{term_a} was already declared.",
+    undeclared: "{term_a} was not declared.",
     used_before: "{term_a} was used before it was declared.",
     unbalanced: "{term_a} was not properly balanced in an 'if'."
 };
@@ -158,7 +159,7 @@ function utilize(node) {
 
 // Or it might be an undeclared variable.
 
-    return error("used_before", node);
+    return error("undeclared", node);
 }
 
 function expression(node) {
