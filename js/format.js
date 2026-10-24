@@ -77,7 +77,7 @@ export default Object.freeze(function format(string, container, encoder) {
                     replacement = String(replacement);
                 }
 
-// If the replacement is a string, then do the substituation.
+// If the replacement is a string, then do the substitution.
 // Otherwise, leave the string in its original state.
 
                 return (
