@@ -19,7 +19,8 @@ input[type=button]:hover {
     background-color: thistle;
 }
 textarea {
-    width:100%;
+    border: 0;
+    width: 100%;
 }
 pre > h4 {
     margin-left: -2em;
@@ -50,12 +51,12 @@ pre {
 </fieldset>
 <p style="text-align: center;">
 
-<input id=clear type=button value="clear">
-<input id=tokens type=button value="tokens">
-<input id=parse type=button value="parse">
+<input id=clear_button type=button value="clear">
+<input id=token_button type=button value="tokens">
+<input id=parse_button type=button value="parse">
+<input id=scope_button type=button value="scope">
 <input id=compile disabled type=button value="compile">
 <input id=complete type=button value="complete">
-<input id=scope disabled type=button value="scope">
 <input id=intrin disabled type=button value="intrinsics">
 <input id=debugger type=button value="debugger">
 
@@ -66,6 +67,7 @@ pre {
 <script type="module">
 import tokenize from "../js/tokenize.js";
 import parse from "../js/parse.js";
+import scope from "../js/scope.js";
 import slot from "../js/slot.js";
 
 const end_of_line = "\n";
@@ -74,141 +76,158 @@ function escapify(text) {
     return "\"" + text.replace(/\\/g, "\\b").replace(/"/g, "\\q")  + "\"";
 }
 
-function display(tree) {
+var indentation = 0;
+var output = undefined;
+
+function begin_emit() {
+    indentation = 0;
+    output = [];
+}
+
+function end_emit() {
+    return output.join("");
+}
+
+function emit(token) {
+    if (token === undefined) {
+        emit(end_of_line);
+        emit(" ".repeat(indentation));
+    } else if (typeof token === "string") {
+        output.push(token);
+    } else if (Array.isArray(token)) {
+        token.forEach(function (arg, arg_nr) {
+            if (arg_nr !== 0) {
+                emit(" ");
+            }
+            return emit(arg);
+        });
+    } else if (token.kind === "text") {
+        emit(escapify(token.text));
+    } else if (token.kind === "number" || token.kind === "apostrophic") {
+        emit(token.text);
+    } else {
+        if (token.kind === "name") {
+            emit(token.text);
+            if (typeof token.make === "string") {
+                emit("₼" + token.make);
+            }
+            if (typeof token.function_nr === "number") {
+                emit("ƒ" + token.function_nr);
+            }
+            if (typeof token.level === "number") {
+                emit("£" + token.level);
+            }
+            if (typeof token.slot === "number") {
+                emit("$" + token.slot);
+            }
+        } else if (token.kind === "infix") {
+            emit("(");
+            token.operators.forEach(function (operator, operator_nr) {
+                emit(token.operands[operator_nr]);
+                emit(" ");
+                emit(operator.text);
+                emit(" ");
+            });
+            emit(token.operands[token.operators.length]);
+            emit(")");
+        } else if (token.kind === "function") {
+            emit("ƒ" + token.function_nr);
+        } else if (token.kind === "array") {
+            emit("[");
+            emit(token.first);
+            emit("]");
+        } else if (token.kind === "record") {
+            emit("{");
+            token.first.forEach(function (field, field_nr) {
+                if (field_nr !== 0) {
+                    emit(" ");
+                }
+                emit(escapify(field.text));
+                emit(": ");
+                emit(token.second[field_nr]);
+            });
+            emit("}");
+        } else if (token.kind === "module") {
+            emit("module");
+            emit(" ");
+            emit(token.first);
+        } else if (token.text === "[") {
+            emit(token.first);
+            emit("[");
+            emit(token.second);
+            emit("]");
+        } else if (token.text === "[]") {
+            emit("[]");
+        } else if (token.text === "(") {
+            emit(token.first);
+            emit("(");
+            if (token.second && token.second.length > 0) {
+                emit(token.second)
+            }
+            emit(")");
+        } else if (token.text === "then") {
+            emit("(");
+            emit(token.first);
+            emit(" then ");
+            emit(token.second);
+            emit(" else ");
+            emit(token.third);
+            emit(")");
+        } else {
+            emit(token.text);
+            emit("????");
+        }
+    }
+}
+
+function emit_statement(token) {
+    emit();
+    emit(token.text);
+    if (token.first) {
+        emit(" ");
+        if (token.push) {
+            emit("[]");
+        }
+        emit(token.first);
+        if (token.second) {
+            emit(" ");
+            emit(token.second);
+            if (token.pop) {
+                emit("[]");
+            }
+            if (token.third) {
+                emit(" ");
+                emit(token.third);
+            }
+        }
+    }
+    if (token.statements) {
+        emit_statements(token.statements);
+        if (Array.isArray(token.else_if) && token.else_if.length > 0) {
+            token.else_if.forEach(function else_if(clause) {
+                emit();
+                emit("else if ");
+                emit(clause.first);
+                emit_statements(clause.statements)
+            })
+        }
+        if (Array.isArray(token.else) && token.else.length > 0) {
+            emit();
+            emit("else");
+            emit_statements(token.else)
+        }
+    }
+}
+
+function emit_statements(array) {
+    indentation += 4;
+    array.forEach(emit_statement);
+    indentation -= 4;
+}
+function emit_tree(tree) {
     if (Array.isArray(tree)) {
         return tree.join(end_of_line);
     }
-    var indentation = 0;
-    var output = [];
-
-    function emit(token) {
-        if (token === undefined) {
-            emit(end_of_line);
-            emit(" ".repeat(indentation));
-        } else if (typeof token === "string") {
-            output.push(token);
-        } else if (Array.isArray(token)) {
-            token.forEach(function (arg, arg_nr) {
-                if (arg_nr !== 0) {
-                    emit(" ");
-                }
-                return emit(arg);
-            });
-        } else if (token.kind === "text") {
-            emit(escapify(token.text));
-        } else if (token.kind === "number" || token.kind === "apostrophic") {
-            emit(token.text);
-        } else {
-            if (token.kind === "name") {
-                emit(token.text);
-                if (typeof token.function_nr === "number") {
-                    emit("ƒ" + token.function_nr);
-                }
-            } else if (token.kind === "infix") {
-                emit("(");
-                token.operators.forEach(function (operator, operator_nr) {
-                    emit(token.operands[operator_nr]);
-                    emit(" ");
-                    emit(operator.text);
-                    emit(" ");
-                });
-                emit(token.operands[token.operators.length]);
-                emit(")");
-            } else if (token.kind === "function") {
-                emit("ƒ" + token.function_nr);
-            } else if (token.kind === "array") {
-                emit("[");
-                emit(token.first);
-                emit("]");
-            } else if (token.kind === "record") {
-                emit("{");
-                token.first.forEach(function (field, field_nr) {
-                    if (field_nr !== 0) {
-                        emit(" ");
-                    }
-                    emit(escapify(field.text));
-                    emit(": ");
-                    emit(token.second[field_nr]);
-                });
-                emit("}");
-            } else if (token.kind === "module") {
-                emit("module");
-                emit(" ");
-                emit(token.first);
-            } else if (token.text === "[") {
-                emit(token.first);
-                emit("[");
-                emit(token.second);
-                emit("]");
-            } else if (token.text === "[]") {
-                emit("[]");
-            } else if (token.text === "(") {
-                emit(token.first);
-                emit("(");
-                if (token.second && token.second.length > 0) {
-                    emit(token.second)
-                }
-                emit(")");
-            } else if (token.text === "then") {
-                emit("(");
-                emit(token.first);
-                emit(" then ");
-                emit(token.second);
-                emit(" else ");
-                emit(token.third);
-                emit(")");
-            } else {
-                emit(token.text);
-                emit("????");
-            }
-        }
-    }
-
-    function emit_statement(token) {
-        emit();
-        emit(token.text);
-        if (token.first) {
-            emit(" ");
-            if (token.push) {
-                emit("[]");
-            }
-            emit(token.first);
-            if (token.second) {
-                emit(" ");
-                emit(token.second);
-                if (token.pop) {
-                    emit("[]");
-                }
-                if (token.third) {
-                    emit(" ");
-                    emit(token.third);
-                }
-            }
-        }
-        if (token.statements) {
-            emit_statements(token.statements);
-            if (Array.isArray(token.else_if) && token.else_if.length > 0) {
-                token.else_if.forEach(function else_if(clause) {
-                    emit();
-                    emit("else if ");
-                    emit(clause.first);
-                    emit_statements(clause.statements)
-                })
-            }
-            if (Array.isArray(token.else) && token.else.length > 0) {
-                emit();
-                emit("else");
-                emit_statements(token.else)
-            }
-        }
-    }
-
-    function emit_statements(array) {
-        indentation += 4;
-        array.forEach(emit_statement);
-        indentation -= 4;
-    }
-
     emit(tree.misty);
     emit(" ");
     emit(tree.name);
@@ -225,56 +244,93 @@ function display(tree) {
         emit_statements(func.statements);
         emit();
     });
-    emit();
-    return output.join("");
 }
 
 (function initialize() {
     const inputation = document.getElementById("inputation");
     const outputation = document.getElementById("outputation");
     const outputlegend = document.getElementById("outputlegend");
-    const clear = document.getElementById("clear");
-    const tokens = document.getElementById("tokens");
-    const parse_node = document.getElementById("parse");
+    const clear_element = document.getElementById("clear_button");
+    const token_element = document.getElementById("token_button");
+    const parse_element = document.getElementById("parse_button");
+    const scope_element = document.getElementById("scope_button");
     const compile = document.getElementById("compile");
     const complete = document.getElementById("complete");
-    const scope = document.getElementById("scope");
     const intrin = document.getElementById("intrin");
     const debug = document.getElementById("debugger");
     inputation.value = localStorage.getItem("source") || "misty program test() {\n}";
     inputation.addEventListener("input", function () {
         localStorage.setItem("source", inputation.value);
     });
-    clear.addEventListener("click", function (event) {
+    clear_element.addEventListener("click", function (event) {
         outputlegend.replaceChildren("Watch this space");
         outputation.innerHTML = "";
         inputation.value = "";
         inputation.focus();
     });
-    tokens.addEventListener("click", function (event) {
-        outputation.innerHTML = "";
-        outputation.append(tokenize(inputation.value).reduce(function (accumulator, token) {
-            return accumulator + JSON.stringify(token, [
-                "error", "error_column", "error_row", "text", "kind",
-                "at", "from_column", "from_row", "to_column", "to_row",
-                "length", "indentation"
-            ]) + "\n";
-        }, "[\n") + "]");
+    token_element.addEventListener("click", function (event) {
+        outputation.textContent = "[\n" + tokenize(inputation.value).map(
+            function (token) {
+                return "    " + JSON.stringify(token, [
+                    "error", "error_column", "error_row", "text", "kind",
+                    "at", "from_column", "from_row", "to_column",
+                    "to_row", "length", "indentation"
+                ]);
+            }
+        ).join("\n") + "\n]";
         outputlegend.replaceChildren("Tokens");
         inputation.focus();
     }, false);
-    parse_node.addEventListener("click", function (event) {
-        outputlegend.replaceChildren("parse");
-        outputation.innerHTML = "";
-        outputation.append(display(parse(tokenize(inputation.value))));
+    parse_element.addEventListener("click", function (event) {
         inputation.focus();
+        const tree = parse(tokenize(inputation.value));
+        if (Array.isArray(tree)) {
+            outputlegend.replaceChildren("Errors");
+            outputation.textContent = tree.join(end_of_line);
+        } else {
+            outputlegend.replaceChildren("Parse Tree I");
+            begin_emit();
+            emit_tree(tree);
+            outputation.textContent = end_emit();
+        }
     }, false);
-    compile.addEventListener("click", function (event) {
-        outputlegend.replaceChildren("compile");
-        outputation.innerHTML = "";
-        outputation.append(display(slot((parse(tokenize(inputation.value))))));
-        inputation.focus();
-    }, false);
+    scope_element.addEventListener(
+        "click",
+        function (event) {
+            outputation.innerHTML = "";
+            let tree = scope(parse(tokenize(inputation.value)));
+            inputation.focus();
+            if (Array.isArray(tree)) {
+                outputlegend.replaceChildren("Errors");
+                outputation.append(tree.join(end_of_line));
+            } else {
+                outputlegend.replaceChildren("Scope");
+                begin_emit();
+                tree.scopes.forEach(function (scope, func_nr) {
+                    indentation = 0;
+                    emit("ƒ" + func_nr);
+                    emit();
+                    indentation = 4;
+                    Object.keys(scope).sort().forEach(function (name) {
+                        emit(name);
+                        emit();
+                    });
+                });
+                outputation.append(end_emit());
+            }
+        },
+        false
+    );
+    compile.addEventListener(
+        "click",
+        function (event) {
+            outputlegend.replaceChildren("Parse Tree II");
+            outputation.innerHTML = "";
+            //outputation.append(display(slot((parse(tokenize(inputation.value))))));
+            inputation.focus();
+        },
+        false
+    );
     complete.addEventListener("click", function (event) {
         outputation.innerHTML = "";
         outputation.append(
@@ -284,46 +340,7 @@ function display(tree) {
                 4
             )
         );
-        outputlegend.replaceChildren("Parse tree");
-        inputation.focus();
-    }, false);
-    scope.addEventListener("click", function (event) {
-        outputation.innerHTML = "";
-        let tree = slot(parse(tokenize(inputation.value)));
-        let fragment;
-        let element;
-        let line;
-        if (Array.isArray(tree)) {
-            outputation.append(tree.join(end_of_line));
-        } else {
-            fragment = new DocumentFragment();
-            tree.scopes.forEach(function (func, func_nr) {
-                element = document.createElement("h4");
-                element.append(
-                    (
-                        func.name
-                        ? func.name
-                        : ""
-                    ) + "ƒ" + func_nr
-                );
-                fragment.append(element);
-                Object.keys(func).sort().forEach(function (name) {
-                    if (typeof func[name].slot === "number") {
-                        element = document.createElement("div");
-                        line = name + "ƒ" + func[name].function_nr +
-                            " [" + func[name].slot + (
-                                func[name].level === 0
-                                ? ""
-                                : "@" + func[name].level
-                            ) + "] " + func[name].make;
-                        element.append(line);
-                        fragment.append(element);
-                    }
-                });
-            });
-            outputation.append(fragment);
-        }
-        outputlegend.replaceChildren("Scope");
+        outputlegend.replaceChildren("Complete Parse Tree");
         inputation.focus();
     }, false);
     function out_array(label, array) {
