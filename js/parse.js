@@ -1,5 +1,5 @@
 // parse.js
-// 2026-10-20
+// 2026-10-23
 
 // Missing feature:
 //      patterns
@@ -467,7 +467,7 @@ prefix("apostrophic", function functino() {
 });
 
 function more_parameters(list, open) {
-    const parameter = token;
+    const parameter = token();
     consecrate(parameter, "variable");
     if (advance("name").kind === "space" && next_token().text === "|") {
         advance(" ");
@@ -554,7 +554,7 @@ function function_stuff(name) {
     the_function.outer = outer;
 
     if (name) {
-        the_function.name = name.text;
+        the_function.name = name;
         consecrate(name, "variable");
     }
     the_function.parameters = parameter_list();
@@ -600,21 +600,27 @@ intrinsic_structure("pattern", function () {
 
 prefix("(", function paren_expression() {
     let result;
+    let then;
     if (advance("(").kind === "newline") {
         indent();
         result = expression(0, true);
         if (indentation_q()) {
             linebreak();
-            result = token();
-            result.first = result;
-            advance("then");
-            result.kind = "operator";
-            advance(" ");
-            result.second = expression(0, true);
-            linebreak();
-            advance("else");
-            advance(" ");
-            result.third = expression(0, true);
+            then = token();
+            if (then.text === "then") {
+                then.kind = "operator";
+                then.first = result;
+                advance("then");
+                advance(" ");
+                then.second = expression(0, true);
+                linebreak();
+                advance("else");
+                advance(" ");
+                then.third = expression(0, true);
+                result = then;
+            } else {
+                error("expected", then, "then");
+            }
         }
         outdent();
     } else {
@@ -623,6 +629,7 @@ prefix("(", function paren_expression() {
     advance(")");
     return result;
 });
+
 
 function more_fields(keys, values, open) {
     const key = token();
@@ -664,7 +671,7 @@ prefix("{", function record_literal() {
     open_brace.second = [];     // The value expressions
     open_brace.kind = "record";
     const following = advance("{");
-    if (following.kind === "}") {
+    if (following.text === "}") {
         advance("}");
         return open_brace;
     }
@@ -720,11 +727,18 @@ prefix("[]", function empty_array_literal() {
     return bracket;
 });
 
-function more_arguments(store) {
+function more_arguments(store, open) {
     store.push(expression());
-    if (indentation_q()) {
-        linebreak();
-        return more_arguments(store);
+    if (open) {
+        if (indentation_q()) {
+            linebreak();
+            return more_arguments(store);
+        }
+    } else {
+        if (token().kind === "space") {
+            advance(" ");
+            return more_arguments(store, open);
+        }
     }
 }
 
@@ -766,12 +780,12 @@ function invoke(left) {
                     advance(" ");
                     then.third = expression(0);
                 } else {
-                    more_arguments(paren.second);
+                    more_arguments(paren.second, true);
                 }
             }
             outdent();
         } else {
-            more_arguments(paren.second);
+            more_arguments(paren.second, false);
         }
     }
     advance(")");
@@ -823,7 +837,8 @@ statement.def = function def_statement() {
     if (advance("name").text === "(") {
         result.second = function_stuff(
             Object.assign(empty(), {
-                text: name.name
+                kind: "name",
+                text: name.text
             })
         );
     } else {
@@ -843,7 +858,11 @@ function more_else(result) {
             advance(" ");
             elif.first = expression();
             elif.statements = block();
-            result.else_if.push(elif);
+            if (Array.isArray(result.else_if)) {
+                result.else_if.push(elif);
+            } else {
+                result.else_if = [elif];
+            }
             return more_else(result);
         }
         result.else = block();
