@@ -14,22 +14,23 @@ function empty() {
 // Error reporting
 
 const error_message = {
-    already: "{term_a} was already declared.",
-    undeclared: "{term_a} was not declared.",
-    used_before: "{term_a} was used before it was declared.",
-    unbalanced: "{term_a} was not properly balanced in an 'if'."
+    already: "'{term_a}' was already declared.",
+    undeclared: "'{term_a}' was not declared.",
+    used_before: "'{term_a}' was used before it was declared.",
+    unbalanced: "'{term_a}' was not properly balanced in an 'if'."
 };
 
 const error_preamble = "[{from_row}.{from_column}] ";
 
 function error(message, the_token) {
-    if (the_token.error === undefined) {
-        the_token.error = message;
-        errors.push(format(
-            error_message[message],
-            {term_a: the_token.text}
-        ));
-    }
+    errors.push(format(
+        error_preamble + error_message[message],
+        {
+            from_column: the_token.from_column,
+            from_row: the_token.from_row,
+            term_a: the_token.text
+        }
+    ));
 }
 
 const functino = empty();
@@ -162,18 +163,18 @@ function utilize(node) {
     return error("undeclared", node);
 }
 
-function expression(node) {
+function crunch_expression(node) {
     if (node === undefined) {
         return;
     }
     if (Array.isArray(node)) {
-        return node.forEach(expression);
+        return node.forEach(crunch_expression);
     }
     if (node.kind === "name") {
         return utilize(node);
     }
     if (node.kind === "infix") {
-        return expression(node.operands);
+        return crunch_expression(node.operands);
     }
     if (node.kind === "operator") {
         return crunch(node);
@@ -181,19 +182,19 @@ function expression(node) {
 }
 
 function crunch(node) {
-    expression(node.first);
-    expression(node.second);
-    return expression(node.third);
+    crunch_expression(node.first);
+    crunch_expression(node.second);
+    return crunch_expression(node.third);
 }
 
 function crunch_if(node) {
 
 // Process the condition expressions.
 
-    expression(node.first);
+    crunch_expression(node.first);
     if (Array.isArray(node.else_if)) {
         node.else_if.forEach(function (node) {
-            return expression(node.first);
+            return crunch_expression(node.first);
         });
     }
 
@@ -247,35 +248,38 @@ function crunch_if(node) {
 // Otherwise, copy the names from the 'then' to the record at the current
 // end of the if_scope.
 
-    const remote = if_scope[if_scope.length - 1];
-    const taker = (
-        if_scope.length === 0
-        ? scope
-        : (
-            remote.phase
-            ? remote.then
-            : remote.else
-        )
-    );
-    local.then.forEach(function (node) {
-        scope[node.name]  = node;
-    });
+    let remote;
+    let taker = scope;
+    const keys = Object.keys(local.then);
+    if (keys.length > 0) {
+        if (if_scope.length > 0) {
+            remote = if_scope[if_scope.length - 1];
+            taker = (
+                remote.phase
+                ? remote.then
+                : remote.else
+            );
+        }
+        keys.forEach(function (key) {
+            taker[key]  = local.then[key];
+        });
+    }
 };
 
 const statement = {
     assign: crunch,
     call: crunch,
     def(node) {
-        expression(node.second);
         declare(node.first, "def");
+        crunch_expression(node.second);
     },
     if: crunch_if,
     jump: crunch,
     return: crunch,
     send: crunch,
     var(node) {
-        expression(node.second);
         declare(node.first, "var");
+        crunch_expression(node.second);
     }
 };
 
@@ -305,7 +309,7 @@ export default Object.freeze(function scope_phase(tree) {
         }
         a_function.parameters.forEach(function (parameter) {
             declare(parameter, "parameter");
-            return expression(parameter.first);    // default expression
+            return crunch_expression(parameter.first);    // default expression
         });
         crunch_statements(a_function.statements);
     });
