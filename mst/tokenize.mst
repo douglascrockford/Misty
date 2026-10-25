@@ -39,9 +39,9 @@ misty module tokenize() {
 # literals are encoded as single character punctuators.
 
 # A comment token includes '#', all of the characters following it up to
-# but not including the end of line, and all the spaces that proceeded it.
+# but not including the end of line, and all the spaces that preceded it.
 
-# An apostrophic token has a text of three of more characters, and the first
+# An apostrophic token has a text of three or more characters, and the first
 # and last are ''' (apostrophe). These are used for Misty functinos and
 #  McKeeman singletons.
 
