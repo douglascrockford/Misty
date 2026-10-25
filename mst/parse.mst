@@ -324,7 +324,7 @@ def lookup() {
 def other_use() {
 
 # 'function' 'pattern' 'then' can also be used as variables. Look at the syntactic sequence to
-# distinguish. Then used as a keyword, it will be followed by a space followed not by an infix
+# distinguish. When used as a keyword, it will be followed by a space followed not by an infix
 # operator.
 
     return (
@@ -589,7 +589,7 @@ def function_stuff(name) {
 
     assign scopes[function_nr]: {}
 
-# var the function know its maker.
+# Make the function aware of its maker.
 
     assign the_function.outer: outer
 
@@ -597,7 +597,7 @@ def function_stuff(name) {
 
     assign novar[function_nr]: 0
 
-# 'dos' manages loops and their labals.
+# 'dos' manages loops and their labels.
 
     assign dos[function_nr]: []
 
@@ -643,8 +643,8 @@ call prefix("'", function () {
     fi
 
 # Functinos are operator functions. Change the operator token into a name
-# token make an an intrinsic entry in the current scope increment the
-# nr_uses note that the intrinsic function was used.
+# token, make an intrinsic entry in the current scope, increment
+# nr_uses, and note that the intrinsic function was used.
 
     def functino: token
     call advance(token.kind)
