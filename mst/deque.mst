@@ -2,7 +2,7 @@ misty module deque() {
 
 # 2026-10-02
 
-# deque: Double ended queue (pronounced /dek/)
+# deque: Double-ended queue (pronounced /dek/)
 
 # This module produces a constructor function that makes a deque object.
 # A deque object has the abilities of a queue and a stack.
