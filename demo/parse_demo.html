@@ -109,16 +109,16 @@ function emit(token) {
         if (token.kind === "name") {
             emit(token.text);
             if (typeof token.make === "string") {
-                emit("₼" + token.make);
+                emit(" ₼" + token.make);
             }
             if (typeof token.function_nr === "number") {
-                emit("ƒ" + token.function_nr);
+                emit(" ƒ" + token.function_nr);
             }
-            if (typeof token.level === "number") {
-                emit("£" + token.level);
+            if (typeof token.level === "number" && token.level > 0) {
+                emit(" £" + token.level);
             }
             if (typeof token.slot === "number") {
-                emit("$" + token.slot);
+                emit(" $" + token.slot);
             }
         } else if (token.kind === "infix") {
             emit("(");
@@ -297,26 +297,27 @@ function emit_tree(tree) {
     scope_element.addEventListener(
         "click",
         function (event) {
-            outputation.innerHTML = "";
-            let tree = scope(parse(tokenize(inputation.value)));
             inputation.focus();
+            let tree = scope(parse(tokenize(inputation.value)));
             if (Array.isArray(tree)) {
                 outputlegend.replaceChildren("Errors");
-                outputation.append(tree.join(end_of_line));
+                outputation.textContent = tree.join(end_of_line);
             } else {
                 outputlegend.replaceChildren("Scope");
                 begin_emit();
+                indentation = 0;
                 tree.scopes.forEach(function (scope, func_nr) {
-                    indentation = 0;
                     emit("ƒ" + func_nr);
-                    emit();
                     indentation = 4;
+                    emit();
                     Object.keys(scope).sort().forEach(function (name) {
-                        emit(name);
+                        emit(scope[name]);
                         emit();
                     });
+                    indentation = 0;
+                    emit();
                 });
-                outputation.append(end_emit());
+                outputation.textContent = end_emit();
             }
         },
         false
