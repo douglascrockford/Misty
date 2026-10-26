@@ -1,5 +1,5 @@
 // scope.js
-// 2026-09-24
+// 2026-09-26
 
 // A. Make the 'scope' record.
 // B. Upgrade 'name' nodes with 'function_nr', 'level', 'make'
@@ -15,9 +15,10 @@ function empty() {
 
 const error_message = {
     already: "'{term_a}' was already declared.",
+    late: "'{term_a}' was declared too late.",
+    unbalanced: "'{term_a}' was not properly balanced in an 'if'.",
     undeclared: "'{term_a}' was not declared.",
-    used_before: "'{term_a}' was used before it was declared.",
-    unbalanced: "'{term_a}' was not properly balanced in an 'if'."
+    used_before: "'{term_a}' was used before it was declared."
 };
 
 const error_preamble = "[{from_row}.{from_column}] ";
@@ -81,7 +82,14 @@ function declare(node, make) {
     node.level = 0;
     node.function_nr = function_nr;
     if (scope[node.text] !== undefined) {
-        error("already", node);
+        error(
+            (
+                scope[node.text].make === undefined
+                ? "late"
+                : "already"
+            ),
+            node
+        );
     } else {
         if_now = if_scope[if_scope.length - 1];
         if (if_now === undefined) {
@@ -116,6 +124,9 @@ function utilize(node) {
 
     let declaration = scope[node.text];
     if (declaration !== undefined) {
+        if (declaration.make === undefined) {
+            return error("undeclared", node);
+        }
         node.make = declaration.make;
         node.function_nr = declaration.function_nr;
         node.level = declaration.level;
@@ -160,6 +171,7 @@ function utilize(node) {
 
 // Or it might be an undeclared variable.
 
+    scope[node.text] = node;
     return error("undeclared", node);
 }
 
