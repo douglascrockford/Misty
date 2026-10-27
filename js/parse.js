@@ -1,5 +1,5 @@
 // parse.js
-// 2026-10-23
+// 2026-10-27
 
 // Missing feature:
 //      patterns
@@ -431,7 +431,7 @@ function variable() {
     if (advance("name").text === "!") {
         advance("!");
         result.make = "endowment";
-        result.text = result.text + "!";
+        result.text = result.text;
         endowments[result.text] = true;
         return result;
     }

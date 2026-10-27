@@ -1,9 +1,9 @@
 // scope.js
-// 2026-09-26
+// 2026-09-27
 
 // A. Make the 'scope' record.
 // B. Upgrade 'name' nodes with 'function_nr', 'level', 'make'
-// C. Report errors: undeclared, redeclared, unbalanced.
+// C. Report errors: undeclared, redeclared, unbalanced...
 
 import format from "./format.js";
 
@@ -120,6 +120,10 @@ function declare(node, make) {
 
 function utilize(node) {
 
+    if (node.make === "endowment") {
+        return;
+    }
+
 // Have we seen this name before? If so, teach the node about its heritage.
 
     let declaration = scope[node.text];
@@ -155,7 +159,10 @@ function utilize(node) {
         node.level = level;
         scope[node.text] = node;
         declaration.closure = true;
-        if (typeof declaration.after === "number" && declaration.after > node.at) {
+        if (
+            typeof declaration.after === "number" &&
+            declaration.after < node.at
+        ) {
             error("used_before", node);
         }
         return;
