@@ -1,5 +1,5 @@
 // scope.js
-// 2026-09-27
+// 2026-09-29
 
 // A. Make the 'scope' record.
 // B. Upgrade 'name' nodes with 'function_nr', 'level', 'make'
@@ -134,6 +134,12 @@ function utilize(node) {
         node.make = declaration.make;
         node.function_nr = declaration.function_nr;
         node.level = declaration.level;
+        if (
+            typeof declaration.after === "number" &&
+            declaration.after > node.at
+        ) {
+            error("used_before", node);
+        }
         return;
     }
 
@@ -161,7 +167,7 @@ function utilize(node) {
         declaration.closure = true;
         if (
             typeof declaration.after === "number" &&
-            declaration.after < node.at
+            declaration.after > node.at
         ) {
             error("used_before", node);
         }
