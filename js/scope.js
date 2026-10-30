@@ -15,7 +15,6 @@ function empty() {
 
 const error_message = {
     already: "'{term_a}' was already declared.",
-    late: "'{term_a}' was declared too late.",
     unbalanced: "'{term_a}' was not properly balanced in an 'if'.",
     undeclared: "'{term_a}' was not declared.",
     used_before: "'{term_a}' was used before it was declared."
@@ -84,12 +83,13 @@ function declare(node, make) {
     if (scope[node.text] !== undefined) {
         error(
             (
-                scope[node.text].make === undefined
-                ? "late"
-                : "already"
+                scope[node.text].level === 0
+                ? "already"
+                : "used_before"
             ),
             node
         );
+        scope[node.text] =  node;
     } else {
         if_now = if_scope[if_scope.length - 1];
         if (if_now === undefined) {
