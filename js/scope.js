@@ -15,6 +15,7 @@ function empty() {
 
 const error_message = {
     already: "'{term_a}' was already declared.",
+    not_var: "'{term_a}' is not a 'var'.",
     unbalanced: "'{term_a}' was not properly balanced in an 'if'.",
     undeclared: "'{term_a}' was not declared.",
     used_before: "'{term_a}' was used before it was declared."
@@ -292,7 +293,12 @@ function crunch_if(node) {
 };
 
 const statement = {
-    assign: crunch,
+    assign(node) {
+        crunch(node);
+        if (node.first.kind === "name" && node.first.text !== "var") {
+            error("not_var", node.first);
+        }
+    },
     call: crunch,
     def(node) {
         declare(node.first, "def");
