@@ -46,7 +46,9 @@ fieldset, legend {
 }
 
 fieldset {
-    padding: 2em;
+    margin-bottom: 1em;
+    margin-top: 1em;
+    padding: 1em;
 }
 
 legend {
