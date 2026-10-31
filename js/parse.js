@@ -1,5 +1,5 @@
 // parse.js
-// 2026-10-27
+// 2026-10-31
 
 // Missing feature:
 //      patterns
@@ -43,6 +43,7 @@ let functions;
 let function_nr;
 let halt;
 let indentation;
+let log;
 let main;
 let patterns;
 
@@ -895,6 +896,7 @@ statement.log = function log_statement() {
     const result = token();
     advance("log");
     result.first = advance(" ");
+    log[result.first.text] = true;
     advance("name");
     advance(":");
     advance(" ");
@@ -965,6 +967,7 @@ function misty() {
     }
     advance("end_of_file");
     main.endowments = Object.keys(endowments);
+    main.logs = Object.keys(log);
 }
 
 export default Object.freeze(function parse(tokens) {
@@ -982,6 +985,7 @@ export default Object.freeze(function parse(tokens) {
     functions = [];
     halt = false;
     indentation = 0;
+    log = empty();
     patterns = [];
 
     intrinsic_structure_names.forEach(function (name) {
