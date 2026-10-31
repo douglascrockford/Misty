@@ -49,15 +49,42 @@ pre {
 >
 </textarea>
 </fieldset>
+<fieldset style="clear: both;">
+<legend>Endowments</legend>
+<textarea
+    autocomplete=off
+    autocorrect=off
+    autofocus=off
+    id="endowments"
+    placeholder="Endoowment JSON"
+    rows=2
+    spellcheck=false
+    wrap=on
+>
+</textarea>
+</fieldset>
+<fieldset style="clear: both;">
+<legend>Logs</legend>
+<textarea
+    autocomplete=off
+    autocorrect=off
+    autofocus=on
+    id="logs"
+    placeholder="Log Access JSON"
+    rows=2
+    spellcheck=false
+    wrap=on
+>
+</textarea>
+</fieldset>
 <p style="text-align: center;">
 
 <input id=clear_button type=button value="clear">
 <input id=token_button type=button value="tokens">
 <input id=parse_button type=button value="parse">
-<input id=scope_button type=button value="scope">
+<input id=extra_button disabled type=button value="extra">
 <input id=compile disabled type=button value="compile">
-<input id=complete type=button value="complete">
-<input id=intrin disabled type=button value="intrinsics">
+<input id=complete disabled type=button value="complete">
 <input id=debugger type=button value="debugger">
 
 </p>
@@ -88,6 +115,22 @@ function end_emit() {
     return output.join("");
 }
 
+function emit_full_name(token) {
+    if (typeof token.make === "string") {
+        emit(token.make + " ");
+    }
+    emit(token.text);
+    if (typeof token.function_nr === "number") {
+        emit(" ƒ " + token.function_nr);
+    }
+    if (typeof token.slot === "number") {
+        emit("." + token.slot);
+    }
+    if (typeof token.level === "number" && token.level > 0) {
+        emit(" £ " + token.level);
+    }
+}
+
 function emit(token) {
     if (token === undefined) {
         emit(end_of_line);
@@ -108,17 +151,11 @@ function emit(token) {
     } else {
         if (token.kind === "name") {
             emit(token.text);
-            if (typeof token.make === "string") {
-                emit(" ₼" + token.make);
-            }
             if (typeof token.function_nr === "number") {
-                emit(" ƒ" + token.function_nr);
-            }
-            if (typeof token.level === "number" && token.level > 0) {
-                emit(" £" + token.level);
+                emit("ƒ"+ token.function_nr);
             }
             if (typeof token.slot === "number") {
-                emit(" $" + token.slot);
+                emit("." + token.slot);
             }
         } else if (token.kind === "infix") {
             emit("(");
@@ -147,6 +184,8 @@ function emit(token) {
                 emit(token.second[field_nr]);
             });
             emit("}");
+        } else if (token.kind === "endowment") {
+            emit("*endowment*");
         } else if (token.kind === "module") {
             emit("module");
             emit(" ");
@@ -187,6 +226,10 @@ function emit_statement(token) {
         emit(" ");
         if (token.push) {
             emit("[]");
+        }
+        if (token.status) {
+            emit(token.status);
+            emit(" ");
         }
         emit(token.first);
         if (token.second) {
@@ -248,15 +291,16 @@ function emit_tree(tree) {
 
 (function initialize() {
     const inputation = document.getElementById("inputation");
+    const log_box = document.getElementById("logs");
+    const endowment_box = document.getElementById("endowments");
     const outputation = document.getElementById("outputation");
     const outputlegend = document.getElementById("outputlegend");
     const clear_element = document.getElementById("clear_button");
     const token_element = document.getElementById("token_button");
     const parse_element = document.getElementById("parse_button");
-    const scope_element = document.getElementById("scope_button");
+    const extra_element = document.getElementById("extra_button");
     const compile = document.getElementById("compile");
     const complete = document.getElementById("complete");
-    const intrin = document.getElementById("intrin");
     const debug = document.getElementById("debugger");
     inputation.value = localStorage.getItem("source") || "misty program test() {\n}";
     inputation.addEventListener("input", function () {
@@ -273,8 +317,8 @@ function emit_tree(tree) {
             function (token) {
                 return "    " + JSON.stringify(token, [
                     "error", "error_column", "error_row", "text", "kind",
-                    "at", "from_column", "from_row", "to_column",
-                    "to_row", "length", "indentation"
+                    "length", "indentation", "at", "from_column", "from_row",
+                    "to_column", "to_row"
                 ]);
             }
         ).join("\n") + "\n]";
@@ -283,18 +327,46 @@ function emit_tree(tree) {
     }, false);
     parse_element.addEventListener("click", function (event) {
         inputation.focus();
-        const tree = parse(tokenize(inputation.value));
+        var tree = parse(tokenize(inputation.value));
+        var object;
         if (Array.isArray(tree)) {
             outputlegend.replaceChildren("Errors");
             outputation.textContent = tree.join(end_of_line);
-        } else {
-            outputlegend.replaceChildren("Parse Tree I");
-            begin_emit();
-            emit_tree(tree);
-            outputation.textContent = end_emit();
+            return;
         }
+        if (endowment_box.value === "") {
+            object = {};
+            tree.endowments.sort().forEach(
+                function (value) {
+                    object[value] = false;
+                }
+            );
+            endowment_box.value = JSON.stringify(object);
+        }
+        if (log_box.value === "") {
+            object = {};
+            tree.logs.sort().forEach(
+                function (value) {
+                    object[value] = "allowed";
+                }
+            );
+            log_box.value = JSON.stringify(object);
+        }
+        tree = slot(scope(tree, (
+            endowment_box.value === ""
+            ? ""
+            : JSON.parse(endowment_box.value)
+        ), (
+            log_box.value === ""
+            ? ""
+            : JSON.parse(log_box.value)
+        )));
+        outputlegend.replaceChildren("Parse Tree");
+        begin_emit();
+        emit_tree(tree);
+        outputation.textContent = end_emit();
     }, false);
-    scope_element.addEventListener(
+    extra_element.addEventListener(
         "click",
         function (event) {
             inputation.focus();
@@ -303,7 +375,7 @@ function emit_tree(tree) {
                 outputlegend.replaceChildren("Errors");
                 outputation.textContent = tree.join(end_of_line);
             } else {
-                outputlegend.replaceChildren("Scope");
+                outputlegend.replaceChildren("Extra");
                 begin_emit();
                 indentation = 0;
                 tree.scopes.forEach(function (scope, func_nr) {
@@ -349,19 +421,6 @@ function emit_tree(tree) {
             outputation.append(label + ": " + array.join(" ") + end_of_line);
         }
     }
-    intrin.addEventListener("click", function (event) {
-        outputation.innerHTML = "";
-        let tree = parse(tokenize(inputation.value));
-        if (Array.isArray(tree)) {
-            outputation.append(tree.join(end_of_line));
-        } else {
-            out_array("Intrinsics", tree.intrinsics);
-            out_array("Endowments", tree.endowments);
-            out_array("Logs", tree.logs);
-        }
-        outputlegend.replaceChildren("Intrinsics Endowments Uses Logs");
-        inputation.focus();
-    }, false);
     debug.addEventListener("click", function (event) {
         debugger;
     }, false);

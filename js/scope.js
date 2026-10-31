@@ -1,9 +1,12 @@
 // scope.js
-// 2026-09-29
+// 2026-09-30
 
-// A. Make the 'scope' record.
-// B. Upgrade 'name' nodes with 'function_nr', 'level', 'make'
-// C. Report errors: undeclared, redeclared, unbalanced...
+// The scope module takes a parse tree, an endowment record, and a log access
+// record. It fills out the scope array, which it uses to annotate the
+// variables with make, function_nr, and level. It also incorporates the
+// endowments into the tree, and specify access in the log statements.
+
+// Errors are reported.
 
 import format from "./format.js";
 
@@ -67,7 +70,10 @@ const intrinsic = empty();
 let errors;
 let function_nr;
 let functions;
+let grant;
 let if_scope;
+let log_access;
+
 let scope;
 let scopes;
 
@@ -120,8 +126,25 @@ function declare(node, make) {
 }
 
 function utilize(node) {
-
+    let value;
     if (node.make === "endowment") {
+        value = grant[node.text];
+        if (typeof value === "number") {
+            node.kind = "number";
+            node.number = value;
+            node.text = String(value);
+        } else if (typeof value === "string") {
+            node.kind = "text";
+            node.number = value;
+            node.text = value;
+        } else if (typeof value === "boolean") {
+            node.kind = "name";
+            node.make = "intrinsic";
+            node.text = String(value);
+        } else {
+            node.kind = "endowment";
+            node.endowment = value;
+        }
         return;
     }
 
@@ -213,6 +236,14 @@ function crunch(node) {
     return crunch_expression(node.third);
 }
 
+function verify_branch(local) {
+    Object.keys(local.then).forEach(function (name) {
+        if (local.then[name].make !== local.else?.[name]?.make) {
+            error("unbalanced", local.else[name] ?? local.then[name]);
+        }
+    });
+}
+
 function crunch_if(node) {
 
 // Process the condition expressions.
@@ -229,8 +260,8 @@ function crunch_if(node) {
 
     const local = {
         phase: true,
-        then: {},
-        else: {}
+        then: empty(),
+        else: empty()
     };
 
     if_scope.push(local);
@@ -238,33 +269,22 @@ function crunch_if(node) {
 // Process the 'then' instructions.
 
     crunch_statements(node.statements);
-
-// Change the phase to false and process the else instructions.
-
     local.phase = false;
-    crunch_statements(node.else);
 
-// Verify that the declarations in 'then' and 'else' match.
-
-    function verify_branch() {
-        Object.keys(local.then).forEach(function (name) {
-            if (local.then[name].make !== local.else?.[name]?.make) {
-                error("unbalanced", local.then[name]);
-            }
-        });
-    }
-
-    verify_branch();
-
-// Then for each else_if, clear the 'else' and process the branch, and verify.
+// For each 'else if', process the branch, and verify.
 
     if (node.else_if !== undefined) {
         node.else_if.forEach(function (part) {
-            local.else = {};
             crunch_statements(part.statements);
-            verify_branch();
+            verify_branch(local);
+            local.else = empty();
         });
     }
+
+// Process the 'else' instructions.
+
+    crunch_statements(node.else);
+    verify_branch(local);
 
 // Remove the object from the if_scope.
 
@@ -306,6 +326,10 @@ const statement = {
     },
     if: crunch_if,
     jump: crunch,
+    log(node) {
+        node.status = log_access[node.first.text];
+        crunch_expression(node.second);
+    },
     return: crunch,
     send: crunch,
     var(node) {
@@ -322,10 +346,12 @@ function crunch_statements(list) {
     }
 }
 
-export default Object.freeze(function scope_phase(tree) {
+export default Object.freeze(function scope_phase(tree, endow, log) {
     if (Array.isArray(tree)) {
         return tree;
     }
+    grant = endow;
+    log_access = log;
     errors = [];
     scopes = [];
     tree.scopes = scopes;
