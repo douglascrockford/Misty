@@ -220,44 +220,46 @@ function emit(token) {
 }
 
 function emit_statement(token) {
-    emit();
-    emit(token.text);
-    if (token.first) {
-        emit(" ");
-        if (token.push) {
-            emit("[]");
-        }
-        if (token.status) {
-            emit(token.status);
+    if (token.kind === "name") {
+        emit();
+        emit(token.text);
+        if (token.first) {
             emit(" ");
-        }
-        emit(token.first);
-        if (token.second) {
-            emit(" ");
-            emit(token.second);
-            if (token.pop) {
+            if (token.push) {
                 emit("[]");
             }
-            if (token.third) {
+            if (token.status) {
+                emit(token.status);
                 emit(" ");
-                emit(token.third);
+            }
+            emit(token.first);
+            if (token.second) {
+                emit(" ");
+                emit(token.second);
+                if (token.pop) {
+                    emit("[]");
+                }
+                if (token.third) {
+                    emit(" ");
+                    emit(token.third);
+                }
             }
         }
-    }
-    if (token.statements) {
-        emit_statements(token.statements);
-        if (Array.isArray(token.else_if) && token.else_if.length > 0) {
-            token.else_if.forEach(function else_if(clause) {
+        if (token.statements) {
+            emit_statements(token.statements);
+            if (Array.isArray(token.else_if) && token.else_if.length > 0) {
+                token.else_if.forEach(function else_if(clause) {
+                    emit();
+                    emit("else if ");
+                    emit(clause.first);
+                    emit_statements(clause.statements)
+                })
+            }
+            if (Array.isArray(token.else) && token.else.length > 0) {
                 emit();
-                emit("else if ");
-                emit(clause.first);
-                emit_statements(clause.statements)
-            })
-        }
-        if (Array.isArray(token.else) && token.else.length > 0) {
-            emit();
-            emit("else");
-            emit_statements(token.else)
+                emit("else");
+                emit_statements(token.else)
+            }
         }
     }
 }
@@ -361,6 +363,11 @@ function emit_tree(tree) {
             ? ""
             : JSON.parse(log_box.value)
         )));
+        if (Array.isArray(tree)) {
+            outputlegend.replaceChildren("Errors");
+            outputation.textContent = tree.join(end_of_line);
+            return;
+        }
         outputlegend.replaceChildren("Parse Tree");
         begin_emit();
         emit_tree(tree);

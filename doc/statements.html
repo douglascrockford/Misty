@@ -223,20 +223,20 @@ channel
 <ul>
     <li><code>forbidden</code>: The program or module will not  build as long as the source mentions this channel.</li>
     <li><code>allowed</code>. Log messages are sent immediately to the channel actor.</li>
-    <li><code>ignored</code>: The <code>log</code> statement is ignored. It is treated as a comment, but it must still be syntactically correct. It might be <code>allowed</code> on a later build.</li>
+    <li><code>ignored</code>: The <code>log</code> statement is ignored. It is not executed, but it must still be syntactically correct. (It might be <code>allowed</code> on a later build.)</li>
     <li><code>conditional</code>. The <code>log</code> statement is ignored at first, but can be allowed at any time. The <code>debug</code> channel is an example. If the debugger is running, the <code>debug</code> channel is enabled.</li>
 </ul>
 <h6>A log channel can have<dfn> </dfn>any name. For example:</h6>
 <blockquote>
-    <code>abort abuse account activity adventure alarm alert alpha analysis anomaly audit authorization beta billing breech budget bug catastrophic cause checklist chronicle cloud complete compliance console contract crash criminal dashboard data dayfile debug
+    <code>abort abuse account activity adventure alarm alert allowed alpha analysis anomaly audit authorization beta billing breech budget bug catastrophic cause checklist chronicle cloud complete compliance conditional confusion console contract crash criminal dashboard data dayfile debug
         delay delta demo development diagnostic diary disaster disconnect disruption down emergency epic error event evidence example exception exec exhausted experimental
-        expired failover failure fantasy fatal fault feature finished flaw format fraud frontier gamma government guest hallucination halt heartbeat hello host hygiene idle ignore illegal inconsistent info intervention intrusion key kyc legal limit local
+        expired failover failure fantasy fatal fault feature finished flaw forbidden format fraud frontier gamma government guest hallucination halt heartbeat hello host hygiene idle ignore illegal inconsistent info intervention intrusion key kyc legal limit local
         log loss major main maintenance malfunction measurement memory metric migration minor mishap module money monitor motivation network normal null offline online operations overload page panic partition partner permission policy portal
-        practice privacy probe program progress protocol prototype public quality quantum range recover region register regulation reject remote reset risk routine sample scope security
+        practice privacy probe program progress protocol prototype public pulse quality quantum range recover region register regulation reject remote reset risk routine sample scope security
         serious service simulation situation spam special sponsor start state statistics stop storage store stress summary super support suspend suspicious syntax system telemetry test time tomorrow tool trace training
         transition trend trial trivial type unknown unneeded up usage vault verbose version violation warning web world</code>
 </blockquote>
-<p>Logging does not change the behavior of a program.  There will be no response.</p>
+<p>Logging does not change the behavior of a program.  There will be no acknowledgement or response.</p>
 <p>If a log channel is allowed, then  messages are sent to a log actor that is monitoring that channel. It might tabulate, summarize, record, or pass on the event. Unlike <a href="#send"><code>send</code></a> messages, log messages are sent immediately, not waiting for the successful completion of the turn. However, if <code>log</code> is abused, the actor <a href="programs.html#halt">halts</a>.</p>
 <h6>Example:</h6>
 <pre>log debug: &quot;index&quot; &amp;&amp; index</pre>
