@@ -29,6 +29,9 @@ pre {
     margin-left: 2em;
     white-space: pre-wrap;
 }
+#outputation {
+    text-indent: 4em hanging each-line;
+}
 </style>
 </head>
 <body>
@@ -82,13 +85,12 @@ pre {
 <input id=clear_button type=button value="clear">
 <input id=token_button type=button value="tokens">
 <input id=parse_button type=button value="parse">
-<input id=extra_button disabled type=button value="extra">
-<input id=compile disabled type=button value="compile">
-<input id=complete disabled type=button value="complete">
+<input id=extra_button type=button value="extra">
+<input id=complete type=button value="complete">
 <input id=debugger type=button value="debugger">
 
 </p>
-<fieldset><legend id=outputlegend>Watch this space</legend>
+<fieldset><legend id=output_legend>Watch this space</legend>
 <pre id=outputation style="clear: both;"></pre></fieldset>
 
 <script type="module">
@@ -105,6 +107,8 @@ function escapify(text) {
 
 var indentation = 0;
 var output = undefined;
+var endowment_box;
+var log_box;
 
 function begin_emit() {
     indentation = 0;
@@ -121,13 +125,13 @@ function emit_full_name(token) {
     }
     emit(token.text);
     if (typeof token.function_nr === "number") {
-        emit(" ƒ " + token.function_nr);
+        emit(" ƒ" + token.function_nr);
     }
     if (typeof token.slot === "number") {
         emit("." + token.slot);
     }
     if (typeof token.level === "number" && token.level > 0) {
-        emit(" £ " + token.level);
+        emit(" ↑" + token.level);
     }
 }
 
@@ -269,6 +273,7 @@ function emit_statements(array) {
     array.forEach(emit_statement);
     indentation -= 4;
 }
+
 function emit_tree(tree) {
     if (Array.isArray(tree)) {
         return tree.join(end_of_line);
@@ -291,17 +296,67 @@ function emit_tree(tree) {
     });
 }
 
+function emit_extra(title, array) {
+    if (array && array.length > 0) {
+        indentation = 0;
+        emit();
+        emit(title);
+        indentation = 4;
+        emit();
+        emit(array.sort());
+        indentation = 0;
+        emit();
+    }
+}
+
+function process_tree() {
+    inputation.focus();
+    var tree = parse(tokenize(inputation.value));
+    var object;
+    if (Array.isArray(tree)) {
+        output_legend.replaceChildren("Errors");
+        outputation.textContent = tree.join(end_of_line);
+        return;
+    }
+    if (endowment_box.value === "") {
+        object = {};
+        tree.endowments.sort().forEach(
+            function (value) {
+                object[value] = false;
+            }
+        );
+        endowment_box.value = JSON.stringify(object);
+    }
+    if (log_box.value === "") {
+        object = {};
+        tree.logs.sort().forEach(
+            function (value) {
+                object[value] = "allowed";
+            }
+        );
+        log_box.value = JSON.stringify(object);
+    }
+    return slot(scope(tree, (
+        endowment_box.value === ""
+        ? ""
+        : JSON.parse(endowment_box.value)
+    ), (
+        log_box.value === ""
+        ? ""
+        : JSON.parse(log_box.value)
+    )));
+}
+
 (function initialize() {
     const inputation = document.getElementById("inputation");
-    const log_box = document.getElementById("logs");
-    const endowment_box = document.getElementById("endowments");
+    endowment_box = document.getElementById("endowments");
+    log_box = document.getElementById("logs");
     const outputation = document.getElementById("outputation");
-    const outputlegend = document.getElementById("outputlegend");
+    const output_legend = document.getElementById("output_legend");
     const clear_element = document.getElementById("clear_button");
     const token_element = document.getElementById("token_button");
     const parse_element = document.getElementById("parse_button");
     const extra_element = document.getElementById("extra_button");
-    const compile = document.getElementById("compile");
     const complete = document.getElementById("complete");
     const debug = document.getElementById("debugger");
     inputation.value = localStorage.getItem("source") || "misty program test() {\n}";
@@ -309,7 +364,7 @@ function emit_tree(tree) {
         localStorage.setItem("source", inputation.value);
     });
     clear_element.addEventListener("click", function (event) {
-        outputlegend.replaceChildren("Watch this space");
+        output_legend.replaceChildren("Watch this space");
         outputation.innerHTML = "";
         inputation.value = "";
         inputation.focus();
@@ -324,104 +379,50 @@ function emit_tree(tree) {
                 ]);
             }
         ).join("\n") + "\n]";
-        outputlegend.replaceChildren("Tokens");
+        output_legend.replaceChildren("Tokens");
         inputation.focus();
     }, false);
     parse_element.addEventListener("click", function (event) {
-        inputation.focus();
-        var tree = parse(tokenize(inputation.value));
-        var object;
-        if (Array.isArray(tree)) {
-            outputlegend.replaceChildren("Errors");
-            outputation.textContent = tree.join(end_of_line);
-            return;
+        var tree = process_tree();
+        if (tree) {
+            output_legend.replaceChildren("Parse Tree");
+            begin_emit();
+            emit_tree(tree);
+            outputation.textContent = end_emit();
         }
-        if (endowment_box.value === "") {
-            object = {};
-            tree.endowments.sort().forEach(
-                function (value) {
-                    object[value] = false;
-                }
-            );
-            endowment_box.value = JSON.stringify(object);
-        }
-        if (log_box.value === "") {
-            object = {};
-            tree.logs.sort().forEach(
-                function (value) {
-                    object[value] = "allowed";
-                }
-            );
-            log_box.value = JSON.stringify(object);
-        }
-        tree = slot(scope(tree, (
-            endowment_box.value === ""
-            ? ""
-            : JSON.parse(endowment_box.value)
-        ), (
-            log_box.value === ""
-            ? ""
-            : JSON.parse(log_box.value)
-        )));
-        if (Array.isArray(tree)) {
-            outputlegend.replaceChildren("Errors");
-            outputation.textContent = tree.join(end_of_line);
-            return;
-        }
-        outputlegend.replaceChildren("Parse Tree");
-        begin_emit();
-        emit_tree(tree);
-        outputation.textContent = end_emit();
     }, false);
-    extra_element.addEventListener(
-        "click",
-        function (event) {
-            inputation.focus();
-            let tree = scope(parse(tokenize(inputation.value)));
-            if (Array.isArray(tree)) {
-                outputlegend.replaceChildren("Errors");
-                outputation.textContent = tree.join(end_of_line);
-            } else {
-                outputlegend.replaceChildren("Extra");
-                begin_emit();
-                indentation = 0;
-                tree.scopes.forEach(function (scope, func_nr) {
-                    emit("ƒ" + func_nr);
-                    indentation = 4;
-                    emit();
-                    Object.keys(scope).sort().forEach(function (name) {
-                        emit(scope[name]);
-                        emit();
-                    });
-                    indentation = 0;
+    extra_element.addEventListener("click", function (event) {
+        var tree = process_tree();
+        if (tree) {
+            output_legend.replaceChildren("Extra");
+            begin_emit();
+            indentation = 0;
+            emit("Scope");
+            tree.scopes.forEach(function (scope, func_nr) {
+                indentation = 4;
+                emit();
+                emit("ƒ" + func_nr);
+                indentation = 8;
+                emit();
+                Object.keys(scope).sort().forEach(function (name) {
+                    emit_full_name(scope[name]);
                     emit();
                 });
-                outputation.textContent = end_emit();
-            }
-        },
-        false
-    );
-    compile.addEventListener(
-        "click",
-        function (event) {
-            outputlegend.replaceChildren("Parse Tree II");
-            outputation.innerHTML = "";
-            //outputation.append(display(slot((parse(tokenize(inputation.value))))));
-            inputation.focus();
-        },
-        false
-    );
+            });
+            emit_extra("Endowments", tree.endowments);
+            emit_extra("Intrinsics", tree.intrinsics);
+            emit_extra("Logs", tree.logs);
+            emit_extra("Modules", tree.modules);
+            outputation.textContent = end_emit();
+        }
+    }, false);
     complete.addEventListener("click", function (event) {
-        outputation.innerHTML = "";
-        outputation.append(
-            JSON.stringify(
-                slot(parse(tokenize(inputation.value))),
-                null,
-                4
-            )
-        );
-        outputlegend.replaceChildren("Complete Parse Tree");
-        inputation.focus();
+        var tree = process_tree();
+        if (tree) {
+            output_legend.replaceChildren("Complete");
+            outputation.innerHTML = "";
+            outputation.append(JSON.stringify(tree, null, 4));
+        }
     }, false);
     function out_array(label, array) {
         if (Array.isArray(array)) {

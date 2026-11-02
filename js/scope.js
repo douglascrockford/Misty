@@ -1,5 +1,5 @@
 // scope.js
-// 2026-10-01
+// 2026-10-02
 
 // The scope module takes a parse tree, an endowment record, and a log access
 // record. It fills out the scope array, which it uses to annotate the
@@ -73,6 +73,7 @@ let function_nr;
 let functions;
 let grant;
 let if_scope;
+let intrinsic_used;
 let log_access;
 
 let scope;
@@ -103,6 +104,7 @@ function declare(node, make) {
         if (if_now === undefined) {
             scope[node.text] =  node;
         } else {
+            node.if = true;
             if_fork = (
                 if_now.phase
                 ? if_now.then
@@ -204,6 +206,7 @@ function utilize(node) {
     if (intrinsic[node.text]) {
         node.make = "intrinsic";
         scope[node.text] = node;
+        intrinsic_used[node.text] = true;
         return;
     }
 
@@ -359,6 +362,7 @@ export default Object.freeze(function scope_phase(tree, endow, log) {
     grant = endow;
     log_access = log;
     errors = [];
+    intrinsic_used = [];
     scopes = [];
     tree.scopes = scopes;
     functions = tree.functions;
@@ -376,6 +380,7 @@ export default Object.freeze(function scope_phase(tree, endow, log) {
         });
         crunch_statements(a_function.statements);
     });
+    tree.intrinsics = Object.keys(intrinsic_used);
     return (
         errors.length > 0
         ? errors

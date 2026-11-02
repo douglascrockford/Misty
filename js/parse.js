@@ -589,6 +589,7 @@ intrinsic_structure("module", function (the_module) {
     advance();
     the_module.kind = "module";
     the_module.first = locator;
+    main.modules.push(locator);
     return invoke(the_module);
 });
 
@@ -958,6 +959,7 @@ function misty() {
     main = {
         functions,
         misty: kind,
+        modules: [],
         name: name.text,
         patterns
     };
