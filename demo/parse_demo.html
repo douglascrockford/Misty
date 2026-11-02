@@ -133,6 +133,9 @@ function emit_full_name(token) {
     if (typeof token.level === "number" && token.level > 0) {
         emit(" ↑" + token.level);
     }
+    if (token.closure === true) {
+        emit(" closure");
+    }
 }
 
 function emit(token) {
