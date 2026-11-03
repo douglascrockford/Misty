@@ -312,13 +312,21 @@ function emit_extra(title, array) {
     }
 }
 
+function errors_q(tree) {
+    if (Array.isArray(tree)) {
+        output_legend.replaceChildren("Errors");
+        outputation.textContent = tree.join(end_of_line);
+        return true;
+    } else {
+        return false;
+    }
+}
+
 function process_tree() {
     inputation.focus();
     var tree = parse(tokenize(inputation.value));
     var object;
-    if (Array.isArray(tree)) {
-        output_legend.replaceChildren("Errors");
-        outputation.textContent = tree.join(end_of_line);
+    if (errors_q(tree)) {
         return;
     }
     if (endowment_box.value === "") {
@@ -339,7 +347,7 @@ function process_tree() {
         );
         log_box.value = JSON.stringify(object);
     }
-    return slot(scope(tree, (
+    tree = slot(scope(tree, (
         endowment_box.value === ""
         ? ""
         : JSON.parse(endowment_box.value)
@@ -348,6 +356,9 @@ function process_tree() {
         ? ""
         : JSON.parse(log_box.value)
     )));
+    if (!errors_q(tree)) {
+        return tree;
+    }
 }
 
 (function initialize() {
