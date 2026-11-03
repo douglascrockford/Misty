@@ -77,7 +77,7 @@
 <p>This can include startup conditions, timer values.</p>
 <h3>Holding of executables</h3>
 <p>The <a href="programs.html#start"><code>start!</code></a> function obtains its executables from here.</p>
-<h3>Building of executables from modules</h3>
+<h3>Building of executables from programs and modules</h3>
 <p>The program builder gets modules from here.</p>
 <h3>Granting of endowments to modules</h3>
 <p>The program shop can endow select modules with special access to the I/O system and the key store.</p>
@@ -124,6 +124,6 @@
     <li>Enabling access to specific <a href="statements.html#log">log channels</a>.</li>
 </ul>
 <p>A source program that violates policy will not produce an executable.</p>
-<p>Policies are expressed as misty programs. When a program is built, the builder sends a message to the Policy Machine identifying the program and its purpose. The Policy Machine sends back a policy actor. The build system calls the policy actor for each endowed name, module construct, and <code>log</code> channel. The policy actor  replies with values or functions or failure. At the end, the build system  requests a program store address from the policy actor for the new executable.</p>
+<p>Policies are expressed as misty programs. When a program is built, the builder sends a message to the Policy Machine identifying the program and its purpose. The Policy Machine sends back a policy actor. The build system calls the policy actor for each endowed name, module construct, and <code>log</code> channel. The policy actor  replies with values or functional compiler directives or failure. At the end, the build system  requests a program store address from the policy actor for the new executable.</p>
 <p>The build tools are written in Misty. The build tools interact with the policy machine, which is written in Misty, to determine whether and how executables are made. Because policies are Misty programs, it is possible to distribute policy management throughout a network. Distributed policy machines can be set up to manage policies over a network of machines.</p>
 </body></html>
