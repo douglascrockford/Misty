@@ -1,5 +1,5 @@
 // scope.js
-// 2026-10-02
+// 2026-10-03
 
 // The scope module takes a parse tree, an endowment record, and a log access
 // record. It fills out the scope array, which it uses to annotate the
@@ -18,6 +18,7 @@ function empty() {
 
 const error_message = {
     already: "'{term_a}' was already declared.",
+    jump: "'jump' may not be used in a function that has inner functions.",
     forbidden: "'{term_a}' is forbidden.",
     not_var: "'{term_a}' is not a 'var'.",
     unbalanced: "'{term_a}' was not properly balanced in an 'if'.",
@@ -329,7 +330,12 @@ const statement = {
         crunch_expression(node.second);
     },
     if: crunch_if,
-    jump: crunch,
+    jump(node) {
+        if (functions[function_nr].nr_functions > 0) {
+            error("jump", node);
+        }
+        crunch(node);
+    },
     log(node) {
         node.status = log_access[node.first.text];
         if (node.status === "forbidden" || node.status === undefined) {
