@@ -1,5 +1,5 @@
 // parse.js
-// 2026-10-31
+// 2026-11-03
 
 // Missing feature:
 //      patterns
@@ -110,6 +110,9 @@ function error_term(the_token) {
         } else {
             return the_token.text.length + " " + error_message.spaces;
         }
+    }
+    if (the_token.kind === "infix") {
+        return error_term(the_token.operators[0]);
     }
     if (the_token.kind === "end_of_file") {
         return error_message.end_of_file;
@@ -521,10 +524,14 @@ function function_stuff(name) {
 // use "(".
 
     const the_function = token();
+    the_function.nr_functions = 0;
 
 // Stash the current function number for later restoration.
 
     const outer = function_nr;
+    if (outer !== undefined) {
+        functions[outer].nr_functions = functions[outer].nr_functions + 1;
+    }
 
 // Get a new number for the new function.
 
@@ -888,7 +895,7 @@ statement.jump = function jump_statement() {
     advance(" ");
     result.first = expression();
     if (result.first.kind !== "operator" || result.first.text !== "(") {
-        error("expected", result.first, "(");
+        error("unexpected", result.first);
     }
     return result;
 };

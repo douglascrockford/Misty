@@ -273,6 +273,8 @@ This does not apply to default-free parameters and <code>def</code> functions.
 <p>A list of name nodes, the parameters. Each has a <code>parameter_nr</code> field,  <code>0</code> or greater. If a parameter has a default value, it will be in the name token's <code>first</code> field.</p>
 <h4>name</h4>
 <p>If the function is named, this is a simple text.</p>
+<h4>nr_functions</h4>
+<p>The number of inner functions contained in this one (first level only).</p>
 <h4>outer</h4>
 <p>The number of the outer function that made this one.</p>
 <h4>statements</h4>
@@ -281,6 +283,7 @@ This does not apply to default-free parameters and <code>def</code> functions.
 <p>The number of slots that are protected during memory reclamation.</p>
 <h4>nr_slots</h4>
 <p>The number of slots required for this function's inputs, vars, and defs.</p>
+<h4>&nbsp;</h4>
 <h2 id="scopes">Scopes</h2>
 <p>The root node contains an array of scopes. The <code>scopes</code> array is indexed by <code>function_nr</code>, like the <code>functions</code> array. Each function definition has a scope record containing all of the names used in that function. </p>
 <p>A scope record contains  name fields, where the key is a variable name, and the field is a record containing:</p>
