@@ -832,7 +832,7 @@ statement.call = function call_statement() {
     advance(" ");
     result.first = expression();
     if (result.first.kind !== "operator" || result.first.text !== "(") {
-        error("expected", result.first, "(");
+        error("unexpected", result.first);
     }
     return result;
 };
