@@ -36,13 +36,13 @@ This is descriptive of one particular implementation.
 <a href="https://www.crockford.com/mckeeman.html">McKeeman singletons</a>.</p>
 <p>During the compilation process, the kind can change to <code>&quot;statement&quot;</code> or <code>&quot;logical&quot;</code>.</p>
 <h4>text</h4>
-<p>The characters making up the token. </p>
-<p>The <code>kind: &quot;text&quot;</code> tokens have already had escape sequences decoded and outer quotes removed. </p>
+<p>The characters making up the token.</p>
+<p>The <code>kind: &quot;text&quot;</code> tokens have already had escape sequences decoded and outer quotes removed.</p>
 <p>A contiguous run of spaces is made into a single <code>kind: &quot;space&quot;</code> token with a <code>text</code> field containing the entire run of spaces.</p>
 <p>The <code>kind: &quot;operator&quot;</code> includes</p>
 <pre>.  :  (  )  [  ]  {  }  +  -  *  /  //  &amp;  &amp;&amp;  =   &lt;&gt;  &lt;  &gt;  &lt;=   &gt;=  /\  \/  |</pre>
 <h4>number</h4>
-<p>The numeric value of  <code>kind: &quot;number&quot;</code> tokens. The <code>text</code> field  also holds the number in its source form.</p>
+<p>The numeric value of <code>kind: &quot;number&quot;</code> tokens. The <code>text</code> field also holds the number in its source form.</p>
 <h4>at</h4>
 <p>The character position in the source text where the token begins, starting at <code>0</code>.</p>
 <h4>from_row</h4>
@@ -82,7 +82,7 @@ This is descriptive of one particular implementation.
 <h4>misty</h4>
 <p><code>&quot;program&quot;</code> or <code>&quot;module&quot;</code></p>
 <h4>name</h4>
-<p>The name of the file. </p>
+<p>The name of the file.</p>
 <h4>patterns</h4>
 <p><a href="#pattern">An array of pattern definitions.</a></p>
 <h4>scopes</h4>
@@ -119,7 +119,7 @@ This does not apply to default-free parameters and <code>def</code> functions.
 <h4>kind</h4>
 <p><code>&quot;number&quot;</code></p>
 <h4>text</h4>
-<p>A number in text form. This is important during bootstrapping because JavaScript is not able to exactly represent Misty numbers. </p>
+<p>A number in text form. This is important during bootstrapping because JavaScript is not able to exactly represent Misty numbers.</p>
 <h4>number</h4>
 <p>The number value.</p>
 <h3 id="text">Text</h3>
@@ -270,7 +270,7 @@ This does not apply to default-free parameters and <code>def</code> functions.
 <h4>kind</h4>
 <p><code>&quot;function&quot;</code></p>
 <h4>parameters</h4>
-<p>A list of name nodes, the parameters. Each has a <code>parameter_nr</code> field,  <code>0</code> or greater. If a parameter has a default value, it will be in the name token's <code>first</code> field.</p>
+<p>A list of name nodes, the parameters. Each has a <code>parameter_nr</code> field, <code>0</code> or greater. If a parameter has a default value, it will be in the name token's <code>first</code> field.</p>
 <h4>name</h4>
 <p>If the function is named, this is a simple text.</p>
 <h4>nr_functions</h4>
@@ -284,8 +284,8 @@ This does not apply to default-free parameters and <code>def</code> functions.
 <h4>nr_slots</h4>
 <p>The number of slots required for this function's inputs, vars, and defs.</p>
 <h2 id="scopes">Scopes</h2>
-<p>The root node contains an array of scopes. The <code>scopes</code> array is indexed by <code>function_nr</code>, like the <code>functions</code> array. Each function definition has a scope record containing all of the names used in that function. </p>
-<p>A scope record contains  name fields, where the key is a variable name, and the field is a record containing:</p>
+<p>The root node contains an array of scopes. The <code>scopes</code> array is indexed by <code>function_nr</code>, like the <code>functions</code> array. Each function definition has a scope record containing all of the names used in that function.</p>
+<p>A scope record contains   name fields, where the key is a variable name, and the field is a record containing:</p>
 <h4>closure</h4>
 <p>If the name is used by an inner function, then this is <code>true</code>.</p>
 <h4>function_nr</h4>
