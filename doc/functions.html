@@ -16,7 +16,7 @@ div.scope {
 <link rel="icon" type="image/png" href="../favicon.png">
 </head>
 <body>
-<img src="../misty.gif" width="204" height="79">
+<a href="https://mistysystem.com/"><img src="../misty.gif" alt="Misty" width="204" height="79"></a>
 <h1><a href="https://mistysystem.com/">Misty Programming Language:</a>Functions</h1>
 <p>A function is a parameterized sequence of statements. Functions are first-class
   values. Functions can be stored in variables, records, and arrays; functions
@@ -72,12 +72,12 @@ more_open_parameters
     <code>""</code>
     linebreak parameter more_open_parameters
 </p>
-<p>When the function is invoked, the arguments are assigned to the parameter names and made available to the body. 
+<p>When the function is invoked, the arguments are assigned to the parameter names and made available to the body.
 The body can not modify the parameters, but can modify the values of the parameters if they are not stone.</p>
 <p>
 The number of names in the parameter list determines the function's arity.
 If the function is invoked with too many arguments, the <a href="programs.html#halt">actor halts</a>.
-If the function is invoked with too few arguments, the remaining parameters are set to <code>null</code>. 
+If the function is invoked with too few arguments, the remaining parameters are set to <code>null</code>.
 The <code>|</code><small>default</small> operator is allowed in parameter lists, replacing a <code>null</code> argument with a value from an <dfn>expression</dfn>.</p>
 <h3>Body</h3>
 <p>The body is a string of statements wrapped in <code>{}</code><small>braces</small>.
@@ -100,9 +100,9 @@ has finished its invocation and returned. If an inner function redeclares names 
 <blockquote>
   <p><var>function_value</var><code>(</code><var>arguments</var><code>)</code></p>
 </blockquote>
-<p>The parens contain zero or more expressions whose values are passed to the function as arguments. 
-Each value is assigned to a named parameter. 
-Parameters that do not have values are initialized to <code>null</code>. 
+<p>The parens contain zero or more expressions whose values are passed to the function as arguments.
+Each value is assigned to a named parameter.
+Parameters that do not have values are initialized to <code>null</code>.
 If there are too many arguments, then the actor halts.</p>
 <h6>Example:</h6>
 <pre>call my_function(do re mi)    # function invocation</pre>
