@@ -256,7 +256,7 @@ This does not apply to default-free parameters and <code>def</code> functions.
 <h4>second</h4>
 <p>An optional expression node. The default is <code>null</code>.</p>
 <h4>if</h4>
-<p><code>true</code> if declared in an if statement.</p>
+<p><code>true</code> if declared in an <code>if</code> statement.</p>
 <h2 id="functions">Functions</h2>
 <p>The <code>function</code> operator does two things: It makes a function definition that it appends to the <code>functions</code> array, and it makes a reference to that function definition.</p>
 <h3>Function reference</h3>
@@ -283,7 +283,6 @@ This does not apply to default-free parameters and <code>def</code> functions.
 <p>The number of slots that are protected during memory reclamation.</p>
 <h4>nr_slots</h4>
 <p>The number of slots required for this function's inputs, vars, and defs.</p>
-<h4>&nbsp;</h4>
 <h2 id="scopes">Scopes</h2>
 <p>The root node contains an array of scopes. The <code>scopes</code> array is indexed by <code>function_nr</code>, like the <code>functions</code> array. Each function definition has a scope record containing all of the names used in that function. </p>
 <p>A scope record contains  name fields, where the key is a variable name, and the field is a record containing:</p>
@@ -297,10 +296,9 @@ This does not apply to default-free parameters and <code>def</code> functions.
 <p>The distance to the outer scope.</p>
 <h4>make</h4>
 <p>The maker of the name:</p>
-<pre> def  endowment  function  intrinsic  parameter  var</pre>
+<pre>&quot;def&quot;  &quot;endowment&quot;  &quot;function&quot;  &quot;intrinsic&quot;  &quot;parameter&quot;  &quot;var&quot;</pre>
 <p>Only names that were made by the <code>var</code> statement can have their values replaced by the <code>assign</code> statement.</p>
-<p>Only arrays and records that are not stone can have their contents modified by the <code>assign</code> statement.</p>
-<h4>name</h4>
+<h4>text</h4>
 <p>The name of the variable.</p>
 <h4>nr_uses</h4>
 <p>The number of appearances where the variable is actually used.</p>
