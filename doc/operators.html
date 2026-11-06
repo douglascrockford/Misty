@@ -220,8 +220,13 @@ infix_operator
 <h3 id="multiplicative">Multiplicative Operators</h3>
 
 
-<p>Note that when <code>*</code><small>multiply</small> is used with <code>/</code><small>divide</small> and <code>//</code><small>integer divide</small> in an expression, parentheses must be used to determine the relative precedence.</p>
-<p>So <code> a * b / c </code>is an error, but<code> (a * b) / c </code>and<code> a * (b / c) </code>are allowed.</p>
+<p>The<code> *</code><small>and</small> and <code>/</code><small>or</small> operators take two numbers  and produce a  number. Mixing them requires the use of parentheses to disambiguate the precedence.</p>
+<h6>Examples:</h6>
+<pre>p * q * r      # ok
+p / q / r      # ok
+p * q / r      # error
+(p * q) / r    # ok
+p * (q / r)    # ok</pre>
 <h4><span id="*">*</span><small>asterisk</small></h4>
 <p>Multiplication.
   If it can be determined at compile time that either operand is zero, the other operand
@@ -315,7 +320,7 @@ is greater than or equal to the right operand the result is <code>false</code>. 
 <p>Greater than or equal. It is the same as <code>not(<var>left</var> &lt; <var>right</var>)</code>.</p>
 
 <h3 id="logical">Logical Operators</h3>
-<p>The<code> /\</code><small>and</small> and <code>\/</code><small>or</small> operators take two logical values and produce a logical value. Mixing them requires the use of parentheses. </p>
+<p>The<code> /\</code><small>and</small> and <code>\/</code><small>or</small> operators take two logical values and produce a logical value. Mixing them requires the use of parentheses to disambiguate the precedence.</p>
 <h6>Examples:</h6>
 <pre>p /\ q /\ r      # ok
 p \/ q \/ r      # ok
