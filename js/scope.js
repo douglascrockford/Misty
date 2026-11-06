@@ -1,5 +1,5 @@
 // scope.js
-// 2026-10-03
+// 2026-10-06
 
 // The scope module takes a parse tree, an endowment record, and a log access
 // record. It fills out the scope array, which it uses to annotate the
@@ -21,6 +21,7 @@ const error_message = {
     jump: "'jump' may not be used in a function that has inner functions.",
     forbidden: "'{term_a}' is forbidden.",
     not_var: "'{term_a}' is not a 'var'.",
+    paren: "The subexpression with '{term_a}' must be parenthesized.",
     unbalanced: "'{term_a}' was not properly balanced in an 'if'.",
     undeclared: "'{term_a}' was not declared.",
     used_before: "'{term_a}' was used before it was declared."
@@ -217,6 +218,16 @@ function utilize(node) {
     return error("undeclared", node);
 }
 
+function same_operators(array, at = 1) {
+    if (at >= array.length) {
+        return;
+    }
+    if (array[at - 1].text !== array[at].text) {
+        return error("paren", array[at]);
+    }
+    return same_operators(array, at + 1);
+}
+
 function crunch_expression(node) {
     if (node === undefined) {
         return;
@@ -228,6 +239,9 @@ function crunch_expression(node) {
         return utilize(node);
     }
     if (node.kind === "infix") {
+        if (node.precedence === 0 || node.precedence === 4) {
+            same_operators(node.operators);
+        }
         return crunch_expression(node.operands);
     }
     if (node.kind === "operator") {
