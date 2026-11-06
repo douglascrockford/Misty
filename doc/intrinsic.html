@@ -30,7 +30,7 @@ The <a href="programs.html#module"><code>module</code> construct</a> is not need
 <h4 id=null>null</h4>
 <p>This is the value of <code>1 / 0</code>. The <code>null</code> value is an empty immutable object. All attempts to obtain a value from <code>null</code> by <a href="operators.html#refinement">refinement</a> will produce <code>null</code>.</p>
 <p>Any attempt to modify <code>null</code> <a href="programs.html#halt">halts</a>. Any attempt to call <code>null</code> as a function <a href="programs.html#halt">halts</a>.</p>
-<p><code>null</code> is the value of  missing arguments,  missing fields in records, and invalid numbers. The <a href="operators.html#default"><code>|</code><small>default</small></a> operator can detect the presence of <code>null</code> and substitute another value.</p>
+<p><code>null</code> is the value of missing arguments, missing fields in records, and invalid numbers. The <a href="operators.html#default"><code>|</code><small>default</small></a> operator can detect the presence of <code>null</code> and substitute another value.</p>
 <h4 id=pi>pi</h4>
 <p>This is an approximation of the circle expression <var>circumference</var><code> / </code><var>diameter</var>, or to be precisely approximate, <code>3.1415926535897932</code>.</p>
 <h4 id=e>e</h4>
@@ -48,10 +48,10 @@ The <a href="programs.html#module"><code>module</code> construct</a> is not need
 <h4>array(<var>array</var>)</h4>
 <p>Copy. Make a mutable copy of the array.</p>
 <h4>array(<var>array</var> <var>function</var> <var>reverse</var> <var>exit</var>)</h4>
-<p>Map. Call the <var>function</var> with each element of  the <var>array</var>, collecting the return values in a new array. The <var>function</var> is passed each  element and its element number.</p>
+<p>Map. Call the <var>function</var> with each element of the <var>array</var>, collecting the return values in a new array. The <var>function</var> is passed each element and its element number.</p>
 <pre>function (element element_nr)</pre>
 <p>If <var>reverse</var> is <code>true</code>, then it starts with the last element and works backwards.</p>
-<p>If <var>exit</var> is not <code>null</code>, then when the <var>function</var> returns the <var>exit</var> value, then the <code>array</code> function returns early. The <var>exit</var> value will not be stored into the new array. If the <var>array</var> was processed normally, then the returned array will be shorter than the  <var>array</var> argument. If the <var>array</var> was processed in <var>reverse</var>, then the returned array will have the same length as the  <var>array</var> argument. The elements in the new array that were not set due to an early exit will be set to <code>null</code>.</p>
+<p>If <var>exit</var> is not <code>null</code>, then when the <var>function</var> returns the <var>exit</var> value, then the <code>array</code> function returns early. The <var>exit</var> value will not be stored into the new array. If the <var>array</var> was processed normally, then the returned array will be shorter than the <var>array</var> argument. If the <var>array</var> was processed in <var>reverse</var>, then the returned array will have the same length as the <var>array</var> argument. The elements in the new array that were not set due to an early exit will be set to <code>null</code>.</p>
 <p>This is like the <code><a href="#for">for</a></code><a href="#for"> function</a> except that the return values are collected into a new array.</p>
 <h4>array(<var>array</var> <var>another_array</var>)</h4>
 <p>Concat. Produce a new array that concatenates the <var>array</var> and <var>another_array</var>.</p>
@@ -60,15 +60,15 @@ The <a href="programs.html#module"><code>module</code> construct</a> is not need
 <p><var>array</var>: the array to copy</p>
 <p><var>from</var>: the position at which to start copying. Default: <code>0</code>, the beginning. If negative, add <code>length(<var>array</var>)</code>.</p>
 <p><var>to</var>: the position at which to stop copying. Default: <code>length(<var>array</var>)</code>, the end. If negative, add <code>length(<var>array</var>)</code>.</p>
-<p>If, after adjustment,  <var>from</var> and <var>to</var> are not valid ints in the proper range, then it returns <code>null</code>. <var>from</var> must be positive and less than or equal to <var>to</var>. <var>to</var> must be less than or equal to <code>length(<var>array</var>)</code>.</p>
+<p>If, after adjustment, <var>from</var> and <var>to</var> are not valid ints in the proper range, then it returns <code>null</code>. <var>from</var> must be positive and less than or equal to <var>to</var>. <var>to</var> must be less than or equal to <code>length(<var>array</var>)</code>.</p>
 <h4>array(<var>record</var>)</h4>
 <p>Keys. Make an array containing all of the
 text keys in the <var>record</var>. The keys are not guaranteed
-    to be in any particular order.</p>
+   to be in any particular order.</p>
 <h4>array(<var>text</var>)</h4>
 <p>Split the <var>text</var> into grapheme clusters. A grapheme cluster is a Unicode codepoint and its contributing combining characters, if any.</p>
 <h4>array(<var>text</var> <var>separator</var>)</h4>
-<p>Split the <var>text</var> into an array of subtexts. The <var>separator</var>  can be a text or pattern.</p>
+<p>Split the <var>text</var> into an array of subtexts. The <var>separator</var> can be a text or pattern.</p>
 <h4>array(<var>text</var> <var>length</var>)</h4>
 <p>Dice the text into an array of subtexts of a given <var>length</var>.</p>
 <h3 id="logical">Logical</h3>
@@ -198,7 +198,7 @@ assign result: number(null)                     # result is null
 <h4>text(<var>array</var> <var>separator</var>)</h4>
 <p>Convert an array to text. The <var>array</var> can contain text and Unicode codepoints. All are concatenated together to make a single text. The <var>separator</var> text is inserted between each piece. The default <var>separator</var> is the empty text.</p>
 <h4>text(<var>number</var> <var>radix</var>)</h4>
-<p>Convert a number to text.  The optional <var>radix</var> is an int from <code>2</code> thru <code>37</code>. (<a href="https://www.crockford.com/base32.html">See Base 32.</a>) The default <var>radix</var> is 10.</p>
+<p>Convert a number to text. The optional <var>radix</var> is an int from <code>2</code> thru <code>37</code>. (<a href="https://www.crockford.com/base32.html">See Base 32.</a>) The default <var>radix</var> is 10.</p>
 <h4><code>text(<var>number</var> </code><var>format</var><code>) </code></h4>
 <blockquote style="background-color: white; border: 2pt solid black; float: right; margin-right: 0; padding-right: 2em;">
 <p>The format of the <var>format</var> text is</p>
@@ -234,7 +234,7 @@ format_places
 <p> Convert a number to formatted text. The <code>text</code> function converts a <var>number</var> to a text.
     It takes a <var>format</var> text argument.</p>
 <p>A <var>format</var> text contains a style letter that controls how a text is
-    produced from the number.   It is optionally preceded by a separation digit
+    produced from the number. It is optionally preceded by a separation digit
     and optionally followed by a places digit. There are real styles and integer
     styles. If the <var>format</var> argument is not a proper format text,
     then <code>null</code> is returned. The default format is <code>&quot;n&quot;</code>.</p>
@@ -436,7 +436,7 @@ array?(pattern {1- [letter digit &quot;_-%&quot;]})    # false
 array?(null)                                 # false
 array?(&quot;array&quot;)                              # false</pre>
 <h4 id="blob?">blob?(<var>value</var>)</h4>
-<p>Is the <var>value</var> a blob?  If the <var>value</var> is a
+<p>Is the <var>value</var> a blob? If the <var>value</var> is a
     <a href="blob.html">blob</a>, the result is <code>true</code>. Otherwise, the result
     is <code>false</code>.</p>
 <pre>blob?(0)        # false
@@ -489,7 +489,7 @@ function?(&quot;function&quot;)     # false
 function?(null)           # false
 function?(function?)      # true</pre>
 <h4><span id="int?">int?</span>(<var>number</var>)</h4>
-<p>Is the <var>number</var> an int? An int is  an integer that fits in 56 bits.  The ints are in the range <code>-36028797018963968</code> thru <code>36028797018963967</code>. Misty has many more integers that are not ints. Every int is an integer, but not every integer is an int.</p>
+<p>Is the <var>number</var> an int? An int is an integer that fits in 56 bits. The ints are in the range <code>-36028797018963968</code> thru <code>36028797018963967</code>. Misty has many more integers that are not ints. Every int is an integer, but not every integer is an int.</p>
 <pre>int?(65.0000000)              # true
 int?(<code>36028797018963967)       # true</code>
 int?(<code>36028797018963970)       # false</code></pre>
@@ -626,28 +626,17 @@ apply(12 10)              # 12
 apply(and [12 10 8])      # halt
 apply(neg 1)              # -1</pre>
 <h4 id=arccos>arccos(<var>number</var>)</h4>
-<p>Compute the arc cosine.  The <var>number</var> should
+<p>Compute the arc cosine. The <var>number</var> should
     be between <code>-1</code> and <code>1</code>. The result is the inverse cosine,
 in radians, between <code>0</code> and <code>2</code> <code>*</code> <code>pi</code>.</p>
 <h4 id=arcsin>arcsin(<var>number</var>)</h4>
-<p>Compute the arc sine.  The <var>number</var> should be
+<p>Compute the arc sine. The <var>number</var> should be
     between <code>-1</code> and <code>1</code>. The result is the inverse sine,
     in radians, between <code>neg(</code>pi<code>)</code> and <code>pi</code>.</p>
 <h4 id=arctan>arctan(<var>number</var> <var>x</var>)</h4>
 <p>Compute the arc tangent. If the optional <var>x</var> is supplied, then the value is obtained from <var>number</var> <code>/</code> <var>x</var> (assuming that the <var>number</var> is <var>y</var>), using the signs of both to determine the quadrant. The <var>x</var> is allowed to be <code>0</code>. </p>
 <p>The result is the inverse
     tangent, in radians, between <code>neg(</code>pi<code>)</code> and <code>pi</code>.</p>
-<h4 id=arc_cosine>arc_cosine(<var>number</var>)</h4>
-<p>Compute the arc cosine.  The <var>number</var> should
-    be between <code>-1</code> and <code>1</code>. The result is the inverse cosine,
-    in cycles, between <code>0</code> and <code>1</code>.</p>
-<h4 id=arc_sine>arc_sine(<var>number</var>)</h4>
-<p>Compute the arc sine.  The <var>number</var> should be
-    between <code>-1</code> and <code>1</code>. The result is the inverse sine,
-    in cycles, between <code>-0.5</code> and <code>0.5</code>.</p>
-<h4 id=arc_tangent>arc_tangent(<var>number</var> <var>x</var>)</h4>
-<p>Compute the arc tangent. If the optional <var>x</var> is supplied, then the value is obtained from <var>number</var> <code>/</code> <var>x</var> (assuming that the <var>number</var> is <var>y</var>), using the signs of both to determine the quadrant. The <var>x</var> is allowed to be <code>0</code>. The result is the inverse
-    tangent, in cycles, between <code>-1</code> and 1.</p>
 <h4 id="ceiling">ceiling(<var>number</var> <var>place</var>)</h4>
 <p>If <var>place</var> is <code>0</code> or <code>null</code>, the <var>number</var> is rounded up to the smallest integer that is greater than or equal to the
     <var>number</var>. If <var>place</var> is a small negative integer, then the <var>number</var> is rounded up to that  decimal place.</p>
@@ -663,11 +652,8 @@ assign result: ceiling(-12.3775)        # result is -12</pre>
 <h4 id="codepoint">codepoint(<var>text</var>)</h4>
 <p>The <code>codepoint</code> function returns the codepoint number of the first character of the <var>text.</var> If the argument is not a text, or if it is the empty text, then it returns <code>null</code>.</p>
 <h4 id=cos>cos(<var>number</var>)</h4>
-<p>Compute the cosine.  The <var>number</var> should be
+<p>Compute the cosine. The <var>number</var> should be
     in radians. The result is between <code>-1</code> and <code>1</code>.</p>
-<h4 id=cosine>cosine(<var>number</var>)</h4>
-<p>Compute the cosine.  The <var>number</var> should be
-    in cycles. The result is between <code>-1</code> and <code>1</code>.</p>
 <h4 id="extract">extract(<var>text</var> <var>pattern</var> <var>from</var> <var>to</var>)</h4>
 <p>The <var>text</var> is matched to the <var>pattern</var>. If it does not match, the result is <code>null</code>. If the <var>pattern</var> does match, then the result is a record containing the saved fields.</p>
 <h4 id="fallback">fallback(<var>requestor_array</var>)</h4>
@@ -680,7 +666,7 @@ assign result: ceiling(-12.3775)        # result is -12</pre>
 <p>When the <var>function</var>'s return value is <code>true</code>, then the element
     is copied into a new array. If the <var>function</var>'s return value is <code>false</code>, then the element is not copied into the new array. If the return value is not a logical, then the filter returns <code>null</code>.</p>
 <p>It returns a new array. The <code>length</code> of the new array is between
-    <code>0</code> and  <code>length(<var>array</var>)</code>. It returns <code>null</code> if the <var>function</var> argument is not a function.</p>
+    <code>0</code> and <code>length(<var>array</var>)</code>. It returns <code>null</code> if the <var>function</var> argument is not a function.</p>
 <h6>Example:</h6>
 <pre>def data: [0 1.25 2 3.5 4 5.75]
 def integers: filter(data integer?)    # integers is [0 2 4]</pre>
@@ -861,7 +847,7 @@ min(max(8 3) 7)     # 7</pre>
 <p>The result of <code>modulo(<var>dividend</var> <var>divisor</var>)</code> is
 <code><var>dividend</var> - (<var>divisor</var> * floor(<var>dividend</var> / <var>divisor</var>))</code>.
 The result has the sign of the divisor.</p>
-<p> If <var>dividend</var>  is <code>0</code>, then the result is <code>0</code>. If <var>divisor</var> is <code>0</code>,
+<p> If <var>dividend</var> is <code>0</code>, then the result is <code>0</code>. If <var>divisor</var> is <code>0</code>,
 or if either operand is not a number,
 then the result is <code>null</code>. <var><var>dividend</var></var> and <var>divisor</var> are not required to be  integers.</p>
 <p>If both arguments are integers, and if the <var>divisor</var> is a positive power of two, then it is the same as
@@ -970,7 +956,7 @@ assign result: right(-2 1)                     # result is 36028797018963967</pr
 <h6>Examples:</h6>
 <pre>assign result: <code>right_signed</code>(-2 1)              # result is -1</pre>
 <h4 id=rotate>rotate(<var>first</var> <var>second</var>)</h4>
-<p>Left shift with carry  fill.</p>
+<p>Left shift with carry fill.</p>
 <h6>Examples:</h6>
 <pre>assign result: rotate(1 1)                     # result is 2
 assign result: rotate(-2 1)                    # result is -3</pre>
@@ -1000,11 +986,8 @@ that takes a <var>requestor_array</var> and returns a <a href="functions.html#re
     The result of each becomes the argument to the next. The last result is the result of the sequence. </p>
 <p><code>sequence</code> returns a <a href="functions.html#requestor">requestor</a> that returns a <a href="functions.html#cancel">cancel function</a> and processes each <a href="functions.html#requestor">requestor</a> in <code>requestor_array</code> one at a time. Each of those requestors is passed the result of the previous <a href="functions.html#requestor">requestor</a> as its <code>value</code> argument. If all succeed, then the sequence succeeds, giving the result of the last of the requestors. If any fail, then the sequence fails. The sequence succeeds if every requestor in the <var>requestor_array</var> succeeds.</p>
 <h4 id=sin>sin(<var>number</var>)</h4>
-<p>Compute the sine.  The <var>number</var> should be in
+<p>Compute the sine. The <var>number</var> should be in
     radians. The result is the sine, between <code>-1</code> and <code>1</code>.</p>
-<h4 id=sine>sine(<var>number</var>)</h4>
-<p>Compute the sine.  The <var>number</var> should be in
-    cycles. The result is the sine, between <code>-1</code> and <code>1</code>.</p>
 <h4 id="sign">sign(<var>number</var>)</h4>
 <p>The <code>sign</code> function returns <code>-1</code> if the <var>number</var> is negative, <code>0</code> if the <var>number</var> is exactly <code>0</code>, <code>1</code> if the <var>number</var> is positive, and <code>null</code> if it is not a number.</p>
 <h4 id="sort">sort(<var>array</var> <var>select</var>)</h4>
@@ -1099,9 +1082,6 @@ assign result: sqrt(-1)     # result is null </pre>
 <h4 id=tan>tan(<var>number</var>)</h4>
 <p>Compute the tangent. The <var>number</var> should be
     in radians.</p>
-<h4 id=tangent>tangent(<var>number</var>)</h4>
-<p>Compute the tangent. The <var>number</var> should be
-    in cycles.</p>
 <h4 id="trim">trim(<var>text</var> <var>reject</var>)</h4>
 <p>The <code>trim</code> function removes selected characters from the ends of a <var>text</var>. The default is to remove control characters and spaces.</p>
 <pre>assign result: trim(&quot;  Hello   there   &quot;)    # result is &quot;Hello   there&quot;</pre>
