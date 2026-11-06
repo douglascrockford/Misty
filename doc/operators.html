@@ -59,7 +59,7 @@ optional_ternary
 ternary
     linebreak <code>&quot;then&quot;</code> space expression linebreak <code>&quot;else&quot;</code> space expression
 </p>
-<p>Expressions can be wrapped in parentheses to clarify or alter the order of evaluation. </p>
+<p>Expressions can be wrapped in parentheses to clarify or alter the order of evaluation.</p>
 <p id="then">A parenthesized expression can also contain a short-circuiting ternary operation. If the first operand is <code>true</code>, then the second operand is evaluated. If the first operand is <code>false</code>, then the third operand is evaluated.
     If the first operand is neither <code>true</code> nor <code>false</code>, then the <a href="programs.html#halt">actor halts</a>. Expressions that are indented within parens may contain line breaks before an infix operator. Ternary operation is not allowed if a variable is in scope named <code>then</code> or <code>else</code>.</p>
 <p>Example:</p>
@@ -122,7 +122,7 @@ subscript_filler
 </p>
 
 <p>Subscription. The expression in the brackets selects
-a field  of a record or an element of an array, or a character of a text.  </p>
+a field of a record or an element of an array, or a character of a text.</p>
 <table>
     <tr>
         <th>object type</th>
@@ -193,8 +193,8 @@ open_input_values
 </blockquote>
 <p>If the value is not a function, it halts.</p>
 <p>If a function is invoked with too few input values, the missing input values are <code>null</code>.
-If a function is invoked with excess input values, the actor  <a href="programs.html#halt">halts</a>.</p>
-<p>A function invocation can pass at most 4 input values. If you need more, consider passing a single record literal instead. </p>
+If a function is invoked with excess input values, the actor <a href="programs.html#halt">halts</a>.</p>
+<p>A function invocation can pass at most 4 input values. If you need more, consider passing a single record literal instead.</p>
 <p>If a function is used only for its side effects, use the <code><a href="statements.html#call">call</a></code><a href="statements.html#call"> statement</a>.</p>
 <h2 id="infix">Infix Operators</h2>
 <p class="rule">
@@ -221,7 +221,7 @@ infix_operator
 
 
 <p>These operators work only for numbers. If either operand is not a number,
-  or if the operation creates a value that is too enormous  to be contained
+ or if the operation creates a value that is too enormous to be contained
 in a Misty number, then the result is <code>null</code>.</p>
 <h4><span id="*">*</span><small>asterisk</small></h4>
 <p>Multiplication.
@@ -231,7 +231,7 @@ in a Misty number, then the result is <code>null</code>.</p>
 0.10 * 20    # 2
 0 * null     # 0</pre>
 <h4 id="/">/<small>solidus</small></h4>
-<p>Division. </p>
+<p>Division.</p>
 <pre>3 / 4       # 0.75
 5 / 4       # 1.25
 16 / 4      # 4
@@ -251,7 +251,7 @@ null / 4    # null</pre>
 <h3>Additive Operators</h3>
 
 <p>These operators work only for numbers. If either operand is not a number,
-  or if the operation creates a value that is too enormous  to be contained
+  or if the operation creates a value that is too enormous to be contained
   in a Misty number, then the result is <code>null</code>.</p>
 
 <h4 id="+">+</h4>
@@ -266,8 +266,8 @@ null + 0    # null</pre>
 3 - null    # null</pre>
 <h3 id="concatenation">Concatenation Operators</h3>
 <h4 id="&amp;">&<small>ampersand</small></h4>
-<p>Concatenation.  Make a new text
-that combines the two texts.   If an operand is a number, convert it to text. If after this conversion either operand is not text, then it halts.</p>
+<p>Concatenation. Make a new text
+that combines the two texts. If an operand is a number, convert it to text. If after this conversion either operand is not text, then it halts.</p>
 <pre>3 & 4                          # &quot;34&quot;
 &quot;beginning&quot; & &quot;and&quot; & &quot;end&quot;    # &quot;beginningandend&quot;
 &quot;&quot; & &quot;ok&quot;                      # &quot;ok&quot;
@@ -302,7 +302,7 @@ null && &quot;ok&quot;                      # halt
 fi
 </pre>
 <h4 id="&lt;&gt;">&lt;&gt;</h4>
-<p>Not equal. If the operands are not the same, then the result is <code>true</code>.  It is the same as <code>not(<var>left</var> = <var>right</var>)</code>.</p>
+<p>Not equal. If the operands are not the same, then the result is <code>true</code>. It is the same as <code>not(<var>left</var> = <var>right</var>)</code>.</p>
 <h4 id="&lt;">&lt;</h4>
 <p>Less than.</p>
 <p> If the operands are both numbers or both texts, then if the left operand is less than
@@ -311,7 +311,7 @@ is greater than or equal to the right operand the result is <code>false</code>. 
 <h4 id="&lt;=">&lt;=</h4>
 <p>Less than or equal. It is the same as <code>not(<var>right</var> &lt; <var>left</var>)</code>.</p>
 <h4 id="&gt;">&gt;</h4>
-<p>Greater than.  It is the same as <code><var>right</var> &lt; <var>left</var></code>.</p>
+<p>Greater than. It is the same as <code><var>right</var> &lt; <var>left</var></code>.</p>
 <h4 id="'">&gt;=</h4>
 <p>Greater than or equal. It is the same as <code>not(<var>left</var> &lt; <var>right</var>)</code>.</p>
 
