@@ -312,7 +312,6 @@ function expression(open = false) {
         kind: "infix",
         operands: [left],
         operators: [operator],
-        precedence: current_precedence
     };
     let previous_precedence = current_precedence;
 
