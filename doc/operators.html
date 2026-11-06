@@ -220,13 +220,9 @@ infix_operator
 <h3 id="multiplicative">Multiplicative Operators</h3>
 
 
-<p>The<code> *</code><small>and</small> and <code>/</code><small>or</small> operators take two numbers  and produce a  number. Mixing them requires the use of parentheses to disambiguate the precedence.</p>
-<h6>Examples:</h6>
-<pre>p * q * r      # ok
-p / q / r      # ok
-p * q / r      # error
-(p * q) / r    # ok
-p * (q / r)    # ok</pre>
+<p>These operators work only for numbers. If either operand is not a number,
+  or if the operation creates a value that is too enormous  to be contained
+in a Misty number, then the result is <code>null</code>.</p>
 <h4><span id="*">*</span><small>asterisk</small></h4>
 <p>Multiplication.
   If it can be determined at compile time that either operand is zero, the other operand
@@ -255,16 +251,16 @@ null / 4    # null</pre>
 <h3>Additive Operators</h3>
 
 <p>These operators work only for numbers. If either operand is not a number,
-  or if the operation creates a value that is too majestic to be contained
+  or if the operation creates a value that is too enormous  to be contained
   in a Misty number, then the result is <code>null</code>.</p>
 
-<h4>+</h4>
+<h4 id="+">+</h4>
 <p>Addition. If either operand is not a number, the result is <code>null</code>.</p>
 <pre>3 + 4       # 7
 3 + null    # null
 null + 0    # null</pre>
 
-<h4>-</h4>
+<h4 id="-">-</h4>
 <p>Subtraction. If either operand is not a number, the result is <code>null</code>.</p>
 <pre>3 - 4       # -1
 3 - null    # null</pre>
@@ -320,13 +316,7 @@ is greater than or equal to the right operand the result is <code>false</code>. 
 <p>Greater than or equal. It is the same as <code>not(<var>left</var> &lt; <var>right</var>)</code>.</p>
 
 <h3 id="logical">Logical Operators</h3>
-<p>The<code> /\</code><small>and</small> and <code>\/</code><small>or</small> operators take two logical values and produce a logical value. Mixing them requires the use of parentheses to disambiguate the precedence.</p>
-<h6>Examples:</h6>
-<pre>p /\ q /\ r      # ok
-p \/ q \/ r      # ok
-p /\ q \/ r      # error
-(p /\ q) \/ r    # ok
-p /\ (q \/ r)    # ok</pre>
+<p>The<code> /\</code><small>and</small> and <code>\/</code><small>or</small> operators take two logical values and produce a logical value.</p>
 <h4 id="and">/\</h4>
 <p>Short-circuit And. If the left operand is <code>false</code>, then the result is <code>false</code> and the right operand will not be evaluated.
   If the left operand is <code>true</code> and the <code>right</code> operand is <code>false</code>, then the result is <code>false</code>.
@@ -352,11 +342,11 @@ foo | 0          # 0</pre>
 <caption>Operator Precedence</caption>
   <tbody>
   <tr>
-      <td style="background-color: gainsboro;">tightest</td>
+      <td style="background-color: thistle;">tightest</td>
     <td align="center"><code>.&nbsp; &nbsp;[ ]&nbsp; &nbsp;( )</code></td>
 </tr>
   <tr>
-      <td rowspan="6" style="background: linear-gradient(gainsboro, white);">&nbsp;</td>
+      <td rowspan="6" style="background: linear-gradient(thistle, white);">&nbsp;</td>
       <td align="center"><code>|</code></td>
 </tr>
   <tr>
@@ -387,6 +377,8 @@ foo | 0          # 0</pre>
 <pre>&quot;$&quot; & 3 + 4                        # &quot;$7&quot;
 10 - 5 + 2                         # 7
 1 + 2 * 3 + 4                      # 11
+2 * 3 / 4 * 5                      # 7.5
+false /\ true \/ true              # true
 </pre>
 <h5><a href="https://www.crockford.com/ascii.html">ASCII</a></h5>
 </body>
