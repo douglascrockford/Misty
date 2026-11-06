@@ -1,5 +1,5 @@
 // parse.js
-// 2026-11-03
+// 2026-11-06
 
 // Missing feature:
 //      patterns
@@ -311,7 +311,8 @@ function expression(open = false) {
     left = {
         kind: "infix",
         operands: [left],
-        operators: [operator]
+        operators: [operator],
+        precedence: current_precedence
     };
     let previous_precedence = current_precedence;
 
