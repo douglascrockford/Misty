@@ -64,7 +64,7 @@ The <a href="programs.html#module"><code>module</code> construct</a> is not need
 <h4>array(<var>record</var>)</h4>
 <p>Keys. Make an array containing all of the
 text keys in the <var>record</var>. The keys are not guaranteed
-   to be in any particular order.</p>
+to be in any particular order.</p>
 <h4>array(<var>text</var>)</h4>
 <p>Split the <var>text</var> into grapheme clusters. A grapheme cluster is a Unicode codepoint and its contributing combining characters, if any.</p>
 <h4>array(<var>text</var> <var>separator</var>)</h4>
@@ -304,14 +304,14 @@ format_places
 </table>
 <p>The real <var>format</var> options are</p>
 <blockquote>
-    <p><code>&quot;e&quot;</code>  uses scientific notation. One digit is placed before the decimal point, and all of the remaining digits after, followed by <code>e</code> and the exponent.</p>
-    <p><code>&quot;n&quot;</code>  uses <code>.</code><small>period</small> as the decimal point and no separator. It is the format used for numbers in Misty source
+    <p><code>&quot;e&quot;</code> uses scientific notation. One digit is placed before the decimal point, and all of the remaining digits after, followed by <code>e</code> and the exponent.</p>
+    <p><code>&quot;n&quot;</code> uses <code>.</code><small>period</small> as the decimal point and no separator. It is the format used for numbers in Misty source
         programs and JSON. Scientific notation is used if the number value is extreme.</p>
-    <p><code>&quot;s&quot;</code>  uses <code>.</code><small>period</small> as the decimal point and a <i>space</i> as the separator.</p>
-<p><code>&quot;u&quot;</code>  uses <code>.</code><small>period</small> as the decimal point and <code>_</code><small>underbar</small> as the separator.</p>
-    <p><code>&quot;d&quot;</code>  uses <code>.</code><small>period</small> as the decimal point and <code>,</code><small>comma</small> as the separator.</p>
-    <p><code>&quot;c&quot;</code>  uses <code>,</code><small>comma</small> as the decimal point and <code>.</code><small>period</small> as the separator.</p>
-    <p><code>&quot;l&quot;</code>  depends on the locale to determine the characters
+    <p><code>&quot;s&quot;</code> uses <code>.</code><small>period</small> as the decimal point and a <i>space</i> as the separator.</p>
+<p><code>&quot;u&quot;</code> uses <code>.</code><small>period</small> as the decimal point and <code>_</code><small>underbar</small> as the separator.</p>
+    <p><code>&quot;d&quot;</code> uses <code>.</code><small>period</small> as the decimal point and <code>,</code><small>comma</small> as the separator.</p>
+    <p><code>&quot;c&quot;</code> uses <code>,</code><small>comma</small> as the decimal point and <code>.</code><small>period</small> as the separator.</p>
+    <p><code>&quot;l&quot;</code> depends on the locale to determine the characters
     to use as the decimal point and the separator.</p>
 </blockquote>
 <p>The optional <var>places</var> determines the number of digits after
@@ -634,7 +634,7 @@ in radians, between <code>0</code> and <code>2</code> <code>*</code> <code>pi</c
     between <code>-1</code> and <code>1</code>. The result is the inverse sine,
     in radians, between <code>neg(</code>pi<code>)</code> and <code>pi</code>.</p>
 <h4 id=arctan>arctan(<var>number</var> <var>x</var>)</h4>
-<p>Compute the arc tangent. If the optional <var>x</var> is supplied, then the value is obtained from <var>number</var> <code>/</code> <var>x</var> (assuming that the <var>number</var> is <var>y</var>), using the signs of both to determine the quadrant. The <var>x</var> is allowed to be <code>0</code>. </p>
+<p>Compute the arc tangent. If the optional <var>x</var> is supplied, then the value is obtained from <var>number</var> <code>/</code> <var>x</var> (assuming that the <var>number</var> is <var>y</var>), using the signs of both to determine the quadrant. The <var>x</var> is allowed to be <code>0</code>.</p>
 <p>The result is the inverse
     tangent, in radians, between <code>neg(</code>pi<code>)</code> and <code>pi</code>.</p>
 <h4 id="ceiling">ceiling(<var>number</var> <var>place</var>)</h4>
@@ -867,7 +867,7 @@ assign result: ones(8)     # result is 1
 assign result: ones(18)    # result is 2
 assign result: ones(98.6)  # result is null</pre>
 <h4 id="or">or(<var>first</var> <var>second</var>)</h4>
-<p>Or.  If <var>first</var> and <var>second</var> are ints, then the result is the bitwise <code>or</code> of the two ints.</p>
+<p>Or. If <var>first</var> and <var>second</var> are ints, then the result is the bitwise <code>or</code> of the two ints.</p>
 <p>If <var>first</var> and <var>second</var> are logical, the result is logical. For logicals, the result is similar to <code>\/</code> except that it is not short-circuiting.</p>
 <p> Otherwise, the result is <code>null</code>.</p>
 <h6>Examples:</h6>
@@ -879,9 +879,9 @@ assign result: or(true false)    # result is true</pre>
 <h4 id="parallel">parallel(<var>requestor_array</var> <var>throttle</var> <var>need</var>)</h4>
 <p>Parallel. The <code>parallel</code> <a href="functions.html#requestor_factory">requestor factory</a> returns a <a href="functions.html#requestor">requestor function</a>. When the <a href="functions.html#requestor">requestor function</a> is called with a <a href="functions.html#callback">callback</a> function and a value, every requestor in the <var>requestor_array</var> is called with the value, and the results are placed in corresponding elements of the results array. This all happens in parallel. The value produced by the first element of the <var>requestor_array</var> provides the first element of the result. The completed results array is passed to the <a href="functions.html#callback">callback</a> function.</p>
 <p>By default, it starts all of the requestors in the <var>requestor_array</var> at once, each in its own turn so that they do not interfere with each other. This can shock some systems by unleashing a lot of demand all at once. To mitigate the shock, the optional <var>throttle</var> argument sets the maximum number of requestors running at a time. As requestors succeed or fail, waiting requestors can be started. The <var>throttle</var> is optional. If provided, the <var>throttle</var> is a number: the maximum number of requestors to have
-    running at any time. </p>
+    running at any time.</p>
 <p>Ordinarily, the number of successes must be the same as the number of requestors in the <var>requestor_array</var>. If you need fewer successes, specify your need with the <var>need</var> argument. The <var>need</var> could be <code>1</code>, meaning that 1 or more successes are needed. The <code>need</code> could be <code>0</code>, meaning that no successes are needed. If the number of successes is greater than or equal to <code><var>need</var></code>, then the whole operation succeeds. The <var>need</var>  must be between <code>0</code> and <var>requestor_array</var><code>.length</code>.</p>
-<p>The  requestor function itself returns a <a href="functions.html#cancel">cancel</a> function that cancels all of the pending requestors from the <var>requestor_array</var>.</p>
+<p>The requestor function itself returns a <a href="functions.html#cancel">cancel</a> function that cancels all of the pending requestors from the <var>requestor_array</var>.</p>
 <h4 id=power>power(<var>first</var> <var>second</var>)</h4>
 <p>Raise to a power.</p>
 <h6>Examples:</h6>
@@ -983,7 +983,7 @@ round(-12.3775 -2)     # -12.38</pre>
 <p>Sequence. The <code>sequence</code> <a href="functions.html#requestor_factory">requestor factory</a>
 that takes a <var>requestor_array</var> and returns a <a href="functions.html#requestor">requestor</a> function that
     starts all of the <a href="functions.html#requestor">requestors</a> in the <var>requestor_array</var> one at a time.
-    The result of each becomes the argument to the next. The last result is the result of the sequence. </p>
+    The result of each becomes the argument to the next. The last result is the result of the sequence.</p>
 <p><code>sequence</code> returns a <a href="functions.html#requestor">requestor</a> that returns a <a href="functions.html#cancel">cancel function</a> and processes each <a href="functions.html#requestor">requestor</a> in <code>requestor_array</code> one at a time. Each of those requestors is passed the result of the previous <a href="functions.html#requestor">requestor</a> as its <code>value</code> argument. If all succeed, then the sequence succeeds, giving the result of the last of the requestors. If any fail, then the sequence fails. The sequence succeeds if every requestor in the <var>requestor_array</var> succeeds.</p>
 <h4 id=sin>sin(<var>number</var>)</h4>
 <p>Compute the sine. The <var>number</var> should be in
