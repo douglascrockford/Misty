@@ -142,13 +142,14 @@ a field of a record or an element of an array, or a character of a text.</p>
     </tr>
 </table>
 <p>On retrieval, if the record does not contain the key, then <code>null</code>
-  will be returned. On storage, it halts if the record is immutable. On storage to a mutable array, if the key
-  is not a number or if the key violates the bounds of the array, or if the key is not the correct type, then it halts.</p>
+will be returned. On storage, it halts if the record is immutable. On storage to a mutable array, if the key
+is not a number or if the key violates the bounds of the array, or if the key is not the correct type, then it halts.</p>
 <pre>stooge[&quot;first_name&quot;][4]    # &quot;y&quot;
 null[&quot;foo&quot;]                # null
 &quot;foo&quot;[0]                   # "f"
 &quot;foo&quot;[3]                   # null
 </pre>
+
 <h3 id="invocation">Function Invocation</h3>
 <h4 id="invoke">( )<small>parens</small></h4>
 <p class="rule">
@@ -189,13 +190,14 @@ open_input_values
 
 <p>Invocation. The <code>()</code> suffix operator invokes a function value.</p>
 <blockquote>
-  <p><var>function_value</var><code>(</code><var>input_values</var><code>)</code></p>
+<p><var>function_value</var><code>(</code><var>input_values</var><code>)</code></p>
 </blockquote>
 <p>If the value is not a function, it halts.</p>
 <p>If a function is invoked with too few input values, the missing input values are <code>null</code>.
 If a function is invoked with excess input values, the actor <a href="programs.html#halt">halts</a>.</p>
 <p>A function invocation can pass at most 4 input values. If you need more, consider passing a single record literal instead.</p>
 <p>If a function is used only for its side effects, use the <code><a href="statements.html#call">call</a></code><a href="statements.html#call"> statement</a>.</p>
+
 <h2 id="infix">Infix Operators</h2>
 <p class="rule">
 infix_operator
@@ -218,15 +220,13 @@ infix_operator
 </p>
 
 <h3 id="multiplicative">Multiplicative Operators</h3>
-
-
 <p>These operators work only for numbers. If either operand is not a number,
  or if the operation creates a value that is too enormous to be contained
 in a Misty number, then the result is <code>null</code>.</p>
 <h4><span id="*">*</span><small>asterisk</small></h4>
 <p>Multiplication.
-  If it can be determined at compile time that either operand is zero, the other operand
-  might not be evaluated.</p>
+If it can be determined at compile time that either operand is zero, the other operand
+might not be evaluated.</p>
 <pre>3 * 4        # 12
 0.10 * 20    # 2
 0 * null     # 0</pre>
@@ -248,11 +248,12 @@ null / 4    # null</pre>
 0 // 0     # 0
 0 // null  # 0
 3 // 0     # null</pre>
+
 <h3>Additive Operators</h3>
 
 <p>These operators work only for numbers. If either operand is not a number,
-  or if the operation creates a value that is too enormous to be contained
-  in a Misty number, then the result is <code>null</code>.</p>
+or if the operation creates a value that is too enormous to be contained
+in a Misty number, then the result is <code>null</code>.</p>
 
 <h4 id="+">+</h4>
 <p>Addition. If either operand is not a number, the result is <code>null</code>.</p>
@@ -264,6 +265,7 @@ null + 0    # null</pre>
 <p>Subtraction. If either operand is not a number, the result is <code>null</code>.</p>
 <pre>3 - 4       # -1
 3 - null    # null</pre>
+
 <h3 id="concatenation">Concatenation Operators</h3>
 <h4 id="&amp;">&<small>ampersand</small></h4>
 <p>Concatenation. Make a new text
@@ -287,10 +289,10 @@ null && &quot;ok&quot;                      # halt
 &quot;brillig&quot; && &quot;&quot;                   # &quot;brillig&quot;</pre>
 
 <h3 id="relational">Relational Operators</h3>
-<p>The six relational operators compare two values and return either <code>true</code> or <code>false</code>.</p>
-<p>The two equality operators (<code>=</code><small>equal</small> and <code>&lt;&gt;</code><small>not equal)</small> can take values of all types. Objects are equal only if they are the same object. Texts containing the same characters in the same order are equal.</p>
+<p>The six relational operators compare two values, <var>left</var> and <var>right</var>, and return either <code>true</code> or <code>false</code>.</p>
+<p>The two equality operators (<code>=</code><small>equal</small> and <code>&lt;&gt;</code><small>not equal)</small> can take values of all types. Objects are equal only if they are the same object. Texts containing the same codepoints in the same order are equal.</p>
 <p>The four inequality operators (<code>&lt;</code><small>less than</small> <code>&lt;=</code><small>less than or equal</small> <code>&gt;</code><small>greater than</small> <code>&gt;=</code><small>greater than or equal)</small> only work on a pair of numbers or a pair of texts.
-    In all other cases they halt.</p>
+In all other cases they halt the actor.</p>
 <p>Two or more relational operators can be strung together to make more complicated expressions. This can be useful in range checks.</p>
 <p>So<code> a &lt; b &lt;= c </code>produces the same result as<code> a &lt; b /\ b &lt;= c</code>, except that <code>b</code> is evaluated once. In both cases, <code>c</code> is only evaluated if<code> a &lt; b </code>is <code>true</code>.</p>
 <p>Note that<code> (a &lt; b) &lt; c </code>halts because<code> (a &lt; b) </code>produces a logical value and <code>&lt;</code><small>less than</small> does not work with logical values.</p>
@@ -304,10 +306,9 @@ fi
 <h4 id="&lt;&gt;">&lt;&gt;</h4>
 <p>Not equal. If the operands are not the same, then the result is <code>true</code>. It is the same as <code>not(<var>left</var> = <var>right</var>)</code>.</p>
 <h4 id="&lt;">&lt;</h4>
-<p>Less than.</p>
-<p> If the operands are both numbers or both texts, then if the left operand is less than
-    the right operand, then the result is <code>true</code>. If the left operand
-is greater than or equal to the right operand the result is <code>false</code>. If the two operands are not both numbers     or both texts, then it halts.</p>
+<p>Less than. If the operands are both numbers or both texts, then if the left operand is less than
+the right operand, then the result is <code>true</code>. If the left operand
+is greater than or equal to the right operand the result is <code>false</code>. If the two operands are not both numbers or both texts, then it halts.</p>
 <h4 id="&lt;=">&lt;=</h4>
 <p>Less than or equal. It is the same as <code>not(<var>right</var> &lt; <var>left</var>)</code>.</p>
 <h4 id="&gt;">&gt;</h4>
@@ -319,30 +320,32 @@ is greater than or equal to the right operand the result is <code>false</code>. 
 <p>The<code> /\</code><small>and</small> and <code>\/</code><small>or</small> operators take two logical values and produce a logical value.</p>
 <h4 id="and">/\</h4>
 <p>Short-circuit And. If the left operand is <code>false</code>, then the result is <code>false</code> and the right operand will not be evaluated.
-  If the left operand is <code>true</code> and the <code>right</code> operand is <code>false</code>, then the result is <code>false</code>.
-  If the left operand is <code>true</code> and the right operand is <code>true</code>, then the result is <code>true</code>.</p>
-  <p> If the left operand is neither <code>true</code> nor <code>false</code>, then the <a href="programs.html#halt">actor halts</a>. If the left operand is <code>true</code> and the right operand is  neither <code>true</code> nor <code>false</code>, then  the <a href="programs.html#halt">actor halts</a>.</p>
+If the left operand is <code>true</code> and the <code>right</code> operand is <code>false</code>, then the result is <code>false</code>.
+If the left operand is <code>true</code> and the right operand is <code>true</code>, then the result is <code>true</code>.</p>
+<p> If the left operand is neither <code>true</code> nor <code>false</code>, then the <a href="programs.html#halt">actor halts</a>. If the left operand is <code>true</code> and the right operand is  neither <code>true</code> nor <code>false</code>, then  the <a href="programs.html#halt">actor halts</a>.</p>
 <pre>3 &lt; 4 /\ 5 &lt; 6    # true</pre>
 <p>It is made by combining <code>/</code><small>slash</small> and <code>\</code><small>backslash</small>.</p>
 <h4 id="or">\/</h4>
 <p>Short-circuit Or. If the left operand is <code>true</code>, then the result is <code>true</code> and the right operand is not evaluated.
-  If the left operand is <code>false</code> and the right operand is <code>false</code>, then the result is <code>false</code>.
+If the left operand is <code>false</code> and the right operand is <code>false</code>, then the result is <code>false</code>.
 If the left operand is <code>false</code> and the right operand is <code>true</code>, then the result is <code>true</code>.</p>
-  <p>If the left operand is neither <code>true</code> nor <code>false</code>, then the <a href="programs.html#halt">actor halts</a>. If the left operand is <code>false</code> and the right operand is neither <code>true</code> nor <code>false</code>, then  the <a href="programs.html#halt">actor halts</a>.</p>
+<p>If the left operand is neither <code>true</code> nor <code>false</code>, then the <a href="programs.html#halt">actor halts</a>. If the left operand is <code>false</code> and the right operand is neither <code>true</code> nor <code>false</code>, then  the <a href="programs.html#halt">actor halts</a>.</p>
 <pre>3 &lt; 4 \/ 6 &lt; 5    # true</pre>
 <p>It is made by combining <code>\</code><small>backslash</small> and <code>/</code><small>slash</small>.</p>
+
 <h3 id="default">Default Operator</h3>
 <h4 id="|">|</h4>
 <p>Short-circuit Default. If the left operand is not <code>null</code>, then the result
-  is the left operand. Otherwise, the result is the right operand.</p>
+is the left operand. Otherwise, the result is the right operand.</p>
 <pre>var foo: null    # foo is null
 foo | 0          # 0</pre>
+
 <h2 id="precedence">Operator Precedence</h2>
 <table>
 <caption>Operator Precedence</caption>
   <tbody>
   <tr>
-      <td style="background-color: thistle;">tightest</td>
+    <td style="background-color: thistle;">tightest</td>
     <td align="center"><code>.&nbsp; &nbsp;[ ]&nbsp; &nbsp;( )</code></td>
 </tr>
   <tr>
