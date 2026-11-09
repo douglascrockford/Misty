@@ -60,7 +60,7 @@ The <a href="programs.html#module"><code>module</code> construct</a> is not need
 <p><var>array</var>: the array to copy</p>
 <p><var>from</var>: the position at which to start copying. Default: <code>0</code>, the beginning. If negative, add <code>length(<var>array</var>)</code>.</p>
 <p><var>to</var>: the position at which to stop copying. Default: <code>length(<var>array</var>)</code>, the end. If negative, add <code>length(<var>array</var>)</code>.</p>
-<p>If, after adjustment, <var>from</var> and <var>to</var> are not valid ints in the proper range, then it returns <code>null</code>. <var>from</var> must be positive and less than or equal to <var>to</var>. <var>to</var> must be less than or equal to <code>length(<var>array</var>)</code>.</p>
+<p>If, after adjustment, <var>from</var> and <var>to</var> are not valid ints in the proper range, then it returns <code>null</code>. <var>from</var> must be non-negative and less than or equal to <var>to</var>. <var>to</var> must be less than or equal to <code>length(<var>array</var>)</code>.</p>
 <h4>array(<var>record</var>)</h4>
 <p>Keys. Make an array containing all of the
 text keys in the <var>record</var>. The keys are not guaranteed
@@ -405,7 +405,7 @@ assign result: text(12 &quot;t2&quot;)         # result is &quot;0C&quot;
 <p><var>text</var>: the text to copy.</p>
 <p><var>from</var>: the position at which to start copying. Default: <code>0</code>, the beginning. If negative, add <code>length(<var>text</var>)</code>.</p>
 <p><var>to</var>: the position at which to stop copying. Default: <code>length(<var>text</var>)</code>, the end. If negative, add <code>length(<var>text</var>)</code>.</p>
-<p>If, after adjustment, <var>from</var> and <var>to</var> are not valid ints in the proper range, then it returns <code>null</code>. <var>from</var> must be positive and less than or equal to <var>to</var>. <var>to</var> must be less than or equal to <code>length(<var>text</var>)</code>.</p>
+<p>If, after adjustment, <var>from</var> and <var>to</var> are not valid ints in the proper range, then it returns <code>null</code>. <var>from</var> must be non-negative and less than or equal to <var>to</var>. <var>to</var> must be less than or equal to <code>length(<var>text</var>)</code>.</p>
 <pre>assign my_text: &quot;miskatonic&quot;
 text(my_text 0 3)         # &quot;mis&quot;        # the first 3
 text(my_text 3 6)         # &quot;kat&quot;        # from 3 to 6
