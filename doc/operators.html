@@ -154,43 +154,43 @@ null[&quot;foo&quot;]                # null
 <h4 id="invoke">( )<small>parens</small></h4>
 <p class="rule">
 invocation
-    input_value_list
+    argument_value_list
     record_literal
 </p>
 
 <p class="rule">
-input_value_list
-    <code>'('</code> input_values <code>')'</code>
+argument_value_list
+    <code>'('</code> argument_values <code>')'</code>
 </p>
 
 <p class="rule">
-input_values
+argument_values
     <code>""</code>
-    expression closed_input_values
-    indent open_expression input_values_or_ternary outdent
+    expression closed_argument_values
+    indent open_expression argument_values_or_ternary outdent
 </p>
 
 <p class="rule">
-closed_input_values
+closed_argument_values
     <code>""</code>
-    space expression closed_input_values
+    space expression closed_argument_values
 </p>
 
 <p class="rule">
-input_values_or_ternary
+argument_values_or_ternary
     ternary
-    open_input_values
+    open_argument_values
 </p>
 
 <p class="rule">
-open_input_values
+open_argument_values
     <code>""</code>
-    open_expression open_input_values
+    open_expression open_argument_values
 </p>
 
 <p>Invocation. The <code>()</code> suffix operator invokes a function value.</p>
 <blockquote>
-<p><var>function_value</var><code>(</code><var>input_values</var><code>)</code></p>
+<p><var>function_value</var><code>(</code><var>argument_values</var><code>)</code></p>
 </blockquote>
 <p>If the value is not a function, it halts.</p>
 <p>If a function is invoked with too few input values, the missing input values are <code>null</code>.
