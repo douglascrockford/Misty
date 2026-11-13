@@ -86,7 +86,7 @@ open_suffix
     selection open_suffix
     subscript open_suffix
     invocation open_suffix
-    separation infix_operator space open_expression
+    space infix_operator separation open_expression
 </p>
 <p class="rule">
 separation
@@ -154,43 +154,37 @@ null[&quot;foo&quot;]                # null
 <h4 id="invoke">( )<small>parens</small></h4>
 <p class="rule">
 invocation
-    argument_value_list
-    record_literal
+    <code>'('</code> arguments <code>')'</code>
 </p>
 
 <p class="rule">
-argument_value_list
-    <code>'('</code> argument_values <code>')'</code>
-</p>
-
-<p class="rule">
-argument_values
+arguments
     <code>""</code>
-    expression closed_argument_values
-    indent open_expression argument_values_or_ternary outdent
+    expression closed_arguments
+    indent open_expression arguments_or_ternary outdent
 </p>
 
 <p class="rule">
-closed_argument_values
+closed_arguments
     <code>""</code>
-    space expression closed_argument_values
+    space expression closed_arguments
 </p>
 
 <p class="rule">
-argument_values_or_ternary
+arguments_or_ternary
     ternary
-    open_argument_values
+    open_arguments
 </p>
 
 <p class="rule">
-open_argument_values
+open_arguments
     <code>""</code>
-    open_expression open_argument_values
+    open_expression open_arguments
 </p>
 
 <p>Invocation. The <code>()</code> suffix operator invokes a function value.</p>
 <blockquote>
-<p><var>function_value</var><code>(</code><var>argument_values</var><code>)</code></p>
+<p><var>function_value</var><code>(</code><var>arguments</var><code>)</code></p>
 </blockquote>
 <p>If the value is not a function, it halts.</p>
 <p>If a function is invoked with too few input values, the missing input values are <code>null</code>.
